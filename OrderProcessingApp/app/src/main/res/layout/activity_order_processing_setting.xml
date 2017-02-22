@@ -1,9 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.munchado.orderprocess.ui.activity.settings.OrderProcessingSettingActivity">
 
+    <CheckBox
+        android:id="@+id/checkBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="@dimen/twentyeightdp"
+        android:layout_marginStart="@dimen/twentyeightdp"
+        android:layout_marginTop="60dp"
+        android:button="@drawable/checkbok_register"
+        android:gravity="top"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:text="Manual Print" />
+
+    <Button
+        android:id="@+id/submit_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/checkBox"
+        android:layout_margin="@dimen/fifteendp"
+        android:background="@drawable/green_button"
+        android:onClick="saveSetting"
+        android:text="Save"
+        android:textColor="@color/white" />
 </RelativeLayout>

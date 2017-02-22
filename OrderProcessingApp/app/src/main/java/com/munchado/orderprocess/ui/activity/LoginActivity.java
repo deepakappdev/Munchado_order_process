@@ -5,7 +5,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -53,15 +52,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View view) {
-        Log.e("===", "=== onClick");
 
         if (MunchadoUtils.isNetworkAvailable(this)) {
             if (checkLoginValidation()) {
                 getNewToken();
-            } /*else {
-                CustomErrorDialogFragment errorDialogFragment = CustomErrorDialogFragment.newInstance(getResources().getString(R.string.credentials_error));
-                errorDialogFragment.show(getSupportFragmentManager(), "Error");
-            }*/
+            }
         } else {
             CustomErrorDialogFragment errorDialogFragment = CustomErrorDialogFragment.newInstance(getResources().getString(R.string.network_error));
             errorDialogFragment.show(getSupportFragmentManager(), "Error");
@@ -72,7 +67,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         boolean isValid = true;
 
-        Log.e("===", "=== checkLoginValidation");
         if (StringUtils.isNullOrEmpty(mEmail.getText().toString())) {
             mEmailLayout.setErrorEnabled(true);
             mEmailLayout.setError(getString(R.string.error_email_register));

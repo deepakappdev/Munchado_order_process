@@ -1,6 +1,5 @@
 package com.munchado.orderprocess.utils;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
@@ -57,6 +56,7 @@ public final class PrefUtil {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.mContext);
         prefs.edit().putBoolean(key, value).apply();
     }
+
     public static void clearAllData() {
         PreferenceManager.getDefaultSharedPreferences(MyApplication.mContext).edit().clear().apply();
     }
@@ -79,4 +79,19 @@ public final class PrefUtil {
     }
 
 
+    public static String getIPAddress() {
+        return getString(Constants.PREF_IP_ADDRESS, "");
+    }
+
+    public static void putIPAddress(String token) {
+        PrefUtil.putString(Constants.PREF_IP_ADDRESS, token);
+    }
+
+    public static boolean isManualPrint() {
+        return getBoolean(Constants.PREF_MANUAL_PRINT, false);
+    }
+
+    public static void setManualPrint(boolean login) {
+        putBoolean(Constants.PREF_MANUAL_PRINT, login);
+    }
 }

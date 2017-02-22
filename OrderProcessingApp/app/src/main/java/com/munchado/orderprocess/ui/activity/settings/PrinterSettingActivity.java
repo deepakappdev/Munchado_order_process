@@ -3,16 +3,25 @@ package com.munchado.orderprocess.ui.activity.settings;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 
 import com.munchado.orderprocess.R;
+import com.munchado.orderprocess.utils.PrefUtil;
+import com.munchado.orderprocess.utils.StringUtils;
 
 public class PrinterSettingActivity extends AppCompatActivity {
 
+    private EditText txt_ip;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_printer_setting);
+        txt_ip = (EditText)findViewById(R.id.ip) ;
         setupActionbar();
+
+        if(!StringUtils.isNullOrEmpty(PrefUtil.getIPAddress()))
+            txt_ip.setText(PrefUtil.getIPAddress());
     }
 
     private void setupActionbar(){
@@ -28,4 +37,11 @@ public class PrinterSettingActivity extends AppCompatActivity {
         return true;
     }
 
+    public void saveIP(View view) {
+        if(!StringUtils.isNullOrEmpty(txt_ip.getText().toString()))
+        {
+            PrefUtil.putIPAddress(txt_ip.getText().toString());
+            finish();
+        }
+    }
 }
