@@ -11,12 +11,9 @@
     android:paddingTop="@dimen/activity_vertical_margin">
 
     <TextView
-        android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/tendp"
-        android:layout_marginRight="@dimen/tendp"
-        android:layout_marginTop="@dimen/tendp"
+        android:layout_margin="@dimen/margin_normal"
         android:gravity="center"
         android:text="Sign in to Your Munch Ado Dashboard"
         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -26,9 +23,7 @@
         android:id="@+id/email_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/twentydp"
-        android:layout_marginRight="@dimen/twentydp"
-        android:layout_marginTop="@dimen/twentyfivedp"
+        android:layout_marginLeft="@dimen/margin_normal"
         app:counterOverflowTextAppearance="@color/prmary_txt_color"
         app:errorTextAppearance="@style/TextErrorAppearance"
         app:hintTextAppearance="@style/TextFloatLabelAppearance">
@@ -49,9 +44,7 @@
         android:id="@+id/pwd_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/twentydp"
-        android:layout_marginRight="@dimen/twentydp"
-        android:layout_marginTop="@dimen/tendp"
+        android:layout_marginLeft="@dimen/margin_normal"
         app:counterOverflowTextAppearance="@color/prmary_txt_color"
         app:errorTextAppearance="@style/TextErrorAppearance"
         app:hintTextAppearance="@style/TextFloatLabelAppearance">
@@ -72,7 +65,7 @@
         android:id="@+id/submit_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/tendp"
+        android:layout_margin="@dimen/margin_normal"
         android:background="@drawable/green_button"
         android:text="SIGN IN"
         android:textColor="@color/white" />
