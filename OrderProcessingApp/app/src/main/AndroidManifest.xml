@@ -7,24 +7,44 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
-        android:name=".MyApplication"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-    <!--    <activity android:name=".ui.activity.MainActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>-->
-        <activity android:name=".ui.activity.LoginActivity">
+
+        <!--
+            <activity android:name=".ui.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        -->
+        <activity
+            android:name=".ui.activity.LoginActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activity.HomeActivity"
+            android:label="@string/title_activity_home"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.activity.settings.PrinterSettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.settings.ProfileSettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.settings.OrderProcessingSettingActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
