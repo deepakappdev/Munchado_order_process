@@ -14,16 +14,12 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:textColorSecondary">@android:color/white</item>
-
-        <!-- <item name="colorControlNormal">@color/white</item>
-          This is the menu header text color. -->
         <item name="toolbarStyle">@style/ToolbarStyle</item>
     </style>
 
     <style name="ToolbarStyle" parent="@style/Widget.AppCompat.Toolbar">
         <item name="contentInsetStart">0dp</item>
     </style>
-
 
 
     <style name="NavigationStyle" parent="AppTheme.NoActionBar">
@@ -56,9 +52,6 @@
     </style>
 
 
-
-
-
     <style name="TabLayoutStyle" parent="Widget.Design.TabLayout">
         <item name="tabIndicatorColor">@color/colorPrimaryDark</item>
         <item name="tabIndicatorHeight">2dp</item>
@@ -82,15 +75,15 @@
     </style>
 
 
-
-
-
-
     <style name="ToolbarSubtitleAppearance" parent="@style/TextAppearance.Widget.AppCompat.Toolbar.Subtitle">
         <item name="android:textSize">@dimen/textSizeSmall</item>
         <item name="android:textColor">@color/white</item>
 
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
 
 </resources>
