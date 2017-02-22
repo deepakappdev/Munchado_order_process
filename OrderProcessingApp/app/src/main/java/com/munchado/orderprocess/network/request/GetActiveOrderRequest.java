@@ -2,7 +2,7 @@ package com.munchado.orderprocess.network.request;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.munchado.orderprocess.model.archiveorder.ArchiveOrderResponse;
+import com.munchado.orderprocess.model.archiveorder.ActiveOrderResponse;
 import com.munchado.orderprocess.network.volley.GsonRequest;
 import com.munchado.orderprocess.network.volley.NetworkConstants;
 import com.munchado.orderprocess.utils.PrefUtil;
@@ -14,10 +14,10 @@ import java.util.HashMap;
 /**
  * Created by user on 6/23/2015.
  */
-public class GetArchiveOrderRequest extends BaseRequest{
+public class GetActiveOrderRequest extends BaseRequest{
 
     public String getServiceUrl() {
-        return NetworkConstants.GET_ORDER_URL + "&token="+ PrefUtil.getToken()+"&type=archive";
+        return NetworkConstants.GET_ORDER_URL + "&token="+ PrefUtil.getToken()+"&type=live";
     }
 
     public HashMap<String, String> getParameters() {
@@ -36,9 +36,9 @@ public class GetArchiveOrderRequest extends BaseRequest{
     }
 
     public GsonRequest createServerRequest(Response.ErrorListener errorListener, Response.Listener listener) {
-        GsonRequest<ArchiveOrderResponse> itemListRequest = new GsonRequest<>(
+        GsonRequest<ActiveOrderResponse> itemListRequest = new GsonRequest<>(
                 Request.Method.GET, getServiceUrl(),
-                ArchiveOrderResponse.class, null, listener, errorListener, getJsonRequest());
+                ActiveOrderResponse.class, null, listener, errorListener, getJsonRequest());
         itemListRequest.setShouldCache(false);
         itemListRequest.setHeader(getHeaders());
         return itemListRequest;

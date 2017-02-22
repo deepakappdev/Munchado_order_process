@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.munchado.orderprocess.R;
+import com.munchado.orderprocess.common.FRAGMENTS;
 import com.munchado.orderprocess.ui.fragment.ActiveOrderFragment;
 import com.munchado.orderprocess.ui.fragment.PrintSettingFragment;
 
@@ -28,7 +29,7 @@ public class HomeActivity extends BaseActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        addFragment(new PrintSettingFragment(), R.id.frame_container);
+        addFragment(FRAGMENTS.ACTIVE, null);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
@@ -39,7 +40,10 @@ public class HomeActivity extends BaseActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            if (getSupportFragmentManager().getBackStackEntryCount() > 2)
+                getSupportFragmentManager().popBackStack();
+            else
+                super.onBackPressed();
         }
     }
 
@@ -70,12 +74,10 @@ public class HomeActivity extends BaseActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
         if (id == R.id.nav_order) {
-            // Handle the camera action
-            addFragment(new ActiveOrderFragment(), R.id.frame_container);
+            addFragment(FRAGMENTS.ACTIVE, null);
         } else if (id == R.id.nav_manage) {
-            addFragment(new PrintSettingFragment(), R.id.frame_container);
+            addFragment(FRAGMENTS.PRINT, null);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

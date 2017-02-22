@@ -85,5 +85,26 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+    <attr name="textStyle" format="enum">
+        <enum name="Roboto" value="0" />
+        <enum name="RobotoBold" value="1" />
+        <enum name="RobotoLight" value="2" />
+        <enum name="RobotoRegular" value="3" />
+        <enum name="RobotoThin" value="4" />
+        <enum name="RobotoMedium" value="5" />
+        <enum name="Baskerville" value="6" />
+        <enum name="AvenirNextMedium" value="7" />
+        <enum name="AvenirNextDemiBold" value="8" />
+        <enum name="AvenirNextBold" value="9" />
+        <enum name="FuturaMedium" value="10" />
+        <enum name="FuturaBook" value="11" />
+    </attr>
+    <declare-styleable name="CustomTextView">
+        <attr name="textStyle" />
+    </declare-styleable>
+    <declare-styleable name="CustomButton">
+        <attr name="textStyle" />
+    </declare-styleable>
+
 
 </resources>

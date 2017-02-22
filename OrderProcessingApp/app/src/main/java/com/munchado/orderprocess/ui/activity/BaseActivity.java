@@ -1,11 +1,16 @@
 package com.munchado.orderprocess.ui.activity;
 
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
+import com.munchado.orderprocess.R;
+import com.munchado.orderprocess.common.FRAGMENTS;
+import com.munchado.orderprocess.ui.fragment.ActiveOrderFragment;
+import com.munchado.orderprocess.ui.fragment.ArchiveOrderFragment;
 import com.munchado.orderprocess.ui.fragment.BaseFragment;
 
 /**
@@ -26,12 +31,30 @@ public class BaseActivity extends AppCompatActivity {
     }
 
 
-    public void addFragment(BaseFragment baseFragment, int containerId) {
+    public void addFragment(FRAGMENTS fragmentId, Bundle bundle) {
+        BaseFragment fragment = getFragment(fragmentId);
+        fragment.setArguments(bundle);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(containerId, baseFragment);
+        ft.replace(R.id.frame_container, fragment);
+        ft.addToBackStack(null);
         ft.commit();
 
-
     }
+
+    private BaseFragment getFragment(FRAGMENTS fragmentId) {
+        BaseFragment fragment = null;
+        switch (fragmentId) {
+            case ACTIVE:
+                fragment = new ActiveOrderFragment();
+                break;
+            case ARCHIVE:
+                fragment = new ArchiveOrderFragment();
+                break;
+            case LOGIN:
+                break;
+        }
+        return fragment;
+    }
+
 
 }

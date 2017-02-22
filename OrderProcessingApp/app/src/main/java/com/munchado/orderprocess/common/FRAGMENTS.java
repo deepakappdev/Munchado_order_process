@@ -1,0 +1,8 @@
+package com.munchado.orderprocess.common;
+
+/**
+ * Created by android on 22/2/17.
+ */
+public enum FRAGMENTS {
+    LOGIN, ARCHIVE, ACTIVE, PRINT
+}
