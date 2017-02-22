@@ -1,5 +1,96 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="nav_header_vertical_spacing">16dp</dimen>
+    <dimen name="nav_header_height">160dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="twentysp">20sp</dimen>
+    <dimen name="twentyfivesp">25sp</dimen>
+    <dimen name="thirtysp">30sp</dimen>
+
+    <dimen name="fivedp">5dp</dimen>
+    <dimen name="fourteendp">14dp</dimen>
+    <dimen name="twentytwosp">22sp</dimen>
+    <dimen name="fortydp">40dp</dimen>
+    <dimen name="thirtydp">30dp</dimen>
+    <dimen name="twentyfivedp">25dp</dimen>
+    <dimen name="twentydp">20dp</dimen>
+    <dimen name="tendp">10dp</dimen>
+    <dimen name="sixteensp">16sp</dimen>
+    <dimen name="eighteensp">18sp</dimen>
+    <dimen name="fifteensp">15sp</dimen>
+    <dimen name="fourteensp">14sp</dimen>
+    <dimen name="eightdp">8dp</dimen>
+    <dimen name="fiftydp">50dp</dimen>
+    <dimen name="sixtydp">60dp</dimen>
+    <dimen name="seventydp">70dp</dimen>
+    <dimen name="eightydp">80dp</dimen>
+
+    <!--search adapter dimension-->
+    <dimen name="default_divider_height">0.4dp</dimen>
+    <dimen name="default_divider_padding">4dp</dimen>
+    <dimen name="twelvesp">12sp</dimen>
+    <dimen name="card_elevation">1dp</dimen>
+    <dimen name="card_corner_radius">1dp</dimen>
+    <dimen name="card_corner_radius_tiny">3dp</dimen>
+
+    <dimen name="fifteendp">15dp</dimen>
+    <dimen name="tensp">10sp</dimen>
+    <dimen name="fourdp">4dp</dimen>>
+    <dimen name="threedp">3dp</dimen>>
+    <dimen name="twentyeightdp">28dp</dimen>
+    <dimen name="twentyfoursp">24sp</dimen>>
+    <!--Checkbox Padding-->
+    <dimen name="checkbox_padding">15sp</dimen>>
+    <!--Floating action button-->
+    <dimen name="design_fab_image_size" tools:override="true">36dp</dimen>
+
+    <dimen name="textSize46Large">46sp</dimen>
+    <dimen name="textSize40Large">40sp</dimen>
+    <dimen name="textSize35Large">35sp</dimen>
+    <dimen name="textSize24Large">24sp</dimen>
+    <dimen name="textSizeXXLarge">20sp</dimen>
+    <dimen name="textSizeXLarge">18sp</dimen>
+    <dimen name="textSizeLarge">16sp</dimen>
+    <dimen name="textMediumSizeLarge">15sp</dimen>
+    <dimen name="textSizeMedium">14sp</dimen>
+    <dimen name="textSizeSmallMedium">13sp</dimen>
+    <dimen name="textSizeSmall">12sp</dimen>
+    <dimen name="textSizeVerySmall">10sp</dimen>
+    <dimen name="textSizeTiny">8sp</dimen>
+    <dimen name="textSizeTinySmall">5sp</dimen>
+
+    <dimen name="margin_tiny">2dp</dimen>
+    <dimen name="margin_small">4dp</dimen>
+    <dimen name="margin_medium">8dp</dimen>
+    <dimen name="margin_normal">10dp</dimen>
+    <dimen name="margin_large">15dp</dimen>
+    <dimen name="margin_x_large">20dp</dimen>
+    <dimen name="margin_xx_large">24dp</dimen>
+
+    <dimen name="margin_xxx_large">40dp</dimen>
+
+    <dimen name="button_height">45dp</dimen>
+    <dimen name="small_button_height">40dp</dimen>
+
+
+    <dimen name="button_elevation_material">2dp</dimen>
+    <!-- Z translation to apply when button is pressed -->
+    <dimen name="button_pressed_z_material">4dp</dimen>
+    <!-- Default insets (outer padding) around buttons -->
+    <dimen name="button_inset_vertical_material">6dp</dimen>
+    <dimen name="button_inset_horizontal_material">@dimen/control_inset_material</dimen>
+    <!-- Default inner padding within buttons -->
+    <dimen name="button_padding_vertical_material">@dimen/control_padding_material</dimen>
+    <dimen name="button_padding_horizontal_material">8dp</dimen>
+
+    <!-- Default insets (outer padding) around controls -->
+    <dimen name="control_inset_material">4dp</dimen>
+    <!-- Default inner padding within controls -->
+    <dimen name="control_padding_material">4dp</dimen>
+    <!-- Default rounded corner for controls -->
+    <dimen name="control_corner_material">2dp</dimen>
+
 </resources>
