@@ -9,7 +9,8 @@ public class NetworkConstants {
     public static final String TOKEN_URL = HTTP_BASE_URL + "api/dashboard/token?mob=true";
     public static final String LOGIN_URL = HTTP_BASE_URL + "api/dashboard/login?mob=true";
     public static final String LOGOUT_URL = HTTP_BASE_URL + "api/dashboard/logout?mob=true";
+    public static final String GET_ORDER_URL = HTTP_BASE_URL + "api/dashboard/order?mob=true";
+    public static final String GET_ORDER_DETAIL_URL = HTTP_BASE_URL + "api/dashboard/order/";
 
-    public static final String GET_ARCHIVE_ORDER_URL = HTTP_BASE_URL + "archive";
 
 }

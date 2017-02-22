@@ -8,13 +8,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.android.volley.NetworkError;
 import com.munchado.orderprocess.R;
+import com.munchado.orderprocess.model.archiveorder.ArchiveOrderResponse;
+import com.munchado.orderprocess.model.archiveorder.ArchiveOrderResponseData;
+import com.munchado.orderprocess.network.RequestController;
+import com.munchado.orderprocess.network.volley.RequestCallback;
 
 /**
  * Created by android on 22/2/17.
  */
 
-public class ArchiveOrderFragment extends BaseFragment {
+public class ArchiveOrderFragment extends BaseFragment implements RequestCallback {
+    RecyclerView recyclerView;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -30,11 +36,27 @@ public class ArchiveOrderFragment extends BaseFragment {
     }
 
     private void fetchArchiveOrder() {
-
+        RequestController.getArchiveOrder(this);
     }
 
     private void initView(View view) {
-        RecyclerView recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+    }
+
+    @Override
+    public void error(NetworkError networkError) {
+
+    }
+
+    @Override
+    public void success(Object obj) {
+        if (obj instanceof ArchiveOrderResponse) {
+            showArchiveList(((ArchiveOrderResponse) obj).data);
+        }
+    }
+
+    private void showArchiveList(ArchiveOrderResponseData data) {
+
     }
 }
