@@ -4,44 +4,37 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import com.munchado.orderprocess.Constants;
+import com.munchado.orderprocess.MyApplication;
 
 
 public final class PrefUtil {
     private PrefUtil() {
     }
 
-    public static int getInt(Context context, final String key, int defaultValue) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    public static int getInt(final String key, int defaultValue) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.mContext);
         return prefs.getInt(key, defaultValue);
     }
 
-    public static void putInt(Context context, String key, int value) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    public static void putInt(String key, int value) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.mContext);
         prefs.edit().putInt(key, value).apply();
     }
 
-    public static boolean isLogin(Context context) {
-        return getBoolean(context, Constants.PREF_IS_LOGGED_IN, false);
-    }
 
-
-    public static String getToken(Context context) {
-        return getString(context, Constants.PREF_TOKEN, "");
-    }
-
-    public static String getString(Context context, final String key, final String defaultValue) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    public static String getString(final String key, final String defaultValue) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.mContext);
         return prefs.getString(key, defaultValue);
     }
 
-    public static void putString(Context context, String key, String value) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    public static void putString(String key, String value) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.mContext);
         prefs.edit().putString(key, value).apply();
     }
 
-    public static double getDouble(Context context, final String key, double defaultValue) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+    public static double getDouble(final String key, double defaultValue) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.mContext);
         String value = prefs.getString(key, defaultValue + "");
         try {
             return Double.parseDouble(value);
@@ -50,28 +43,40 @@ public final class PrefUtil {
         }
     }
 
-    public static void putDouble(Context context, String key, double value) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    public static void putDouble(String key, double value) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.mContext);
         prefs.edit().putString(key, value + "").apply();
     }
 
-    private static boolean getBoolean(Context context, String key, final boolean defaultValue) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    private static boolean getBoolean(String key, final boolean defaultValue) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.mContext);
         return prefs.getBoolean(key, defaultValue);
     }
 
-    private static void putBoolean(Context context, String key, boolean value) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    private static void putBoolean(String key, boolean value) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MyApplication.mContext);
         prefs.edit().putBoolean(key, value).apply();
     }
-
-    public static void remove(Context context, String key) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-        prefs.edit().remove(key).apply();
+    public static void clearAllData() {
+        PreferenceManager.getDefaultSharedPreferences(MyApplication.mContext).edit().clear().apply();
     }
 
 
-    public static void clearAllData(Context context) {
-        PreferenceManager.getDefaultSharedPreferences(context).edit().clear().apply();
+    public static boolean isLogin() {
+        return getBoolean(Constants.PREF_IS_LOGGED_IN, false);
     }
+
+    public static void setLogin(boolean login) {
+        putBoolean(Constants.PREF_IS_LOGGED_IN, login);
+    }
+
+    public static String getToken() {
+        return getString(Constants.PREF_TOKEN, "");
+    }
+
+    public static void putToken(String token) {
+        PrefUtil.putString(Constants.PREF_TOKEN, token);
+    }
+
+
 }
