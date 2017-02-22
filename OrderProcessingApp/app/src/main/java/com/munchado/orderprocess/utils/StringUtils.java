@@ -107,10 +107,7 @@ public abstract class StringUtils {
         if (pPlusSignNeeded && !pMobileNumber.startsWith("+")) {
             return false;
         }
-        if (pMobileNumber.length() < pMinLength) {
-            return false;
-        }
-        return true;
+        return pMobileNumber.length() >= pMinLength;
     }
 
 
