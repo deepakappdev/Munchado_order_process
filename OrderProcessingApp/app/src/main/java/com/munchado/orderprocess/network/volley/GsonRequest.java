@@ -13,6 +13,9 @@ import com.android.volley.RetryPolicy;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import com.munchado.orderprocess.network.RequestController;
+import com.munchado.orderprocess.utils.PrefUtil;
+import com.munchado.orderprocess.utils.StringUtils;
 
 import org.json.JSONObject;
 
@@ -87,6 +90,8 @@ public class GsonRequest<T> extends Request<T> {
         }
         //headers.put("Accept", "application/json");
         headers.put("Content-Type", "application/json");
+        if(!StringUtils.isNullOrEmpty(PrefUtil.getToken()))
+            headers.put("token", PrefUtil.getToken());
         headers.put("Accept", "application/json; charset=utf-8");
         this.headers = headers;
     }
