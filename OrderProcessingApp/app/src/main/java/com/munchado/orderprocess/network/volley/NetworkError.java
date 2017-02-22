@@ -1,11 +1,8 @@
 package com.munchado.orderprocess.network.volley;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.NoConnectionError;
-import com.android.volley.ParseError;
-import com.android.volley.ServerError;
-import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
+import com.munchado.orderprocess.model.BaseResponse;
 
 import org.json.JSONObject;
 
@@ -14,7 +11,7 @@ import org.json.JSONObject;
  */
 public class NetworkError extends Exception {
     public static final int NO_NETWORK_ERROR = 0;
-    private final String ERROR_MESSAGE = "Not able to connect to VConnect. Please check your network connection and try again.";
+    private final String ERROR_MESSAGE = "Not able to connect to Munchado. Please check your network connection and try again.";
     public int code = -1;
     private String message;
     private String localizedMessage = "Server Error";
@@ -25,33 +22,36 @@ public class NetworkError extends Exception {
     }
 
     public NetworkError(VolleyError volleyError) {
-        if (volleyError instanceof TimeoutError) {
-            localizedMessage = ERROR_MESSAGE;
-            return;
-        }
-        if (volleyError instanceof ServerError) {
-            localizedMessage = ERROR_MESSAGE;
-            return;
-        }
-        if (volleyError instanceof ParseError) {
-            localizedMessage = "Something went wrong. Please check internet connection.";
-            //code = NetworkError.NO_NETWORK_ERROR;
-            return;
-        }
-        if (volleyError instanceof NoConnectionError) {
-            localizedMessage = ERROR_MESSAGE;
-            code = NetworkError.NO_NETWORK_ERROR;
-            return;
-        }
-        if (volleyError instanceof com.android.volley.NetworkError) {
-            localizedMessage = ERROR_MESSAGE;
-            return;
-        }
-        if (volleyError instanceof AuthFailureError) {
-            localizedMessage = "Auth Failure Error";
-            return;
-        }
-        localizedMessage = ERROR_MESSAGE;
+//        if (volleyError instanceof TimeoutError) {
+//            localizedMessage = ERROR_MESSAGE;
+//            return;
+//        }
+//        if (volleyError instanceof ServerError) {
+//            localizedMessage = ERROR_MESSAGE;
+//            return;
+//        }
+//        if (volleyError instanceof ParseError) {
+//            localizedMessage = "Something went wrong. Please check internet connection.";
+//            //code = NetworkError.NO_NETWORK_ERROR;
+//            return;
+//        }
+//        if (volleyError instanceof NoConnectionError) {
+//            localizedMessage = ERROR_MESSAGE;
+//            code = NetworkError.NO_NETWORK_ERROR;
+//            return;
+//        }
+//        if (volleyError instanceof com.android.volley.NetworkError) {
+//            localizedMessage = ERROR_MESSAGE;
+//            return;
+//        }
+//        if (volleyError instanceof AuthFailureError) {
+//            localizedMessage = "Auth Failure Error";
+//            return;
+//        }
+
+        String response =new String(volleyError.networkResponse.data);
+        BaseResponse model= new Gson().fromJson(response,BaseResponse.class);
+        localizedMessage = model.message;
 
     }
 

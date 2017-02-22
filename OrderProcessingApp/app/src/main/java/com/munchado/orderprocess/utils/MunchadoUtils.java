@@ -3,7 +3,6 @@ package com.munchado.orderprocess.utils;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 
 
 /**
@@ -35,13 +34,15 @@ public class MunchadoUtils {
 
                 if (info != null) {
                     for (int i = 0; i < info.length; i++) {
-                        Log.v("Class", info[i].getState().toString());
+                        LogUtils.d("===== in loop "+info[i].getState().toString());
                         if (info[i].getState() == NetworkInfo.State.CONNECTED) {
+                           LogUtils.d("===== connected");
                             return true;
                         }
                     }
                 }
             }
+            LogUtils.d("===== not connected");
             return false;
         } catch (Exception e) {
             return false;

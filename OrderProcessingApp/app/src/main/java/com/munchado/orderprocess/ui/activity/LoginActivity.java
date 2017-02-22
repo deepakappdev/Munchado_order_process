@@ -12,8 +12,15 @@ import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.munchado.orderprocess.R;
+import com.munchado.orderprocess.model.login.LoginResponse;
+import com.munchado.orderprocess.model.token.TokenResponse;
+import com.munchado.orderprocess.network.RequestController;
+import com.munchado.orderprocess.network.volley.NetworkError;
+import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.ui.fragment.CustomErrorDialogFragment;
+import com.munchado.orderprocess.utils.DialogUtil;
 import com.munchado.orderprocess.utils.MunchadoUtils;
+import com.munchado.orderprocess.utils.PrefUtil;
 import com.munchado.orderprocess.utils.StringUtils;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
@@ -47,14 +54,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onClick(View view) {
         Log.e("===", "=== onClick");
-        startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+
         if (MunchadoUtils.isNetworkAvailable(this)) {
             if (checkLoginValidation()) {
-
-            } else {
-                CustomErrorDialogFragment errorDialogFragment = CustomErrorDialogFragment.newInstance(getResources().getString(R.string.network_error));
+                getNewToken();
+            } /*else {
+                CustomErrorDialogFragment errorDialogFragment = CustomErrorDialogFragment.newInstance(getResources().getString(R.string.credentials_error));
                 errorDialogFragment.show(getSupportFragmentManager(), "Error");
-            }
+            }*/
+        } else {
+            CustomErrorDialogFragment errorDialogFragment = CustomErrorDialogFragment.newInstance(getResources().getString(R.string.network_error));
+            errorDialogFragment.show(getSupportFragmentManager(), "Error");
         }
     }
 
@@ -91,5 +101,54 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
 
         return isValid;
+    }
+
+    private void getNewToken() {
+        DialogUtil.showProgressDialog(LoginActivity.this);
+        RequestController.createNewAccessToken(new RequestCallback() {
+            @Override
+            public void error(NetworkError networkError) {
+                DialogUtil.hideProgressDialog();
+                if (networkError != null && !StringUtils.isNullOrEmpty(networkError.getLocalizedMessage())) {
+                    CustomErrorDialogFragment errorDialogFragment = CustomErrorDialogFragment.newInstance(networkError.getLocalizedMessage());
+                    errorDialogFragment.show(getSupportFragmentManager(), "Error");
+                }
+            }
+
+            @Override
+            public void success(Object obj) {
+                TokenResponse mTokenResponse = (TokenResponse) obj;
+                PrefUtil.putToken(mTokenResponse.data.token);
+                hitLogin();
+            }
+        });
+    }
+
+    private void hitLogin() {
+
+        RequestController.login(mEmail.getText().toString(), mPassword.getText().toString(), new RequestCallback() {
+            @Override
+            public void error(NetworkError volleyError) {
+                DialogUtil.hideProgressDialog();
+                if (volleyError != null && !StringUtils.isNullOrEmpty(volleyError.getLocalizedMessage())) {
+                    CustomErrorDialogFragment errorDialogFragment = CustomErrorDialogFragment.newInstance(volleyError.getLocalizedMessage());
+                    errorDialogFragment.show(getSupportFragmentManager(), "Error");
+                }
+            }
+
+            @Override
+            public void success(Object response) {
+                DialogUtil.hideProgressDialog();
+                LoginResponse mLoginResponse = (LoginResponse) response;
+                if (mLoginResponse.data.message) {
+                    PrefUtil.setLogin(true);
+                    startActivity(new Intent(LoginActivity.this, HomeActivity.class));
+                    finish();
+                } else {
+                    CustomErrorDialogFragment errorDialogFragment = CustomErrorDialogFragment.newInstance("Unable to login.");
+                    errorDialogFragment.show(getSupportFragmentManager(), "Error");
+                }
+            }
+        });
     }
 }

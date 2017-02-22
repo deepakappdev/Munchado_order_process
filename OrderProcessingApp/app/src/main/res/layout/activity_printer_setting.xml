@@ -1,16 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.munchado.orderprocess.ui.activity.settings.PrinterSettingActivity">
 
-   <!-- <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/email_layout"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="?attr/colorPrimary"
-        app:title="Printer Settings"
-        app:titleTextColor="@color/white" />-->
-</RelativeLayout>
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="25dp"
+        android:layout_marginEnd="@dimen/fifteendp"
+        android:layout_marginLeft="@dimen/fifteendp"
+        android:layout_marginRight="@dimen/fifteendp"
+        android:layout_marginStart="@dimen/fifteendp"
+        android:layout_marginTop="60dp"
+        app:counterOverflowTextAppearance="@color/prmary_txt_color"
+        app:errorTextAppearance="@style/TextErrorAppearance"
+        app:hintTextAppearance="@style/TextFloatLabelAppearance">
+
+        <EditText
+            android:id="@+id/ip"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusableInTouchMode="true"
+            android:hint="Enter I.P. Address of Printer"
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="@color/default_text_color" />
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/submit_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fifteendp"
+        android:background="@drawable/green_button"
+        android:text="Test"
+        android:textColor="@color/white" />
+</LinearLayout>
