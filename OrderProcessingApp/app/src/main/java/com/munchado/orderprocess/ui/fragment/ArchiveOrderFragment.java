@@ -8,19 +8,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.volley.NetworkError;
 import com.munchado.orderprocess.R;
+import com.munchado.orderprocess.model.archiveorder.ActiveOrderResponse;
+import com.munchado.orderprocess.model.archiveorder.ActiveOrderResponseData;
 import com.munchado.orderprocess.model.archiveorder.ArchiveOrderResponse;
 import com.munchado.orderprocess.model.archiveorder.ArchiveOrderResponseData;
 import com.munchado.orderprocess.network.RequestController;
+import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
+import com.munchado.orderprocess.ui.adapter.ActiveOrderAdapter;
+import com.munchado.orderprocess.ui.adapter.ArchiveOrderAdapter;
 
 /**
  * Created by android on 22/2/17.
  */
 
-public class ArchiveOrderFragment extends BaseFragment implements RequestCallback {
+public class ArchiveOrderFragment extends BaseFragment implements RequestCallback, View.OnClickListener {
+
     RecyclerView recyclerView;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -40,12 +46,14 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
     }
 
     private void initView(View view) {
+        view.findViewById(R.id.text_archive_order).setOnClickListener(this);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
     }
 
+
     @Override
-    public void error(NetworkError networkError) {
+    public void error(NetworkError volleyError) {
 
     }
 
@@ -57,6 +65,17 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
     }
 
     private void showArchiveList(ArchiveOrderResponseData data) {
+        ArchiveOrderAdapter adapter = new ArchiveOrderAdapter();
+        adapter.setResults(data.archive_order);
+        recyclerView.setAdapter(adapter);
+    }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.text_archive_order:
+                getFragmentManager().popBackStack();
+                break;
+        }
     }
 }

@@ -102,6 +102,9 @@
     <declare-styleable name="CustomTextView">
         <attr name="textStyle" />
     </declare-styleable>
+    <declare-styleable name="CustomButton">
+        <attr name="textStyle" />
+    </declare-styleable>
 
 
 </resources>

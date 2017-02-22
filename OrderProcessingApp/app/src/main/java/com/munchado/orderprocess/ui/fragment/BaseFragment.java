@@ -36,24 +36,6 @@ public class BaseFragment extends Fragment {
             baseFragment=  new PrintSettingFragment();
         else if(fragmentType.equalsIgnoreCase(Constants.FRAGMENT_ACTIVE_ORDER))
             baseFragment =  new ActiveOrderFragment();
-//        else if(fragmentType.equalsIgnoreCase(Constants.FRAGMENT_NEW_TIP))
-//            baseFragment =  new NewTipFragment();
-//        else if(fragmentType.equalsIgnoreCase(Constants.FRAGMENT_NEW_REVIEW_DINEIN)) {
-//            baseFragment = new NewReviewDineInFragment();
-//        }
-//        else if(fragmentType.equalsIgnoreCase(Constants.FRAGMENT_NEW_REVIEW_DELIVERY)) {
-//            baseFragment = new NewReviewDeliveryFragment();
-//        }
-//        else if(fragmentType.equalsIgnoreCase(Constants.FRAGMENT_NEW_REVIEW_TAKEOUT)) {
-//            baseFragment = new NewReviewTakeoutFragment();
-//        }
-//        /*Friends Fragment*/
-//        else if(fragmentType.equalsIgnoreCase(Constants.FRAGMENT_FRIENDS))
-//            baseFragment=  new NewReviewFragment();
-//        else if(fragmentType.equalsIgnoreCase(Constants.FRAGMENT_FIND_FRIENDS))
-//            baseFragment =  new CurrentReviewFragment();
-//        else if(fragmentType.equalsIgnoreCase(Constants.FRAGMENT_INVITE_FRIENDS))
-//            baseFragment =  new NewTipFragment();
         if(paramArray!=null && paramArray.length>0) {
             Bundle args = new Bundle();
             args.putStringArray(Constants.FRAGMENT_ARGS, paramArray);
