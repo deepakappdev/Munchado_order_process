@@ -35,7 +35,7 @@ public class RequestController {
         return rp;
     }
 
-    private static Response.ErrorListener getErrorListener(final RequestCallback<?> callback) {
+    private static Response.ErrorListener getErrorListener(final RequestCallback callback) {
         return new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
@@ -46,7 +46,7 @@ public class RequestController {
         };
     }
 
-    private static Response.Listener getListener(final RequestCallback<?> callback, final BaseRequest request) {
+    private static Response.Listener getListener(final RequestCallback callback, final BaseRequest request) {
         return new Response.Listener() {
             @Override
             public void onResponse(Object response) {
@@ -64,7 +64,7 @@ public class RequestController {
         };
     }
 
-    public static void getNewAccessToken(final RequestCallback<?> lastCallback, final BaseRequest request) {
+    public static void getNewAccessToken(final RequestCallback lastCallback, final BaseRequest request) {
         NewTokenRequest newTokenRequest = new NewTokenRequest();
         GsonRequest authRequest = newTokenRequest.createServerRequest(getErrorListener(lastCallback),
                 new Response.Listener() {
