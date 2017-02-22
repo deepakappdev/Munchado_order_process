@@ -8,6 +8,7 @@
     <string name="email_error">This doesn\'t look like any email we ever seen, Maybe the \'@\' or the \'.\' are in wrong spot. This isn\'t cubism, put things where they belong! </string>
     <string name="error_password_register">Woah, we cant let you go without a password.</string>
     <string name="network_error">No Internet Access</string>
+    <string name="credentials_error">Invalid Credentials. Please try again.</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>

@@ -14,6 +14,7 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
 import com.munchado.orderprocess.network.RequestController;
+import com.munchado.orderprocess.utils.LogUtils;
 import com.munchado.orderprocess.utils.PrefUtil;
 import com.munchado.orderprocess.utils.StringUtils;
 
@@ -89,10 +90,11 @@ public class GsonRequest<T> extends Request<T> {
             //headers.put("Authorization","Bearer " + ;
         }
         //headers.put("Accept", "application/json");
-        headers.put("Content-Type", "application/json");
-        if(!StringUtils.isNullOrEmpty(PrefUtil.getToken()))
+//        headers.put("Content-Type", "application/json");
+        if (!StringUtils.isNullOrEmpty(PrefUtil.getToken()))
             headers.put("token", PrefUtil.getToken());
-        headers.put("Accept", "application/json; charset=utf-8");
+//        headers.put("Accept", "application/json; charset=utf-8");
+        LogUtils.e("==== header : " + headers);
         this.headers = headers;
     }
 
@@ -153,6 +155,7 @@ public class GsonRequest<T> extends Request<T> {
             String json = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
             //Small hack due to issue in webservice.
             //json = json.replace("\"\"", "null");
+            LogUtils.e("=====" + json);
             return Response.success(gson.fromJson(json, clazz), HttpHeaderParser.parseCacheHeaders(response));
         } catch (UnsupportedEncodingException e) {
             return Response.error(new ParseError(e));

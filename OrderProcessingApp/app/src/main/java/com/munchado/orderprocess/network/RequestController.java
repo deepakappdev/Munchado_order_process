@@ -3,7 +3,6 @@ package com.munchado.orderprocess.network;
 import com.android.volley.Cache;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Network;
-import com.android.volley.NetworkError;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
@@ -18,7 +17,9 @@ import com.munchado.orderprocess.network.request.BaseRequest;
 import com.munchado.orderprocess.network.request.LoginRequest;
 import com.munchado.orderprocess.network.request.NewTokenRequest;
 import com.munchado.orderprocess.network.volley.GsonRequest;
+import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
+import com.munchado.orderprocess.utils.LogUtils;
 import com.munchado.orderprocess.utils.PrefUtil;
 
 import java.util.concurrent.TimeUnit;
@@ -39,6 +40,7 @@ public class RequestController {
         return new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
+                LogUtils.e("====" + new String(volleyError.networkResponse.data));
                 if (callback != null)
                     callback.error(new NetworkError(volleyError));
 
@@ -51,7 +53,7 @@ public class RequestController {
             @Override
             public void onResponse(Object response) {
                 if (response == null)
-                    callback.error(new NetworkError(new Throwable("Something went wrong")));
+                    callback.error(new NetworkError(new VolleyError("Something went wrong")));
                 else if (response instanceof BaseResponse) {
                     if (((BaseResponse) response).is_token_valid) {
                         callback.success(response);
@@ -98,11 +100,13 @@ public class RequestController {
         GsonRequest gsonRequest = request.createServerRequest(getErrorListener(callBack), getListener(callBack, request));
         getmRequestQueue().add(gsonRequest);
     }
+
     public static void login(String username, String password, RequestCallback callBack) {
         LoginRequest request = new LoginRequest(username, password);
         GsonRequest gsonRequest = request.createServerRequest(getErrorListener(callBack), getListener(callBack, request));
         getmRequestQueue().add(gsonRequest);
     }
+
     public static void logout(String username, String password, RequestCallback callBack) {
         LoginRequest request = new LoginRequest(username, password);
         GsonRequest gsonRequest = request.createServerRequest(getErrorListener(callBack), getListener(callBack, request));
