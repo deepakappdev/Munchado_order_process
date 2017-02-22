@@ -1,6 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="orange">#FF8208</color>
+    <color name="colorPrimary">#FF8208</color>
+    <color name="colorPrimaryDark">#EF7600</color>
+
+    <!--<color name="colorAccent">#90C332</color>-->
+    <color name="colorAccent">@color/colorPrimary</color>
+    <color name="color_drawer_bg">#Af000000</color>
+    <color name="background_main">#dadada</color>
+    <color name="background_view_pager">#F7F8F8</color>
+    <color name="background_text_color">#8D8E8E</color>
+    <color name="search_text_color">#DFDFDF</color>
+    <color name="navigation_color">#EFEFEF</color>
+
+    <color name="prmary_txt_color">#4b4b4b</color>
+    <color name="grey_profile">#4B4B4B</color>
+    <color name="transparent">#00000000</color>
+
+    <color name="white">#ffffff</color>
+    <color name="background_grey_color">#E0E0E0</color>
+    <color name="fb_bg">#4C72B9</color>
+    <color name="google_bg">#F62B00</color>
+    <color name="login_bg">#90C332</color>
+    <color name="twitter_bg">#24C0F8</color>
+    <color name="grey_outline_color">#dedfe0</color>
+
+    <color name="black">#000000</color>
+    <color name="grey_line">#F6F6F6</color>
+    <color name="grey_light">#AAAAAA</color>
+    <color name="grey_background">#8C8C8C</color>
+    <color name="default_header_color">#445566</color>
+    <color name="dark_grey">#484547</color>
+    <color name="border_grey">#CFCFCF</color>
+    <color name="text_light_black">#868787</color>
+    <color name="grey_checkbox_color">#4c4c4c</color>
+
+    <color name="app_background_color">#FAFAFA</color>
+    <color name="home_background_color">#F0F0F0</color>
+
+    <color name="divider_color">#C7C7CC</color>
+
+    <color name="item_selected_background_color">#C7C7CC</color>
+    <color name="image_placeholder_background_color">#C7C7CC</color>
+    <color name="wallet_hint_foreground_holo_dark">#808080</color>
+
+
+    <color name="theme_primary">#2196F3</color>
+    <color name="theme_background">#FFFFFF</color>
+    <color name="theme_background_inverse">#212121</color>
+
+    <color name="theme_accent_1">#212121</color>
+
+    <color name="theme_primary_trans">#99212121</color>
+
+    <color name="theme_primary_text">#212121</color>
+    <color name="theme_secondary_text">#727272</color>
+    <color name="theme_primary_text_inverted">#ffffff</color>
+    <color name="theme_secondary_text_inverted">#8affffff</color>
+    <color name="theme_icons">#FFFFFF</color>
+    <color name="theme_divider">#B6B6B6</color>
+    <color name="black_overlay">#66000000</color>
+    <color name="green_overview">#7FFF55</color>
+    <color name="red_overview">#FF0000</color>
+    <color name="green_btn_color">#8CBC3F</color>
+    <color name="text_red">#C63C32</color>
+    <color name="status_bar_search_color">#BDBDBD</color>
+    <color name="semi_black_transparent">#77000000</color>
+
+    <color name="yellow">#ffff66</color>
+    <color name="activity_background">#eeeeee</color>
+    <color name="default_text_color">#2a2a2a</color>
+    <color name="semi_white_transparent">#88ffffff</color>
+
+    <color name="gradient_start">#00343434</color>
+    <color name="gradient_end">#ff000000</color>
+    <color name="grey_profile_lite">#9A9A9A</color>
+
+    <color name="grey_profile_grey_background">#AEAEAE</color>
+
 </resources>

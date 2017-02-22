@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/twentydp"
+    android:background="@color/white"
+    android:elevation="10dp"
+    android:gravity="center"
+    android:minWidth="300dp"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/mErrortext"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="@dimen/tendp"
+        android:gravity="center"
+        android:padding="14dp"
+        android:text="My name is mainsh"
+        android:textColor="@color/prmary_txt_color"
+        android:textSize="@dimen/fifteensp" />
+
+    <TextView
+        android:id="@+id/mCloseBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/tendp"
+        android:gravity="center"
+        android:padding="@dimen/tendp"
+        android:text="Close"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/fifteensp" />
+
+</LinearLayout>
