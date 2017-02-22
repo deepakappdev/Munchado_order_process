@@ -1,4 +1,4 @@
-<resources>>
+<resources>
 
     <style name="AppTheme.NoActionBar" parent="AppTheme">
         <item name="windowActionBar">false</item>
@@ -10,18 +10,8 @@
 
     </style>
 
-    <style name="ActivityAnimation.Activity" parent="@android:style/Animation.Activity">
-        <item name="android:windowExitAnimation">@anim/fade_out</item>
-        <item name="android:windowEnterAnimation">@anim/fade_in</item>
-    </style>
 
-    <style name="margin_right_left">
-        <item name="android:layout_marginLeft">@dimen/tendp</item>
-        <item name="android:layout_marginRight">@dimen/tendp</item>
-        <item name="android:layout_marginStart">@dimen/tendp</item>
-        <item name="android:layout_marginEnd">@dimen/tendp</item>
 
-    </style>
 
     <style name="YourDialogStyle" parent="Theme.AppCompat.Light.Dialog">
         <item name="android:colorAccent">@color/colorAccent</item>

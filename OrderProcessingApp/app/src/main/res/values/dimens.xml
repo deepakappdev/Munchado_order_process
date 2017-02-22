@@ -6,27 +6,7 @@
     <dimen name="nav_header_vertical_spacing">16dp</dimen>
     <dimen name="nav_header_height">160dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="twentysp">20sp</dimen>
-    <dimen name="twentyfivesp">25sp</dimen>
-    <dimen name="thirtysp">30sp</dimen>
 
-    <dimen name="fivedp">5dp</dimen>
-    <dimen name="fourteendp">14dp</dimen>
-    <dimen name="twentytwosp">22sp</dimen>
-    <dimen name="fortydp">40dp</dimen>
-    <dimen name="thirtydp">30dp</dimen>
-    <dimen name="twentyfivedp">25dp</dimen>
-    <dimen name="twentydp">20dp</dimen>
-    <dimen name="tendp">10dp</dimen>
-    <dimen name="sixteensp">16sp</dimen>
-    <dimen name="eighteensp">18sp</dimen>
-    <dimen name="fifteensp">15sp</dimen>
-    <dimen name="fourteensp">14sp</dimen>
-    <dimen name="eightdp">8dp</dimen>
-    <dimen name="fiftydp">50dp</dimen>
-    <dimen name="sixtydp">60dp</dimen>
-    <dimen name="seventydp">70dp</dimen>
-    <dimen name="eightydp">80dp</dimen>
 
     <!--search adapter dimension-->
     <dimen name="default_divider_height">0.4dp</dimen>
