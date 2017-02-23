@@ -1,6 +1,7 @@
 package com.munchado.orderprocess.ui.activity;
 
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
@@ -47,6 +48,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mEmail = (EditText) findViewById(R.id.email);
         mPassword = (EditText) findViewById(R.id.password);
 
+        Typeface type = Typeface.createFromAsset(getAssets(),"Avenir-Next-Medium.ttf");
+        mEmail.setTypeface(type);
+        mPassword.setTypeface(type);
+        mEmailLayout.setTypeface(type);
+        mPasswordLayout.setTypeface(type);
         findViewById(R.id.submit_btn).setOnClickListener(this);
     }
 
