@@ -14,6 +14,7 @@ import com.munchado.orderprocess.model.archiveorder.ArchiveOrderResponseData;
 import com.munchado.orderprocess.network.RequestController;
 import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
+import com.munchado.orderprocess.ui.activity.HomeActivity;
 import com.munchado.orderprocess.ui.adapter.ArchiveOrderAdapter;
 import com.munchado.orderprocess.utils.DialogUtil;
 
@@ -38,7 +39,11 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
         initView(view);
         fetchArchiveOrder();
     }
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((HomeActivity)getActivity()).setCustomTitle("Archive Orders");
+    }
     private void fetchArchiveOrder() {
         DialogUtil.showProgressDialog(getActivity());
         RequestController.getArchiveOrder(this);

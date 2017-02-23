@@ -64,4 +64,8 @@ public class HomeActivity extends BaseActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+    public void setCustomTitle(String title) {
+        toolbar.setTitle(title);
+    }
 }

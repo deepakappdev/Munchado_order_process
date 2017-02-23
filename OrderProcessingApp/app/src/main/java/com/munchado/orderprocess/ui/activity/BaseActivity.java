@@ -31,23 +31,12 @@ public class BaseActivity extends AppCompatActivity {
         super.onPause();
     }
 
-
-  /*  public void addFragment(FRAGMENTS fragmentId, Bundle bundle) {
-        BaseFragment fragment = getFragment(fragmentId);
-        fragment.setArguments(bundle);
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.frame_container, fragment);
-        ft.addToBackStack(fragmentId.name());
-        ft.commit();
-
-    }*/
-
     public void addFragment(FRAGMENTS fragmentId, Bundle bundle) {
         BaseFragment fragment = getFragment(fragmentId);
         fragment.setArguments(bundle);
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ft.replace(R.id.frame_container, fragment);
-        ft.addToBackStack(null);
+        ft.addToBackStack(fragmentId.name());
         ft.commit();
 
     }
@@ -57,15 +46,12 @@ public class BaseActivity extends AppCompatActivity {
         switch (fragmentId) {
             case ACTIVE:
                 fragment = new ActiveOrderFragment();
-                setTitle("Active Orders");
                 break;
             case ARCHIVE:
                 fragment = new ArchiveOrderFragment();
-                setTitle("Archive Orders");
                 break;
             case PRINT:
                 fragment = new PrintSettingFragment();
-                setTitle("Settings");
                 break;
             case LOGIN:
                 break;
@@ -75,7 +61,7 @@ public class BaseActivity extends AppCompatActivity {
 
 
     public void popToHomePage(){
-        getSupportFragmentManager().popBackStackImmediate(FRAGMENTS.ACTIVE.name(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        getSupportFragmentManager().popBackStack(FRAGMENTS.ACTIVE.name(), 0);
 
     }
 

@@ -17,6 +17,7 @@ import com.munchado.orderprocess.network.RequestController;
 import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.ui.activity.BaseActivity;
+import com.munchado.orderprocess.ui.activity.HomeActivity;
 import com.munchado.orderprocess.ui.adapter.ActiveOrderAdapter;
 import com.munchado.orderprocess.utils.DialogUtil;
 
@@ -46,6 +47,12 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
     private void fetchActiveOrder() {
         DialogUtil.showProgressDialog(getActivity());
         RequestController.getActiveOrder(this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((HomeActivity)getActivity()).setCustomTitle("Active Orders");
     }
 
     private void initView(View view) {
