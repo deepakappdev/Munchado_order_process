@@ -13,12 +13,13 @@ import com.munchado.orderprocess.common.FRAGMENTS;
 
 public class HomeActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -27,6 +28,7 @@ public class HomeActivity extends BaseActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
+        toolbar.setTitle("Active Orders");
         addFragment(FRAGMENTS.ACTIVE, null);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -51,8 +53,10 @@ public class HomeActivity extends BaseActivity
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         if (id == R.id.nav_order) {
-            addFragment(FRAGMENTS.ACTIVE, null);
+            popToHomePage();
+//            addFragment(FRAGMENTS.ACTIVE, null, toolbar);
         } else if (id == R.id.nav_manage) {
+            popToHomePage();
             addFragment(FRAGMENTS.PRINT, null);
         }
 
