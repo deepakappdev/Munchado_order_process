@@ -13,6 +13,7 @@ import com.munchado.orderprocess.common.FRAGMENTS;
 import com.munchado.orderprocess.ui.fragment.ActiveOrderFragment;
 import com.munchado.orderprocess.ui.fragment.ArchiveOrderFragment;
 import com.munchado.orderprocess.ui.fragment.BaseFragment;
+import com.munchado.orderprocess.ui.fragment.OrderDetailFragment;
 import com.munchado.orderprocess.ui.fragment.PrintSettingFragment;
 
 /**
@@ -31,25 +32,15 @@ public class BaseActivity extends AppCompatActivity {
         super.onPause();
     }
 
-
-  /*  public void addFragment(FRAGMENTS fragmentId, Bundle bundle) {
-        BaseFragment fragment = getFragment(fragmentId);
-        fragment.setArguments(bundle);
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.frame_container, fragment);
-        ft.addToBackStack(fragmentId.name());
-        ft.commit();
-
-    }*/
-
     public void addFragment(FRAGMENTS fragmentId, Bundle bundle) {
         BaseFragment fragment = getFragment(fragmentId);
-        fragment.setArguments(bundle);
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.frame_container, fragment);
-        ft.addToBackStack(null);
-        ft.commit();
-
+        if(fragment!=null) {
+            fragment.setArguments(bundle);
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.frame_container, fragment);
+            ft.addToBackStack(fragmentId.name());
+            ft.commit();
+        }
     }
 
     private BaseFragment getFragment(FRAGMENTS fragmentId) {
@@ -57,17 +48,17 @@ public class BaseActivity extends AppCompatActivity {
         switch (fragmentId) {
             case ACTIVE:
                 fragment = new ActiveOrderFragment();
-                setTitle("Active Orders");
                 break;
             case ARCHIVE:
                 fragment = new ArchiveOrderFragment();
-                setTitle("Archive Orders");
                 break;
             case PRINT:
                 fragment = new PrintSettingFragment();
-                setTitle("Settings");
                 break;
             case LOGIN:
+                break;
+            case ORDER_DETAIL:
+                fragment = new OrderDetailFragment();
                 break;
         }
         return fragment;
@@ -75,7 +66,7 @@ public class BaseActivity extends AppCompatActivity {
 
 
     public void popToHomePage(){
-        getSupportFragmentManager().popBackStackImmediate(FRAGMENTS.ACTIVE.name(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        getSupportFragmentManager().popBackStack(FRAGMENTS.ACTIVE.name(), 0);
 
     }
 

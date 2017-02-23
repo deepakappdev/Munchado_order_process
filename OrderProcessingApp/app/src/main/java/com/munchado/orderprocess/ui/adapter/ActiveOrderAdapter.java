@@ -10,15 +10,13 @@ import android.widget.TextView;
 import com.munchado.orderprocess.R;
 import com.munchado.orderprocess.model.archiveorder.ItemList;
 import com.munchado.orderprocess.model.archiveorder.OrderItem;
-import com.munchado.orderprocess.utils.DateTimeUtils;
-import com.munchado.orderprocess.utils.LogUtils;
 
 import java.util.List;
 
 /**
  * Created by android on 22/2/17.
  */
-public class ActiveOrderAdapter extends RecyclerView.Adapter<ActiveOrderAdapter.MyViewHolder> {
+public class ActiveOrderAdapter  extends RecyclerView.Adapter<ActiveOrderAdapter.MyViewHolder>{
 
     private List<OrderItem> orderItems;
 
@@ -41,7 +39,7 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<ActiveOrderAdapter.
         return orderItems.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    class MyViewHolder extends RecyclerView.ViewHolder{
 
         private final TextView textOrderType;
         private final TextView textOrderItem;
@@ -51,24 +49,23 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<ActiveOrderAdapter.
 
         public MyViewHolder(View itemView) {
             super(itemView);
-            textOrderType = (TextView) itemView.findViewById(R.id.text_order_type);
-            textOrderItem = (TextView) itemView.findViewById(R.id.text_order_item);
-            textOrderAmount = (TextView) itemView.findViewById(R.id.text_order_amount);
-            textDelayTime = (TextView) itemView.findViewById(R.id.text_delay_time);
-            btnAction = (Button) itemView.findViewById(R.id.btn_action);
+            textOrderType = (TextView)itemView.findViewById(R.id.text_order_type);
+            textOrderItem = (TextView)itemView.findViewById(R.id.text_order_item);
+            textOrderAmount = (TextView)itemView.findViewById(R.id.text_order_amount);
+            textDelayTime = (TextView)itemView.findViewById(R.id.text_delay_time);
+            btnAction = (Button)itemView.findViewById(R.id.btn_action);
 
         }
 
         public void populateItem(OrderItem orderItem) {
             textOrderType.setText(orderItem.order_type);
             StringBuilder stringBuilder = new StringBuilder();
-            for (ItemList itemList : orderItem.item_list) {
+            for(ItemList itemList:orderItem.item_list) {
                 stringBuilder.append(itemList.item_qty + " " + itemList.item_name + ", ");
             }
             textOrderItem.setText(stringBuilder.toString());
             textOrderAmount.setText("$ " + orderItem.total_amount);
-            LogUtils.d("==== " + stringBuilder.toString() + "===" + DateTimeUtils.getTimeAgo(orderItem.delivery_date) + "===" + orderItem.delivery_date);
-            textDelayTime.setText(DateTimeUtils.getTimeAgo(orderItem.delivery_date));
+            textDelayTime.setText(orderItem.delivery_date);
         }
     }
 }

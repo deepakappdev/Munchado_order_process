@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.munchado.orderprocess.R;
+import com.munchado.orderprocess.listener.OnOrderClickListener;
 import com.munchado.orderprocess.model.archiveorder.ItemList;
 import com.munchado.orderprocess.model.archiveorder.OrderItem;
 import com.munchado.orderprocess.utils.DateTimeUtils;
@@ -17,9 +18,11 @@ import java.util.List;
  * Created by android on 22/2/17.
  */
 public class ArchiveOrderAdapter extends RecyclerView.Adapter<ArchiveOrderAdapter.MyViewHolder>{
-
+    private final OnOrderClickListener clickListener;
     private List<OrderItem> orderItems;
-
+    public ArchiveOrderAdapter(OnOrderClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
     public void setResults(List<OrderItem> orderItems) {
         this.orderItems = orderItems;
     }
@@ -45,9 +48,16 @@ public class ArchiveOrderAdapter extends RecyclerView.Adapter<ArchiveOrderAdapte
         private final TextView textOrderItem;
         private final TextView textOrderAmount;
         private final TextView textDelayTime;
+        private OrderItem orderItem;
 
         public MyViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    clickListener.onClickOrderItem(orderItem);
+                }
+            });
             textOrderType = (TextView)itemView.findViewById(R.id.text_order_type);
             textOrderItem = (TextView)itemView.findViewById(R.id.text_order_item);
             textOrderAmount = (TextView)itemView.findViewById(R.id.text_order_amount);
@@ -56,6 +66,7 @@ public class ArchiveOrderAdapter extends RecyclerView.Adapter<ArchiveOrderAdapte
         }
 
         public void populateItem(OrderItem orderItem) {
+            this.orderItem = orderItem;
             textOrderType.setText(orderItem.order_type);
             StringBuilder stringBuilder = new StringBuilder();
             for(ItemList itemList:orderItem.item_list) {
