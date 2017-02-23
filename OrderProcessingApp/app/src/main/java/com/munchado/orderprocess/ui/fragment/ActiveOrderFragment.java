@@ -54,7 +54,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
     @Override
     public void onResume() {
         super.onResume();
-        ((HomeActivity)getActivity()).setCustomTitle("Active Orders");
+        ((HomeActivity) getActivity()).setCustomTitle("Active Orders");
     }
 
     private void initView(View view) {
@@ -90,7 +90,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
         public void onClickOrderItem(OrderItem orderItem) {
             Bundle bundle = new Bundle();
             bundle.putString("ORDER_ID", orderItem.id);
-            ((BaseActivity)getActivity()).addFragment(FRAGMENTS.ORDER_DETAIL, bundle);
+            ((BaseActivity) getActivity()).addFragment(FRAGMENTS.ORDER_DETAIL, bundle);
         }
 
         @Override
@@ -103,8 +103,9 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.text_archive_order:
-                ((BaseActivity)getActivity()).addFragment(FRAGMENTS.ARCHIVE, null);
+                ((BaseActivity) getActivity()).addFragment(FRAGMENTS.ARCHIVE, null);
                 break;
         }
     }
 }
+
