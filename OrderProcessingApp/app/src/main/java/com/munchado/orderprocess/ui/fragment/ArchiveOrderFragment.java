@@ -9,15 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.munchado.orderprocess.R;
-import com.munchado.orderprocess.model.archiveorder.ActiveOrderResponse;
-import com.munchado.orderprocess.model.archiveorder.ActiveOrderResponseData;
 import com.munchado.orderprocess.model.archiveorder.ArchiveOrderResponse;
 import com.munchado.orderprocess.model.archiveorder.ArchiveOrderResponseData;
 import com.munchado.orderprocess.network.RequestController;
 import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
-import com.munchado.orderprocess.ui.adapter.ActiveOrderAdapter;
 import com.munchado.orderprocess.ui.adapter.ArchiveOrderAdapter;
+import com.munchado.orderprocess.utils.DialogUtil;
 
 /**
  * Created by android on 22/2/17.
@@ -42,6 +40,7 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
     }
 
     private void fetchArchiveOrder() {
+        DialogUtil.showProgressDialog(getActivity());
         RequestController.getArchiveOrder(this);
     }
 
@@ -54,11 +53,12 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
 
     @Override
     public void error(NetworkError volleyError) {
-
+        DialogUtil.hideProgressDialog();
     }
 
     @Override
     public void success(Object obj) {
+        DialogUtil.hideProgressDialog();
         if (obj instanceof ArchiveOrderResponse) {
             showArchiveList(((ArchiveOrderResponse) obj).data);
         }
