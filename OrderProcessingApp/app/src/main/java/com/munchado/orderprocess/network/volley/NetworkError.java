@@ -22,37 +22,17 @@ public class NetworkError extends Exception {
     }
 
     public NetworkError(VolleyError volleyError) {
-//        if (volleyError instanceof TimeoutError) {
-//            localizedMessage = ERROR_MESSAGE;
-//            return;
-//        }
-//        if (volleyError instanceof ServerError) {
-//            localizedMessage = ERROR_MESSAGE;
-//            return;
-//        }
-//        if (volleyError instanceof ParseError) {
-//            localizedMessage = "Something went wrong. Please check internet connection.";
-//            //code = NetworkError.NO_NETWORK_ERROR;
-//            return;
-//        }
-//        if (volleyError instanceof NoConnectionError) {
-//            localizedMessage = ERROR_MESSAGE;
-//            code = NetworkError.NO_NETWORK_ERROR;
-//            return;
-//        }
-//        if (volleyError instanceof com.android.volley.NetworkError) {
-//            localizedMessage = ERROR_MESSAGE;
-//            return;
-//        }
-//        if (volleyError instanceof AuthFailureError) {
-//            localizedMessage = "Auth Failure Error";
-//            return;
-//        }
-
-        String response =new String(volleyError.networkResponse.data);
-        BaseResponse model= new Gson().fromJson(response,BaseResponse.class);
-        localizedMessage = model.message;
-
+        if(volleyError!=null && volleyError.networkResponse!=null && volleyError.networkResponse.data!=null){
+            String response =new String(volleyError.networkResponse.data);
+            BaseResponse model= new Gson().fromJson(response,BaseResponse.class);
+            localizedMessage = model.message;
+        }
+        else{
+            BaseResponse model= new BaseResponse();
+            model.message="Something went wrong";
+            model.result=false;
+            localizedMessage = model.message;
+        }
     }
 
 

@@ -8,9 +8,13 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.munchado.orderprocess.R;
+import com.munchado.orderprocess.network.RequestController;
+import com.munchado.orderprocess.network.volley.NetworkError;
+import com.munchado.orderprocess.network.volley.RequestCallback;
+import com.munchado.orderprocess.ui.fragment.CustomErrorDialogFragment;
 import com.munchado.orderprocess.utils.StringUtils;
 
-public class ProfileSettingActivity extends AppCompatActivity {
+public class ProfileSettingActivity extends AppCompatActivity implements RequestCallback{
 
     TextInputLayout txt_resname_layout, txt_address_layout, txt_phone_layout, txt_email_layout;
     TextView txt_resname, txt_address, txt_phone, txt_email, txt_zip, txt_state, txt_city;
@@ -19,6 +23,7 @@ public class ProfileSettingActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_setting);
+
         getSupportActionBar().setTitle("Profile Setting");
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -36,7 +41,7 @@ public class ProfileSettingActivity extends AppCompatActivity {
         txt_state = (TextView) findViewById(R.id.txt_state);
         txt_zip = (TextView) findViewById(R.id.txt_zip);
 
-
+        RequestController.getRestaurantProfileDetail(this);
     }
 
     @Override
@@ -87,5 +92,18 @@ public class ProfileSettingActivity extends AppCompatActivity {
     if(checkLoginValidation()){
 
     }
+    }
+
+    @Override
+    public void error(NetworkError networkError) {
+        if (networkError != null && !StringUtils.isNullOrEmpty(networkError.getLocalizedMessage())) {
+            CustomErrorDialogFragment errorDialogFragment = CustomErrorDialogFragment.newInstance(networkError.getLocalizedMessage());
+            errorDialogFragment.show(getSupportFragmentManager(), "Error");
+        }
+    }
+
+    @Override
+    public void success(Object obj) {
+
     }
 }

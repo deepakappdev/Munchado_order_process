@@ -36,6 +36,7 @@
                     android:id="@+id/txt_resname"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:enabled="false"
                     android:focusableInTouchMode="true"
                     android:hint="Restaurant Name"
                     android:inputType="text"
@@ -57,6 +58,7 @@
                     android:id="@+id/txt_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:enabled="false"
                     android:focusableInTouchMode="true"
                     android:hint="Address"
                     android:inputType="text"
@@ -144,6 +146,7 @@
                     android:id="@+id/txt_phone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:enabled="false"
                     android:focusableInTouchMode="true"
                     android:hint="Contact No."
                     android:inputType="phone"
@@ -165,6 +168,7 @@
                     android:id="@+id/txt_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:enabled="false"
                     android:focusableInTouchMode="true"
                     android:hint="Email"
                     android:inputType="textEmailAddress"
@@ -181,7 +185,8 @@
                 android:background="@drawable/green_button"
                 android:onClick="save"
                 android:text="Save"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                android:visibility="invisible" />
         </LinearLayout>
     </ScrollView>
 

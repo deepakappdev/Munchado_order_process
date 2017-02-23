@@ -24,10 +24,11 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.activity.settings.PrinterSettingActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".ui.activity.settings.ProfileSettingActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="stateHidden"  />
         <activity
             android:name=".ui.activity.settings.OrderProcessingSettingActivity"
             android:screenOrientation="portrait" />
