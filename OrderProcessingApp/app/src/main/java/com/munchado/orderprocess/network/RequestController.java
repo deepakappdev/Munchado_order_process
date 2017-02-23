@@ -16,6 +16,7 @@ import com.munchado.orderprocess.model.token.TokenResponse;
 import com.munchado.orderprocess.network.request.BaseRequest;
 import com.munchado.orderprocess.network.request.GetActiveOrderRequest;
 import com.munchado.orderprocess.network.request.GetArchiveOrderRequest;
+import com.munchado.orderprocess.network.request.GetOrderDetailRequest;
 import com.munchado.orderprocess.network.request.LoginRequest;
 import com.munchado.orderprocess.network.request.NewTokenRequest;
 import com.munchado.orderprocess.network.volley.GsonRequest;
@@ -122,6 +123,13 @@ public class RequestController {
 
     public static void getActiveOrder(RequestCallback callBack) {
         GetActiveOrderRequest request = new GetActiveOrderRequest();
+        GsonRequest gsonRequest = request.createServerRequest(getErrorListener(callBack), getListener(callBack, request));
+        getmRequestQueue().add(gsonRequest);
+    }
+
+
+    public static void getOrderDetail(String orderId, RequestCallback callBack) {
+        GetOrderDetailRequest request = new GetOrderDetailRequest(orderId);
         GsonRequest gsonRequest = request.createServerRequest(getErrorListener(callBack), getListener(callBack, request));
         getmRequestQueue().add(gsonRequest);
     }
