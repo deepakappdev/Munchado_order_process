@@ -9,11 +9,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.munchado.orderprocess.R;
+import com.munchado.orderprocess.common.FRAGMENTS;
+import com.munchado.orderprocess.listener.OnOrderClickListener;
 import com.munchado.orderprocess.model.archiveorder.ArchiveOrderResponse;
 import com.munchado.orderprocess.model.archiveorder.ArchiveOrderResponseData;
+import com.munchado.orderprocess.model.archiveorder.OrderItem;
 import com.munchado.orderprocess.network.RequestController;
 import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
+import com.munchado.orderprocess.ui.activity.BaseActivity;
 import com.munchado.orderprocess.ui.activity.HomeActivity;
 import com.munchado.orderprocess.ui.adapter.ArchiveOrderAdapter;
 import com.munchado.orderprocess.utils.DialogUtil;
@@ -70,10 +74,23 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
     }
 
     private void showArchiveList(ArchiveOrderResponseData data) {
-        ArchiveOrderAdapter adapter = new ArchiveOrderAdapter();
+        ArchiveOrderAdapter adapter = new ArchiveOrderAdapter(onOrderClickListener);
         adapter.setResults(data.archive_order);
         recyclerView.setAdapter(adapter);
     }
+    OnOrderClickListener onOrderClickListener = new OnOrderClickListener() {
+        @Override
+        public void onClickOrderItem(OrderItem orderItem) {
+            Bundle bundle = new Bundle();
+            bundle.putString("ORDER_ID", orderItem.id);
+            ((BaseActivity)getActivity()).addFragment(FRAGMENTS.ORDER_DETAIL, bundle);
+        }
+
+        @Override
+        public void onClickOrderAction(OrderItem orderItem) {
+
+        }
+    };
 
     @Override
     public void onClick(View view) {

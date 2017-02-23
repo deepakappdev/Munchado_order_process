@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.munchado.orderprocess.R;
+import com.munchado.orderprocess.listener.OnOrderClickListener;
 import com.munchado.orderprocess.model.archiveorder.ItemList;
 import com.munchado.orderprocess.model.archiveorder.OrderItem;
 
@@ -18,7 +19,12 @@ import java.util.List;
  */
 public class ActiveOrderAdapter  extends RecyclerView.Adapter<ActiveOrderAdapter.MyViewHolder>{
 
+    private final OnOrderClickListener clickListener;
     private List<OrderItem> orderItems;
+
+    public ActiveOrderAdapter(OnOrderClickListener clickListener) {
+        this.clickListener = clickListener;
+    }
 
     public void setResults(List<OrderItem> orderItems) {
         this.orderItems = orderItems;
@@ -46,18 +52,32 @@ public class ActiveOrderAdapter  extends RecyclerView.Adapter<ActiveOrderAdapter
         private final TextView textOrderAmount;
         private final TextView textDelayTime;
         private final Button btnAction;
+        private OrderItem orderItem;
 
         public MyViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    clickListener.onClickOrderItem(orderItem);
+                }
+            });
             textOrderType = (TextView)itemView.findViewById(R.id.text_order_type);
             textOrderItem = (TextView)itemView.findViewById(R.id.text_order_item);
             textOrderAmount = (TextView)itemView.findViewById(R.id.text_order_amount);
             textDelayTime = (TextView)itemView.findViewById(R.id.text_delay_time);
             btnAction = (Button)itemView.findViewById(R.id.btn_action);
+            btnAction.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    clickListener.onClickOrderAction(orderItem);
+                }
+            });
 
         }
 
         public void populateItem(OrderItem orderItem) {
+            this.orderItem = orderItem;
             textOrderType.setText(orderItem.order_type);
             StringBuilder stringBuilder = new StringBuilder();
             for(ItemList itemList:orderItem.item_list) {

@@ -13,6 +13,7 @@ import com.munchado.orderprocess.common.FRAGMENTS;
 import com.munchado.orderprocess.ui.fragment.ActiveOrderFragment;
 import com.munchado.orderprocess.ui.fragment.ArchiveOrderFragment;
 import com.munchado.orderprocess.ui.fragment.BaseFragment;
+import com.munchado.orderprocess.ui.fragment.OrderDetailFragment;
 import com.munchado.orderprocess.ui.fragment.PrintSettingFragment;
 
 /**
@@ -33,12 +34,13 @@ public class BaseActivity extends AppCompatActivity {
 
     public void addFragment(FRAGMENTS fragmentId, Bundle bundle) {
         BaseFragment fragment = getFragment(fragmentId);
-        fragment.setArguments(bundle);
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        ft.replace(R.id.frame_container, fragment);
-        ft.addToBackStack(fragmentId.name());
-        ft.commit();
-
+        if(fragment!=null) {
+            fragment.setArguments(bundle);
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.replace(R.id.frame_container, fragment);
+            ft.addToBackStack(fragmentId.name());
+            ft.commit();
+        }
     }
 
     private BaseFragment getFragment(FRAGMENTS fragmentId) {
@@ -54,6 +56,9 @@ public class BaseActivity extends AppCompatActivity {
                 fragment = new PrintSettingFragment();
                 break;
             case LOGIN:
+                break;
+            case ORDER_DETAIL:
+                fragment = new OrderDetailFragment();
                 break;
         }
         return fragment;

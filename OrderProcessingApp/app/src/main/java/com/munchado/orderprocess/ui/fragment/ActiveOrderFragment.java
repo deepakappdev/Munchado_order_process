@@ -11,8 +11,10 @@ import android.widget.TextView;
 
 import com.munchado.orderprocess.R;
 import com.munchado.orderprocess.common.FRAGMENTS;
+import com.munchado.orderprocess.listener.OnOrderClickListener;
 import com.munchado.orderprocess.model.archiveorder.ActiveOrderResponse;
 import com.munchado.orderprocess.model.archiveorder.ActiveOrderResponseData;
+import com.munchado.orderprocess.model.archiveorder.OrderItem;
 import com.munchado.orderprocess.network.RequestController;
 import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
@@ -78,10 +80,24 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
 
     private void showActiveList(ActiveOrderResponseData data) {
         textActiveOrderCount.setText(data.total_live_records + " ACTIVE ORDERS");
-        ActiveOrderAdapter adapter = new ActiveOrderAdapter();
+        ActiveOrderAdapter adapter = new ActiveOrderAdapter(onOrderClickListener);
         adapter.setResults(data.live_order);
         recyclerView.setAdapter(adapter);
     }
+
+    OnOrderClickListener onOrderClickListener = new OnOrderClickListener() {
+        @Override
+        public void onClickOrderItem(OrderItem orderItem) {
+            Bundle bundle = new Bundle();
+            bundle.putString("ORDER_ID", orderItem.id);
+            ((BaseActivity)getActivity()).addFragment(FRAGMENTS.ORDER_DETAIL, bundle);
+        }
+
+        @Override
+        public void onClickOrderAction(OrderItem orderItem) {
+
+        }
+    };
 
     @Override
     public void onClick(View view) {
