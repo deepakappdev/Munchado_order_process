@@ -18,6 +18,7 @@ import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.ui.activity.BaseActivity;
 import com.munchado.orderprocess.ui.adapter.ActiveOrderAdapter;
+import com.munchado.orderprocess.utils.DialogUtil;
 
 /**
  * Created by android on 22/2/17.
@@ -43,6 +44,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
     }
 
     private void fetchActiveOrder() {
+        DialogUtil.showProgressDialog(getActivity());
         RequestController.getActiveOrder(this);
     }
 
@@ -56,11 +58,12 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
 
     @Override
     public void error(NetworkError volleyError) {
-
+        DialogUtil.hideProgressDialog();
     }
 
     @Override
     public void success(Object obj) {
+        DialogUtil.hideProgressDialog();
         if (obj instanceof ActiveOrderResponse) {
             showActiveList(((ActiveOrderResponse) obj).data);
         }

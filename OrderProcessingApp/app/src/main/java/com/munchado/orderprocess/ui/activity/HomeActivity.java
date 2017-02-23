@@ -40,10 +40,10 @@ public class HomeActivity extends BaseActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            if (getSupportFragmentManager().getBackStackEntryCount() > 2)
+            if (getSupportFragmentManager().getBackStackEntryCount() > 1)
                 getSupportFragmentManager().popBackStack();
             else
-                super.onBackPressed();
+                finish();
         }
     }
 
