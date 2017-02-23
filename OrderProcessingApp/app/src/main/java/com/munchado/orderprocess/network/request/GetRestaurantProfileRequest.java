@@ -2,7 +2,7 @@ package com.munchado.orderprocess.network.request;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.munchado.orderprocess.model.BaseResponse;
+import com.munchado.orderprocess.model.profile.RestaurantProfileResponse;
 import com.munchado.orderprocess.network.volley.GsonRequest;
 import com.munchado.orderprocess.network.volley.NetworkConstants;
 import com.munchado.orderprocess.utils.LogUtils;
@@ -38,9 +38,9 @@ public class GetRestaurantProfileRequest extends BaseRequest{
     }
 
     public GsonRequest createServerRequest(Response.ErrorListener errorListener, Response.Listener listener) {
-        GsonRequest<BaseResponse> itemListRequest = new GsonRequest<>(
+        GsonRequest<RestaurantProfileResponse> itemListRequest = new GsonRequest<>(
                 Request.Method.GET, getServiceUrl(),
-                BaseResponse.class, null, listener, errorListener, getJsonRequest());
+                RestaurantProfileResponse.class, null, listener, errorListener, getJsonRequest());
         itemListRequest.setShouldCache(false);
         itemListRequest.setHeader(getHeaders());
         return itemListRequest;

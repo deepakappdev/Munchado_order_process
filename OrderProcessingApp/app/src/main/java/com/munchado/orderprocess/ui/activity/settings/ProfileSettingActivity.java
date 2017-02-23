@@ -8,13 +8,14 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.munchado.orderprocess.R;
+import com.munchado.orderprocess.model.profile.RestaurantProfileResponse;
 import com.munchado.orderprocess.network.RequestController;
 import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.ui.fragment.CustomErrorDialogFragment;
 import com.munchado.orderprocess.utils.StringUtils;
 
-public class ProfileSettingActivity extends AppCompatActivity implements RequestCallback{
+public class ProfileSettingActivity extends AppCompatActivity implements RequestCallback {
 
     TextInputLayout txt_resname_layout, txt_address_layout, txt_phone_layout, txt_email_layout;
     TextView txt_resname, txt_address, txt_phone, txt_email, txt_zip, txt_state, txt_city;
@@ -89,9 +90,9 @@ public class ProfileSettingActivity extends AppCompatActivity implements Request
     }
 
     public void save(View view) {
-    if(checkLoginValidation()){
+        if (checkLoginValidation()) {
 
-    }
+        }
     }
 
     @Override
@@ -104,6 +105,15 @@ public class ProfileSettingActivity extends AppCompatActivity implements Request
 
     @Override
     public void success(Object obj) {
-
+        RestaurantProfileResponse response = (RestaurantProfileResponse) obj;
+        if (response.result) {
+            txt_resname.setText(response.data.restaurant_name);
+            txt_address.setText(response.data.address);
+            txt_phone.setText(response.data.phone);
+            txt_email.setText(response.data.email);
+            txt_city.setText(response.data.city_name);
+            txt_state.setText(response.data.state);
+            txt_zip.setText(response.data.zipcode);
+        }
     }
 }
