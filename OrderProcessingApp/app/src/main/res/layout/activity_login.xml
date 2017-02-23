@@ -33,9 +33,10 @@
             android:layout_height="wrap_content"
             android:focusableInTouchMode="true"
             android:hint="Email Address"
-            android:inputType="textEmailAddress" android:text="info@baserany.com"
+            android:inputType="textEmailAddress"
             android:maxLines="1"
             android:singleLine="true"
+            android:text="info@baserany.com"
             android:textColor="@color/default_text_color" />
     </android.support.design.widget.TextInputLayout>
 
@@ -54,9 +55,10 @@
             android:layout_height="wrap_content"
             android:focusableInTouchMode="true"
             android:hint="Password"
-            android:inputType="textPassword" android:text="204654"
+            android:inputType="textPassword"
             android:maxLines="1"
             android:singleLine="true"
+            android:text="204654"
             android:textColor="@color/default_text_color" />
     </android.support.design.widget.TextInputLayout>
 

@@ -3,7 +3,6 @@ package com.munchado.orderprocess.utils;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -17,18 +16,19 @@ public class DateTimeUtils {
     static Date getCurrentNewYorkTime() {
         try {
             Calendar calendar = Calendar.getInstance();
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-yyyy hh:mm:ss");
-            sdf.setTimeZone(TimeZone.getTimeZone("America/New_York"));
+            SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_YYYY_MM_DD_HHMMSS);
+//            sdf.setTimeZone(TimeZone.getTimeZone("America/New_York"));
             String formattedStr = sdf.format(calendar.getTime());
-            return new SimpleDateFormat("dd-MMM-yyyy hh:mm:ss").parse(formattedStr);
+            return new SimpleDateFormat(FORMAT_YYYY_MM_DD_HHMMSS).parse(formattedStr);
         } catch(Exception x){
             return null;
         }
     }
 
-    public static String getTimeAgo(String dateStr, SimpleDateFormat format) {
+    public static String getTimeAgo(String dateStr) {
         try {
-            long milliSeconds = format.parse(dateStr).getTime();
+            SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_YYYY_MM_DD_HHMMSS);
+            long milliSeconds = sdf.parse(dateStr).getTime();
             long currentMilliSeconds = getCurrentNewYorkTime().getTime();
             long timeago = TimeUnit.MILLISECONDS.toMinutes(currentMilliSeconds - milliSeconds);
             if (timeago > 0 && timeago < 60)
