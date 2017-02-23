@@ -4,12 +4,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.munchado.orderprocess.R;
 import com.munchado.orderprocess.model.archiveorder.ItemList;
 import com.munchado.orderprocess.model.archiveorder.OrderItem;
+import com.munchado.orderprocess.utils.DateTimeUtils;
 
 import java.util.List;
 
@@ -63,7 +63,8 @@ public class ArchiveOrderAdapter extends RecyclerView.Adapter<ArchiveOrderAdapte
             }
             textOrderItem.setText(stringBuilder.toString());
             textOrderAmount.setText("$ " + orderItem.total_amount);
-            textDelayTime.setText(orderItem.delivery_date);
+//            textDelayTime.setText(orderItem.delivery_date);
+            textDelayTime.setText(DateTimeUtils.getTimeAgo(orderItem.delivery_date));
         }
     }
 }
