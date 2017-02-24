@@ -2,6 +2,7 @@ package com.munchado.orderprocess.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -15,13 +16,12 @@ import com.munchado.orderprocess.listener.OnOrderClickListener;
 import com.munchado.orderprocess.model.archiveorder.ActiveOrderResponse;
 import com.munchado.orderprocess.model.archiveorder.ActiveOrderResponseData;
 import com.munchado.orderprocess.model.archiveorder.OrderItem;
+import com.munchado.orderprocess.model.login.StatusResponse;
 import com.munchado.orderprocess.network.RequestController;
 import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.ui.activity.BaseActivity;
-import com.munchado.orderprocess.ui.activity.HomeActivity;
 import com.munchado.orderprocess.ui.adapter.ActiveOrderAdapter;
-import com.munchado.orderprocess.utils.DialogUtil;
 
 /**
  * Created by android on 22/2/17.
@@ -31,12 +31,16 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
 
     RecyclerView recyclerView;
     private TextView textActiveOrderCount;
+    private View rootView;
+    private ActiveOrderAdapter adapter;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        return inflater.inflate(R.layout.frag_active_order, container, false);
+        if (rootView == null)
+            rootView = inflater.inflate(R.layout.frag_active_order, container, false);
+        return rootView;
     }
 
     @Override
@@ -47,15 +51,10 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
     }
 
     private void fetchActiveOrder() {
-        DialogUtil.showProgressDialog(getActivity());
         RequestController.getActiveOrder(this);
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        ((HomeActivity)getActivity()).setCustomTitle("Active Orders");
-    }
+
 
     private void initView(View view) {
         textActiveOrderCount = (TextView) view.findViewById(R.id.text_active_order_count);
@@ -67,35 +66,56 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
 
     @Override
     public void error(NetworkError volleyError) {
-        DialogUtil.hideProgressDialog();
+
     }
 
     @Override
     public void success(Object obj) {
-        DialogUtil.hideProgressDialog();
+        if(getActivity()==null)return;
         if (obj instanceof ActiveOrderResponse) {
-            showActiveList(((ActiveOrderResponse) obj).data);
+            updateActiveList(((ActiveOrderResponse) obj).data);
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    fetchActiveOrder();
+                }
+            }, 30000);
+        } else if (obj instanceof StatusResponse) {
+            if (((StatusResponse) obj).data.message) {
+                moveToArchive(orderItem);
+            }
         }
     }
 
-    private void showActiveList(ActiveOrderResponseData data) {
-        textActiveOrderCount.setText(data.total_live_records + " ACTIVE ORDERS");
-        ActiveOrderAdapter adapter = new ActiveOrderAdapter(onOrderClickListener);
-        adapter.setResults(data.live_order);
-        recyclerView.setAdapter(adapter);
+    private void moveToArchive(OrderItem orderItem) {
+        adapter.removeOrder(orderItem);
     }
 
+    private void updateActiveList(ActiveOrderResponseData data) {
+        textActiveOrderCount.setText(data.total_live_records + " ACTIVE ORDERS");
+        if(adapter==null || recyclerView.getAdapter()!=adapter) {
+            adapter = new ActiveOrderAdapter(onOrderClickListener);
+            recyclerView.setAdapter(adapter);
+        }
+        adapter.updateResult(data.live_order);
+
+    }
+
+    private OrderItem orderItem;
     OnOrderClickListener onOrderClickListener = new OnOrderClickListener() {
         @Override
         public void onClickOrderItem(OrderItem orderItem) {
             Bundle bundle = new Bundle();
             bundle.putString("ORDER_ID", orderItem.id);
-            ((BaseActivity)getActivity()).addFragment(FRAGMENTS.ORDER_DETAIL, bundle);
+                                                      ((BaseActivity) getActivity()).addFragment(FRAGMENTS.ORDER_DETAIL, bundle);
         }
 
         @Override
         public void onClickOrderAction(OrderItem orderItem) {
-
+            ActiveOrderFragment.this.orderItem = orderItem;
+            RequestController.orderProcess(orderItem.id, ActiveOrderFragment.this);
+            orderItem.inProgress = true;
+            adapter.updateResult(orderItem);
         }
     };
 
@@ -103,8 +123,13 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.text_archive_order:
-                ((BaseActivity)getActivity()).addFragment(FRAGMENTS.ARCHIVE, null);
+                ((BaseActivity) getActivity()).addFragment(FRAGMENTS.ARCHIVE, null);
                 break;
         }
+    }
+
+    @Override
+    FRAGMENTS getFragmentId() {
+        return FRAGMENTS.ACTIVE;
     }
 }

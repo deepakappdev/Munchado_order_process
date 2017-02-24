@@ -2,11 +2,10 @@ package com.munchado.orderprocess.network.request;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.munchado.orderprocess.model.login.LoginResponse;
+import com.munchado.orderprocess.model.login.StatusResponse;
 import com.munchado.orderprocess.network.volley.GsonRequest;
 import com.munchado.orderprocess.network.volley.NetworkConstants;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -44,11 +43,11 @@ public class LogoutRequest extends BaseRequest {
     }
 
     public GsonRequest createServerRequest(Response.ErrorListener errorListener, Response.Listener listener) {
-        GsonRequest<LoginResponse> itemListRequest = new GsonRequest<>(
+        GsonRequest<StatusResponse> gsonRequest = new GsonRequest<>(
                 Request.Method.POST, getServiceUrl(),
-                LoginResponse.class, null, listener, errorListener, getJsonRequest());
-        itemListRequest.setShouldCache(false);
-        itemListRequest.setHeader(getHeaders());
-        return itemListRequest;
+                StatusResponse.class, null, listener, errorListener, getJsonRequest());
+        gsonRequest.setShouldCache(false);
+        gsonRequest.setHeader(getHeaders());
+        return gsonRequest;
     }
 }

@@ -36,11 +36,11 @@ public class GetArchiveOrderRequest extends BaseRequest{
     }
 
     public GsonRequest createServerRequest(Response.ErrorListener errorListener, Response.Listener listener) {
-        GsonRequest<ArchiveOrderResponse> itemListRequest = new GsonRequest<>(
+        GsonRequest<ArchiveOrderResponse> gsonRequest = new GsonRequest<>(
                 Request.Method.GET, getServiceUrl(),
                 ArchiveOrderResponse.class, null, listener, errorListener, getJsonRequest());
-        itemListRequest.setShouldCache(false);
-        itemListRequest.setHeader(getHeaders());
-        return itemListRequest;
+        gsonRequest.setShouldCache(false);
+        gsonRequest.setHeader(getHeaders());
+        return gsonRequest;
     }
 }

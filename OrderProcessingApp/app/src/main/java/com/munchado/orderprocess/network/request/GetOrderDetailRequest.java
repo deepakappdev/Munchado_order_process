@@ -42,11 +42,11 @@ public class GetOrderDetailRequest extends BaseRequest{
     }
 
     public GsonRequest createServerRequest(Response.ErrorListener errorListener, Response.Listener listener) {
-        GsonRequest<OrderDetailResponse> itemListRequest = new GsonRequest<>(
+        GsonRequest<OrderDetailResponse> gsonRequest = new GsonRequest<>(
                 Request.Method.GET, getServiceUrl(),
                 OrderDetailResponse.class, null, listener, errorListener, getJsonRequest());
-        itemListRequest.setShouldCache(false);
-        itemListRequest.setHeader(getHeaders());
-        return itemListRequest;
+        gsonRequest.setShouldCache(false);
+        gsonRequest.setHeader(getHeaders());
+        return gsonRequest;
     }
 }

@@ -15,6 +15,7 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.munchado.orderprocess.R;
+import com.munchado.orderprocess.utils.LogUtils;
 import com.munchado.orderprocess.utils.StringUtils;
 
 /**
@@ -74,7 +75,6 @@ public class CustomErrorDialogFragment extends DialogFragment {
         if(!StringUtils.isNullOrEmpty(mButtonText))
             mCloseBtn.setText(mButtonText);
         mErrorText.setText(mErrorMsg);
-        Log.i("====","======= error msg : "+mErrorMsg);
         mCloseBtn.setOnClickListener(new View.OnClickListener() {
 
             @Override

@@ -6,6 +6,6 @@ import com.munchado.orderprocess.model.BaseResponse;
  * Created by android on 22/2/17.
  */
 
-public class LoginResponse extends BaseResponse {
-    public LoginResponseData data;
+public class StatusResponse extends BaseResponse {
+    public StatusResponseData data;
 }

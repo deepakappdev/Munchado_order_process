@@ -48,11 +48,11 @@ public class NetworkError extends Exception {
 //            localizedMessage = "Auth Failure Error";
 //            return;
 //        }
-
-        String response =new String(volleyError.networkResponse.data);
-        BaseResponse model= new Gson().fromJson(response,BaseResponse.class);
-        localizedMessage = model.message;
-
+        if (volleyError.networkResponse != null && volleyError.networkResponse.data != null) {
+            String response = new String(volleyError.networkResponse.data);
+            BaseResponse model = new Gson().fromJson(response, BaseResponse.class);
+            localizedMessage = model.message;
+        }
     }
 
 

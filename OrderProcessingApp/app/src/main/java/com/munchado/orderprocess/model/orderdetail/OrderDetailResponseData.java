@@ -35,4 +35,5 @@ public class OrderDetailResponseData {
     public MyDeliveryDetail my_delivery_detail;
     public OrderAmountCalculation order_amount_calculation;
     public ArrayList<MyItemList> item_list = new ArrayList<>();
+    public String email = "";
 }

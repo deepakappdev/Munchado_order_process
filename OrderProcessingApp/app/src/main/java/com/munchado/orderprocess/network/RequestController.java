@@ -19,6 +19,7 @@ import com.munchado.orderprocess.network.request.GetArchiveOrderRequest;
 import com.munchado.orderprocess.network.request.GetOrderDetailRequest;
 import com.munchado.orderprocess.network.request.LoginRequest;
 import com.munchado.orderprocess.network.request.NewTokenRequest;
+import com.munchado.orderprocess.network.request.OrderProcessRequest;
 import com.munchado.orderprocess.network.volley.GsonRequest;
 import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
@@ -43,7 +44,7 @@ public class RequestController {
         return new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
-                LogUtils.e("====" + new String(volleyError.networkResponse.data));
+
                 if (callback != null)
                     callback.error(new NetworkError(volleyError));
 
@@ -133,6 +134,13 @@ public class RequestController {
         GsonRequest gsonRequest = request.createServerRequest(getErrorListener(callBack), getListener(callBack, request));
         getmRequestQueue().add(gsonRequest);
     }
+
+    public static void orderProcess(String orderId, RequestCallback callBack) {
+        OrderProcessRequest request = new OrderProcessRequest(orderId);
+        GsonRequest gsonRequest = request.createServerRequest(getErrorListener(callBack), getListener(callBack, request));
+        getmRequestQueue().add(gsonRequest);
+    }
+
 
 
 }

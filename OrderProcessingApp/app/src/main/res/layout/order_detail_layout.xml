@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/dark_grey"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <ImageView
@@ -13,40 +12,53 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_margin="@dimen/margin_normal"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/margin_normal">
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:gravity="right"
             android:orientation="vertical">
 
             <com.munchado.orderprocess.ui.widgets.CustomTextView
                 android:layout_width="wrap_content"
-                android:textColor="@color/grey_light"
-                app:textStyle="RobotoLight"
                 android:layout_height="wrap_content"
-                android:text="Name:" />
+                android:text="Order ID:"
+                android:textColor="@color/grey_light"
+                app:textStyle="RobotoLight" />
+
             <com.munchado.orderprocess.ui.widgets.CustomTextView
                 android:layout_width="wrap_content"
-                android:textColor="@color/grey_light"
-                app:textStyle="RobotoLight"
                 android:layout_height="wrap_content"
-                android:text="Email:" />
+                android:text="Type:"
+                android:textColor="@color/grey_light"
+                app:textStyle="RobotoLight" />
+
             <com.munchado.orderprocess.ui.widgets.CustomTextView
                 android:layout_width="wrap_content"
-                android:textColor="@color/grey_light"
-                app:textStyle="RobotoLight"
                 android:layout_height="wrap_content"
-                android:text="Tel:" />
+                android:text="Time of Order:"
+                android:textColor="@color/grey_light"
+                app:textStyle="RobotoLight" />
+
             <com.munchado.orderprocess.ui.widgets.CustomTextView
+                android:id="@+id/label_order_time"
                 android:layout_width="wrap_content"
-                android:textColor="@color/grey_light"
-                app:textStyle="RobotoLight"
                 android:layout_height="wrap_content"
-                android:text="Past Activity:" />
+                android:text="Time of Delivery:"
+                android:textColor="@color/grey_light"
+                app:textStyle="RobotoLight" />
+
+            <com.munchado.orderprocess.ui.widgets.CustomTextView
+                android:id="@+id/label_delivery_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:text="Deliver to:"
+                android:textColor="@color/grey_light"
+                app:textStyle="RobotoLight" />
 
         </LinearLayout>
 
@@ -54,36 +66,44 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margin_small"
-            android:layout_weight="3"
+            android:layout_weight="1"
             android:orientation="vertical">
+
             <com.munchado.orderprocess.ui.widgets.CustomTextView
+                android:id="@+id/text_order_id"
                 android:layout_width="wrap_content"
-                android:textColor="@color/white"
-                app:textStyle="RobotoMedium"
-                android:id="@+id/text_name"
                 android:layout_height="wrap_content"
-                />
+                android:textColor="@color/default_text_color"
+                app:textStyle="RobotoMedium" />
+
             <com.munchado.orderprocess.ui.widgets.CustomTextView
+                android:id="@+id/text_order_type"
                 android:layout_width="wrap_content"
-                android:textColor="@color/white"
-                app:textStyle="RobotoMedium"
-                android:id="@+id/text_email"
                 android:layout_height="wrap_content"
-                />
+                android:textColor="@color/default_text_color"
+                app:textStyle="RobotoMedium" />
+
             <com.munchado.orderprocess.ui.widgets.CustomTextView
+                android:id="@+id/text_order_time"
                 android:layout_width="wrap_content"
-                android:textColor="@color/white"
-                android:id="@+id/text_telephone"
-                app:textStyle="RobotoMedium"
                 android:layout_height="wrap_content"
-                 />
+                android:textColor="@color/default_text_color"
+                app:textStyle="RobotoMedium" />
+
             <com.munchado.orderprocess.ui.widgets.CustomTextView
+                android:id="@+id/text_delivery_time"
                 android:layout_width="wrap_content"
-                android:textColor="@color/white"
-                app:textStyle="RobotoMedium"
-                android:id="@+id/text_past_activity"
                 android:layout_height="wrap_content"
-                />
+                android:textColor="@color/default_text_color"
+                app:textStyle="RobotoMedium" />
+
+            <com.munchado.orderprocess.ui.widgets.CustomTextView
+                android:id="@+id/text_delivery_address"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                android:textColor="@color/default_text_color"
+                app:textStyle="RobotoMedium" />
 
         </LinearLayout>
 

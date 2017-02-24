@@ -18,7 +18,6 @@ import java.util.HashMap;
 public class GetActiveOrderRequest extends BaseRequest{
 
     public String getServiceUrl() {
-        LogUtils.d("=== url : "+NetworkConstants.GET_ORDER_URL + "&token="+ PrefUtil.getToken()+"&type=live");
         return NetworkConstants.GET_ORDER_URL + "&token="+ PrefUtil.getToken()+"&type=live";
     }
 
@@ -38,11 +37,11 @@ public class GetActiveOrderRequest extends BaseRequest{
     }
 
     public GsonRequest createServerRequest(Response.ErrorListener errorListener, Response.Listener listener) {
-        GsonRequest<ActiveOrderResponse> itemListRequest = new GsonRequest<>(
+        GsonRequest<ActiveOrderResponse> gsonRequest = new GsonRequest<>(
                 Request.Method.GET, getServiceUrl(),
                 ActiveOrderResponse.class, null, listener, errorListener, getJsonRequest());
-        itemListRequest.setShouldCache(false);
-        itemListRequest.setHeader(getHeaders());
-        return itemListRequest;
+        gsonRequest.setShouldCache(false);
+        gsonRequest.setHeader(getHeaders());
+        return gsonRequest;
     }
 }

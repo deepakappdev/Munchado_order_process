@@ -44,9 +44,8 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
         fetchArchiveOrder();
     }
     @Override
-    public void onResume() {
-        super.onResume();
-        ((HomeActivity)getActivity()).setCustomTitle("Archive Orders");
+    FRAGMENTS getFragmentId() {
+        return FRAGMENTS.ARCHIVE;
     }
     private void fetchArchiveOrder() {
         DialogUtil.showProgressDialog(getActivity());
