@@ -1,5 +1,6 @@
 package com.munchado.orderprocess.model.print;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -8,5 +9,5 @@ import java.util.List;
 public class PrintModel {
 
     public PrintHeaderModel mPrintHeaderModel;
-    public List<PrintItemModel> mPrintItemList;
+    public List<PrintItemModel> mPrintItemList = new ArrayList<>();
 }

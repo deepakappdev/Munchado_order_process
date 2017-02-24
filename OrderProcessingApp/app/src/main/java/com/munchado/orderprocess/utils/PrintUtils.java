@@ -19,6 +19,7 @@ public class PrintUtils {
     public void setPrintData(ActiveOrderResponseData data){
         List<OrderItem> orderItemsList = data.live_order;
         PrintModel mPrintModel=new PrintModel();
+        mPrintModel.mPrintItemList.clear();
         for(OrderItem orderItem : orderItemsList){
             PrintHeaderModel mPrintHeaderModel=new PrintHeaderModel();
             mPrintHeaderModel.store_name = orderItem.restaurant_name;
@@ -29,12 +30,19 @@ public class PrintUtils {
                 printItemModel.serial_no=i;
                 printItemModel.item_name = mItemModel.item_name;
                 printItemModel.quantity = Integer.parseInt(mItemModel.item_qty);
+
                 mPrintModel.mPrintItemList.add(printItemModel);
                 i++;
             }
             mPrintModel.mPrintHeaderModel = mPrintHeaderModel;
         }
 
+        LogUtils.d(mPrintModel.mPrintHeaderModel.store_name);
+        LogUtils.d("$ "+mPrintModel.mPrintHeaderModel.total);
+        LogUtils.d(mPrintModel.mPrintHeaderModel.seperator);
+        for(PrintItemModel printItemModel : mPrintModel.mPrintItemList){
+            LogUtils.d(printItemModel.serial_no+" "+printItemModel.item_name+" "+printItemModel.quantity);
+        }
     }
 
     public void printSampleText(){
