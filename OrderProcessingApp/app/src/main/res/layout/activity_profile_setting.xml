@@ -40,8 +40,6 @@
                     android:focusableInTouchMode="true"
                     android:hint="Restaurant Name"
                     android:inputType="text"
-                    android:maxLines="1"
-                    android:singleLine="true"
                     android:textColor="@color/default_text_color" />
             </android.support.design.widget.TextInputLayout>
 
@@ -62,8 +60,6 @@
                     android:focusableInTouchMode="true"
                     android:hint="Address"
                     android:inputType="text"
-                    android:maxLines="1"
-                    android:singleLine="true"
                     android:textColor="@color/default_text_color" />
             </android.support.design.widget.TextInputLayout>
 

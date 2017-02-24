@@ -13,6 +13,7 @@ import com.munchado.orderprocess.network.RequestController;
 import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.ui.fragment.CustomErrorDialogFragment;
+import com.munchado.orderprocess.utils.DialogUtil;
 import com.munchado.orderprocess.utils.StringUtils;
 
 public class ProfileSettingActivity extends AppCompatActivity implements RequestCallback {
@@ -42,6 +43,7 @@ public class ProfileSettingActivity extends AppCompatActivity implements Request
         txt_state = (TextView) findViewById(R.id.txt_state);
         txt_zip = (TextView) findViewById(R.id.txt_zip);
 
+        DialogUtil.showProgressDialog(this);
         RequestController.getRestaurantProfileDetail(this);
     }
 
@@ -97,6 +99,7 @@ public class ProfileSettingActivity extends AppCompatActivity implements Request
 
     @Override
     public void error(NetworkError networkError) {
+        DialogUtil.hideProgressDialog();
         if (networkError != null && !StringUtils.isNullOrEmpty(networkError.getLocalizedMessage())) {
             CustomErrorDialogFragment errorDialogFragment = CustomErrorDialogFragment.newInstance(networkError.getLocalizedMessage());
             errorDialogFragment.show(getSupportFragmentManager(), "Error");
@@ -105,6 +108,7 @@ public class ProfileSettingActivity extends AppCompatActivity implements Request
 
     @Override
     public void success(Object obj) {
+        DialogUtil.hideProgressDialog();
         RestaurantProfileResponse response = (RestaurantProfileResponse) obj;
         if (response.result) {
             txt_resname.setText(response.data.restaurant_name);
