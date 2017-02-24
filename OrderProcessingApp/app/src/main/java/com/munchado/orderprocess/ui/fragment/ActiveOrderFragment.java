@@ -17,6 +17,8 @@ import com.munchado.orderprocess.model.archiveorder.ActiveOrderResponse;
 import com.munchado.orderprocess.model.archiveorder.ActiveOrderResponseData;
 import com.munchado.orderprocess.model.archiveorder.OrderItem;
 import com.munchado.orderprocess.model.login.StatusResponse;
+import com.munchado.orderprocess.model.orderdetail.OrderDetailResponse;
+import com.munchado.orderprocess.model.orderprocess.OrderProcessResponse;
 import com.munchado.orderprocess.network.RequestController;
 import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
@@ -55,7 +57,6 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
     }
 
 
-
     private void initView(View view) {
         textActiveOrderCount = (TextView) view.findViewById(R.id.text_active_order_count);
         view.findViewById(R.id.text_archive_order).setOnClickListener(this);
@@ -71,7 +72,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
 
     @Override
     public void success(Object obj) {
-        if(getActivity()==null)return;
+        if (getActivity() == null) return;
         if (obj instanceof ActiveOrderResponse) {
             updateActiveList(((ActiveOrderResponse) obj).data);
             handler.postDelayed(new Runnable() {
@@ -80,20 +81,27 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
                     fetchActiveOrder();
                 }
             }, 30000);
-        } else if (obj instanceof StatusResponse) {
-            if (((StatusResponse) obj).data.message) {
-                moveToArchive(orderItem);
+        } else if (obj instanceof OrderProcessResponse) {
+            if (((OrderProcessResponse) obj).data.message) {
+                if(((OrderProcessResponse) obj).data.status.equalsIgnoreCase("confirmed"))
+                    moveToConfirmed(((OrderProcessResponse) obj).data.order_id);
+                else
+                    moveToArchive(((OrderProcessResponse) obj).data.order_id);
             }
         }
     }
 
-    private void moveToArchive(OrderItem orderItem) {
-        adapter.removeOrder(orderItem);
+    private void moveToArchive(String orderId) {
+        adapter.removeOrder(orderId);
     }
+    private void moveToConfirmed(String orderId) {
+        adapter.confirmOrder(orderId);
+    }
+
 
     private void updateActiveList(ActiveOrderResponseData data) {
         textActiveOrderCount.setText(data.total_live_records + " ACTIVE ORDERS");
-        if(adapter==null || recyclerView.getAdapter()!=adapter) {
+        if (adapter == null || recyclerView.getAdapter() != adapter) {
             adapter = new ActiveOrderAdapter(onOrderClickListener);
             recyclerView.setAdapter(adapter);
         }
@@ -101,7 +109,6 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
 
     }
 
-    private OrderItem orderItem;
     OnOrderClickListener onOrderClickListener = new OnOrderClickListener() {
         @Override
         public void onClickOrderItem(OrderItem orderItem) {
@@ -112,8 +119,16 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
 
         @Override
         public void onClickOrderAction(OrderItem orderItem) {
-            ActiveOrderFragment.this.orderItem = orderItem;
-            RequestController.orderProcess(orderItem.id, ActiveOrderFragment.this);
+            String status = "";
+            if (orderItem.status.equalsIgnoreCase("placed"))
+                status = "confirmed";
+            else if (orderItem.status.equalsIgnoreCase("confirmed")) {
+                if (orderItem.order_type.equalsIgnoreCase("takeout"))
+                    status = "arrived";
+                else
+                    status = "delivered";
+            }
+            RequestController.orderProcess(orderItem.id, status, "", ActiveOrderFragment.this);
             orderItem.inProgress = true;
             adapter.updateResult(orderItem);
         }

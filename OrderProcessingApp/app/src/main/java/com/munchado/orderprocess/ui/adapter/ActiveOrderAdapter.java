@@ -28,19 +28,22 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<ActiveOrderAdapter.
     }
 
     public void updateResult(List<OrderItem> orderItems) {
-        for(OrderItem orderItem : orderItems) {
-            int position = getItemPosition(orderItem);
-            if(position==-1) {
-                this.orderItems.add(0, orderItem);
-                notifyItemInserted(0);
-                notifyItemRangeChanged(0, getItemCount());
+        if (this.orderItems.size() == 0) {
+            this.orderItems.addAll(orderItems);
+        } else
+            for (OrderItem orderItem : orderItems) {
+                int position = getItemPosition(orderItem.id);
+                if (position == -1) {
+                    this.orderItems.add(0, orderItem);
+                    notifyItemInserted(0);
+                    notifyItemRangeChanged(0, getItemCount());
+                }
             }
-        }
     }
 
     public void updateResult(OrderItem selectedItem) {
-        int position = getItemPosition(selectedItem);
-        if(position>=0) {
+        int position = getItemPosition(selectedItem.id);
+        if (position >= 0) {
             orderItems.remove(position);
             orderItems.add(position, selectedItem);
             notifyItemChanged(position);
@@ -63,8 +66,8 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<ActiveOrderAdapter.
         return orderItems.size();
     }
 
-    public void removeOrder(OrderItem orderItem) {
-        int position = getItemPosition(orderItem);
+    public void removeOrder(String orderId) {
+        int position = getItemPosition(orderId);
         if (position > -1) {
             orderItems.remove(position);
             notifyItemRemoved(position);
@@ -72,12 +75,12 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<ActiveOrderAdapter.
         }
     }
 
-    private int getItemPosition(OrderItem selectedItem) {
+    private int getItemPosition(String orderId) {
         int position = -1;
         boolean found = false;
         for (OrderItem orderItem : this.orderItems) {
             position++;
-            if (orderItem.id.equalsIgnoreCase(selectedItem.id)) {
+            if (orderItem.id.equalsIgnoreCase(orderId)) {
                 found = true;
                 break;
             }
@@ -87,6 +90,17 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<ActiveOrderAdapter.
         else
             return -1;
     }
+
+    public void confirmOrder(String orderId) {
+        int position = getItemPosition(orderId);
+        if (position > -1) {
+            orderItems.get(position).status = "confirmed";
+            orderItems.get(position).inProgress = false;
+            notifyItemChanged(position);
+            notifyItemRangeChanged(position, getItemCount());
+        }
+    }
+
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
@@ -123,11 +137,28 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<ActiveOrderAdapter.
             textOrderType.setText(orderItem.order_type);
             StringBuilder stringBuilder = new StringBuilder();
             for (ItemList itemList : orderItem.item_list) {
-                stringBuilder.append(itemList.item_qty + " " + itemList.item_name + ", ");
+                stringBuilder.append(itemList.item_qty).append(" ").append(itemList.item_name).append(", ");
             }
             textOrderItem.setText(stringBuilder.toString());
             textOrderAmount.setText("$ " + orderItem.total_amount);
             textDelayTime.setText(DateTimeUtils.getTimeAgo(orderItem.delivery_date));
+            if(orderItem.inProgress) {
+                btnAction.setVisibility(View.GONE);
+            } else {
+                btnAction.setVisibility(View.VISIBLE);
+                if (orderItem.status.equalsIgnoreCase("confirmed")) {
+                    if (orderItem.order_type.equalsIgnoreCase("takeout")) {
+                        btnAction.setText("Picked Up");
+                    } else if (orderItem.order_type.equalsIgnoreCase("delivery")) {
+                        btnAction.setText("Delivering");
+                    }
+                    btnAction.setBackgroundResource(R.drawable.green_button);
+
+                } else if (orderItem.status.equalsIgnoreCase("placed")) {
+                    btnAction.setText("Confirm");
+                    btnAction.setBackgroundResource(R.drawable.green_button);
+                }
+            }
         }
     }
 }

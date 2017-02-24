@@ -96,7 +96,7 @@ public class GsonRequest<T> extends Request<T> {
         if (!StringUtils.isNullOrEmpty(PrefUtil.getToken()))
             headers.put("token", PrefUtil.getToken());
 //        headers.put("Accept", "application/json; charset=utf-8");
-        LogUtils.d("==== Headers: " + headers);
+        LogUtils.d("==== Headers: ", headers.toString());
         this.headers = headers;
     }
 

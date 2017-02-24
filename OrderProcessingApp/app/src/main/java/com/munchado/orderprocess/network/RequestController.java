@@ -46,7 +46,7 @@ public class RequestController {
             @Override
             public void onErrorResponse(VolleyError volleyError) {
 //                LogUtils.e("====" + new String(volleyError.networkResponse.data));
-                LogUtils.e("====" + volleyError.getLocalizedMessage());
+                LogUtils.e("==== Error: ", volleyError.getLocalizedMessage());
                 if (callback != null)
                     callback.error(new NetworkError(volleyError));
 
@@ -137,8 +137,8 @@ public class RequestController {
         getmRequestQueue().add(gsonRequest);
     }
 
-    public static void orderProcess(String orderId, RequestCallback callBack) {
-        OrderProcessRequest request = new OrderProcessRequest(orderId);
+    public static void orderProcess(String orderId, String status, String reason, RequestCallback callBack) {
+        OrderProcessRequest request = new OrderProcessRequest(orderId, status, reason);
         GsonRequest gsonRequest = request.createServerRequest(getErrorListener(callBack), getListener(callBack, request));
         getmRequestQueue().add(gsonRequest);
     }

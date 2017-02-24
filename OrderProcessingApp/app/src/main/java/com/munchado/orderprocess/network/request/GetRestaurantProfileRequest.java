@@ -18,7 +18,6 @@ import java.util.HashMap;
 public class GetRestaurantProfileRequest extends BaseRequest{
 
     public String getServiceUrl() {
-        LogUtils.d("=== url : "+ NetworkConstants.GET_RESTAURANT_PROFILE_URL + "&token="+ PrefUtil.getToken());
         return NetworkConstants.GET_RESTAURANT_PROFILE_URL + "&token="+ PrefUtil.getToken();
     }
 
