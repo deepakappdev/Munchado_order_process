@@ -9,6 +9,7 @@ public class OrderDetailResponseData {
     public String id;
     public String customer_first_name;
     public String customer_last_name;
+    public String email;
     public String order_date;
     public String status;
     public String order_type1;
@@ -35,5 +36,5 @@ public class OrderDetailResponseData {
     public MyDeliveryDetail my_delivery_detail;
     public OrderAmountCalculation order_amount_calculation;
     public ArrayList<MyItemList> item_list = new ArrayList<>();
-    public String email = "";
+    public UserActivity user_activity;
 }

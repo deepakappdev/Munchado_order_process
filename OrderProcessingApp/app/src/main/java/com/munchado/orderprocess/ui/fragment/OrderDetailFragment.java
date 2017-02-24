@@ -134,7 +134,21 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         textName.setText(data.customer_first_name + " " + data.customer_last_name);
         textTelephone.setText(data.my_delivery_detail.phone);
         textEmail.setText(data.email);
-        textPastActivity.setText("No Past Activity");
+        StringBuilder pastActivity = new StringBuilder();
+        if(data.user_activity!=null) {
+            if(data.user_activity.total_user_order>0)
+                pastActivity.append(data.user_activity.total_user_order).append(" Orders");
+            if(data.user_activity.total_user_reservation>0)
+                pastActivity.append(", ").append(data.user_activity.total_user_reservation).append(" Reservation");
+            if(data.user_activity.total_user_checkin>0)
+                pastActivity.append(", ").append(data.user_activity.total_user_checkin).append(" Checkins");
+            if(data.user_activity.total_user_review>0)
+                pastActivity.append(", ").append(data.user_activity.total_user_review).append(" Reviews");
+        }
+        if(pastActivity.toString().isEmpty())
+            textPastActivity.setText("No Past Activity");
+        else
+            textPastActivity.setText(pastActivity.toString());
 
 
         showOrderDetail(data);
