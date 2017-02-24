@@ -11,6 +11,7 @@ import com.munchado.orderprocess.R;
 import com.munchado.orderprocess.listener.OnOrderClickListener;
 import com.munchado.orderprocess.model.archiveorder.ItemList;
 import com.munchado.orderprocess.model.archiveorder.OrderItem;
+import com.munchado.orderprocess.utils.DateTimeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -126,7 +127,7 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<ActiveOrderAdapter.
             }
             textOrderItem.setText(stringBuilder.toString());
             textOrderAmount.setText("$ " + orderItem.total_amount);
-            textDelayTime.setText(orderItem.delivery_date);
+            textDelayTime.setText(DateTimeUtils.getTimeAgo(orderItem.delivery_date));
         }
     }
 }

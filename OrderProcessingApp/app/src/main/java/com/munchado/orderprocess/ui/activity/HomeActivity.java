@@ -1,5 +1,6 @@
 package com.munchado.orderprocess.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -10,6 +11,7 @@ import android.view.MenuItem;
 
 import com.munchado.orderprocess.R;
 import com.munchado.orderprocess.common.FRAGMENTS;
+import com.munchado.orderprocess.utils.PrefUtil;
 
 public class HomeActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -54,10 +56,13 @@ public class HomeActivity extends BaseActivity
         int id = item.getItemId();
         if (id == R.id.nav_order) {
             popToHomePage();
-//            addFragment(FRAGMENTS.ACTIVE, null, toolbar);
         } else if (id == R.id.nav_manage) {
             popToHomePage();
             addFragment(FRAGMENTS.PRINT, null);
+        } else if (id == R.id.nav_logout) {
+            PrefUtil.clearAllData();
+            startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

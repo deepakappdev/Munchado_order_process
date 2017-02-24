@@ -107,7 +107,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
         public void onClickOrderItem(OrderItem orderItem) {
             Bundle bundle = new Bundle();
             bundle.putString("ORDER_ID", orderItem.id);
-                                                      ((BaseActivity) getActivity()).addFragment(FRAGMENTS.ORDER_DETAIL, bundle);
+            ((BaseActivity) getActivity()).addFragment(FRAGMENTS.ORDER_DETAIL, bundle);
         }
 
         @Override
