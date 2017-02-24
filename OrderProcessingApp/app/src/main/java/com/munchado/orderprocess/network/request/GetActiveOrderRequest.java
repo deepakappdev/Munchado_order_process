@@ -5,7 +5,6 @@ import com.android.volley.Response;
 import com.munchado.orderprocess.model.archiveorder.ActiveOrderResponse;
 import com.munchado.orderprocess.network.volley.GsonRequest;
 import com.munchado.orderprocess.network.volley.NetworkConstants;
-import com.munchado.orderprocess.utils.LogUtils;
 import com.munchado.orderprocess.utils.PrefUtil;
 
 import org.json.JSONObject;

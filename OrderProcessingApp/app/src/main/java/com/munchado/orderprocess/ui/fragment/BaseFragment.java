@@ -1,15 +1,10 @@
 package com.munchado.orderprocess.ui.fragment;
 
-import android.content.Context;
-import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
 
 import com.munchado.orderprocess.common.FRAGMENTS;
 import com.munchado.orderprocess.ui.activity.HomeActivity;
-import com.munchado.orderprocess.utils.Constants;
 
 /**
  * Created by android on 22/2/17.

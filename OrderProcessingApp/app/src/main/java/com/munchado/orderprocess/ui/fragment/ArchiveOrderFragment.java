@@ -18,7 +18,6 @@ import com.munchado.orderprocess.network.RequestController;
 import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.ui.activity.BaseActivity;
-import com.munchado.orderprocess.ui.activity.HomeActivity;
 import com.munchado.orderprocess.ui.adapter.ArchiveOrderAdapter;
 import com.munchado.orderprocess.utils.DialogUtil;
 

@@ -2,7 +2,6 @@ package com.munchado.orderprocess.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -105,7 +104,9 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
             adapter = new ActiveOrderAdapter(onOrderClickListener);
             recyclerView.setAdapter(adapter);
         }
+        data.live_order.subList(20, data.live_order.size()).clear();
         adapter.updateResult(data.live_order);
+
 
     }
 
@@ -115,6 +116,8 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
             Bundle bundle = new Bundle();
             bundle.putString("ORDER_ID", orderItem.id);
             ((BaseActivity) getActivity()).addFragment(FRAGMENTS.ORDER_DETAIL, bundle);
+
+
         }
 
         @Override
