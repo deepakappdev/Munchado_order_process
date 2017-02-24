@@ -21,7 +21,6 @@ import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.ui.activity.BaseActivity;
 import com.munchado.orderprocess.ui.adapter.ActiveOrderAdapter;
-import com.munchado.orderprocess.utils.PrintUtils;
 
 /**
  * Created by android on 22/2/17.
@@ -99,7 +98,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
         }
         adapter.updateResult(data.live_order);
 
-        new PrintUtils().setPrintData(data);
+
     }
 
     private OrderItem orderItem;
@@ -109,6 +108,8 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
             Bundle bundle = new Bundle();
             bundle.putString("ORDER_ID", orderItem.id);
             ((BaseActivity) getActivity()).addFragment(FRAGMENTS.ORDER_DETAIL, bundle);
+
+
         }
 
         @Override

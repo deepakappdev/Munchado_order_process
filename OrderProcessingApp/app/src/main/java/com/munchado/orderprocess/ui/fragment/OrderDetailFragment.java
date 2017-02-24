@@ -17,6 +17,7 @@ import com.munchado.orderprocess.model.orderdetail.OrderDetailResponseData;
 import com.munchado.orderprocess.network.RequestController;
 import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
+import com.munchado.orderprocess.utils.PrintUtils;
 import com.munchado.orderprocess.utils.StringUtils;
 import com.munchado.orderprocess.utils.Utils;
 
@@ -127,6 +128,8 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         if (obj instanceof OrderDetailResponse) {
             showDetail(((OrderDetailResponse) obj).data);
         }
+
+        new PrintUtils().setPrintData(((OrderDetailResponse) obj).data);
     }
 
     private void showDetail(OrderDetailResponseData data) {
