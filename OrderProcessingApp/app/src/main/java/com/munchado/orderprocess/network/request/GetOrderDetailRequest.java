@@ -5,6 +5,7 @@ import com.android.volley.Response;
 import com.munchado.orderprocess.model.orderdetail.OrderDetailResponse;
 import com.munchado.orderprocess.network.volley.GsonRequest;
 import com.munchado.orderprocess.network.volley.NetworkConstants;
+import com.munchado.orderprocess.utils.LogUtils;
 import com.munchado.orderprocess.utils.PrefUtil;
 
 import org.json.JSONObject;
@@ -14,7 +15,7 @@ import java.util.HashMap;
 /**
  * Created by user on 6/23/2015.
  */
-public class GetOrderDetailRequest extends BaseRequest{
+public class GetOrderDetailRequest extends BaseRequest {
 
     private final String orderId;
 
@@ -23,7 +24,7 @@ public class GetOrderDetailRequest extends BaseRequest{
     }
 
     public String getServiceUrl() {
-        return NetworkConstants.GET_ORDER_DETAIL_URL + orderId + "?mob=true&token="+ PrefUtil.getToken();
+        return NetworkConstants.GET_ORDER_DETAIL_URL + orderId + "?mob=true&token=" + PrefUtil.getToken();
     }
 
     public HashMap<String, String> getParameters() {
@@ -42,11 +43,12 @@ public class GetOrderDetailRequest extends BaseRequest{
     }
 
     public GsonRequest createServerRequest(Response.ErrorListener errorListener, Response.Listener listener) {
-        GsonRequest<OrderDetailResponse> itemListRequest = new GsonRequest<>(
+        LogUtils.d("=== url : " + getServiceUrl());
+        GsonRequest<OrderDetailResponse> gsonRequest = new GsonRequest<>(
                 Request.Method.GET, getServiceUrl(),
                 OrderDetailResponse.class, null, listener, errorListener, getJsonRequest());
-        itemListRequest.setShouldCache(false);
-        itemListRequest.setHeader(getHeaders());
-        return itemListRequest;
+        gsonRequest.setShouldCache(false);
+        gsonRequest.setHeader(getHeaders());
+        return gsonRequest;
     }
 }

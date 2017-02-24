@@ -12,7 +12,7 @@ import android.view.WindowManager;
 import android.widget.EditText;
 
 import com.munchado.orderprocess.R;
-import com.munchado.orderprocess.model.login.LoginResponse;
+import com.munchado.orderprocess.model.login.StatusResponse;
 import com.munchado.orderprocess.model.token.TokenResponse;
 import com.munchado.orderprocess.network.RequestController;
 import com.munchado.orderprocess.network.volley.NetworkError;
@@ -139,8 +139,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void success(Object response) {
                 DialogUtil.hideProgressDialog();
-                LoginResponse mLoginResponse = (LoginResponse) response;
-                if (mLoginResponse.data.message) {
+                StatusResponse mStatusResponse = (StatusResponse) response;
+                if (mStatusResponse.data.message) {
                     PrefUtil.setLogin(true);
                     startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                     finish();

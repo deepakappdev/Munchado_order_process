@@ -28,21 +28,17 @@ public class MunchadoUtils {
         try {
             ConnectivityManager connectivity = (ConnectivityManager) context
                     .getSystemService(Context.CONNECTIVITY_SERVICE);
-
             if (connectivity != null) {
                 NetworkInfo[] info = connectivity.getAllNetworkInfo();
 
                 if (info != null) {
                     for (int i = 0; i < info.length; i++) {
-                        LogUtils.d("===== in loop "+info[i].getState().toString());
                         if (info[i].getState() == NetworkInfo.State.CONNECTED) {
-                           LogUtils.d("===== connected");
                             return true;
                         }
                     }
                 }
             }
-            LogUtils.d("===== not connected");
             return false;
         } catch (Exception e) {
             return false;

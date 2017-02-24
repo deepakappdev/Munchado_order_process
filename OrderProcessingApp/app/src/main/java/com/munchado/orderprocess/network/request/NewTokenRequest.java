@@ -35,11 +35,11 @@ public class NewTokenRequest extends BaseRequest{
     }
 
     public GsonRequest createServerRequest(Response.ErrorListener errorListener, Response.Listener listener) {
-        GsonRequest<TokenResponse> itemListRequest = new GsonRequest<>(
+        GsonRequest<TokenResponse> gsonRequest = new GsonRequest<>(
                 Request.Method.POST, getServiceUrl(),
                 TokenResponse.class, null, listener, errorListener, getJsonRequest());
-        itemListRequest.setShouldCache(false);
-        itemListRequest.setHeader(getHeaders());
-        return itemListRequest;
+        gsonRequest.setShouldCache(false);
+        gsonRequest.setHeader(getHeaders());
+        return gsonRequest;
     }
 }

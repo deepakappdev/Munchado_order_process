@@ -71,6 +71,7 @@ public class HomeActivity extends BaseActivity
     }
 
     public void setCustomTitle(String title) {
-        toolbar.setTitle(title);
+        if(toolbar!=null)
+            toolbar.setTitle(title);
     }
 }

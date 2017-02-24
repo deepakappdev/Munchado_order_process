@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.munchado.orderprocess.R;
+import com.munchado.orderprocess.common.FRAGMENTS;
 import com.munchado.orderprocess.ui.activity.HomeActivity;
 import com.munchado.orderprocess.ui.activity.settings.OrderProcessingSettingActivity;
 import com.munchado.orderprocess.ui.activity.settings.PrinterSettingActivity;
@@ -25,7 +26,10 @@ public class PrintSettingFragment extends BaseFragment implements View.OnClickLi
         // Required empty public constructor
     }
 
-
+    @Override
+    FRAGMENTS getFragmentId() {
+        return FRAGMENTS.PRINT;
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -41,11 +45,7 @@ public class PrintSettingFragment extends BaseFragment implements View.OnClickLi
         tv_order_processing_setting.setOnClickListener(this);
         return view;
     }
-    @Override
-    public void onResume() {
-        super.onResume();
-        ((HomeActivity)getActivity()).setCustomTitle("Settings");
-    }
+
 
     @Override
     public void onClick(View v) {

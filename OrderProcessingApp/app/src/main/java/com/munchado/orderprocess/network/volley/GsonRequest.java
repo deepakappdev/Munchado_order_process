@@ -56,6 +56,7 @@ public class GsonRequest<T> extends Request<T> {
     public GsonRequest(int method, String url, Class<T> clazz, Map<String, String> parameters, Listener listener,
                        ErrorListener errorListener) {
         super(method, url, errorListener);
+        LogUtils.d("==== Url: ", url);
         this.clazz = clazz;
         this.parameters = parameters;
         this.listener = listener;
@@ -73,9 +74,10 @@ public class GsonRequest<T> extends Request<T> {
     public byte[] getBody() throws AuthFailureError {
         if (bodyParameters != null) {
             try {
+                LogUtils.e("==== Body: ", bodyParameters.toString());
                 return bodyParameters.toString().getBytes();
             } catch (Exception e) {
-                Log.e(TAG, "Exception with post body" + e.getLocalizedMessage());
+                LogUtils.e(TAG, "Exception with post body" + e.getLocalizedMessage());
             }
         }
         return null;
@@ -94,7 +96,7 @@ public class GsonRequest<T> extends Request<T> {
         if (!StringUtils.isNullOrEmpty(PrefUtil.getToken()))
             headers.put("token", PrefUtil.getToken());
 //        headers.put("Accept", "application/json; charset=utf-8");
-        LogUtils.e("==== header : " + headers);
+        LogUtils.d("==== Headers: " + headers);
         this.headers = headers;
     }
 
@@ -153,9 +155,7 @@ public class GsonRequest<T> extends Request<T> {
     protected Response<T> parseNetworkResponse(NetworkResponse response) {
         try {
             String json = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
-            //Small hack due to issue in webservice.
-            //json = json.replace("\"\"", "null");
-            LogUtils.e("=====" + json);
+            LogUtils.d("==== Response: ", json);
             return Response.success(gson.fromJson(json, clazz), HttpHeaderParser.parseCacheHeaders(response));
         } catch (UnsupportedEncodingException e) {
             return Response.error(new ParseError(e));

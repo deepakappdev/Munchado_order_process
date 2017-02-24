@@ -2,7 +2,10 @@ package com.munchado.orderprocess.network.request;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.munchado.orderprocess.model.login.StatusResponse;
 import com.munchado.orderprocess.network.volley.GsonRequest;
+import com.munchado.orderprocess.network.volley.NetworkConstants;
+import com.munchado.orderprocess.utils.PrefUtil;
 
 import org.json.JSONObject;
 
@@ -11,10 +14,16 @@ import java.util.HashMap;
 /**
  * Created by user on 6/23/2015.
  */
-public class GetFlickerImageRequest {
+public class OrderProcessRequest extends BaseRequest{
+
+    private final String orderId;
+
+    public OrderProcessRequest(String orderId) {
+        this.orderId = orderId;
+    }
 
     public String getServiceUrl() {
-        return "https://api.flickr.com/services/feeds/photos_public.gne?format=json&nojsoncallback=?";
+        return NetworkConstants.GET_ORDER_DETAIL_URL + orderId + "?mob=true&token="+ PrefUtil.getToken();
     }
 
     public HashMap<String, String> getParameters() {
@@ -33,11 +42,11 @@ public class GetFlickerImageRequest {
     }
 
     public GsonRequest createServerRequest(Response.ErrorListener errorListener, Response.Listener listener) {
-        GsonRequest<Object> itemListRequest = new GsonRequest<>(
-                Request.Method.GET, getServiceUrl(),
-                Object.class, null, listener, errorListener, getJsonRequest());
-        itemListRequest.setShouldCache(false);
-        itemListRequest.setHeader(getHeaders());
-        return itemListRequest;
+        GsonRequest<StatusResponse> gsonRequest = new GsonRequest<>(
+                Request.Method.PUT, getServiceUrl(),
+                StatusResponse.class, null, listener, errorListener, getJsonRequest());
+        gsonRequest.setShouldCache(false);
+        gsonRequest.setHeader(getHeaders());
+        return gsonRequest;
     }
 }

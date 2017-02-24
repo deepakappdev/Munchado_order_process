@@ -13,19 +13,39 @@ import com.munchado.orderprocess.model.archiveorder.ItemList;
 import com.munchado.orderprocess.model.archiveorder.OrderItem;
 import com.munchado.orderprocess.utils.DateTimeUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Created by android on 22/2/17.
  */
-public class ActiveOrderAdapter  extends RecyclerView.Adapter<ActiveOrderAdapter.MyViewHolder>{
+public class ActiveOrderAdapter extends RecyclerView.Adapter<ActiveOrderAdapter.MyViewHolder> {
     private final OnOrderClickListener clickListener;
-    private List<OrderItem> orderItems;
+    private List<OrderItem> orderItems = new ArrayList<>();
+
     public ActiveOrderAdapter(OnOrderClickListener clickListener) {
         this.clickListener = clickListener;
     }
-    public void setResults(List<OrderItem> orderItems) {
-        this.orderItems = orderItems;
+
+    public void updateResult(List<OrderItem> orderItems) {
+        for(OrderItem orderItem : orderItems) {
+            int position = getItemPosition(orderItem);
+            if(position==-1) {
+                this.orderItems.add(0, orderItem);
+                notifyItemInserted(0);
+                notifyItemRangeChanged(0, getItemCount());
+            }
+        }
+    }
+
+    public void updateResult(OrderItem selectedItem) {
+        int position = getItemPosition(selectedItem);
+        if(position>=0) {
+            orderItems.remove(position);
+            orderItems.add(position, selectedItem);
+            notifyItemChanged(position);
+            notifyItemRangeChanged(position, getItemCount());
+        }
     }
 
     @Override
@@ -43,7 +63,32 @@ public class ActiveOrderAdapter  extends RecyclerView.Adapter<ActiveOrderAdapter
         return orderItems.size();
     }
 
-    class MyViewHolder extends RecyclerView.ViewHolder{
+    public void removeOrder(OrderItem orderItem) {
+        int position = getItemPosition(orderItem);
+        if (position > -1) {
+            orderItems.remove(position);
+            notifyItemRemoved(position);
+            notifyItemRangeChanged(position, getItemCount());
+        }
+    }
+
+    private int getItemPosition(OrderItem selectedItem) {
+        int position = -1;
+        boolean found = false;
+        for (OrderItem orderItem : this.orderItems) {
+            position++;
+            if (orderItem.id.equalsIgnoreCase(selectedItem.id)) {
+                found = true;
+                break;
+            }
+        }
+        if (found)
+            return position;
+        else
+            return -1;
+    }
+
+    class MyViewHolder extends RecyclerView.ViewHolder {
 
         private final TextView textOrderType;
         private final TextView textOrderItem;
@@ -60,19 +105,24 @@ public class ActiveOrderAdapter  extends RecyclerView.Adapter<ActiveOrderAdapter
                     clickListener.onClickOrderItem(orderItem);
                 }
             });
-            textOrderType = (TextView)itemView.findViewById(R.id.text_order_type);
-            textOrderItem = (TextView)itemView.findViewById(R.id.text_order_item);
-            textOrderAmount = (TextView)itemView.findViewById(R.id.text_order_amount);
-            textDelayTime = (TextView)itemView.findViewById(R.id.text_delay_time);
-            btnAction = (Button)itemView.findViewById(R.id.btn_action);
-
+            textOrderType = (TextView) itemView.findViewById(R.id.text_order_type);
+            textOrderItem = (TextView) itemView.findViewById(R.id.text_order_item);
+            textOrderAmount = (TextView) itemView.findViewById(R.id.text_order_amount);
+            textDelayTime = (TextView) itemView.findViewById(R.id.text_delay_time);
+            btnAction = (Button) itemView.findViewById(R.id.btn_action);
+            btnAction.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    clickListener.onClickOrderAction(orderItem);
+                }
+            });
         }
 
         public void populateItem(OrderItem orderItem) {
             this.orderItem = orderItem;
             textOrderType.setText(orderItem.order_type);
             StringBuilder stringBuilder = new StringBuilder();
-            for(ItemList itemList:orderItem.item_list) {
+            for (ItemList itemList : orderItem.item_list) {
                 stringBuilder.append(itemList.item_qty + " " + itemList.item_name + ", ");
             }
             textOrderItem.setText(stringBuilder.toString());
