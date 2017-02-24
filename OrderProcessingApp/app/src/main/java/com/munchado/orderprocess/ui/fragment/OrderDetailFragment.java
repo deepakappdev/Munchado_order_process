@@ -17,6 +17,7 @@ import com.munchado.orderprocess.model.orderdetail.OrderDetailResponseData;
 import com.munchado.orderprocess.network.RequestController;
 import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
+import com.munchado.orderprocess.ui.widgets.CustomButton;
 import com.munchado.orderprocess.utils.PrintUtils;
 import com.munchado.orderprocess.utils.StringUtils;
 import com.munchado.orderprocess.utils.Utils;
@@ -47,6 +48,8 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     private TextView textDeliveryTime;
     private TextView labelDeliveryAddress;
     private TextView textDeliveryAddress;
+    private CustomButton buttonPrint;
+    private OrderDetailResponse response;
     private View progressBar;
 
 
@@ -77,13 +80,13 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         textTelephone = (TextView) view.findViewById(R.id.text_telephone);
         textPastActivity = (TextView) view.findViewById(R.id.text_past_activity);
 
-        textOrderId = (TextView)view.findViewById(R.id.text_order_id);
-        textOrderType = (TextView)view.findViewById(R.id.text_order_type);
-        textOrderTime = (TextView)view.findViewById(R.id.text_order_time);
-        labelOrderTime = (TextView)view.findViewById(R.id.label_order_time);
-        textDeliveryTime = (TextView)view.findViewById(R.id.text_delivery_time);
-        labelDeliveryAddress = (TextView)view.findViewById(R.id.label_delivery_address);
-        textDeliveryAddress = (TextView)view.findViewById(R.id.text_delivery_address);
+        textOrderId = (TextView) view.findViewById(R.id.text_order_id);
+        textOrderType = (TextView) view.findViewById(R.id.text_order_type);
+        textOrderTime = (TextView) view.findViewById(R.id.text_order_time);
+        labelOrderTime = (TextView) view.findViewById(R.id.label_order_time);
+        textDeliveryTime = (TextView) view.findViewById(R.id.text_delivery_time);
+        labelDeliveryAddress = (TextView) view.findViewById(R.id.label_delivery_address);
+        textDeliveryAddress = (TextView) view.findViewById(R.id.text_delivery_address);
 
         orderLayout = (LinearLayout) view.findViewById(R.id.order_layout);
 
@@ -93,13 +96,15 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         textTax = (TextView) view.findViewById(R.id.text_tax);
         textTip = (TextView) view.findViewById(R.id.text_tip);
         textTotal = (TextView) view.findViewById(R.id.text_total);
+
+        buttonPrint =(CustomButton)view.findViewById(R.id.printbutton);
     }
 
     private void showOrderDetail(OrderDetailResponseData orderDetailData) {
         textOrderId.setText(orderDetailData.id);
         textOrderType.setText(orderDetailData.order_type);
         textOrderTime.setText(orderDetailData.order_date);
-        if(orderDetailData.order_type.equalsIgnoreCase("takeout")) {
+        if (orderDetailData.order_type.equalsIgnoreCase("takeout")) {
             labelOrderTime.setText("Time of Takeout");
             labelDeliveryAddress.setVisibility(View.GONE);
             textDeliveryAddress.setVisibility(View.GONE);
@@ -113,23 +118,28 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         }
         textDeliveryTime.setText(orderDetailData.delivery_date);
 
+
     }
+
     @Override
     public void error(NetworkError volleyError) {
         progressBar.setVisibility(View.GONE);
     }
+
     @Override
     FRAGMENTS getFragmentId() {
         return FRAGMENTS.ORDER_DETAIL;
     }
+
     @Override
     public void success(Object obj) {
         progressBar.setVisibility(View.GONE);
         if (obj instanceof OrderDetailResponse) {
-            showDetail(((OrderDetailResponse) obj).data);
+            response = (OrderDetailResponse) obj;
+            showDetail(response.data);
         }
 
-        new PrintUtils().setPrintData(((OrderDetailResponse) obj).data);
+
     }
 
     private void showDetail(OrderDetailResponseData data) {
@@ -142,12 +152,18 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         showOrderDetail(data);
         showOrderItem(data.item_list);
         showOrderPaymentDetail(data.order_amount_calculation);
+        buttonPrint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new PrintUtils().setPrintData(response.data);
+            }
+        });
     }
 
     private void showOrderItem(ArrayList<MyItemList> item_list) {
         orderLayout.removeAllViews();
         LayoutInflater inflater = LayoutInflater.from(orderLayout.getContext());
-        for(MyItemList itemList:item_list) {
+        for (MyItemList itemList : item_list) {
             View view = inflater.inflate(R.layout.row_order_item, null);
             TextView itemName = (TextView) view.findViewById(R.id.text_item_name);
             TextView textInstruction = (TextView) view.findViewById(R.id.text_instruction);
@@ -155,13 +171,13 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
             TextView itemPrice = (TextView) view.findViewById(R.id.text_item_price);
 
             itemName.setText(itemList.item_name);
-            if(StringUtils.isNullOrEmpty(itemList.item_special_instruction)) {
+            if (StringUtils.isNullOrEmpty(itemList.item_special_instruction)) {
                 textInstruction.setVisibility(View.GONE);
             } else {
                 textInstruction.setText(itemList.item_special_instruction);
             }
             itemCount.setText(itemList.item_qty);
-            itemPrice.setText("$" + (Utils.parseDouble(itemList.unit_price)*Utils.parseDouble(itemList.item_qty)));
+            itemPrice.setText("$" + (Utils.parseDouble(itemList.unit_price) * Utils.parseDouble(itemList.item_qty)));
             orderLayout.addView(view);
         }
     }
@@ -179,6 +195,5 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         textTip.setText("$" + payment_detail.tip_amount);
         textTotal.setText("$" + payment_detail.total_order_price);
     }
-
 
 }

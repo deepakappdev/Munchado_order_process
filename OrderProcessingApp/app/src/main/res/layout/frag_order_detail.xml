@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context="com.munchado.orderprocess.ui.fragment.OrderDetailFragment">
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -89,5 +90,23 @@
         </android.support.v4.widget.NestedScrollView>
 
     </android.support.design.widget.CoordinatorLayout>
-<include layout="@layout/progress_bar_layout"/>
+
+    <include layout="@layout/progress_bar_layout" />
+
+    <com.munchado.orderprocess.ui.widgets.CustomButton
+        android:id="@+id/printbutton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/margin_x_large"
+        android:background="@drawable/green_button"
+        android:paddingEnd="@dimen/fifteendp"
+        android:paddingLeft="@dimen/fifteendp"
+        android:paddingRight="@dimen/fifteendp"
+        android:paddingStart="@dimen/fifteendp"
+        android:text="Print Order"
+        android:textColor="@color/white"
+        app:textStyle="RobotoRegular" />
 </RelativeLayout>
