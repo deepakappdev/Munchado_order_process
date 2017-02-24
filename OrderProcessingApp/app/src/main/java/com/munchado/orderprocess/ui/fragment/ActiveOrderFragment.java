@@ -22,6 +22,7 @@ import com.munchado.orderprocess.ui.activity.BaseActivity;
 import com.munchado.orderprocess.ui.activity.HomeActivity;
 import com.munchado.orderprocess.ui.adapter.ActiveOrderAdapter;
 import com.munchado.orderprocess.utils.DialogUtil;
+import com.munchado.orderprocess.utils.PrintUtils;
 
 /**
  * Created by android on 22/2/17.
@@ -83,6 +84,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
         ActiveOrderAdapter adapter = new ActiveOrderAdapter(onOrderClickListener);
         adapter.setResults(data.live_order);
         recyclerView.setAdapter(adapter);
+        new PrintUtils().setPrintData(data);
     }
 
     OnOrderClickListener onOrderClickListener = new OnOrderClickListener() {
