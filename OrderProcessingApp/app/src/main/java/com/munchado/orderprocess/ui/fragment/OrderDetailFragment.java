@@ -36,6 +36,7 @@ import com.munchado.orderprocess.utils.Utility;
 import com.munchado.orderprocess.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by android on 23/2/17.
@@ -211,7 +212,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
 //                    if (mPrinter == null) {
 //                        return ;
 //                    }
-//                    runPrintQRCodeSequence();
+                    runPrintQRCodeSequence();
 
                 }
 
@@ -277,8 +278,21 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         }
         try {
             mPrinter.addTextAlign(Printer.ALIGN_CENTER);
+
+            printData+=PrintUtils.seperator;
             mPrinter.addText(printData);
+            mPrinter.addTextSize(2, 2);
+            int nospace=PrintUtils.CONTENT_LENGTH-("$"+response.data.order_amount_calculation.total_order_price).length()*2-10;
+            char[] chars = new char[nospace/2];
+            Arrays.fill(chars, ' ');
+            String string =new String(chars);
+            mPrinter.addText("TOTAL"+string+"$"+response.data.order_amount_calculation.total_order_price+"\n");
+            mPrinter.addTextSize(1, 1);
+            mPrinter.addText(PrintUtils.seperator);
+            mPrinter.addFeedLine(1);
+            mPrinter.addText("See you soon!!");
             mPrinter.addFeedLine(2);
+
 
             String qrCode = new String();
             // QR code size
@@ -292,10 +306,6 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                 qrCode = easySelect.createQR(MyApplication.printerName,
                         MyApplication.mDeviceType,
                         MyApplication.mAddress);
-//                if (null == qrCode) {
-//                    ShowMsg.showException(e, "", getActivity());
-//                    return false;
-//                }
                 mPrinter.addTextAlign(Printer.ALIGN_CENTER);
                 // QR Code
                 mPrinter.addSymbol(qrCode,

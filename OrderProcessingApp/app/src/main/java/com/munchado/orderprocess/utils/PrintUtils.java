@@ -11,15 +11,16 @@ import java.util.Arrays;
  */
 public class PrintUtils {
 
-    private static final int CONTENT_LENGTH = 40;
+    public static final int CONTENT_LENGTH = 40;
     private static final int NO_LENGTH = 4;
+    public static String seperator="------------------------------------------\n";
     static DecimalFormat df = new DecimalFormat();
 
     public static String setPrintData(OrderDetailResponseData orderDetailResponseData) {
-        char[] chars = new char[CONTENT_LENGTH];
-        Arrays.fill(chars, '-');
-        String seperator = new String(chars);
-        seperator+="\n";
+//        char[] chars = new char[CONTENT_LENGTH];
+//        Arrays.fill(chars, '-');
+//        seperator= new String(chars);
+//        seperator+="\n";
         StringBuilder builder = new StringBuilder();
         builder.append(getCenterAlignedData(orderDetailResponseData.restaurant_name));
         builder.append(getCenterAlignedData(orderDetailResponseData.restaurant_address));
@@ -37,9 +38,9 @@ public class PrintUtils {
         builder.append(getAmountCalculation("Delivery", "$" + orderDetailResponseData.order_amount_calculation.delivery_charge));
         builder.append(getAmountCalculation("Tax", "$" + orderDetailResponseData.order_amount_calculation.tax_amount));
         builder.append(getAmountCalculation("Tip", "$" + orderDetailResponseData.order_amount_calculation.tip_amount));
-        builder.append(getAmountCalculation("Total", "$" + orderDetailResponseData.order_amount_calculation.total_order_price));
-        builder.append(seperator).append("\n\n");
-        builder.append(getCenterAlignedData("See you soon!!"));
+//        builder.append(getAmountCalculation("Total", "$" + orderDetailResponseData.order_amount_calculation.total_order_price));
+//        builder.append(seperator).append("\n\n");
+//        builder.append(getCenterAlignedData("See you soon!!"));
         LogUtils.d(builder.toString());
         return builder.toString();
     }
