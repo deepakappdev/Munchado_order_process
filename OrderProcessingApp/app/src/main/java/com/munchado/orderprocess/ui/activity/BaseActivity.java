@@ -2,7 +2,6 @@ package com.munchado.orderprocess.ui.activity;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -15,6 +14,7 @@ import com.munchado.orderprocess.ui.fragment.ArchiveOrderFragment;
 import com.munchado.orderprocess.ui.fragment.BaseFragment;
 import com.munchado.orderprocess.ui.fragment.OrderDetailFragment;
 import com.munchado.orderprocess.ui.fragment.PrintSettingFragment;
+import com.munchado.orderprocess.utils.LogUtils;
 
 /**
  * Created by android on 22/2/17.
@@ -69,7 +69,11 @@ public class BaseActivity extends AppCompatActivity {
         getSupportFragmentManager().popBackStack(FRAGMENTS.ACTIVE.name(), 0);
 
     }
-
+    @Override
+    public void onResume() {
+        super.onResume();
+        LogUtils.d("==== onResume BaseActivity ");
+    }
 
 
 
