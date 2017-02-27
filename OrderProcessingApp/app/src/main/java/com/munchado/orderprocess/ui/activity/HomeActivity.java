@@ -11,6 +11,7 @@ import android.view.MenuItem;
 
 import com.munchado.orderprocess.R;
 import com.munchado.orderprocess.common.FRAGMENTS;
+import com.munchado.orderprocess.utils.LogUtils;
 import com.munchado.orderprocess.utils.PrefUtil;
 
 public class HomeActivity extends BaseActivity
@@ -74,4 +75,19 @@ public class HomeActivity extends BaseActivity
         if(toolbar!=null)
             toolbar.setTitle(title);
     }
+
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        LogUtils.d("===== onActivityResult");
+//        if(requestCode == OrderDetailFragment.REQUEST_CODE_DISCOVER_PRINTER && resultCode == RESULT_OK){
+//            Bundle bundle = data.getExtras();
+//            BluetoothDeviceModel model = (BluetoothDeviceModel) bundle.getSerializable("device");
+//            MyApplication.mTarget = model.title_target;
+//            MyApplication.mInterfaceType = model.title_interface;
+//            MyApplication.mAddress = model.title_address;
+//            MyApplication.printerName = model.title_name;
+//        }
+//    }
+
+
 }

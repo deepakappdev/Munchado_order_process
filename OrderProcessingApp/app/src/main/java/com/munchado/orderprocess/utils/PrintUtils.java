@@ -11,18 +11,20 @@ import java.util.Arrays;
  */
 public class PrintUtils {
 
-    private static final int CONTENT_LENGTH = 30;
+    private static final int CONTENT_LENGTH = 40;
     private static final int NO_LENGTH = 4;
-    DecimalFormat df = new DecimalFormat();
+    static DecimalFormat df = new DecimalFormat();
 
-    public void setPrintData(OrderDetailResponseData orderDetailResponseData) {
-
-        final String seperator = "------------------------------\n";
+    public static String setPrintData(OrderDetailResponseData orderDetailResponseData) {
+        char[] chars = new char[CONTENT_LENGTH];
+        Arrays.fill(chars, '-');
+        String seperator = new String(chars);
+        seperator+="\n";
         StringBuilder builder = new StringBuilder();
         builder.append(getCenterAlignedData(orderDetailResponseData.restaurant_name));
         builder.append(getCenterAlignedData(orderDetailResponseData.restaurant_address));
         builder.append(seperator);
-
+//        LogUtils.d(builder.toString());
         int i = 1;
         for (MyItemList printItemModel : orderDetailResponseData.item_list) {
             builder.append(getItemPriceData(i, printItemModel.item_name, Integer.valueOf(printItemModel.item_qty) * Float.valueOf(printItemModel.unit_price) + ""));
@@ -39,12 +41,13 @@ public class PrintUtils {
         builder.append(seperator).append("\n\n");
         builder.append(getCenterAlignedData("See you soon!!"));
         LogUtils.d("==== Bill: ", builder.toString());
+        return builder.toString();
     }
 
-    public String getAmountCalculation(String string, String amount) {
+    public static String getAmountCalculation(String string, String amount) {
         StringBuilder stringBuilder = new StringBuilder();
-        if(!amount.contains("."))
-            amount=amount+".00";
+        if (!amount.contains("."))
+            amount = amount + ".00";
         int remainingspace = CONTENT_LENGTH - string.length() - amount.length();
         if (remainingspace > 0) {
             char[] chars = new char[remainingspace];
@@ -55,13 +58,13 @@ public class PrintUtils {
         return stringBuilder.toString();
     }
 
-    public String getItemPriceData(int serialNo, String name, String price) {
+    public static String getItemPriceData(int serialNo, String name, String price) {
         name = name.replaceAll("&amp;", "&");
         StringBuilder stringBuilder = new StringBuilder();
         df.setMaximumFractionDigits(2);
         String p = df.format(Float.valueOf(price));
-        if(!p.contains("."))
-            p=p+".00";
+        if (!p.contains("."))
+            p = p + ".00";
         if (serialNo > 9)
             stringBuilder.append(serialNo + ". ");
         else
@@ -98,7 +101,7 @@ public class PrintUtils {
         return stringBuilder.toString();
     }
 
-    public String getCenterAlignedData(String str) {
+    public static String getCenterAlignedData(String str) {
         str = str.replaceAll("&amp;", "&");
         StringBuilder stringBuilder = new StringBuilder();
         if (str.length() > CONTENT_LENGTH) {

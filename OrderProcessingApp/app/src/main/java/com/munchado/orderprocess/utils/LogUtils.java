@@ -13,6 +13,14 @@ public class LogUtils {
             Log.d(tag, s);
     }
 
+    public static void d(String s) {
+        if (BuildConfig.DEBUG)
+            Log.d("", s);
+    }
+    public static void e(String s) {
+        if (BuildConfig.DEBUG)
+            Log.e("", s);
+    }
     public static void e(String tag, String s) {
         if (BuildConfig.DEBUG)
             Log.e(tag, s);

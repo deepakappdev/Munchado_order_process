@@ -1,5 +1,7 @@
 package com.munchado.orderprocess.ui.fragment;
 
+import android.bluetooth.BluetoothAdapter;
+import android.content.Intent;
 import android.content.DialogInterface;
 import android.graphics.Paint;
 import android.os.Bundle;
@@ -13,7 +15,14 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.epson.easyselect.EasySelect;
+import com.epson.epos2.Epos2Exception;
+import com.epson.epos2.printer.Printer;
+import com.epson.epos2.printer.PrinterStatusInfo;
+import com.epson.epos2.printer.ReceiveListener;
+import com.munchado.orderprocess.MyApplication;
 import com.munchado.orderprocess.R;
 import com.munchado.orderprocess.common.FRAGMENTS;
 import com.munchado.orderprocess.model.orderdetail.MyItemList;
@@ -24,8 +33,12 @@ import com.munchado.orderprocess.model.orderprocess.OrderProcessResponse;
 import com.munchado.orderprocess.network.RequestController;
 import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
+import com.munchado.orderprocess.ui.activity.DiscoveryActivity;
+import com.munchado.orderprocess.utils.LogUtils;
 import com.munchado.orderprocess.utils.PrintUtils;
+import com.munchado.orderprocess.utils.ShowMsg;
 import com.munchado.orderprocess.utils.StringUtils;
+import com.munchado.orderprocess.utils.Utility;
 import com.munchado.orderprocess.utils.Utils;
 import com.squareup.picasso.Picasso;
 
@@ -35,7 +48,7 @@ import java.util.ArrayList;
  * Created by android on 23/2/17.
  */
 
-public class OrderDetailFragment extends BaseFragment implements RequestCallback, View.OnClickListener {
+public class OrderDetailFragment extends BaseFragment implements RequestCallback, View.OnClickListener, ReceiveListener {
 
     private TextView textName;
     private TextView textEmail;
@@ -61,6 +74,11 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     private TextView textAction;
     private TextView textCancel;
     private TextView textPrint;
+    private String printData = "";
+
+    public Printer mPrinter = null;
+
+    public static int REQUEST_CODE_DISCOVER_PRINTER = 111;
 
     @Nullable
     @Override
@@ -151,6 +169,10 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         hideProgressBar();
         if (obj instanceof OrderDetailResponse) {
             response = (OrderDetailResponse) obj;
+//            responseForPrint = response;
+
+            printData = PrintUtils.setPrintData(response.data);
+            LogUtils.d(printData);
             showDetail(response.data);
         } else if (obj instanceof OrderProcessResponse) {
             if (((OrderProcessResponse) obj).data.message) {
@@ -262,6 +284,30 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         switch (view.getId()) {
             case R.id.text_print:
                 new PrintUtils().setPrintData(response.data);
+            case R.id.btn_print:
+//                new PrintUtils().setPrintData(response.data);
+                if (StringUtils.isNullOrEmpty(MyApplication.printerName)) {
+                    BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                    if (!mBluetoothAdapter.isEnabled()) {
+                        mBluetoothAdapter.enable();
+                        Toast.makeText(getActivity(), "Bluetooth is off. Trying to switch ON. Please wait...", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+//                    LogUtils.d("==== "+printData);
+                    Intent intent = new Intent(getActivity(), DiscoveryActivity.class);
+                    startActivity(intent);
+                } else {
+//                    LogUtils.d("==== on click else");
+//                    Gson gsonObj = new Gson();
+//                    String jsonStr = gsonObj.toJson(response);
+//                    LogUtils.d("==== "+jsonStr);
+//                    LogUtils.d("==== "+printData);
+//                    if (mPrinter == null) {
+//                        return ;
+//                    }
+//                    runPrintQRCodeSequence();
+
+                }
                 break;
             case R.id.btn_action:
 
@@ -280,8 +326,368 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                 askUserForReason();
 
                 break;
+
         }
     }
+
+    /**
+     * Print data
+     *
+     * @return boolean result
+     */
+    private boolean printData() {
+        String msg = "";
+        final int barcodeWidth = 2;
+        final int barcodeHeight = 100;
+        if (mPrinter == null) {
+            return false;
+        }
+        try {
+            mPrinter.addTextAlign(Printer.ALIGN_CENTER);
+            mPrinter.addText(printData);
+            mPrinter.addFeedLine(2);
+
+            String qrCode = new String();
+            // QR code size
+            final int qrcodeWidth = 5;
+            final int qrcodeHeight = 5;
+
+            try {
+                EasySelect easySelect = new EasySelect();
+
+                // create QR code data from EasySelect library
+                qrCode = easySelect.createQR(MyApplication.printerName,
+                        MyApplication.mDeviceType,
+                        MyApplication.mAddress);
+//                if (null == qrCode) {
+//                    ShowMsg.showException(e, "", getActivity());
+//                    return false;
+//                }
+                mPrinter.addTextAlign(Printer.ALIGN_CENTER);
+                // QR Code
+                mPrinter.addSymbol(qrCode,
+                        Printer.SYMBOL_QRCODE_MODEL_2,
+                        Printer.LEVEL_L,
+                        qrcodeWidth,
+                        qrcodeHeight,
+                        0);
+                mPrinter.addFeedLine(1);
+
+            } catch (Epos2Exception e) {
+                ShowMsg.showException(e, "", getActivity());
+                return false;
+            }
+
+           mPrinter.addCut(Printer.CUT_FEED);
+        } catch (Epos2Exception e) {
+            e.printStackTrace();
+        }
+        if (!connectPrinter()) {
+            return false;
+        }
+
+        PrinterStatusInfo status = mPrinter.getStatus();
+
+        dispPrinterWarnings(status);
+
+        if (!isPrintable(status)) {
+            ShowMsg.showMsg(makeErrorMessage(status), getActivity());
+            try {
+                mPrinter.disconnect();
+            } catch (Epos2Exception ex) {
+                // Do nothing
+            }
+            finalizeObject();
+            return false;
+        }
+
+        try {
+            msg = "sendData";
+            mPrinter.sendData(Printer.PARAM_DEFAULT);
+        } catch (Exception e) {
+            ShowMsg.showException(e, msg, getActivity());
+            disconnectPrinter();
+            return false;
+        }
+
+        return true;
+    }
+
+    // --------------------------------------------------------------------------------------------
+
+    /**
+     * Initialize printer object
+     *
+     * @return boolean result
+     */
+    private boolean initializeObject() {
+        try {
+            mPrinter = new Printer(Utility.convertPrinterNameToPrinterSeries(MyApplication.printerName),
+                    Printer.MODEL_ANK,
+                    getActivity());
+            LogUtils.d("====== initialize printer");
+        } catch (Exception e) {
+            ShowMsg.showException(e, "Printer", getActivity());
+            e.printStackTrace();
+            return false;
+        }
+
+        mPrinter.setReceiveEventListener(this);
+
+        return true;
+    }
+
+    // --------------------------------------------------------------------------------------------
+
+    /**
+     * Finalize printer object
+     */
+    private void finalizeObject() {
+        if (mPrinter == null) {
+            return;
+        }
+        LogUtils.d("====== finalizeObject");
+//        mPrinter.clearCommandBuffer();
+//
+//        mPrinter.setReceiveEventListener(null);
+//
+//        mPrinter = null;
+    }
+
+    // --------------------------------------------------------------------------------------------
+
+    /**
+     * Connect printer
+     *
+     * @return boolean result
+     */
+    private boolean connectPrinter() {
+        boolean isBeginTransaction = false;
+
+        if (mPrinter == null) {
+            return false;
+        }
+
+        try {
+            mPrinter.connect(MyApplication.mTarget, Printer.PARAM_DEFAULT);
+            LogUtils.d("====== mPrinter connected");
+        } catch (Exception e) {
+            ShowMsg.showException(e, "connect", getActivity());
+            return false;
+        }
+
+        try {
+            mPrinter.beginTransaction();
+            isBeginTransaction = true;
+            LogUtils.d("====== mPrinter beginTransaction");
+        } catch (Exception e) {
+            ShowMsg.showException(e, "beginTransaction", getActivity());
+        }
+
+        if (!isBeginTransaction) {
+            try {
+                mPrinter.disconnect();
+                LogUtils.d("====== mPrinter disconnect");
+            } catch (Epos2Exception e) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    // --------------------------------------------------------------------------------------------
+
+    /**
+     * Disconnect printer
+     */
+    private void disconnectPrinter() {
+        String method = "";
+        LogUtils.d("====== disconnectPrinter ");
+        if (mPrinter == null) {
+            return;
+        }
+
+        try {
+            method = "endTransaction";
+            mPrinter.endTransaction();
+        } catch (final Exception e) {
+            final String errorMethod = method;
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public synchronized void run() {
+                    ShowMsg.showException(e, errorMethod, getActivity());
+                }
+            });
+        }
+
+        try {
+            method = "disconnect";
+            mPrinter.disconnect();
+        } catch (final Exception e) {
+            final String errorMethod = method;
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public synchronized void run() {
+                    ShowMsg.showException(e, errorMethod, getActivity());
+                }
+            });
+        }
+
+        finalizeObject();
+    }
+
+    // --------------------------------------------------------------------------------------------
+
+    /**
+     * Disconnect printer
+     *
+     * @param status PrinterStatusInfo
+     * @return boolean result
+     */
+    private boolean isPrintable(PrinterStatusInfo status) {
+        LogUtils.d("====== isPrintable false");
+        if (status == null) {
+            return false;
+        }
+
+        if (status.getConnection() == Printer.FALSE) {
+            return false;
+        } else if (status.getOnline() == Printer.FALSE) {
+            return false;
+        } else {
+            //print available
+        }
+        LogUtils.d("====== isPrintable true");
+        return true;
+    }
+
+    // --------------------------------------------------------------------------------------------
+
+    /**
+     * Make error message
+     *
+     * @param status PrinterStatusInfo
+     * @return String error message
+     */
+    private String makeErrorMessage(PrinterStatusInfo status) {
+        String msg = "";
+
+        if (status.getOnline() == Printer.FALSE) {
+            msg += getString(R.string.handlingmsg_err_offline);
+        }
+        if (status.getConnection() == Printer.FALSE) {
+            msg += getString(R.string.handlingmsg_err_no_response);
+        }
+        if (status.getCoverOpen() == Printer.TRUE) {
+            msg += getString(R.string.handlingmsg_err_cover_open);
+        }
+        if (status.getPaper() == Printer.PAPER_EMPTY) {
+            msg += getString(R.string.handlingmsg_err_receipt_end);
+        }
+        if (status.getPaperFeed() == Printer.TRUE || status.getPanelSwitch() == Printer.SWITCH_ON) {
+            msg += getString(R.string.handlingmsg_err_paper_feed);
+        }
+        if (status.getErrorStatus() == Printer.MECHANICAL_ERR || status.getErrorStatus() == Printer.AUTOCUTTER_ERR) {
+            msg += getString(R.string.handlingmsg_err_autocutter);
+            msg += getString(R.string.handlingmsg_err_need_recover);
+        }
+        if (status.getErrorStatus() == Printer.UNRECOVER_ERR) {
+            msg += getString(R.string.handlingmsg_err_unrecover);
+        }
+        if (status.getErrorStatus() == Printer.AUTORECOVER_ERR) {
+            if (status.getAutoRecoverError() == Printer.HEAD_OVERHEAT) {
+                msg += getString(R.string.handlingmsg_err_overheat);
+                msg += getString(R.string.handlingmsg_err_head);
+            }
+            if (status.getAutoRecoverError() == Printer.MOTOR_OVERHEAT) {
+                msg += getString(R.string.handlingmsg_err_overheat);
+                msg += getString(R.string.handlingmsg_err_motor);
+            }
+            if (status.getAutoRecoverError() == Printer.BATTERY_OVERHEAT) {
+                msg += getString(R.string.handlingmsg_err_overheat);
+                msg += getString(R.string.handlingmsg_err_battery);
+            }
+            if (status.getAutoRecoverError() == Printer.WRONG_PAPER) {
+                msg += getString(R.string.handlingmsg_err_wrong_paper);
+            }
+        }
+        if (status.getBatteryLevel() == Printer.BATTERY_LEVEL_0) {
+            msg += getString(R.string.handlingmsg_err_battery_real_end);
+        }
+
+        return msg;
+    }
+
+
+    /**
+     * Display warnings
+     *
+     * @param status PrinterStatusInfo
+     */
+    private void dispPrinterWarnings(PrinterStatusInfo status) {
+//        EditText edtWarnings = (EditText) findViewById(R.id.edtWarnings);
+        String warningsMsg = "";
+
+        if (status == null) {
+            return;
+        }
+
+        if (status.getPaper() == Printer.PAPER_NEAR_END) {
+            warningsMsg += getString(R.string.handlingmsg_warn_receipt_near_end);
+        }
+
+        if (status.getBatteryLevel() == Printer.BATTERY_LEVEL_1) {
+            warningsMsg += getString(R.string.handlingmsg_warn_battery_near_end);
+        }
+
+//        edtWarnings.setText(warningsMsg);
+    }
+
+    @Override
+    public void onPtrReceive(Printer printer, int i, PrinterStatusInfo printerStatusInfo, String s) {
+        getActivity().runOnUiThread(new Runnable() {
+            @Override
+            public synchronized void run() {
+                LogUtils.d("====== onPtrReceive ");
+//                ShowMsg.showResult(code, makeErrorMessage(status), mContext);
+//
+//                dispPrinterWarnings(status);
+//
+//                updateButtonState(true);
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        disconnectPrinter();
+                    }
+                }).start();
+            }
+        });
+    }
+
+    /**
+     * Run Print QRCode Sequence
+     */
+    private boolean runPrintQRCodeSequence() {
+
+        if (!initializeObject()) {
+            return false;
+        }
+
+        if (!printData()) {
+            finalizeObject();
+            return false;
+        }
+        if (!StringUtils.isNullOrEmpty(printData)) {
+            finalizeObject();
+            return false;
+        }
+
+
+        return true;
+    }
+}
 
     private void askUserForReason() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
