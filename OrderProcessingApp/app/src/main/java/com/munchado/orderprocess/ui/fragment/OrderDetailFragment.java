@@ -283,8 +283,6 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         String currentStatus = response.data.status;
         switch (view.getId()) {
             case R.id.text_print:
-                new PrintUtils().setPrintData(response.data);
-            case R.id.btn_print:
 //                new PrintUtils().setPrintData(response.data);
                 if (StringUtils.isNullOrEmpty(MyApplication.printerName)) {
                     BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
@@ -687,7 +685,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
 
         return true;
     }
-}
+
 
     private void askUserForReason() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
