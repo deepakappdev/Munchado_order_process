@@ -4,6 +4,7 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 
 import com.munchado.orderprocess.common.FRAGMENTS;
+import com.munchado.orderprocess.ui.activity.BaseActivity;
 import com.munchado.orderprocess.ui.activity.HomeActivity;
 
 /**
@@ -20,6 +21,11 @@ public abstract class BaseFragment extends Fragment {
         super.onResume();
         if (getActivity() != null && getActivity() instanceof HomeActivity)
             ((HomeActivity) getActivity()).setCustomTitle(getCustomTitle(getFragmentId()));
+    }
+
+    public void showToast(String message) {
+        if(getActivity()!=null)
+            ((BaseActivity)getActivity()).showToast(message);
     }
 
     private String getCustomTitle(FRAGMENTS fragmentId) {

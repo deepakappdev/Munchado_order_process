@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import com.munchado.orderprocess.R;
 import com.munchado.orderprocess.common.FRAGMENTS;
@@ -21,6 +22,8 @@ import com.munchado.orderprocess.ui.fragment.PrintSettingFragment;
  */
 
 public class BaseActivity extends AppCompatActivity {
+
+    private Toast toast;
 
     @Override
     protected void onPause() {
@@ -71,19 +74,10 @@ public class BaseActivity extends AppCompatActivity {
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    public void showToast(String message) {
+        if(toast==null)
+            toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
+        toast.setText(message);
+        toast.show();
+    }
 }
