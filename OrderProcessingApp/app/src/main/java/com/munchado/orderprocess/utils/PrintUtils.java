@@ -38,7 +38,7 @@ public class PrintUtils {
         builder.append(getAmountCalculation("Total", "$" + orderDetailResponseData.order_amount_calculation.total_order_price));
         builder.append(seperator).append("\n\n");
         builder.append(getCenterAlignedData("See you soon!!"));
-        LogUtils.d(builder.toString());
+        LogUtils.d("==== Bill: ", builder.toString());
     }
 
     public String getAmountCalculation(String string, String amount) {

@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -21,6 +22,7 @@ import com.munchado.orderprocess.ui.widgets.CustomButton;
 import com.munchado.orderprocess.utils.PrintUtils;
 import com.munchado.orderprocess.utils.StringUtils;
 import com.munchado.orderprocess.utils.Utils;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -28,7 +30,7 @@ import java.util.ArrayList;
  * Created by android on 23/2/17.
  */
 
-public class OrderDetailFragment extends BaseFragment implements RequestCallback {
+public class OrderDetailFragment extends BaseFragment implements RequestCallback, View.OnClickListener {
 
     private TextView textName;
     private TextView textEmail;
@@ -48,8 +50,8 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     private TextView textDeliveryTime;
     private TextView labelDeliveryAddress;
     private TextView textDeliveryAddress;
-    private CustomButton buttonPrint;
     private OrderDetailResponse response;
+    private ImageView imageView;
     private View progressBar;
 
 
@@ -77,6 +79,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         progressBar = view.findViewById(R.id.progress_bar);
         textName = (TextView) view.findViewById(R.id.text_name);
         textEmail = (TextView) view.findViewById(R.id.text_email);
+        imageView = (ImageView) view.findViewById(R.id.image_view);
         textTelephone = (TextView) view.findViewById(R.id.text_telephone);
         textPastActivity = (TextView) view.findViewById(R.id.text_past_activity);
 
@@ -97,7 +100,10 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         textTip = (TextView) view.findViewById(R.id.text_tip);
         textTotal = (TextView) view.findViewById(R.id.text_total);
 
-        buttonPrint =(CustomButton)view.findViewById(R.id.printbutton);
+        view.findViewById(R.id.btn_print).setOnClickListener(this);
+        view.findViewById(R.id.btn_action).setOnClickListener(this);
+        view.findViewById(R.id.btn_cancel).setOnClickListener(this);
+
     }
 
     private void showOrderDetail(OrderDetailResponseData orderDetailData) {
@@ -146,18 +152,23 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         textName.setText(data.customer_first_name + " " + data.customer_last_name);
         textTelephone.setText(data.my_delivery_detail.phone);
         textEmail.setText(data.email);
+
+        Picasso.with(getContext()).load(data.user_image)
+                .placeholder(R.drawable.profile_img)
+                .into(imageView);
+
         StringBuilder pastActivity = new StringBuilder();
-        if(data.user_activity!=null) {
-            if(data.user_activity.total_user_order>0)
+        if (data.user_activity != null) {
+            if (data.user_activity.total_user_order > 0)
                 pastActivity.append(data.user_activity.total_user_order).append(" Orders");
-            if(data.user_activity.total_user_reservation>0)
+            if (data.user_activity.total_user_reservation > 0)
                 pastActivity.append(", ").append(data.user_activity.total_user_reservation).append(" Reservation");
-            if(data.user_activity.total_user_checkin>0)
+            if (data.user_activity.total_user_checkin > 0)
                 pastActivity.append(", ").append(data.user_activity.total_user_checkin).append(" Checkins");
-            if(data.user_activity.total_user_review>0)
+            if (data.user_activity.total_user_review > 0)
                 pastActivity.append(", ").append(data.user_activity.total_user_review).append(" Reviews");
         }
-        if(pastActivity.toString().isEmpty())
+        if (pastActivity.toString().isEmpty())
             textPastActivity.setText("No Past Activity");
         else
             textPastActivity.setText(pastActivity.toString());
@@ -166,12 +177,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         showOrderDetail(data);
         showOrderItem(data.item_list);
         showOrderPaymentDetail(data.order_amount_calculation);
-        buttonPrint.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                new PrintUtils().setPrintData(response.data);
-            }
-        });
+
     }
 
     private void showOrderItem(ArrayList<MyItemList> item_list) {
@@ -210,4 +216,17 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         textTotal.setText("$" + payment_detail.total_order_price);
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_print:
+                new PrintUtils().setPrintData(response.data);
+                break;
+            case R.id.btn_action:
+                break;
+            case R.id.btn_cancel:
+                break;
+
+        }
+    }
 }
