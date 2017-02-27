@@ -37,4 +37,5 @@ public class OrderDetailResponseData {
     public OrderAmountCalculation order_amount_calculation;
     public ArrayList<MyItemList> item_list = new ArrayList<>();
     public UserActivity user_activity;
+    public String user_image;
 }

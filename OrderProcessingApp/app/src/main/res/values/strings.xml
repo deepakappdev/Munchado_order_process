@@ -18,6 +18,9 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="cancel_order">Cancel Order</string>
+    <string name="confirm">Confirm</string>
+    <string name="print_order">Print Order</string>
 
     <string name="btn_discovery">Discovery</string>
     <string name="title_target">Target</string>

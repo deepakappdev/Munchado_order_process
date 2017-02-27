@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,13 +28,13 @@ import com.munchado.orderprocess.network.RequestController;
 import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.ui.activity.DiscoveryActivity;
-import com.munchado.orderprocess.ui.widgets.CustomButton;
 import com.munchado.orderprocess.utils.LogUtils;
 import com.munchado.orderprocess.utils.PrintUtils;
 import com.munchado.orderprocess.utils.ShowMsg;
 import com.munchado.orderprocess.utils.StringUtils;
 import com.munchado.orderprocess.utils.Utility;
 import com.munchado.orderprocess.utils.Utils;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -42,7 +43,7 @@ import java.util.Arrays;
  * Created by android on 23/2/17.
  */
 
-public class OrderDetailFragment extends BaseFragment implements RequestCallback, ReceiveListener {
+public class OrderDetailFragment extends BaseFragment implements RequestCallback, View.OnClickListener, ReceiveListener {
 
     private TextView textName;
     private TextView textEmail;
@@ -62,8 +63,8 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     private TextView textDeliveryTime;
     private TextView labelDeliveryAddress;
     private TextView textDeliveryAddress;
-    private CustomButton buttonPrint;
     private OrderDetailResponse response;
+    private ImageView imageView;
     private View progressBar;
     private String printData = "";
 
@@ -96,6 +97,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         progressBar = view.findViewById(R.id.progress_bar);
         textName = (TextView) view.findViewById(R.id.text_name);
         textEmail = (TextView) view.findViewById(R.id.text_email);
+        imageView = (ImageView) view.findViewById(R.id.image_view);
         textTelephone = (TextView) view.findViewById(R.id.text_telephone);
         textPastActivity = (TextView) view.findViewById(R.id.text_past_activity);
 
@@ -114,8 +116,11 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         textTax = (TextView) view.findViewById(R.id.text_tax);
         textTip = (TextView) view.findViewById(R.id.text_tip);
         textTotal = (TextView) view.findViewById(R.id.text_total);
+        view.findViewById(R.id.btn_print).setOnClickListener(this);
+        view.findViewById(R.id.btn_action).setOnClickListener(this);
+        view.findViewById(R.id.btn_cancel).setOnClickListener(this);
 
-        buttonPrint = (CustomButton) view.findViewById(R.id.printbutton);
+//        buttonPrint = (CustomButton) view.findViewById(R.id.printbutton);
     }
 
     private void showOrderDetail(OrderDetailResponseData orderDetailData) {
@@ -168,6 +173,11 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         textName.setText(data.customer_first_name + " " + data.customer_last_name);
         textTelephone.setText(data.my_delivery_detail.phone);
         textEmail.setText(data.email);
+
+        Picasso.with(getContext()).load(data.user_image)
+                .placeholder(R.drawable.profile_img)
+                .into(imageView);
+
         StringBuilder pastActivity = new StringBuilder();
         if (data.user_activity != null) {
             if (data.user_activity.total_user_order > 0)
@@ -188,37 +198,50 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         showOrderDetail(data);
         showOrderItem(data.item_list);
         showOrderPaymentDetail(data.order_amount_calculation);
-        buttonPrint.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                LogUtils.e("==== on click");
-//                LogUtils.e("==== on click before if");
-                if (StringUtils.isNullOrEmpty(MyApplication.printerName)) {
-                    BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-                    if (!mBluetoothAdapter.isEnabled()) {
-                        mBluetoothAdapter.enable();
-                        Toast.makeText(getActivity(), "Bluetooth is off. Trying to switch ON. Please wait...", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-//                    LogUtils.d("==== "+printData);
-                    Intent intent = new Intent(getActivity(), DiscoveryActivity.class);
-                    startActivity(intent);
-                } else {
-//                    LogUtils.d("==== on click else");
-//                    Gson gsonObj = new Gson();
-//                    String jsonStr = gsonObj.toJson(response);
-//                    LogUtils.d("==== "+jsonStr);
-//                    LogUtils.d("==== "+printData);
-//                    if (mPrinter == null) {
-//                        return ;
+//<<<<<<< HEAD
+//        buttonPrint.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                LogUtils.e("==== on click");
+////                LogUtils.e("==== on click before if");
+//                if (StringUtils.isNullOrEmpty(MyApplication.printerName)) {
+//                    BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+//                    if (!mBluetoothAdapter.isEnabled()) {
+//                        mBluetoothAdapter.enable();
+//                        Toast.makeText(getActivity(), "Bluetooth is off. Trying to switch ON. Please wait...", Toast.LENGTH_SHORT).show();
+//                        return;
 //                    }
-                    runPrintQRCodeSequence();
-
-                }
-
-
-            }
-        });
+////                    LogUtils.d("==== "+printData);
+//                    Intent intent = new Intent(getActivity(), DiscoveryActivity.class);
+//                    startActivity(intent);
+//                } else {
+////                    LogUtils.d("==== on click else");
+////                    Gson gsonObj = new Gson();
+////                    String jsonStr = gsonObj.toJson(response);
+////                    LogUtils.d("==== "+jsonStr);
+////                    LogUtils.d("==== "+printData);
+////                    if (mPrinter == null) {
+////                        return ;
+////                    }
+//                    runPrintQRCodeSequence();
+//
+//                }
+//
+//
+//            }
+//        });
+//=======
+////        buttonPrint.setOnClickListener(new View.OnClickListener() {
+////            @Override
+////            public void onClick(View v) {
+//////                LogUtils.e("==== on click");
+//////                LogUtils.e("==== on click before if");
+////
+////
+////
+////            }
+////        });
+//>>>>>>> developement
     }
 
     @Override
@@ -263,6 +286,41 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         textTotal.setText("$" + payment_detail.total_order_price);
     }
 
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.btn_print:
+//                new PrintUtils().setPrintData(response.data);
+                if (StringUtils.isNullOrEmpty(MyApplication.printerName)) {
+                    BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+                    if (!mBluetoothAdapter.isEnabled()) {
+                        mBluetoothAdapter.enable();
+                        Toast.makeText(getActivity(), "Bluetooth is off. Trying to switch ON. Please wait...", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+//                    LogUtils.d("==== "+printData);
+                    Intent intent = new Intent(getActivity(), DiscoveryActivity.class);
+                    startActivity(intent);
+                } else {
+//                    LogUtils.d("==== on click else");
+//                    Gson gsonObj = new Gson();
+//                    String jsonStr = gsonObj.toJson(response);
+//                    LogUtils.d("==== "+jsonStr);
+//                    LogUtils.d("==== "+printData);
+//                    if (mPrinter == null) {
+//                        return ;
+//                    }
+                    runPrintQRCodeSequence();
+
+                }
+                break;
+            case R.id.btn_action:
+                break;
+            case R.id.btn_cancel:
+                break;
+
+        }
+    }
 
     /**
      * Print data
@@ -306,6 +364,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                 qrCode = easySelect.createQR(MyApplication.printerName,
                         MyApplication.mDeviceType,
                         MyApplication.mAddress);
+
                 mPrinter.addTextAlign(Printer.ALIGN_CENTER);
                 // QR Code
                 mPrinter.addSymbol(qrCode,

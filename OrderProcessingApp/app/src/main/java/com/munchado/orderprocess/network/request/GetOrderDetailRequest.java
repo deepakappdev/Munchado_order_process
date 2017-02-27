@@ -43,7 +43,7 @@ public class GetOrderDetailRequest extends BaseRequest {
     }
 
     public GsonRequest createServerRequest(Response.ErrorListener errorListener, Response.Listener listener) {
-        LogUtils.d("=== url : " + getServiceUrl());
+        LogUtils.d("=== url : ", getServiceUrl());
         GsonRequest<OrderDetailResponse> gsonRequest = new GsonRequest<>(
                 Request.Method.GET, getServiceUrl(),
                 OrderDetailResponse.class, null, listener, errorListener, getJsonRequest());
