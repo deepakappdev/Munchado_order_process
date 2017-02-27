@@ -12,7 +12,7 @@ import java.util.Arrays;
 public class PrintUtils {
 
     public static final int CONTENT_LENGTH = 40;
-    private static final int NO_LENGTH = 4;
+    private static final int NO_LENGTH = 0;
     public static String seperator="------------------------------------------\n";
     static DecimalFormat df = new DecimalFormat();
 
@@ -56,6 +56,49 @@ public class PrintUtils {
         return stringBuilder.toString();
     }
 
+    public static String getSubItemPriceData(int serialNo, String name, String price) {
+        name = name.replaceAll("&amp;", "&");
+        StringBuilder stringBuilder = new StringBuilder();
+        df.setMaximumFractionDigits(2);
+        String p = df.format(Float.valueOf(price));
+        if (!p.contains("."))
+            p = p + ".00";
+//        if (serialNo > 9)
+//            stringBuilder.append(serialNo + ". ");
+//        else
+//            stringBuilder.append("0" + serialNo + ". ");
+        int spaceforitemname = CONTENT_LENGTH - ("    $" + p).length() - 4;
+
+        if (name.length() > spaceforitemname) {
+            int notimes = name.length() / spaceforitemname;
+            int rem = name.length() % spaceforitemname;
+            for (int i = 0; i < notimes; i++) {
+                if (i == 0)
+                    stringBuilder.append("    ").append(name.substring(0, spaceforitemname)).append("    $" + p).append("\n");
+                else
+                    stringBuilder.append("    ").append(name.substring(i * (spaceforitemname), (i + 1) * spaceforitemname)).append("\n");//
+            }
+            int remainingspace = spaceforitemname - rem;
+            if (remainingspace > 1) {
+                char[] chars = new char[remainingspace];
+                Arrays.fill(chars, ' ');
+                stringBuilder.append("    ").append(name.substring(spaceforitemname * notimes)).append("\n");//.append("    ")
+            } else
+                stringBuilder.append("    ").append(name).append("\n");//.append("    ")
+        } else {
+            int remainingspace = spaceforitemname - name.length();
+            if (remainingspace > 1) {
+                char[] chars = new char[remainingspace];
+                Arrays.fill(chars, ' ');
+                stringBuilder.append("    ").append(name).append(chars).append("    $" + p).append("\n");
+            } else
+                stringBuilder.append("    ").append(name).append("\n");
+        }
+
+
+        return stringBuilder.toString();
+    }
+
     public static String getItemPriceData(int serialNo, String name, String price) {
         name = name.replaceAll("&amp;", "&");
         StringBuilder stringBuilder = new StringBuilder();
@@ -63,34 +106,34 @@ public class PrintUtils {
         String p = df.format(Float.valueOf(price));
         if (!p.contains("."))
             p = p + ".00";
-        if (serialNo > 9)
-            stringBuilder.append(serialNo + ". ");
-        else
-            stringBuilder.append("0" + serialNo + ". ");
-        int spaceforitemname = CONTENT_LENGTH - (" $" + p).length() - NO_LENGTH;
+//        if (serialNo > 9)
+//            stringBuilder.append(serialNo + ". ");
+//        else
+//            stringBuilder.append("0" + serialNo + ". ");
+        int spaceforitemname = CONTENT_LENGTH - ("    $" + p).length() - NO_LENGTH;
 
         if (name.length() > spaceforitemname) {
             int notimes = name.length() / spaceforitemname;
             int rem = name.length() % spaceforitemname;
             for (int i = 0; i < notimes; i++) {
                 if (i == 0)
-                    stringBuilder.append(name.substring(0, spaceforitemname)).append(" $" + p).append("\n");
+                    stringBuilder.append(name.substring(0, spaceforitemname)).append("    $" + p).append("\n");
                 else
-                    stringBuilder.append("    ").append(name.substring(i * (spaceforitemname), (i + 1) * spaceforitemname)).append("\n");
+                    stringBuilder.append(name.substring(i * (spaceforitemname), (i + 1) * spaceforitemname)).append("\n");//.append("    ")
             }
             int remainingspace = spaceforitemname - rem;
             if (remainingspace > 1) {
                 char[] chars = new char[remainingspace];
                 Arrays.fill(chars, ' ');
-                stringBuilder.append("    ").append(name.substring(spaceforitemname * notimes)).append("\n");
+                stringBuilder.append(name.substring(spaceforitemname * notimes)).append("\n");//.append("    ")
             } else
-                stringBuilder.append("    ").append(name).append("\n");
+                stringBuilder.append(name).append("\n");//.append("    ")
         } else {
             int remainingspace = spaceforitemname - name.length();
             if (remainingspace > 1) {
                 char[] chars = new char[remainingspace];
                 Arrays.fill(chars, ' ');
-                stringBuilder.append(name).append(chars).append(" $" + p).append("\n");
+                stringBuilder.append(name).append(chars).append("    $" + p).append("\n");
             } else
                 stringBuilder.append(name).append("\n");
         }
@@ -103,21 +146,37 @@ public class PrintUtils {
         str = str.replaceAll("&amp;", "&");
         StringBuilder stringBuilder = new StringBuilder();
         if (str.length() > CONTENT_LENGTH) {
-            int notimes = str.length() / CONTENT_LENGTH;
-            int rem = str.length() % CONTENT_LENGTH;
-            for (int i = 0; i < notimes; i++) {
-                if (i == 0)
-                    stringBuilder.append(str.substring(0, CONTENT_LENGTH)).append("\n");
-                else
-                    stringBuilder.append(str.substring(i * (CONTENT_LENGTH), (i + 1) * CONTENT_LENGTH)).append("\n");
-            }
-            int remainingspace = CONTENT_LENGTH - rem;
-            if (remainingspace > 1) {
-                char[] chars = new char[remainingspace / 2];
+            boolean flag = true;
+            int index=0;
+            while (flag){
+                Model model=getString(str.substring(index,str.length()),CONTENT_LENGTH);
+//                LogUtils.d("====== "+str.substring(index,str.length()));
+                index = model.index;
+                int noTimesSpace = (CONTENT_LENGTH-model.data.length())/2;
+                char[] chars = new char[noTimesSpace];
                 Arrays.fill(chars, ' ');
-                stringBuilder.append(chars).append(str.substring(CONTENT_LENGTH * notimes)).append(chars).append("\n");
-            } else
-                stringBuilder.append(str).append("\n");
+                stringBuilder.append(chars).append(model.data).append(chars).append("\n");
+                if(model.index==-1)
+                {
+                    flag=false;
+                    break;
+                }
+            }
+//            int notimes = str.length() / CONTENT_LENGTH;
+//            int rem = str.length() % CONTENT_LENGTH;
+//            for (int i = 0; i < notimes; i++) {
+//                if (i == 0)
+//                    stringBuilder.append(str.substring(0, CONTENT_LENGTH)).append("\n");
+//                else
+//                    stringBuilder.append(str.substring(i * (CONTENT_LENGTH), (i + 1) * CONTENT_LENGTH)).append("\n");
+//            }
+//            int remainingspace = CONTENT_LENGTH - rem;
+//            if (remainingspace > 1) {
+//                char[] chars = new char[remainingspace / 2];
+//                Arrays.fill(chars, ' ');
+//                stringBuilder.append(chars).append(str.substring(CONTENT_LENGTH * notimes)).append(chars).append("\n");
+//            } else
+//                stringBuilder.append(str).append("\n");
         } else {
             int remainingspace = CONTENT_LENGTH - str.length();
             if (remainingspace > 1) {
@@ -129,4 +188,84 @@ public class PrintUtils {
         }
         return stringBuilder.toString();
     }
+
+    private static Model getString(String str,int length){
+        int lastIndex=-1;
+        length-=3;
+        Model model=new Model();
+        str=str.trim();
+        str=str.trim();
+        str=str.trim();
+        int index = str.indexOf(" ",1);
+//        str+=" ";
+//        LogUtils.d("=== String :"+str+"=== str length :"+str.length()+"=== available length :"+length);
+        if(str.length()>length){
+            for (;
+                 index <= str.length();
+                 index = str.indexOf(" ", index + 1))
+            {
+                if(index>=length || index==0)
+                {
+//                    LogUtils.d("=== Index : "+index+"=== last index : "+lastIndex+"=== Index string 1: "+str.substring(0,index));
+                    break;
+                }
+                else if(index ==-1){
+//                    LogUtils.d("=== Index : "+index+"=== last index : "+lastIndex+"=== Index string 2 : "+str);
+                    lastIndex=0;
+                    break;
+                }
+//                LogUtils.d("=== Index : "+index+"=== last index : "+lastIndex+"=== Index string 3 : "+str.substring(0,index));
+                lastIndex = index;
+            }
+            if(lastIndex>-1)
+            {
+                model.data=str.substring(0,lastIndex);
+                model.index = index;
+            }
+            else if(index ==length)
+            {
+                model.data=str.substring(0,index);
+                model.index = index;
+            }
+            else
+            {
+                model.data=str;
+                model.index = lastIndex;
+            }
+
+        }
+        else
+        {
+            model.data=str;
+            model.index = -1;
+//            LogUtils.d("=== Index string 4 : "+str);
+        }
+        return model;
+    }
+    static class Model{
+        String data;
+        int index;
+    }
+
+    private static void displayMultilineString(String string, int length){
+        StringBuilder builder=new StringBuilder();
+        int lastindex=-1;
+        String str = new String();
+        String []arr=string.split(" ");
+        for(int i=0;i<arr.length;i++){
+
+            if(str.length()<length && (str+arr[i]) .length()<length){
+                builder.append(arr[i]).append(" ");
+                str+=arr[i]+" ";
+            }
+            else{
+                str="";
+                builder.append("\n").append(arr[i]).append(" ");
+            }
+
+        }
+        LogUtils.d("=== string : "+builder.toString());
+    }
 }
+
+

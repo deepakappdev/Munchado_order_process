@@ -70,8 +70,6 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
 
     public Printer mPrinter = null;
 
-    public static int REQUEST_CODE_DISCOVER_PRINTER = 111;
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -198,56 +196,6 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         showOrderDetail(data);
         showOrderItem(data.item_list);
         showOrderPaymentDetail(data.order_amount_calculation);
-//<<<<<<< HEAD
-//        buttonPrint.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-////                LogUtils.e("==== on click");
-////                LogUtils.e("==== on click before if");
-//                if (StringUtils.isNullOrEmpty(MyApplication.printerName)) {
-//                    BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-//                    if (!mBluetoothAdapter.isEnabled()) {
-//                        mBluetoothAdapter.enable();
-//                        Toast.makeText(getActivity(), "Bluetooth is off. Trying to switch ON. Please wait...", Toast.LENGTH_SHORT).show();
-//                        return;
-//                    }
-////                    LogUtils.d("==== "+printData);
-//                    Intent intent = new Intent(getActivity(), DiscoveryActivity.class);
-//                    startActivity(intent);
-//                } else {
-////                    LogUtils.d("==== on click else");
-////                    Gson gsonObj = new Gson();
-////                    String jsonStr = gsonObj.toJson(response);
-////                    LogUtils.d("==== "+jsonStr);
-////                    LogUtils.d("==== "+printData);
-////                    if (mPrinter == null) {
-////                        return ;
-////                    }
-//                    runPrintQRCodeSequence();
-//
-//                }
-//
-//
-//            }
-//        });
-//=======
-////        buttonPrint.setOnClickListener(new View.OnClickListener() {
-////            @Override
-////            public void onClick(View v) {
-//////                LogUtils.e("==== on click");
-//////                LogUtils.e("==== on click before if");
-////
-////
-////
-////            }
-////        });
-//>>>>>>> developement
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        LogUtils.d("==== onResume fragment ");
     }
 
     private void showOrderItem(ArrayList<MyItemList> item_list) {
@@ -298,18 +246,9 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                         Toast.makeText(getActivity(), "Bluetooth is off. Trying to switch ON. Please wait...", Toast.LENGTH_SHORT).show();
                         return;
                     }
-//                    LogUtils.d("==== "+printData);
                     Intent intent = new Intent(getActivity(), DiscoveryActivity.class);
                     startActivity(intent);
                 } else {
-//                    LogUtils.d("==== on click else");
-//                    Gson gsonObj = new Gson();
-//                    String jsonStr = gsonObj.toJson(response);
-//                    LogUtils.d("==== "+jsonStr);
-//                    LogUtils.d("==== "+printData);
-//                    if (mPrinter == null) {
-//                        return ;
-//                    }
                     runPrintQRCodeSequence();
 
                 }
