@@ -12,6 +12,6 @@ public class MyItemList {
     public String unit_price;
     public String item_special_instruction;
     public int item_status;
-//    public ArrayList<AddonsList> addons_list = new ArrayList<>();
+    public ArrayList<AddonsList> addons_list = new ArrayList<>();
 
 }

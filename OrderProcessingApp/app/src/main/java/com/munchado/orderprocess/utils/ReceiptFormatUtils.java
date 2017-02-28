@@ -1,30 +1,53 @@
 package com.munchado.orderprocess.utils;
 
+import com.munchado.orderprocess.model.orderdetail.AddonsList;
 import com.munchado.orderprocess.model.orderdetail.MyItemList;
 import com.munchado.orderprocess.model.orderdetail.OrderDetailResponseData;
 
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 
 /**
  * Created by munchado on 24/2/17.
  */
-public class PrintUtils {
+public class ReceiptFormatUtils {
 
     public static final int CONTENT_LENGTH = 40;
     private static final int NO_LENGTH = 0;
-    public static String seperator="------------------------------------------\n";
+    public static String seperator = "------------------------------------------\n";
     static DecimalFormat df = new DecimalFormat();
+
 
     public static String setPrintData(OrderDetailResponseData orderDetailResponseData) {
         StringBuilder builder = new StringBuilder();
         builder.append(getCenterAlignedData(orderDetailResponseData.restaurant_name));
         builder.append(getCenterAlignedData(orderDetailResponseData.restaurant_address));
+        builder.append(getLeftNRightAlignedString("Order Id: "+orderDetailResponseData.id,""));
+        Calendar cal = Calendar.getInstance();
+        SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
+        SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm:ss");
+
+        String strDate = sdf.format(cal.getTime());
+        String strDate2 = sdf2.format(cal.getTime());
+        builder.append(getLeftNRightAlignedString("Date: "+strDate,"Time: "+strDate2));
         builder.append(seperator);
 //        LogUtils.d(builder.toString());
         int i = 1;
         for (MyItemList printItemModel : orderDetailResponseData.item_list) {
-            builder.append(getItemPriceData(i, printItemModel.item_name, Integer.valueOf(printItemModel.item_qty) * Float.valueOf(printItemModel.unit_price) + ""));
+            if(printItemModel.addons_list!=null && printItemModel.addons_list.size()>0 && printItemModel.addons_list.get(0).addon_price.equalsIgnoreCase("0.00"))
+            {
+                builder.append(getItemPriceData(i, printItemModel.item_name+" ("+printItemModel.addons_list.get(0).addon_name+")", Integer.valueOf(printItemModel.item_qty) * Float.valueOf(printItemModel.unit_price) + ""));
+                printItemModel.addons_list.remove(0);
+            }
+            else
+                builder.append(getItemPriceData(i, printItemModel.item_name, Integer.valueOf(printItemModel.item_qty) * Float.valueOf(printItemModel.unit_price) + ""));
+            int j = 1;
+            for (AddonsList addonsListModel : printItemModel.addons_list) {
+                builder.append(getSubItemPriceData(j, addonsListModel.addon_name, Integer.valueOf(addonsListModel.addon_quantity) * Float.valueOf(addonsListModel.addon_price) + ""));
+                j++;
+            }
             i++;
         }
 
@@ -63,36 +86,36 @@ public class PrintUtils {
         String p = df.format(Float.valueOf(price));
         if (!p.contains("."))
             p = p + ".00";
-//        if (serialNo > 9)
-//            stringBuilder.append(serialNo + ". ");
-//        else
-//            stringBuilder.append("0" + serialNo + ". ");
-        int spaceforitemname = CONTENT_LENGTH - ("    $" + p).length() - 4;
+        if (serialNo > 9)
+            stringBuilder.append(" " + serialNo + ". ");
+        else
+            stringBuilder.append(" 0" + serialNo + ". ");
+        int spaceforitemname = CONTENT_LENGTH - ("    $" + p).length() - 5;
 
         if (name.length() > spaceforitemname) {
             int notimes = name.length() / spaceforitemname;
             int rem = name.length() % spaceforitemname;
             for (int i = 0; i < notimes; i++) {
                 if (i == 0)
-                    stringBuilder.append("    ").append(name.substring(0, spaceforitemname)).append("    $" + p).append("\n");
+                    stringBuilder.append(name.substring(0, spaceforitemname)).append("    $" + p).append("\n");
                 else
-                    stringBuilder.append("    ").append(name.substring(i * (spaceforitemname), (i + 1) * spaceforitemname)).append("\n");//
+                    stringBuilder.append("     ").append(name.substring(i * (spaceforitemname), (i + 1) * spaceforitemname)).append("\n");//
             }
             int remainingspace = spaceforitemname - rem;
             if (remainingspace > 1) {
                 char[] chars = new char[remainingspace];
                 Arrays.fill(chars, ' ');
-                stringBuilder.append("    ").append(name.substring(spaceforitemname * notimes)).append("\n");//.append("    ")
+                stringBuilder.append("     ").append(name.substring(spaceforitemname * notimes)).append("\n");//.append("    ")
             } else
-                stringBuilder.append("    ").append(name).append("\n");//.append("    ")
+                stringBuilder.append("     ").append(name).append("\n");//.append("    ")
         } else {
             int remainingspace = spaceforitemname - name.length();
             if (remainingspace > 1) {
                 char[] chars = new char[remainingspace];
                 Arrays.fill(chars, ' ');
-                stringBuilder.append("    ").append(name).append(chars).append("    $" + p).append("\n");
+                stringBuilder.append(name).append(chars).append("    $" + p).append("\n");
             } else
-                stringBuilder.append("    ").append(name).append("\n");
+                stringBuilder.append("     ").append(name).append("\n");
         }
 
 
@@ -112,6 +135,7 @@ public class PrintUtils {
 //            stringBuilder.append("0" + serialNo + ". ");
         int spaceforitemname = CONTENT_LENGTH - ("    $" + p).length() - NO_LENGTH;
 
+//        stringBuilder.append(displayMultilineString(serialNo,name,spaceforitemname,p));
         if (name.length() > spaceforitemname) {
             int notimes = name.length() / spaceforitemname;
             int rem = name.length() % spaceforitemname;
@@ -142,23 +166,31 @@ public class PrintUtils {
         return stringBuilder.toString();
     }
 
+    public static String getLeftNRightAlignedString(String left,String right){
+        StringBuilder stringBuilder = new StringBuilder();
+        int remainingspace=CONTENT_LENGTH-left.length()-right.length();
+        char[] chars = new char[remainingspace];
+        Arrays.fill(chars, ' ');
+        stringBuilder.append(left).append(chars).append(right).append("\n");
+        return stringBuilder.toString();
+    }
+
     public static String getCenterAlignedData(String str) {
         str = str.replaceAll("&amp;", "&");
         StringBuilder stringBuilder = new StringBuilder();
         if (str.length() > CONTENT_LENGTH) {
             boolean flag = true;
-            int index=0;
-            while (flag){
-                Model model=getString(str.substring(index,str.length()),CONTENT_LENGTH);
+            int index = 0;
+            while (flag) {
+                Model model = getString(str.substring(index, str.length()), CONTENT_LENGTH);
 //                LogUtils.d("====== "+str.substring(index,str.length()));
                 index = model.index;
-                int noTimesSpace = (CONTENT_LENGTH-model.data.length())/2;
+                int noTimesSpace = (CONTENT_LENGTH - model.data.length()) / 2;
                 char[] chars = new char[noTimesSpace];
                 Arrays.fill(chars, ' ');
                 stringBuilder.append(chars).append(model.data).append(chars).append("\n");
-                if(model.index==-1)
-                {
-                    flag=false;
+                if (model.index == -1) {
+                    flag = false;
                     break;
                 }
             }
@@ -189,82 +221,71 @@ public class PrintUtils {
         return stringBuilder.toString();
     }
 
-    private static Model getString(String str,int length){
-        int lastIndex=-1;
-        length-=3;
-        Model model=new Model();
-        str=str.trim();
-        str=str.trim();
-        str=str.trim();
-        int index = str.indexOf(" ",1);
+    private static Model getString(String str, int length) {
+        int lastIndex = -1;
+        length -= 3;
+        Model model = new Model();
+        str = str.trim();
+        str = str.trim();
+        str = str.trim();
+        int index = str.indexOf(" ", 1);
 //        str+=" ";
 //        LogUtils.d("=== String :"+str+"=== str length :"+str.length()+"=== available length :"+length);
-        if(str.length()>length){
+        if (str.length() > length) {
             for (;
                  index <= str.length();
-                 index = str.indexOf(" ", index + 1))
-            {
-                if(index>=length || index==0)
-                {
+                 index = str.indexOf(" ", index + 1)) {
+                if (index >= length || index == 0) {
 //                    LogUtils.d("=== Index : "+index+"=== last index : "+lastIndex+"=== Index string 1: "+str.substring(0,index));
                     break;
-                }
-                else if(index ==-1){
+                } else if (index == -1) {
 //                    LogUtils.d("=== Index : "+index+"=== last index : "+lastIndex+"=== Index string 2 : "+str);
-                    lastIndex=0;
+                    lastIndex = 0;
                     break;
                 }
 //                LogUtils.d("=== Index : "+index+"=== last index : "+lastIndex+"=== Index string 3 : "+str.substring(0,index));
                 lastIndex = index;
             }
-            if(lastIndex>-1)
-            {
-                model.data=str.substring(0,lastIndex);
+            if (lastIndex > -1) {
+                model.data = str.substring(0, lastIndex);
                 model.index = index;
-            }
-            else if(index ==length)
-            {
-                model.data=str.substring(0,index);
+            } else if (index == length) {
+                model.data = str.substring(0, index);
                 model.index = index;
-            }
-            else
-            {
-                model.data=str;
+            } else {
+                model.data = str;
                 model.index = lastIndex;
             }
 
-        }
-        else
-        {
-            model.data=str;
+        } else {
+            model.data = str;
             model.index = -1;
 //            LogUtils.d("=== Index string 4 : "+str);
         }
         return model;
     }
-    static class Model{
+
+    static class Model {
         String data;
         int index;
     }
 
-    private static void displayMultilineString(String string, int length){
-        StringBuilder builder=new StringBuilder();
-        int lastindex=-1;
-        String str = new String();
-        String []arr=string.split(" ");
-        for(int i=0;i<arr.length;i++){
+    private static String displayMultilineString(int no, String string, int length, String price) {
+        StringBuilder sb = new StringBuilder(string);
 
-            if(str.length()<length && (str+arr[i]) .length()<length){
-                builder.append(arr[i]).append(" ");
-                str+=arr[i]+" ";
+        int i = 0;
+        int count = 1;
+        while ((i = sb.indexOf(" ", i + length)) != -1) {
+            if (count == 1)
+            {
+//                if(no>0)
+                sb.replace(i, i + 1, "$" + price + "\n");
+//                else sb.replace(i, i + 1, "$" + price + "\n");
             }
-            else{
-                str="";
-                builder.append("\n").append(arr[i]).append(" ");
-            }
-
+            else
+                sb.replace(i, i + 1, "\n");
         }
-        LogUtils.d("=== string : "+builder.toString());
+        return sb.toString();
     }
 }
 

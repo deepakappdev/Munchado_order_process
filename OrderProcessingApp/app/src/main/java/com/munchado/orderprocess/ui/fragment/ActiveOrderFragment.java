@@ -15,8 +15,6 @@ import com.munchado.orderprocess.listener.OnOrderClickListener;
 import com.munchado.orderprocess.model.archiveorder.ActiveOrderResponse;
 import com.munchado.orderprocess.model.archiveorder.ActiveOrderResponseData;
 import com.munchado.orderprocess.model.archiveorder.OrderItem;
-import com.munchado.orderprocess.model.login.StatusResponse;
-import com.munchado.orderprocess.model.orderdetail.OrderDetailResponse;
 import com.munchado.orderprocess.model.orderprocess.OrderProcessResponse;
 import com.munchado.orderprocess.network.RequestController;
 import com.munchado.orderprocess.network.volley.NetworkError;
@@ -109,7 +107,6 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
             adapter = new ActiveOrderAdapter(onOrderClickListener);
             recyclerView.setAdapter(adapter);
         }
-        data.live_order.subList(20, data.live_order.size()).clear();
         adapter.updateResult(data.live_order);
 
 
