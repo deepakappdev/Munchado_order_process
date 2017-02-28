@@ -79,11 +79,12 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     public Printer mPrinter = null;
 
     public static int REQUEST_CODE_DISCOVER_PRINTER = 111;
+    private View rootView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.frag_order_detail, container, false);
+        return rootView = inflater.inflate(R.layout.frag_order_detail, container, false);
     }
 
     @Override
@@ -136,6 +137,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     }
 
     private void showOrderDetail(OrderDetailResponseData orderDetailData) {
+        rootView.findViewById(R.id.layout_order_detail).setVisibility(View.VISIBLE);
         textOrderId.setText(orderDetailData.id);
         textOrderType.setText(orderDetailData.order_type);
         textOrderTime.setText(orderDetailData.order_date);
@@ -192,6 +194,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     }
 
     private void showDetail(OrderDetailResponseData data) {
+        rootView.findViewById(R.id.layout_customer_detail).setVisibility(View.VISIBLE);
         textName.setText(data.customer_first_name + " " + data.customer_last_name);
         textTelephone.setText(data.my_delivery_detail.phone);
         textEmail.setText(data.email);
@@ -265,6 +268,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     }
 
     private void showOrderPaymentDetail(OrderAmountCalculation payment_detail) {
+        rootView.findViewById(R.id.layout_order_payment).setVisibility(View.VISIBLE);
         textSubtotal.setText("$" + payment_detail.subtotal);
         textDealDiscount.setText("$" + payment_detail.promocode_discount);
 

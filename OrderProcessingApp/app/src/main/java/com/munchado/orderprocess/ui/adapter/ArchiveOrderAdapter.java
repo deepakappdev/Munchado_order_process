@@ -70,7 +70,7 @@ public class ArchiveOrderAdapter extends RecyclerView.Adapter<ArchiveOrderAdapte
             textOrderType.setText(orderItem.order_type);
             StringBuilder stringBuilder = new StringBuilder();
             for(ItemList itemList:orderItem.item_list) {
-                stringBuilder.append(itemList.item_qty + " " + itemList.item_name + ", ");
+                stringBuilder.append(itemList.item_qty).append(" ").append(itemList.item_name).append(", ");
             }
             textOrderItem.setText(stringBuilder.toString());
             textOrderAmount.setText("$ " + orderItem.total_amount);
