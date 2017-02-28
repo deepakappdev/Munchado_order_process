@@ -9,7 +9,11 @@ package com.munchado.orderprocess.utils;
 
 import android.content.Context;
 
+import com.munchado.orderprocess.model.orderdetail.AddonsList;
+
 import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 
 /**
@@ -131,5 +135,9 @@ public abstract class StringUtils {
 
     public static int getResourceId(Context context, String name, String resourceType) {
         return context.getResources().getIdentifier(name, resourceType, context.getPackageName());
+    }
+
+    public static boolean isNullOrEmpty(List<?> arrayList) {
+        return (arrayList == null || arrayList.size() == 0);
     }
 }

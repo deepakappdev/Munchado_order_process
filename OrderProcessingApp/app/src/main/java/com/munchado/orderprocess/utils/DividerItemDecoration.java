@@ -15,15 +15,6 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
     private Drawable divider;
 
     /**
-     * Default divider will be used
-     */
-    public DividerItemDecoration(Context context) {
-        final TypedArray styledAttributes = context.obtainStyledAttributes(ATTRS);
-        divider = styledAttributes.getDrawable(0);
-        styledAttributes.recycle();
-    }
-
-    /**
      * Custom divider will be used
      */
     public DividerItemDecoration(Context context, int resId) {

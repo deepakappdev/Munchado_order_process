@@ -15,6 +15,8 @@ import com.munchado.orderprocess.listener.OnOrderClickListener;
 import com.munchado.orderprocess.model.archiveorder.ActiveOrderResponse;
 import com.munchado.orderprocess.model.archiveorder.ActiveOrderResponseData;
 import com.munchado.orderprocess.model.archiveorder.OrderItem;
+import com.munchado.orderprocess.model.login.StatusResponse;
+import com.munchado.orderprocess.model.orderdetail.OrderDetailResponse;
 import com.munchado.orderprocess.model.orderprocess.OrderProcessResponse;
 import com.munchado.orderprocess.network.RequestController;
 import com.munchado.orderprocess.network.volley.NetworkError;
@@ -60,7 +62,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
         view.findViewById(R.id.text_archive_order).setOnClickListener(this);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), R.drawable.horizontal_line));
     }
 
 
@@ -95,6 +97,8 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
 
     private void moveToArchive(String orderId) {
         adapter.removeOrder(orderId);
+        textActiveOrderCount.setText(adapter.getItemCount() + " Active Orders");
+
     }
     private void moveToConfirmed(String orderId) {
         adapter.confirmOrder(orderId);
@@ -102,11 +106,12 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
 
 
     private void updateActiveList(ActiveOrderResponseData data) {
-        textActiveOrderCount.setText(data.total_live_records + " ACTIVE ORDERS");
+        textActiveOrderCount.setText(data.total_live_records + " Active Orders");
         if (adapter == null || recyclerView.getAdapter() != adapter) {
             adapter = new ActiveOrderAdapter(onOrderClickListener);
             recyclerView.setAdapter(adapter);
         }
+//        data.live_order.subList(20, data.live_order.size()).clear();
         adapter.updateResult(data.live_order);
 
 

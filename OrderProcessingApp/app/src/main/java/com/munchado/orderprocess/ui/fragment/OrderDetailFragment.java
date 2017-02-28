@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.munchado.orderprocess.MyApplication;
 import com.munchado.orderprocess.R;
 import com.munchado.orderprocess.common.FRAGMENTS;
+import com.munchado.orderprocess.model.orderdetail.AddonsList;
 import com.munchado.orderprocess.model.orderdetail.MyItemList;
 import com.munchado.orderprocess.model.orderdetail.OrderAmountCalculation;
 import com.munchado.orderprocess.model.orderdetail.OrderDetailResponse;
@@ -71,10 +72,13 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
 
 
 
+    public static int REQUEST_CODE_DISCOVER_PRINTER = 111;
+    private View rootView;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.frag_order_detail, container, false);
+        return rootView = inflater.inflate(R.layout.frag_order_detail, container, false);
     }
 
     @Override
@@ -127,6 +131,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     }
 
     private void showOrderDetail(OrderDetailResponseData orderDetailData) {
+        rootView.findViewById(R.id.layout_order_detail).setVisibility(View.VISIBLE);
         textOrderId.setText(orderDetailData.id);
         textOrderType.setText(orderDetailData.order_type);
         textOrderTime.setText(orderDetailData.order_date);
@@ -148,6 +153,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     @Override
     public void error(NetworkError volleyError) {
         hideProgressBar();
+        showToast(volleyError.getLocalizedMessage());
     }
 
     @Override
@@ -157,11 +163,13 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
 
     @Override
     public void success(Object obj) {
+        if(getActivity()==null)return;
         hideProgressBar();
         if (obj instanceof OrderDetailResponse) {
             response = (OrderDetailResponse) obj;
-//            responseForPrint = response;
-            printData = ReceiptFormatUtils.setPrintData(response.data);
+
+                    printData = ReceiptFormatUtils.setPrintData(response.data);
+
             LogUtils.d(printData);
             showDetail(response.data);
         } else if (obj instanceof OrderProcessResponse) {
@@ -182,7 +190,11 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     }
 
     private void showDetail(OrderDetailResponseData data) {
-        textName.setText(data.customer_first_name + " " + data.customer_last_name);
+        rootView.findViewById(R.id.layout_customer_detail).setVisibility(View.VISIBLE);
+        StringBuilder nameBuilder = new StringBuilder(data.customer_first_name);
+        if(!StringUtils.isNullOrEmpty(data.customer_last_name))
+            nameBuilder.append(" ").append(data.customer_last_name);
+        textName.setText(nameBuilder.toString());
         textTelephone.setText(data.my_delivery_detail.phone);
         textEmail.setText(data.email);
 
@@ -231,6 +243,27 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
             }
             itemCount.setText(itemList.item_qty);
             itemPrice.setText("$" + (Utils.parseDouble(itemList.unit_price) * Utils.parseDouble(itemList.item_qty)));
+            LinearLayout layoutAddons = (LinearLayout) view.findViewById(R.id.layout_add_ons);
+            if(StringUtils.isNullOrEmpty(itemList.addons_list))
+                layoutAddons.setVisibility(View.GONE);
+            else {
+                layoutAddons.setVisibility(View.VISIBLE);
+                for (AddonsList addonsItem:itemList.addons_list) {
+                    View addonView = inflater.inflate(R.layout.row_addon_item, null);
+                    itemName = (TextView) addonView.findViewById(R.id.text_item_name);
+                    itemCount = (TextView) addonView.findViewById(R.id.text_item_count);
+                    itemPrice = (TextView) addonView.findViewById(R.id.text_item_price);
+
+                    itemName.setText(addonsItem.addon_name);
+                    itemCount.setText(addonsItem.addon_quantity);
+                    itemPrice.setText("$" + addonsItem.addons_total_price);
+                    layoutAddons.addView(addonView);
+                }
+            }
+
+
+
+
             orderLayout.addView(view);
         }
     }
@@ -256,6 +289,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     }
 
     private void showOrderPaymentDetail(OrderAmountCalculation payment_detail) {
+        rootView.findViewById(R.id.layout_order_payment).setVisibility(View.VISIBLE);
         textSubtotal.setText("$" + payment_detail.subtotal);
         textDealDiscount.setText("$" + payment_detail.promocode_discount);
 
@@ -290,7 +324,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                 }
                 break;
             case R.id.btn_action:
-
+                showProgressBar();
                 String status = "";
                 if (currentStatus.equalsIgnoreCase("placed"))
                     status = "confirmed";
@@ -304,7 +338,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                 break;
             case R.id.text_cancel:
                 if(progressBar.getVisibility()!=View.VISIBLE)
-                askUserForReason();
+                    askUserForReason();
 
                 break;
 
@@ -314,7 +348,6 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
 
     private void askUserForReason() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-        alertDialog.setTitle("Cancel Order");
         alertDialog.setMessage("Enter Reason");
 
         final EditText input = new EditText(getActivity());
@@ -335,7 +368,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                     }
                 });
 
-        alertDialog.setNegativeButton("NO",
+        alertDialog.setNegativeButton("No",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();

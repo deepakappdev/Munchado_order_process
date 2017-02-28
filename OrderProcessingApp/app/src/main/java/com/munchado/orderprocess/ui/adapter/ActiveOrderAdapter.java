@@ -148,7 +148,7 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<ActiveOrderAdapter.
             }
             textOrderItem.setText(stringBuilder.toString());
             textOrderAmount.setText("$ " + orderItem.total_amount);
-            textDelayTime.setText(DateTimeUtils.getTimeAgo(orderItem.delivery_date));
+            textDelayTime.setText(DateTimeUtils.getTimeAgo(orderItem.order_date));
             if (orderItem.inProgress) {
                 progressBar.setVisibility(View.VISIBLE);
                 btnAction.setVisibility(View.INVISIBLE);

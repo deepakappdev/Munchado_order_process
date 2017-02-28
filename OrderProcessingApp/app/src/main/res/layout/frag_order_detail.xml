@@ -3,79 +3,57 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-<LinearLayout
-    android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:layout_height="match_parent">
-    <android.support.v4.widget.NestedScrollView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:id="@+id/scrollView"
-android:layout_weight="1"
-        android:layout_height="wrap_content">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <android.support.v4.widget.NestedScrollView
+            android:id="@+id/scrollView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <include
-                layout="@layout/person_detail_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <include
-                layout="@layout/order_detail_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+            android:layout_height="0dp"
+            android:layout_weight="1">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center">
+                android:orientation="vertical">
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1"
-                    android:background="@color/grey_light" />
+                <include
+                    layout="@layout/person_detail_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
 
-                <com.munchado.orderprocess.ui.widgets.CustomTextView
-                    android:layout_width="wrap_content"
+                <include
+                    layout="@layout/order_detail_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
+
+                <LinearLayout
+                    android:id="@+id/order_layout"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_normal"
-                    android:text="ORDER"
-                    android:textColor="@color/default_text_color" />
+                    android:layout_marginBottom="@dimen/margin_normal"
+                    android:orientation="vertical" />
 
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="1dp"
-                    android:layout_weight="1"
-                    android:background="@color/grey_light" />
+                <include
+                    layout="@layout/order_payment_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+
             </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
 
-            <LinearLayout
-                android:id="@+id/order_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_normal"
-                android:orientation="vertical" />
+        <include
+            android:id="@+id/layout_action_button"
+            layout="@layout/order_action_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
-            <include
-                layout="@layout/order_payment_layout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-
-        </LinearLayout>
-    </android.support.v4.widget.NestedScrollView>
-    <include
-        android:id="@+id/layout_action_button"
-        layout="@layout/order_action_layout"
-        android:layout_alignParentBottom="true"
-        android:layout_below="@id/scrollView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-</LinearLayout>
     <include layout="@layout/progress_bar_layout" />
 
 

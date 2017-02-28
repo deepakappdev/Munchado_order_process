@@ -3,6 +3,7 @@ package com.munchado.orderprocess.utils;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -17,7 +18,7 @@ public class DateTimeUtils {
         try {
             Calendar calendar = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_YYYY_MM_DD_HHMMSS);
-//            sdf.setTimeZone(TimeZone.getTimeZone("America/New_York"));
+            sdf.setTimeZone(TimeZone.getTimeZone("America/New_York"));
             String formattedStr = sdf.format(calendar.getTime());
             return new SimpleDateFormat(FORMAT_YYYY_MM_DD_HHMMSS).parse(formattedStr);
         } catch(Exception x){
@@ -30,12 +31,15 @@ public class DateTimeUtils {
             SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_YYYY_MM_DD_HHMMSS);
             long milliSeconds = sdf.parse(dateStr).getTime();
             long currentMilliSeconds = getCurrentNewYorkTime().getTime();
-            long timeago = TimeUnit.MILLISECONDS.toMinutes(currentMilliSeconds - milliSeconds);
-            if (timeago > 0 && timeago < 60)
-                return timeago + " minutes ago";
-            timeago = TimeUnit.MILLISECONDS.toSeconds(currentMilliSeconds - milliSeconds);
+
+            long timeago = TimeUnit.MILLISECONDS.toSeconds(currentMilliSeconds - milliSeconds);
             if (timeago > 0 && timeago < 60)
                 return timeago + " seconds ago";
+
+            timeago = TimeUnit.MILLISECONDS.toMinutes(currentMilliSeconds - milliSeconds);
+            if (timeago > 0 && timeago < 60)
+                return timeago + " minutes ago";
+
             timeago = TimeUnit.MILLISECONDS.toHours(currentMilliSeconds - milliSeconds);
             if (timeago > 0 && timeago < 24)
                 return timeago == 1 ? (timeago + " hour ago") : (timeago + " hours ago");

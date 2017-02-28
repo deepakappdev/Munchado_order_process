@@ -15,7 +15,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="ARCHIVE"
+            android:text="Archive"
             android:textColor="@color/default_text_color"
             android:textSize="@dimen/textSizeXLarge"
             app:textStyle="RobotoMedium" />
