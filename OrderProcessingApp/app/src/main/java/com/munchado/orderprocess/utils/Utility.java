@@ -101,10 +101,7 @@ public class Utility {
         if (macAddress == null) {
             return false;
         }
-        if (macAddress.equals("")) {
-            return false;
-        }
-        return true;
+        return !macAddress.equals("");
     }
 
     // --------------------------------------------------------------------------------------------
@@ -123,10 +120,7 @@ public class Utility {
         if (bdAddress == null) {
             return false;
         }
-        if (bdAddress.equals("")) {
-            return false;
-        }
-        return true;
+        return !bdAddress.equals("");
     }
 
     // --------------------------------------------------------------------------------------------

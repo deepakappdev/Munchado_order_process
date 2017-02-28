@@ -4,17 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-    android:padding="@dimen/margin_normal">
+    android:padding="@dimen/margin_small">
 
-    <com.munchado.orderprocess.ui.widgets.CustomButton
-        android:id="@+id/btn_cancel"
+    <com.munchado.orderprocess.ui.widgets.CustomTextView
+        android:id="@+id/text_cancel"
         android:layout_width="wrap_content"
+        android:visibility="gone"
+
         android:layout_height="wrap_content"
-        android:background="@drawable/grey_button"
-        android:padding="@dimen/fifteendp"
         android:text="@string/cancel_order"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
+        android:layout_marginLeft="@dimen/margin_small"
+        android:textColor="@color/red_overview"
         android:textSize="@dimen/textSizeLarge"
         app:textStyle="RobotoRegular" />
 
@@ -23,27 +23,29 @@
         android:layout_height="0dp"
         android:layout_weight="1" />
 
-    <com.munchado.orderprocess.ui.widgets.CustomButton
-        android:id="@+id/btn_action"
+
+    <com.munchado.orderprocess.ui.widgets.CustomTextView
+        android:id="@+id/text_print"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/green_button"
-        android:padding="@dimen/fifteendp"
-        android:text="@string/confirm"
-        android:textAllCaps="false"
-        android:textColor="@color/white"
+        android:visibility="gone"
+
+        android:text="@string/print_order"
+        android:textColor="@color/dark_grey"
+        android:layout_marginRight="@dimen/margin_normal"
         android:textSize="@dimen/textSizeLarge"
         app:textStyle="RobotoRegular" />
 
     <com.munchado.orderprocess.ui.widgets.CustomButton
-        android:id="@+id/btn_print"
-        android:layout_width="wrap_content"
+        android:id="@+id/btn_action"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:background="@drawable/green_button"
-        android:padding="@dimen/fifteendp"
-        android:text="@string/print_order"
+        android:text="@string/confirm"
         android:textAllCaps="false"
+        android:visibility="gone"
         android:textColor="@color/white"
         android:textSize="@dimen/textSizeLarge"
         app:textStyle="RobotoRegular" />
+
 </LinearLayout>

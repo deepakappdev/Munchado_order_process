@@ -1,5 +1,7 @@
 package com.munchado.orderprocess.ui.adapter;
 
+import android.graphics.Color;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,8 +72,9 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<ActiveOrderAdapter.
         int position = getItemPosition(orderId);
         if (position > -1) {
             orderItems.remove(position);
-            notifyItemRemoved(position);
-            notifyItemRangeChanged(position, getItemCount());
+//            notifyItemRemoved(position);
+//            notifyItemRangeChanged(position, getItemCount());
+            notifyDataSetChanged();
         }
     }
 
@@ -109,6 +112,7 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<ActiveOrderAdapter.
         private final TextView textOrderAmount;
         private final TextView textDelayTime;
         private final Button btnAction;
+        private final ContentLoadingProgressBar progressBar;
         private OrderItem orderItem;
 
         public MyViewHolder(View itemView) {
@@ -123,6 +127,7 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<ActiveOrderAdapter.
             textOrderItem = (TextView) itemView.findViewById(R.id.text_order_item);
             textOrderAmount = (TextView) itemView.findViewById(R.id.text_order_amount);
             textDelayTime = (TextView) itemView.findViewById(R.id.text_delay_time);
+            progressBar = (ContentLoadingProgressBar) itemView.findViewById(R.id.progress_bar);
             btnAction = (Button) itemView.findViewById(R.id.btn_action);
             btnAction.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -137,22 +142,26 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<ActiveOrderAdapter.
             textOrderType.setText(orderItem.order_type);
             StringBuilder stringBuilder = new StringBuilder();
             for (ItemList itemList : orderItem.item_list) {
-                stringBuilder.append(itemList.item_qty).append(" ").append(itemList.item_name).append(", ");
+                if (stringBuilder.length() > 0)
+                    stringBuilder.append(", ");
+                stringBuilder.append(itemList.item_qty).append("  ").append(itemList.item_name);
             }
             textOrderItem.setText(stringBuilder.toString());
             textOrderAmount.setText("$ " + orderItem.total_amount);
             textDelayTime.setText(DateTimeUtils.getTimeAgo(orderItem.delivery_date));
-            if(orderItem.inProgress) {
-                btnAction.setVisibility(View.GONE);
+            if (orderItem.inProgress) {
+                progressBar.setVisibility(View.VISIBLE);
+                btnAction.setVisibility(View.INVISIBLE);
             } else {
+                progressBar.setVisibility(View.INVISIBLE);
                 btnAction.setVisibility(View.VISIBLE);
                 if (orderItem.status.equalsIgnoreCase("confirmed")) {
                     if (orderItem.order_type.equalsIgnoreCase("takeout")) {
                         btnAction.setText("Picked Up");
                     } else if (orderItem.order_type.equalsIgnoreCase("delivery")) {
-                        btnAction.setText("Delivering");
+                        btnAction.setText("Sent");
                     }
-                    btnAction.setBackgroundResource(R.drawable.green_button);
+                    btnAction.setBackgroundResource(R.drawable.grey_button);
 
                 } else if (orderItem.status.equalsIgnoreCase("placed")) {
                     btnAction.setText("Confirm");

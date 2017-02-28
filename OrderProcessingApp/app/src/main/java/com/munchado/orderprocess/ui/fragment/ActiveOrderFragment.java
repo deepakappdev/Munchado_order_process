@@ -23,6 +23,7 @@ import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.ui.activity.BaseActivity;
 import com.munchado.orderprocess.ui.adapter.ActiveOrderAdapter;
+import com.munchado.orderprocess.utils.DividerItemDecoration;
 
 /**
  * Created by android on 22/2/17.
@@ -61,6 +62,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
         view.findViewById(R.id.text_archive_order).setOnClickListener(this);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext()));
     }
 
 
@@ -86,9 +88,12 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
                     moveToConfirmed(((OrderProcessResponse) obj).data.order_id);
                 else
                     moveToArchive(((OrderProcessResponse) obj).data.order_id);
+                showToast("Order Successfully " + ((OrderProcessResponse) obj).data.status);
             }
         }
     }
+
+
 
     private void moveToArchive(String orderId) {
         adapter.removeOrder(orderId);

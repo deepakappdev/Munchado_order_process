@@ -20,6 +20,7 @@ import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.ui.activity.BaseActivity;
 import com.munchado.orderprocess.ui.adapter.ArchiveOrderAdapter;
 import com.munchado.orderprocess.utils.DialogUtil;
+import com.munchado.orderprocess.utils.DividerItemDecoration;
 
 /**
  * Created by android on 22/2/17.
@@ -55,6 +56,7 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
         view.findViewById(R.id.text_archive_order).setOnClickListener(this);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext()));
     }
 
 
