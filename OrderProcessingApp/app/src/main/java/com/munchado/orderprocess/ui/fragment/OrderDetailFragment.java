@@ -157,6 +157,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     @Override
     public void error(NetworkError volleyError) {
         hideProgressBar();
+        showToast(volleyError.getLocalizedMessage());
     }
 
     @Override
@@ -166,11 +167,10 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
 
     @Override
     public void success(Object obj) {
+        if(getActivity()==null)return;
         hideProgressBar();
         if (obj instanceof OrderDetailResponse) {
             response = (OrderDetailResponse) obj;
-//            responseForPrint = response;
-
             printData = PrintUtils.setPrintData(response.data);
             LogUtils.d(printData);
             showDetail(response.data);
@@ -308,7 +308,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                 }
                 break;
             case R.id.btn_action:
-
+                showProgressBar();
                 String status = "";
                 if (currentStatus.equalsIgnoreCase("placed"))
                     status = "confirmed";
@@ -689,7 +689,6 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
 
     private void askUserForReason() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(getActivity());
-        alertDialog.setTitle("Cancel Order");
         alertDialog.setMessage("Enter Reason");
 
         final EditText input = new EditText(getActivity());
@@ -710,7 +709,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                     }
                 });
 
-        alertDialog.setNegativeButton("NO",
+        alertDialog.setNegativeButton("No",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();

@@ -75,7 +75,7 @@ public class ArchiveOrderAdapter extends RecyclerView.Adapter<ArchiveOrderAdapte
             textOrderItem.setText(stringBuilder.toString());
             textOrderAmount.setText("$ " + orderItem.total_amount);
 //            textDelayTime.setText(orderItem.delivery_date);
-            textDelayTime.setText(DateTimeUtils.getTimeAgo(orderItem.delivery_date));
+            textDelayTime.setText(DateTimeUtils.getTimeAgo(orderItem.order_date));
         }
     }
 }
