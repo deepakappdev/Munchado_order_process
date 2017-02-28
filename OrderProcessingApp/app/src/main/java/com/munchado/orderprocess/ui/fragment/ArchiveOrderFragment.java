@@ -56,7 +56,7 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
         view.findViewById(R.id.text_archive_order).setOnClickListener(this);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext()));
+        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), R.drawable.horizontal_line));
     }
 
 

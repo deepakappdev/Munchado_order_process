@@ -25,6 +25,7 @@ import com.epson.epos2.printer.ReceiveListener;
 import com.munchado.orderprocess.MyApplication;
 import com.munchado.orderprocess.R;
 import com.munchado.orderprocess.common.FRAGMENTS;
+import com.munchado.orderprocess.model.orderdetail.AddonsList;
 import com.munchado.orderprocess.model.orderdetail.MyItemList;
 import com.munchado.orderprocess.model.orderdetail.OrderAmountCalculation;
 import com.munchado.orderprocess.model.orderdetail.OrderDetailResponse;
@@ -195,7 +196,10 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
 
     private void showDetail(OrderDetailResponseData data) {
         rootView.findViewById(R.id.layout_customer_detail).setVisibility(View.VISIBLE);
-        textName.setText(data.customer_first_name + " " + data.customer_last_name);
+        StringBuilder nameBuilder = new StringBuilder(data.customer_first_name);
+        if(!StringUtils.isNullOrEmpty(data.customer_last_name))
+            nameBuilder.append(" ").append(data.customer_last_name);
+        textName.setText(nameBuilder.toString());
         textTelephone.setText(data.my_delivery_detail.phone);
         textEmail.setText(data.email);
 
@@ -243,6 +247,27 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
             }
             itemCount.setText(itemList.item_qty);
             itemPrice.setText("$" + (Utils.parseDouble(itemList.unit_price) * Utils.parseDouble(itemList.item_qty)));
+            LinearLayout layoutAddons = (LinearLayout) view.findViewById(R.id.layout_add_ons);
+            if(StringUtils.isNullOrEmpty(itemList.addons_list))
+                layoutAddons.setVisibility(View.GONE);
+            else {
+                layoutAddons.setVisibility(View.VISIBLE);
+                for (AddonsList addonsItem:itemList.addons_list) {
+                    View addonView = inflater.inflate(R.layout.row_addon_item, null);
+                    itemName = (TextView) addonView.findViewById(R.id.text_item_name);
+                    itemCount = (TextView) addonView.findViewById(R.id.text_item_count);
+                    itemPrice = (TextView) addonView.findViewById(R.id.text_item_price);
+
+                    itemName.setText(addonsItem.addon_name);
+                    itemCount.setText(addonsItem.addon_quantity);
+                    itemPrice.setText("$" + addonsItem.addons_total_price);
+                    layoutAddons.addView(addonView);
+                }
+            }
+
+
+
+
             orderLayout.addView(view);
         }
     }
