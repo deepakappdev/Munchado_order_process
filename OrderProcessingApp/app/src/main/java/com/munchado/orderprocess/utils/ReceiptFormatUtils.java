@@ -23,7 +23,8 @@ public class ReceiptFormatUtils {
     public static String setPrintData(OrderDetailResponseData orderDetailResponseData) {
         StringBuilder builder = new StringBuilder();
         builder.append(getCenterAlignedData(orderDetailResponseData.restaurant_name));
-        builder.append(getCenterAlignedData(orderDetailResponseData.restaurant_address));
+        builder.append(getCenterAlignedData(orderDetailResponseData.restaurant_address)).append("\n");
+        builder.append(getLeftNRightAlignedString("Receipt No.: "+orderDetailResponseData.payment_receipt,""));
         builder.append(getLeftNRightAlignedString("Order Id: "+orderDetailResponseData.id,""));
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
@@ -32,6 +33,7 @@ public class ReceiptFormatUtils {
         String strDate = sdf.format(cal.getTime());
         String strDate2 = sdf2.format(cal.getTime());
         builder.append(getLeftNRightAlignedString("Date: "+strDate,"Time: "+strDate2));
+
         builder.append(seperator);
 //        LogUtils.d(builder.toString());
         int i = 1;
