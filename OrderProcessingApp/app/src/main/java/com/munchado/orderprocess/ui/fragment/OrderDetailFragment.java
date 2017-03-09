@@ -50,9 +50,9 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     private TextView textPastActivity;
     private TextView textSubtotal;
     private TextView textDealDiscount;
-    private TextView textDelivery;
+    private TextView textDelivery, textDeliverytitle;
     private TextView textTax;
-    private TextView textTip;
+    private TextView textTip, textTiptitle;
     private TextView textTotal;
     private LinearLayout orderLayout;
     private TextView textOrderId;
@@ -111,6 +111,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         textOrderTime = (TextView) view.findViewById(R.id.text_order_time);
         labelOrderTime = (TextView) view.findViewById(R.id.label_order_time);
         textDeliveryTime = (TextView) view.findViewById(R.id.text_delivery_time);
+        textDeliverytitle= (TextView) view.findViewById(R.id.text_delivery_title);
         labelDeliveryAddress = (TextView) view.findViewById(R.id.label_delivery_address);
         textDeliveryAddress = (TextView) view.findViewById(R.id.text_delivery_address);
 
@@ -121,6 +122,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         textDelivery = (TextView) view.findViewById(R.id.text_delivery);
         textTax = (TextView) view.findViewById(R.id.text_tax);
         textTip = (TextView) view.findViewById(R.id.text_tip);
+        textTiptitle= (TextView) view.findViewById(R.id.text_tip_title);
         textTotal = (TextView) view.findViewById(R.id.text_total);
 
         textPlus = (TextView) view.findViewById(R.id.text_plus);
@@ -148,6 +150,11 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
             labelOrderTime.setText("Time of Takeout");
             labelDeliveryAddress.setVisibility(View.GONE);
             textDeliveryAddress.setVisibility(View.GONE);
+            textTiptitle.setVisibility(View.GONE);
+            textTip.setVisibility(View.GONE);
+            textDelivery.setVisibility(View.GONE);
+            textDeliverytitle.setVisibility(View.GONE);
+
 
         } else {
             labelOrderTime.setText("Time of Delivery");
@@ -303,7 +310,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     private void showOrderPaymentDetail(OrderAmountCalculation payment_detail) {
         rootView.findViewById(R.id.layout_order_payment).setVisibility(View.VISIBLE);
         textSubtotal.setText("$" + payment_detail.subtotal);
-        textDealDiscount.setText("$" + payment_detail.promocode_discount);
+        textDealDiscount.setText("$" + payment_detail.discount);
 
         if (Utils.parseDouble(payment_detail.delivery_charge) == 0)
             textDelivery.setText("Free");
