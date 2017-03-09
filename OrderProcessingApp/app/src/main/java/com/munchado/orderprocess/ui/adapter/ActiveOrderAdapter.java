@@ -32,6 +32,7 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<ActiveOrderAdapter.
     public void updateResult(List<OrderItem> orderItems) {
         if (this.orderItems.size() == 0) {
             this.orderItems.addAll(orderItems);
+            notifyDataSetChanged();
         } else
             for (OrderItem orderItem : orderItems) {
                 int position = getItemPosition(orderItem.id);
