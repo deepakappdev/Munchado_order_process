@@ -104,6 +104,10 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<ActiveOrderAdapter.
         }
     }
 
+    public List<OrderItem> getAllItems() {
+        return orderItems;
+    }
+
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 

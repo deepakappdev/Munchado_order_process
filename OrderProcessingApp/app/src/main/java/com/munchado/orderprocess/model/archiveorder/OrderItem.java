@@ -21,5 +21,4 @@ public class OrderItem {
     public String total_amount;
     public ArrayList<ItemList> item_list = new ArrayList<>();
     public boolean inProgress;
-
 }

@@ -22,12 +22,15 @@ import com.munchado.orderprocess.model.archiveorder.ActiveOrderResponse;
 import com.munchado.orderprocess.model.archiveorder.ActiveOrderResponseData;
 import com.munchado.orderprocess.model.archiveorder.OrderItem;
 import com.munchado.orderprocess.model.orderprocess.OrderProcessResponse;
+import com.munchado.orderprocess.model.orderprocess.OrderProcessResponseData;
 import com.munchado.orderprocess.network.RequestController;
 import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.ui.activity.BaseActivity;
 import com.munchado.orderprocess.ui.adapter.ActiveOrderAdapter;
 import com.munchado.orderprocess.utils.DividerItemDecoration;
+
+import java.util.List;
 
 /**
  * Created by android on 22/2/17.
@@ -80,6 +83,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
         if (getActivity() == null) return;
         if (obj instanceof ActiveOrderResponse) {
             updateActiveList(((ActiveOrderResponse) obj).data);
+            cleanRemainingItem(((ActiveOrderResponse) obj).data);
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -92,12 +96,27 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
                     moveToConfirmed(((OrderProcessResponse) obj).data.order_id);
                 else
                     moveToArchive(((OrderProcessResponse) obj).data.order_id);
+
                 showToast("Order Successfully " + ((OrderProcessResponse) obj).data.status);
             }
         }
     }
 
-
+    private void cleanRemainingItem(ActiveOrderResponseData data) {
+        List<OrderItem> allItems = adapter.getAllItems();
+        for(int index = 0;index<allItems.size();index++) {
+            OrderItem orderItem = allItems.get(index);
+            boolean found = false;
+            for(OrderItem updatedItem:data.live_order) {
+                if(updatedItem.id.equalsIgnoreCase(orderItem.id)) {
+                    found = true;
+                    break;
+                }
+            }
+            if(!found)
+                moveToArchive(orderItem.id);
+        }
+    }
 
     private void moveToArchive(String orderId) {
         adapter.removeOrder(orderId);
@@ -117,8 +136,6 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
         }
 //        data.live_order.subList(20, data.live_order.size()).clear();
         adapter.updateResult(data.live_order);
-
-
     }
 
     OnOrderClickListener onOrderClickListener = new OnOrderClickListener() {
@@ -127,8 +144,6 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
             Bundle bundle = new Bundle();
             bundle.putString("ORDER_ID", orderItem.id);
             ((BaseActivity) getActivity()).addFragment(FRAGMENTS.ORDER_DETAIL, bundle);
-
-
         }
 
         @Override
