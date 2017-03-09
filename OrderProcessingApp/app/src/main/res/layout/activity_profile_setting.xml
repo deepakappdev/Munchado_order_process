@@ -57,9 +57,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:enabled="false"
-                    android:focusableInTouchMode="true"
                     android:hint="Address"
                     android:inputType="text"
+                    android:maxLines="4"
+                    android:singleLine="false"
                     android:textColor="@color/default_text_color" />
             </android.support.design.widget.TextInputLayout>
 

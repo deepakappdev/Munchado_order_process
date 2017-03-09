@@ -1,9 +1,15 @@
 package com.munchado.orderprocess.ui.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +21,6 @@ import com.munchado.orderprocess.listener.OnOrderClickListener;
 import com.munchado.orderprocess.model.archiveorder.ActiveOrderResponse;
 import com.munchado.orderprocess.model.archiveorder.ActiveOrderResponseData;
 import com.munchado.orderprocess.model.archiveorder.OrderItem;
-import com.munchado.orderprocess.model.login.StatusResponse;
-import com.munchado.orderprocess.model.orderdetail.OrderDetailResponse;
 import com.munchado.orderprocess.model.orderprocess.OrderProcessResponse;
 import com.munchado.orderprocess.network.RequestController;
 import com.munchado.orderprocess.network.volley.NetworkError;
@@ -52,7 +56,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
         fetchActiveOrder();
     }
 
-    private void fetchActiveOrder() {
+    public void fetchActiveOrder() {
         RequestController.getActiveOrder(this);
     }
 
@@ -151,6 +155,33 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
                 ((BaseActivity) getActivity()).addFragment(FRAGMENTS.ARCHIVE, null);
                 break;
         }
+    }
+
+    // handler for received Intents for the "my-event" event
+    private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            // Extract data included in the Intent
+            String message = intent.getStringExtra("message");
+            Log.d("receiver", "=============Got message: " + message);
+            fetchActiveOrder();
+        }
+    };
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Register mMessageReceiver to receive messages.
+        LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMessageReceiver,
+                new IntentFilter("com.munchado.orderprocess.notification.refresh"));
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+        // Unregister since the activity is not visible
+//        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mMessageReceiver);
     }
 
     @Override

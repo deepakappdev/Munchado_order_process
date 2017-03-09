@@ -18,6 +18,7 @@ import com.munchado.orderprocess.network.RequestController;
 import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.ui.fragment.CustomErrorDialogFragment;
+import com.munchado.orderprocess.utils.Constants;
 import com.munchado.orderprocess.utils.DialogUtil;
 import com.munchado.orderprocess.utils.MunchadoUtils;
 import com.munchado.orderprocess.utils.PrefUtil;
@@ -141,6 +142,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 DialogUtil.hideProgressDialog();
                 StatusResponse mStatusResponse = (StatusResponse) response;
                 if (mStatusResponse.data.message) {
+                    PrefUtil.putString(Constants.PREF_USER_ID, "58285");
+
                     PrefUtil.setLogin(true);
                     startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                     finish();
@@ -151,4 +154,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         });
     }
+
+
 }

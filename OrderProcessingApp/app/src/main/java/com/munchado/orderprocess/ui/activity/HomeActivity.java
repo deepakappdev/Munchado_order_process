@@ -11,7 +11,8 @@ import android.view.MenuItem;
 
 import com.munchado.orderprocess.R;
 import com.munchado.orderprocess.common.FRAGMENTS;
-import com.munchado.orderprocess.utils.LogUtils;
+import com.munchado.orderprocess.notification.PubnubService;
+import com.munchado.orderprocess.utils.Constants;
 import com.munchado.orderprocess.utils.PrefUtil;
 
 public class HomeActivity extends BaseActivity
@@ -62,6 +63,9 @@ public class HomeActivity extends BaseActivity
             addFragment(FRAGMENTS.PRINT, null);
         } else if (id == R.id.nav_logout) {
             PrefUtil.clearAllData();
+            Intent i = new Intent(HomeActivity.this, PubnubService.class);
+            i.putExtra(Constants.PARAM_PUBNUB_ACTION, Constants.PARAM_PUBNUB_UNSUBSCRIBE);
+            startService(i);
             startActivity(new Intent(HomeActivity.this, LoginActivity.class));
             finish();
         }
@@ -76,18 +80,16 @@ public class HomeActivity extends BaseActivity
             toolbar.setTitle(title);
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        LogUtils.d("===== onActivityResult");
-//        if(requestCode == OrderDetailFragment.REQUEST_CODE_DISCOVER_PRINTER && resultCode == RESULT_OK){
-//            Bundle bundle = data.getExtras();
-//            BluetoothDeviceModel model = (BluetoothDeviceModel) bundle.getSerializable("device");
-//            MyApplication.mTarget = model.title_target;
-//            MyApplication.mInterfaceType = model.title_interface;
-//            MyApplication.mAddress = model.title_address;
-//            MyApplication.printerName = model.title_name;
-//        }
-//    }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        initPub();
+    }
+    private void initPub() {
+        Intent i = new Intent(this, PubnubService.class);
+        i.putExtra(Constants.PARAM_PUBNUB_ACTION,Constants.PARAM_PUBNUB_SUBSCRIBE);
+        startService(i);
 
+    }
 }

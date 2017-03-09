@@ -1,9 +1,14 @@
 package com.munchado.orderprocess.ui.activity;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
@@ -15,7 +20,6 @@ import com.munchado.orderprocess.ui.fragment.ArchiveOrderFragment;
 import com.munchado.orderprocess.ui.fragment.BaseFragment;
 import com.munchado.orderprocess.ui.fragment.OrderDetailFragment;
 import com.munchado.orderprocess.ui.fragment.PrintSettingFragment;
-import com.munchado.orderprocess.utils.LogUtils;
 
 /**
  * Created by android on 22/2/17.
@@ -25,19 +29,10 @@ public class BaseActivity extends AppCompatActivity {
 
     private Toast toast;
 
-    @Override
-    protected void onPause() {
-        View view = this.getCurrentFocus();
-        if (view != null) {
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-        }
-        super.onPause();
-    }
 
     public void addFragment(FRAGMENTS fragmentId, Bundle bundle) {
         BaseFragment fragment = getFragment(fragmentId);
-        if(fragment!=null) {
+        if (fragment != null) {
             fragment.setArguments(bundle);
             FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
             ft.replace(R.id.frame_container, fragment);
@@ -68,20 +63,30 @@ public class BaseActivity extends AppCompatActivity {
     }
 
 
-    public void popToHomePage(){
+    public void popToHomePage() {
         getSupportFragmentManager().popBackStack(FRAGMENTS.ACTIVE.name(), 0);
 
     }
+
+
     @Override
-    public void onResume() {
-        super.onResume();
-        LogUtils.d("==== onResume BaseActivity ");
+    protected void onPause() {
+        View view = this.getCurrentFocus();
+        if (view != null) {
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+
+        super.onPause();
     }
 
     public void showToast(String message) {
-        if(toast==null)
+        if (toast == null)
             toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
         toast.setText(message);
         toast.show();
     }
+
+
+
 }

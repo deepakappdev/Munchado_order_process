@@ -14,7 +14,9 @@ import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.ui.fragment.CustomErrorDialogFragment;
 import com.munchado.orderprocess.utils.DialogUtil;
+import com.munchado.orderprocess.utils.LogUtils;
 import com.munchado.orderprocess.utils.StringUtils;
+import com.munchado.orderprocess.utils.Utils;
 
 public class ProfileSettingActivity extends AppCompatActivity implements RequestCallback {
 
@@ -112,7 +114,8 @@ public class ProfileSettingActivity extends AppCompatActivity implements Request
         RestaurantProfileResponse response = (RestaurantProfileResponse) obj;
         if (response.result) {
             txt_resname.setText(response.data.restaurant_name);
-            txt_address.setText(response.data.address);
+            LogUtils.d("===== address : "+response.data.address);
+            txt_address.setText(Utils.decodeHtml(response.data.address));
             txt_phone.setText(response.data.phone);
             txt_email.setText(response.data.email);
             txt_city.setText(response.data.city_name);

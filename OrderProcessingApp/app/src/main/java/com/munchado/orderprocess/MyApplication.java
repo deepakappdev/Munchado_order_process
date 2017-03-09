@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 
 import com.epson.easyselect.EasySelectDeviceType;
+import com.munchado.orderprocess.utils.Foreground;
 
 /**
  * Created by android on 22/2/17.
@@ -23,5 +24,6 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mContext = getApplicationContext();
+        Foreground.init(this);
     }
 }

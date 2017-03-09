@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "464887470728",
+    "firebase_url": "https://munch-ado-order-processing.firebaseio.com",
+    "project_id": "munch-ado-order-processing",
+    "storage_bucket": "munch-ado-order-processing.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:464887470728:android:cd91b64308dfdb2a",
+        "android_client_info": {
+          "package_name": "com.munchado.orderprocess"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "464887470728-eimm0dd00saor7cm5kj523j0v25hlgc5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDD_m9LdIKRzGgvDFDRQE4jJF5wdxHrvfU"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
