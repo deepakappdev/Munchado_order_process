@@ -74,6 +74,9 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
 
     public static int REQUEST_CODE_DISCOVER_PRINTER = 111;
     private View rootView;
+    private TextView textChangeDeliveryTime;
+    private TextView textPlus;
+    private TextView textMinus;
 
     @Nullable
     @Override
@@ -119,6 +122,12 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         textTax = (TextView) view.findViewById(R.id.text_tax);
         textTip = (TextView) view.findViewById(R.id.text_tip);
         textTotal = (TextView) view.findViewById(R.id.text_total);
+
+        textPlus = (TextView) view.findViewById(R.id.text_plus);
+        textChangeDeliveryTime = (TextView) view.findViewById(R.id.text_change_delivery_time);
+        textMinus = (TextView) view.findViewById(R.id.text_minus);
+        textPlus.setOnClickListener(this);
+        textMinus.setOnClickListener(this);
 
         (textPrint = (TextView) view.findViewById(R.id.text_print)).setOnClickListener(this);
         textPrint.setPaintFlags(textPrint.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
@@ -272,10 +281,13 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         textPrint.setVisibility(View.VISIBLE);
         textAction.setVisibility(View.VISIBLE);
         textCancel.setVisibility(View.VISIBLE);
+        rootView.findViewById(R.id.layout_change_delivery_time).setVisibility(View.GONE);
         String currentStatus = response.data.status;
         if (currentStatus.equalsIgnoreCase("placed")) {
             textAction.setText("Confirm");
             textAction.setBackgroundResource(R.drawable.green_button);
+            rootView.findViewById(R.id.layout_change_delivery_time).setVisibility(View.VISIBLE);
+
         } else if (currentStatus.equalsIgnoreCase("confirmed")) {
             textAction.setBackgroundResource(R.drawable.grey_button);
             if (response.data.order_type.equalsIgnoreCase("takeout"))
