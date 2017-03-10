@@ -116,6 +116,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
             if(!found)
                 moveToArchive(orderItem.id);
         }
+        textActiveOrderCount.setText(adapter.getItemCount() + " Active Orders");
     }
 
     private void moveToArchive(String orderId) {
@@ -129,7 +130,6 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
 
 
     private void updateActiveList(ActiveOrderResponseData data) {
-        textActiveOrderCount.setText(data.total_live_records + " Active Orders");
         if (adapter == null || recyclerView.getAdapter() != adapter) {
             adapter = new ActiveOrderAdapter(onOrderClickListener);
             recyclerView.setAdapter(adapter);
