@@ -36,6 +36,7 @@ import com.munchado.orderprocess.utils.StringUtils;
 import com.munchado.orderprocess.utils.Utils;
 import com.squareup.picasso.Picasso;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -59,6 +60,8 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     private TextView textOrderType;
     private TextView textOrderTime;
     private TextView labelOrderTime;
+    private TextView tv_change_delivery_time;
+
     private TextView textDeliveryTime;
     private TextView labelDeliveryAddress;
     private TextView textDeliveryAddress;
@@ -77,6 +80,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     private TextView textChangeDeliveryTime;
     private TextView textPlus;
     private TextView textMinus;
+    DecimalFormat df = new DecimalFormat();
 
     @Nullable
     @Override
@@ -88,6 +92,8 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
+        df.setMinimumFractionDigits(2);
+        df.setMaximumFractionDigits(2);
         fetchOrderDetail();
     }
 
@@ -114,6 +120,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         textDeliverytitle= (TextView) view.findViewById(R.id.text_delivery_title);
         labelDeliveryAddress = (TextView) view.findViewById(R.id.label_delivery_address);
         textDeliveryAddress = (TextView) view.findViewById(R.id.text_delivery_address);
+        tv_change_delivery_time = (TextView) view.findViewById(R.id.tv_change_delivery_time);
 
         orderLayout = (LinearLayout) view.findViewById(R.id.order_layout);
 
@@ -148,6 +155,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         textOrderTime.setText(orderDetailData.order_date);
         if (orderDetailData.order_type.equalsIgnoreCase("takeout")) {
             labelOrderTime.setText("Time of Takeout");
+            tv_change_delivery_time.setText("Change Takeout Time");
             labelDeliveryAddress.setVisibility(View.GONE);
             textDeliveryAddress.setVisibility(View.GONE);
             textTiptitle.setVisibility(View.GONE);
@@ -183,7 +191,6 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         hideProgressBar();
         if (obj instanceof OrderDetailResponse) {
             response = (OrderDetailResponse) obj;
-
                     printData = ReceiptFormatUtils.setPrintData(response.data);
 
             LogUtils.d(printData);
@@ -258,21 +265,22 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                 textInstruction.setText(itemList.item_special_instruction);
             }
             itemCount.setText(itemList.item_qty);
-            itemPrice.setText("$" + (Utils.parseDouble(itemList.unit_price) * Utils.parseDouble(itemList.item_qty)));
+            itemPrice.setText("$" + df.format(Utils.parseDouble(itemList.unit_price) * Utils.parseDouble(itemList.item_qty)));
             LinearLayout layoutAddons = (LinearLayout) view.findViewById(R.id.layout_add_ons);
             if(StringUtils.isNullOrEmpty(itemList.addons_list))
                 layoutAddons.setVisibility(View.GONE);
             else {
                 layoutAddons.setVisibility(View.VISIBLE);
+                LogUtils.d("============== add on list size : "+itemList.addons_list.size());
                 for (AddonsList addonsItem:itemList.addons_list) {
                     View addonView = inflater.inflate(R.layout.row_addon_item, null);
                     itemName = (TextView) addonView.findViewById(R.id.text_item_name);
                     itemCount = (TextView) addonView.findViewById(R.id.text_item_count);
                     itemPrice = (TextView) addonView.findViewById(R.id.text_item_price);
 
-                    itemName.setText(addonsItem.addon_name);
+                    itemName.setText("+ "+addonsItem.addon_name);
                     itemCount.setText(addonsItem.addon_quantity);
-                    itemPrice.setText("$" + addonsItem.addons_total_price);
+                    itemPrice.setText("$" + df.format(Double.valueOf(addonsItem.addons_total_price)));
                     layoutAddons.addView(addonView);
                 }
             }
@@ -309,17 +317,17 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
 
     private void showOrderPaymentDetail(OrderAmountCalculation payment_detail) {
         rootView.findViewById(R.id.layout_order_payment).setVisibility(View.VISIBLE);
-        textSubtotal.setText("$" + payment_detail.subtotal);
-        textDealDiscount.setText("$" + payment_detail.discount);
+        textSubtotal.setText("$" + df.format(Double.valueOf(payment_detail.subtotal)));
+        textDealDiscount.setText("$" + df.format(Double.valueOf(payment_detail.discount)));
 
         if (Utils.parseDouble(payment_detail.delivery_charge) == 0)
             textDelivery.setText("Free");
         else
-            textDelivery.setText("$" + payment_detail.delivery_charge);
+            textDelivery.setText("$" + df.format(Double.valueOf(payment_detail.delivery_charge)));
 
-        textTax.setText("$" + payment_detail.tax_amount);
-        textTip.setText("$" + payment_detail.tip_amount);
-        textTotal.setText("$" + payment_detail.total_order_price);
+        textTax.setText("$" + df.format(Double.valueOf(payment_detail.tax_amount)));
+        textTip.setText("$" + df.format(Double.valueOf(payment_detail.tip_amount)));
+        textTotal.setText("$" + df.format(Double.valueOf(payment_detail.total_order_price)));
     }
 
     @Override

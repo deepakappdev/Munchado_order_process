@@ -42,6 +42,8 @@ dependencies {
     compile 'com.pubnub:pubnub-android:3.7.4'
     compile files('libs/ePOS2.jar')
     compile files('libs/ePOSEasySelect.jar')
+    compile files('libs/StarIOPort3.1.jar')
+    compile files('libs/starioextension.jar')
 }
 
 // Add to the bottom of the file

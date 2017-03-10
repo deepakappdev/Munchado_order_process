@@ -14,8 +14,10 @@
         android:visibility="gone">
 
         <com.munchado.orderprocess.ui.widgets.CustomTextView
+            android:id="@+id/tv_change_delivery_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/margin_small"
             android:text="Change Delivery Time"
             android:textColor="@color/default_text_color" />
 
