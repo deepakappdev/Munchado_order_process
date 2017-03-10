@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.munchado.orderprocess.R;
 import com.munchado.orderprocess.common.FRAGMENTS;
@@ -29,6 +30,7 @@ import com.munchado.orderprocess.utils.DividerItemDecoration;
 public class ArchiveOrderFragment extends BaseFragment implements RequestCallback, View.OnClickListener {
 
     RecyclerView recyclerView;
+    TextView tv_archive_order_count;
 
     @Nullable
     @Override
@@ -55,6 +57,7 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
     private void initView(View view) {
         view.findViewById(R.id.text_archive_order).setOnClickListener(this);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
+        tv_archive_order_count = (TextView) view.findViewById(R.id.tv_archive_order_count);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), R.drawable.horizontal_line));
     }
@@ -76,6 +79,7 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
     private void showArchiveList(ArchiveOrderResponseData data) {
         ArchiveOrderAdapter adapter = new ArchiveOrderAdapter(onOrderClickListener);
         adapter.setResults(data.archive_order);
+        tv_archive_order_count.setText(data.archive_order.size()+" Archive Orders");
         recyclerView.setAdapter(adapter);
     }
     OnOrderClickListener onOrderClickListener = new OnOrderClickListener() {

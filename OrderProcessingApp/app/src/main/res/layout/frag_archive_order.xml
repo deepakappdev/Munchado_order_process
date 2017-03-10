@@ -12,10 +12,11 @@
 
 
         <com.munchado.orderprocess.ui.widgets.CustomTextView
+            android:id="@+id/tv_archive_order_count"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Archive"
+            android:text="Archive Orders"
             android:textColor="@color/default_text_color"
             android:textSize="@dimen/textSizeXLarge"
             app:textStyle="RobotoMedium" />
@@ -24,7 +25,7 @@
             android:id="@+id/text_archive_order"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="View Today's Order"
+            android:text="View Active Order"
             android:textColor="@color/dark_grey" />
     </LinearLayout>
 

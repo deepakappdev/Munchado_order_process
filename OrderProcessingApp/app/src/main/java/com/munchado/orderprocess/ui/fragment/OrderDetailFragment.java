@@ -150,7 +150,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
 
     private void showOrderDetail(OrderDetailResponseData orderDetailData) {
         rootView.findViewById(R.id.layout_order_detail).setVisibility(View.VISIBLE);
-        textOrderId.setText(orderDetailData.id);
+        textOrderId.setText(orderDetailData.payment_receipt);
         textOrderType.setText(orderDetailData.order_type);
         textOrderTime.setText(orderDetailData.order_date);
         if (orderDetailData.order_type.equalsIgnoreCase("takeout")) {
