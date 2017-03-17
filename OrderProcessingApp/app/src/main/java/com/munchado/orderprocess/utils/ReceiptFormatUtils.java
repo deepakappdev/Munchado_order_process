@@ -6,8 +6,10 @@ import com.munchado.orderprocess.model.orderdetail.OrderDetailResponseData;
 
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 /**
  * Created by munchado on 24/2/17.
@@ -22,8 +24,8 @@ public class ReceiptFormatUtils {
 
     public static String setPrintData(OrderDetailResponseData orderDetailResponseData) {
         StringBuilder builder = new StringBuilder();
-        builder.append(getCenterAlignedData(orderDetailResponseData.restaurant_name));
-        builder.append(getCenterAlignedData(orderDetailResponseData.restaurant_address)).append("\n");
+        builder.append(getCenterSplitArray(orderDetailResponseData.restaurant_name,CONTENT_LENGTH));
+        builder.append(getCenterSplitArray(orderDetailResponseData.restaurant_address,CONTENT_LENGTH)).append("\n");
         builder.append(getLeftNRightAlignedString("Receipt No.: "+orderDetailResponseData.payment_receipt,""));
         builder.append(getLeftNRightAlignedString("Order Id: "+orderDetailResponseData.id,""));
         Calendar cal = Calendar.getInstance();
@@ -65,10 +67,6 @@ public class ReceiptFormatUtils {
         builder.append(getAmountCalculation("Total", "$" + orderDetailResponseData.order_amount_calculation.total_order_price));
         builder.append(seperator);
         builder.append(getCenterAlignedData("See you soon!!")).append("\n");
-//        builder.append(getAmountCalculation("Total", "$" + orderDetailResponseData.order_amount_calculation.total_order_price));
-//        builder.append(seperator).append("\n\n");
-//        builder.append(getCenterAlignedData("See you soon!!"));
-//        LogUtils.d("==== Bill: ", builder.toString());
         return builder.toString();
     }
 
@@ -101,43 +99,61 @@ public class ReceiptFormatUtils {
 //        else
             stringBuilder.append(" - ");
         int spaceforitemname = CONTENT_LENGTH - ("      $" + p).length() - 3;
-
+        spaceforitemname=15;
         if (name.length() > spaceforitemname) {
             LogUtils.d("===== subitem : if");
-            int notimes = name.length() / spaceforitemname;
-            int rem = name.length() % spaceforitemname;
-            for (int i = 0; i < notimes; i++) {
 
-                if (i == 0)
-                {
-                    String prc=Float.valueOf(p)>100?(" $" + p):(Float.valueOf(p)>10?("  $" + p):("   $" + p));
-                    stringBuilder.append(name.substring(0, spaceforitemname)).append("  ").append(qty).append(prc).append("\n");
+            List<String> list =new ArrayList<>();
+            list.addAll(getSplitArray(name,spaceforitemname));
+            for(int j=0;j<list.size();j++){
+                if(j==0){
+
+                    int remainingspace = spaceforitemname - list.get(j).length();
+                    char[] chars = new char[remainingspace+2];
+                    Arrays.fill(chars, ' ');
+
+                    String prc=Float.valueOf(p)>=100?(" $" + p):(Float.valueOf(p)>=10?("  $" + p):("   $" + p));
+                    stringBuilder.append(list.get(j)).append(chars).append(qty).append(prc).append("\n");
                 }
-
-
-//                if (i == 0)
-//                    stringBuilder.append(name.substring(0, spaceforitemname)).append("  $" + p).append("\n");
                 else
-                    stringBuilder.append("     ").append(name.substring(i * (spaceforitemname), (i + 1) * spaceforitemname)).append("\n");//
+                    stringBuilder.append(list.get(j)).append("\n");
             }
-            int remainingspace = spaceforitemname - rem;
-            if (remainingspace > 1) {
-                char[] chars = new char[remainingspace];
-                Arrays.fill(chars, ' ');
-                stringBuilder.append("     ").append(name.substring(spaceforitemname * notimes)).append("\n");//.append("    ")
-            } else
-                stringBuilder.append("     ").append(name).append("\n");//.append("    ")
+
+
+//            int notimes = name.length() / spaceforitemname;
+//            int rem = name.length() % spaceforitemname;
+//            for (int i = 0; i < notimes; i++) {
+//
+//                if (i == 0)
+//                {
+//                    String prc=Float.valueOf(p)>=100?(" $" + p):(Float.valueOf(p)>=10?("  $" + p):("   $" + p));
+//                    stringBuilder.append(name.substring(0, spaceforitemname)).append("  ").append(qty).append(prc).append("\n");
+//                }
+////                if (i == 0)
+////                    stringBuilder.append(name.substring(0, spaceforitemname)).append("  $" + p).append("\n");
+//                else
+//                    stringBuilder.append("     ").append(name.substring(i * (spaceforitemname), (i + 1) * spaceforitemname)).append("\n");//
+//            }
+//            int remainingspace = spaceforitemname - rem;
+//            if (remainingspace > 1) {
+//                char[] chars = new char[remainingspace];
+//                Arrays.fill(chars, ' ');
+//                stringBuilder.append("     ").append(name.substring(spaceforitemname * notimes)).append("\n");//.append("    ")
+//            } else
+//                stringBuilder.append("     ").append(name).append("\n");//.append("    ")
         } else {
-            LogUtils.d("===== subitem : else");
-            int remainingspace = spaceforitemname - name.length()-1;
+
+            int remainingspace = spaceforitemname - name.length();
+//            int remainingspace = 15 - name.length();
+            LogUtils.d("===== subitem : else spaceforitemname : "+spaceforitemname+"== name.length():"+name.length()+"=== remainingspace : "+remainingspace);
             if (remainingspace > 1) {
                 char[] chars = new char[remainingspace];
                 Arrays.fill(chars, ' ');
-                String prc=Float.valueOf(p)>100?(" $" + p):(Float.valueOf(p)>10?("  $" + p):("   $" + p));
+                String prc=Float.valueOf(p)>=100?(" $" + p):(Float.valueOf(p)>=10?("  $" + p):("   $" + p));
                 stringBuilder.append(name).append(chars).append("  ").append(qty).append(prc).append("\n");
 //                stringBuilder.append(name).append(chars).append("  $" + p).append("\n");
             } else
-                stringBuilder.append("     ").append(name).append("\n");
+                stringBuilder.append("   ").append(name).append("\n");
         }
 
 
@@ -155,34 +171,53 @@ public class ReceiptFormatUtils {
             qty=" "+qty;
 //        else
 //            stringBuilder.append("0" + serialNo + ". ");
-        int spaceforitemname = CONTENT_LENGTH - ("      $" + p).length() - NO_LENGTH;
-
+        int spaceforitemname = CONTENT_LENGTH - ("      $" + p).length() - 3;
+        spaceforitemname=18;
 //        stringBuilder.append(displayMultilineString(serialNo,name,spaceforitemname,p));
         if (name.length() > spaceforitemname) {
-            int notimes = name.length() / spaceforitemname;
-            int rem = name.length() % spaceforitemname;
-            for (int i = 0; i < notimes; i++) {
-                if (i == 0)
-                {
-                    String prc=Float.valueOf(p)>100?(" $" + p):(Float.valueOf(p)>10?("  $" + p):("   $" + p));
-                    stringBuilder.append(name.substring(0, spaceforitemname)).append("  ").append(qty).append(prc).append("\n");
+
+            List<String> list =new ArrayList<>();
+            list.addAll(getSplitArray(name,spaceforitemname));
+            for(int j=0;j<list.size();j++){
+                if(j==0){
+
+                    int remainingspace = spaceforitemname - list.get(j).length();
+                        char[] chars = new char[remainingspace+2];
+                        Arrays.fill(chars, ' ');
+
+                    String prc=Float.valueOf(p)>=100?(" $" + p):(Float.valueOf(p)>=10?("  $" + p):("   $" + p));
+                    stringBuilder.append(list.get(j)).append(chars).append(qty).append(prc).append("\n");
                 }
                 else
-                    stringBuilder.append(name.substring(i * (spaceforitemname), (i + 1) * spaceforitemname)).append("\n");//.append("    ")
+                    stringBuilder.append(list.get(j)).append("\n");
             }
-            int remainingspace = spaceforitemname - rem;
-            if (remainingspace > 1) {
-                char[] chars = new char[remainingspace];
-                Arrays.fill(chars, ' ');
-                stringBuilder.append(name.substring(spaceforitemname * notimes)).append("\n");//.append("    ")
-            } else
-                stringBuilder.append(name).append("\n");//.append("    ")
+
+//            int notimes = name.length() / spaceforitemname;
+//            int rem = name.length() % spaceforitemname;
+//            for (int i = 0; i < notimes; i++) {
+//                if (i == 0)
+//                {
+//                    String prc=Float.valueOf(p)>100?(" $" + p):(Float.valueOf(p)>10?("  $" + p):("   $" + p));
+//                    stringBuilder.append(name.substring(0, spaceforitemname)).append("  ").append(qty).append(prc).append("\n");
+//                }
+//                else
+//                    stringBuilder.append(name.substring(i * (spaceforitemname), (i + 1) * spaceforitemname)).append("\n");//.append("    ")
+//            }
+//            int remainingspace = spaceforitemname - rem;
+//            if (remainingspace > 1) {
+//                char[] chars = new char[remainingspace];
+//                Arrays.fill(chars, ' ');
+//                stringBuilder.append(name.substring(spaceforitemname * notimes)).append("\n");//.append("    ")
+//            } else
+//                stringBuilder.append(name).append("\n");//.append("    ")
+
+
         } else {
             int remainingspace = spaceforitemname - name.length();
             if (remainingspace > 1) {
                 char[] chars = new char[remainingspace];
                 Arrays.fill(chars, ' ');
-                String prc=Float.valueOf(p)>100?(" $" + p):(Float.valueOf(p)>10?("  $" + p):("   $" + p));
+                String prc=Float.valueOf(p)>=100?(" $" + p):(Float.valueOf(p)>=10?("  $" + p):("   $" + p));
                 stringBuilder.append(name).append(chars).append("  ").append(qty).append(prc).append("\n");
 //                stringBuilder.append(name).append(chars).append("  $" + p).append("\n");
             } else
@@ -313,6 +348,65 @@ public class ReceiptFormatUtils {
                 sb.replace(i, i + 1, "\n");
         }
         return sb.toString();
+    }
+
+    static ArrayList<String> getSplitArray(String itemName, int maxLength) {
+        itemName = itemName.replaceAll("&amp;", "&");
+        String[] splitString = itemName.split(" ");
+        int nameLength = splitString.length;
+        ArrayList<String> stringArray = new ArrayList<>();
+        int index = 0;
+        while (index<nameLength) {
+            String finalLine=splitString[index];
+
+            while (index<nameLength-1) {
+                String testLine = finalLine + " " + splitString[index+1];
+                if(testLine.length()<=maxLength) {
+                    finalLine = testLine;
+                    index++;
+                } else {
+                    break;
+                }
+            }
+            stringArray.add(finalLine);
+            index++;
+        }
+        return stringArray;
+    }
+
+    static String getCenterSplitArray(String itemName, int maxLength) {
+        itemName = itemName.replaceAll("&amp;", "&");
+        String[] splitString = itemName.split(" ");
+        int nameLength = splitString.length;
+//        ArrayList<String> stringArray = new ArrayList<>();
+        StringBuilder stringBuilder=new StringBuilder();
+        int index = 0;
+        while (index<nameLength) {
+            String finalLine=splitString[index];
+
+            while (index<nameLength-1) {
+                String testLine = finalLine + " " + splitString[index+1];
+                if(testLine.length()<=maxLength) {
+                    finalLine = testLine;
+                    index++;
+                } else {
+                    break;
+                }
+            }
+            int spaceCount = (maxLength-finalLine.length())/2;
+            stringBuilder.append(getSpaceString(spaceCount) + finalLine).append("\n");
+            index++;
+        }
+        return stringBuilder.toString();
+    }
+
+    private static String getSpaceString(int spaceCount) {
+        StringBuilder builder = new StringBuilder();
+        for(int index=0;index<spaceCount;index++) {
+            builder.append(" ");
+        }
+        return builder.toString();
+
     }
 }
 
