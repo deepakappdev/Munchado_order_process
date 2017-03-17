@@ -1,12 +1,12 @@
 package com.munchado.orderprocess.ui.fragment;
 
-import android.bluetooth.BluetoothAdapter;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,9 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.munchado.orderprocess.MyApplication;
 import com.munchado.orderprocess.R;
 import com.munchado.orderprocess.common.FRAGMENTS;
 import com.munchado.orderprocess.model.orderdetail.AddonsList;
@@ -28,9 +26,10 @@ import com.munchado.orderprocess.model.orderprocess.OrderProcessResponse;
 import com.munchado.orderprocess.network.RequestController;
 import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
-import com.munchado.orderprocess.ui.activity.DiscoveryActivity;
+import com.munchado.orderprocess.print.PrinterSetting;
+import com.munchado.orderprocess.print.StarPrinterUtils;
+import com.munchado.orderprocess.ui.activity.print.SearchPrinterActivity;
 import com.munchado.orderprocess.utils.LogUtils;
-import com.munchado.orderprocess.utils.PrintReceiptUtils;
 import com.munchado.orderprocess.utils.ReceiptFormatUtils;
 import com.munchado.orderprocess.utils.StringUtils;
 import com.munchado.orderprocess.utils.Utils;
@@ -284,10 +283,6 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                     layoutAddons.addView(addonView);
                 }
             }
-
-
-
-
             orderLayout.addView(view);
         }
     }
@@ -335,20 +330,32 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         String currentStatus = response.data.status;
         switch (view.getId()) {
             case R.id.text_print:
-                if (StringUtils.isNullOrEmpty(MyApplication.printerName)) {
-                    BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-                    if (!mBluetoothAdapter.isEnabled()) {
-                        mBluetoothAdapter.enable();
-                        Toast.makeText(getActivity(), "Bluetooth is off. Trying to switch ON. Please wait...", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
-                    Intent intent = new Intent(getActivity(), DiscoveryActivity.class);
-                    startActivity(intent);
-                } else {
-                    showProgressBar();
-                    new PrintReceiptUtils(getActivity(),printData,response,progressBar).runPrintQRCodeSequence();
 
+                PrinterSetting setting = new PrinterSetting(getActivity());
+
+                if (TextUtils.isEmpty(setting.getPortName()) || TextUtils.isEmpty(setting.getPortSettings())){
+                    Intent intent = new Intent(getActivity(), SearchPrinterActivity.class);
+                    intent.putExtra("printData",printData);
+                    startActivity(intent);
                 }
+                else
+                    new StarPrinterUtils(getActivity(),"",printData);
+
+
+//                if (StringUtils.isNullOrEmpty(MyApplication.printerName)) {
+//                    BluetoothAdapter mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+//                    if (!mBluetoothAdapter.isEnabled()) {
+//                        mBluetoothAdapter.enable();
+//                        Toast.makeText(getActivity(), "Bluetooth is off. Trying to switch ON. Please wait...", Toast.LENGTH_SHORT).show();
+//                        return;
+//                    }
+//                    Intent intent = new Intent(getActivity(), DiscoveryActivity.class);
+//                    startActivity(intent);
+//                } else {
+//                    showProgressBar();
+//                    new PrintReceiptUtils(getActivity(),printData,response,progressBar).runPrintQRCodeSequence();
+//
+//                }
                 break;
             case R.id.btn_action:
                 showProgressBar();
