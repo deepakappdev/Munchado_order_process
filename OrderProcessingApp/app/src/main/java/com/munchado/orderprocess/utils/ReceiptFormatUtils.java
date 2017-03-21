@@ -60,8 +60,10 @@ public class ReceiptFormatUtils {
         builder.append(seperator);
         builder.append(getAmountCalculation("Subtotal", "$" + orderDetailResponseData.order_amount_calculation.subtotal));
         builder.append(getAmountCalculation("Discount", "$" + orderDetailResponseData.order_amount_calculation.discount));
+        if(!orderDetailResponseData.order_type.equalsIgnoreCase("takeout"))
         builder.append(getAmountCalculation("Delivery", "$" + orderDetailResponseData.order_amount_calculation.delivery_charge));
         builder.append(getAmountCalculation("Tax", "$" + orderDetailResponseData.order_amount_calculation.tax_amount));
+        if(!orderDetailResponseData.order_type.equalsIgnoreCase("takeout"))
         builder.append(getAmountCalculation("Tip", "$" + orderDetailResponseData.order_amount_calculation.tip_amount));
         builder.append(seperator);
         builder.append(getAmountCalculation("Total", "$" + orderDetailResponseData.order_amount_calculation.total_order_price));
@@ -87,6 +89,7 @@ public class ReceiptFormatUtils {
     public static String getSubItemPriceData(int serialNo, String name,String qty, String price) {
         name = name.replaceAll("&amp;", "&");
         StringBuilder stringBuilder = new StringBuilder();
+        price+="00";
         df.setMinimumFractionDigits(2);
         df.setMaximumFractionDigits(2);
         String p = df.format(Float.valueOf(price));
@@ -101,7 +104,6 @@ public class ReceiptFormatUtils {
         int spaceforitemname = CONTENT_LENGTH - ("      $" + p).length() - 3;
         spaceforitemname=15;
         if (name.length() > spaceforitemname) {
-            LogUtils.d("===== subitem : if");
 
             List<String> list =new ArrayList<>();
             list.addAll(getSplitArray(name,spaceforitemname));
@@ -119,33 +121,11 @@ public class ReceiptFormatUtils {
                     stringBuilder.append(list.get(j)).append("\n");
             }
 
-
-//            int notimes = name.length() / spaceforitemname;
-//            int rem = name.length() % spaceforitemname;
-//            for (int i = 0; i < notimes; i++) {
-//
-//                if (i == 0)
-//                {
-//                    String prc=Float.valueOf(p)>=100?(" $" + p):(Float.valueOf(p)>=10?("  $" + p):("   $" + p));
-//                    stringBuilder.append(name.substring(0, spaceforitemname)).append("  ").append(qty).append(prc).append("\n");
-//                }
-////                if (i == 0)
-////                    stringBuilder.append(name.substring(0, spaceforitemname)).append("  $" + p).append("\n");
-//                else
-//                    stringBuilder.append("     ").append(name.substring(i * (spaceforitemname), (i + 1) * spaceforitemname)).append("\n");//
-//            }
-//            int remainingspace = spaceforitemname - rem;
-//            if (remainingspace > 1) {
-//                char[] chars = new char[remainingspace];
-//                Arrays.fill(chars, ' ');
-//                stringBuilder.append("     ").append(name.substring(spaceforitemname * notimes)).append("\n");//.append("    ")
-//            } else
-//                stringBuilder.append("     ").append(name).append("\n");//.append("    ")
         } else {
 
             int remainingspace = spaceforitemname - name.length();
 //            int remainingspace = 15 - name.length();
-            LogUtils.d("===== subitem : else spaceforitemname : "+spaceforitemname+"== name.length():"+name.length()+"=== remainingspace : "+remainingspace);
+//            LogUtils.d("===== subitem : else spaceforitemname : "+spaceforitemname+"== name.length():"+name.length()+"=== remainingspace : "+remainingspace);
             if (remainingspace > 1) {
                 char[] chars = new char[remainingspace];
                 Arrays.fill(chars, ' ');
@@ -163,6 +143,7 @@ public class ReceiptFormatUtils {
     public static String getItemPriceData(int serialNo, String name,String qty, String price) {
         name = name.replaceAll("&amp;", "&");
         StringBuilder stringBuilder = new StringBuilder();
+        price+="00";
         df.setMaximumFractionDigits(2);
         String p = df.format(Float.valueOf(price));
         if (!p.contains("."))
@@ -174,14 +155,16 @@ public class ReceiptFormatUtils {
         int spaceforitemname = CONTENT_LENGTH - ("      $" + p).length() - 3;
         spaceforitemname=18;
 //        stringBuilder.append(displayMultilineString(serialNo,name,spaceforitemname,p));
-        if (name.length() > spaceforitemname) {
+        if (name.length() >= spaceforitemname) {
 
             List<String> list =new ArrayList<>();
             list.addAll(getSplitArray(name,spaceforitemname));
+//            LogUtils.d("===== name: "+name+"==== length: "+list.get(0).length());
             for(int j=0;j<list.size();j++){
                 if(j==0){
 
                     int remainingspace = spaceforitemname - list.get(j).length();
+
                         char[] chars = new char[remainingspace+2];
                         Arrays.fill(chars, ' ');
 
@@ -192,29 +175,10 @@ public class ReceiptFormatUtils {
                     stringBuilder.append(list.get(j)).append("\n");
             }
 
-//            int notimes = name.length() / spaceforitemname;
-//            int rem = name.length() % spaceforitemname;
-//            for (int i = 0; i < notimes; i++) {
-//                if (i == 0)
-//                {
-//                    String prc=Float.valueOf(p)>100?(" $" + p):(Float.valueOf(p)>10?("  $" + p):("   $" + p));
-//                    stringBuilder.append(name.substring(0, spaceforitemname)).append("  ").append(qty).append(prc).append("\n");
-//                }
-//                else
-//                    stringBuilder.append(name.substring(i * (spaceforitemname), (i + 1) * spaceforitemname)).append("\n");//.append("    ")
-//            }
-//            int remainingspace = spaceforitemname - rem;
-//            if (remainingspace > 1) {
-//                char[] chars = new char[remainingspace];
-//                Arrays.fill(chars, ' ');
-//                stringBuilder.append(name.substring(spaceforitemname * notimes)).append("\n");//.append("    ")
-//            } else
-//                stringBuilder.append(name).append("\n");//.append("    ")
-
-
         } else {
             int remainingspace = spaceforitemname - name.length();
-            if (remainingspace > 1) {
+//            LogUtils.d("######## name: "+name+"==== length: "+name.length()+"==== remaining space : "+remainingspace);
+            if (remainingspace > 0) {
                 char[] chars = new char[remainingspace];
                 Arrays.fill(chars, ' ');
                 String prc=Float.valueOf(p)>=100?(" $" + p):(Float.valueOf(p)>=10?("  $" + p):("   $" + p));

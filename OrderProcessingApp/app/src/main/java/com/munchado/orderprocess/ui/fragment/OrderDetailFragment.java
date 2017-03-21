@@ -4,6 +4,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -29,6 +30,7 @@ import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.print.PrinterSetting;
 import com.munchado.orderprocess.print.StarPrinterUtils;
 import com.munchado.orderprocess.ui.activity.print.SearchPrinterActivity;
+import com.munchado.orderprocess.utils.DateTimeUtils;
 import com.munchado.orderprocess.utils.LogUtils;
 import com.munchado.orderprocess.utils.ReceiptFormatUtils;
 import com.munchado.orderprocess.utils.StringUtils;
@@ -36,7 +38,11 @@ import com.munchado.orderprocess.utils.Utils;
 import com.squareup.picasso.Picasso;
 
 import java.text.DecimalFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Created by android on 23/2/17.
@@ -56,6 +62,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     private TextView textTotal;
     private LinearLayout orderLayout;
     private TextView textOrderId;
+    private TextView text_receipt_no;
     private TextView textOrderType;
     private TextView textOrderTime;
     private TextView labelOrderTime;
@@ -70,9 +77,10 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     private TextView textAction;
     private TextView textCancel;
     private TextView textPrint;
+    private LinearLayout layout_instrctions;
+    private TextView textinstrctions;
     private String printData = "";
-
-
+    private String deliveryTakeyoutDateString="";
 
     public static int REQUEST_CODE_DISCOVER_PRINTER = 111;
     private View rootView;
@@ -80,7 +88,13 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     private TextView textPlus;
     private TextView textMinus;
     DecimalFormat df = new DecimalFormat();
-
+    Calendar calendar = Calendar. getInstance();
+    Date date;
+//    long startClickTime=-1;
+//    CountDownTimer timer;
+    Handler handler = new Handler();
+    Runnable runnable;
+    SimpleDateFormat format =new SimpleDateFormat(DateTimeUtils.FORMAT_YYYY_MM_DD_HHMMSS);
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -112,23 +126,26 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         textPastActivity = (TextView) view.findViewById(R.id.text_past_activity);
 
         textOrderId = (TextView) view.findViewById(R.id.text_order_id);
+        text_receipt_no = (TextView) view.findViewById(R.id.text_receipt_no);
         textOrderType = (TextView) view.findViewById(R.id.text_order_type);
         textOrderTime = (TextView) view.findViewById(R.id.text_order_time);
         labelOrderTime = (TextView) view.findViewById(R.id.label_order_time);
         textDeliveryTime = (TextView) view.findViewById(R.id.text_delivery_time);
-        textDeliverytitle= (TextView) view.findViewById(R.id.text_delivery_title);
+        textDeliverytitle = (TextView) view.findViewById(R.id.text_delivery_title);
         labelDeliveryAddress = (TextView) view.findViewById(R.id.label_delivery_address);
         textDeliveryAddress = (TextView) view.findViewById(R.id.text_delivery_address);
         tv_change_delivery_time = (TextView) view.findViewById(R.id.tv_change_delivery_time);
 
         orderLayout = (LinearLayout) view.findViewById(R.id.order_layout);
+        layout_instrctions = (LinearLayout) view.findViewById(R.id.special_instruction_layout);
 
         textSubtotal = (TextView) view.findViewById(R.id.text_subtotal);
+        textinstrctions = (TextView) view.findViewById(R.id.speical_instruction);
         textDealDiscount = (TextView) view.findViewById(R.id.text_deal_discount);
         textDelivery = (TextView) view.findViewById(R.id.text_delivery);
         textTax = (TextView) view.findViewById(R.id.text_tax);
         textTip = (TextView) view.findViewById(R.id.text_tip);
-        textTiptitle= (TextView) view.findViewById(R.id.text_tip_title);
+        textTiptitle = (TextView) view.findViewById(R.id.text_tip_title);
         textTotal = (TextView) view.findViewById(R.id.text_total);
 
         textPlus = (TextView) view.findViewById(R.id.text_plus);
@@ -145,11 +162,13 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
 
         (textAction = (TextView) view.findViewById(R.id.btn_action)).setOnClickListener(this);
 
+        view.findViewById(R.id.btn_update).setOnClickListener(this);
     }
 
     private void showOrderDetail(OrderDetailResponseData orderDetailData) {
         rootView.findViewById(R.id.layout_order_detail).setVisibility(View.VISIBLE);
-        textOrderId.setText(orderDetailData.payment_receipt);
+        textOrderId.setText(orderDetailData.id);
+        text_receipt_no.setText(orderDetailData.payment_receipt);
         textOrderType.setText(orderDetailData.order_type);
         textOrderTime.setText(orderDetailData.order_date);
         if (orderDetailData.order_type.equalsIgnoreCase("takeout")) {
@@ -167,10 +186,13 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
             labelOrderTime.setText("Time of Delivery");
             labelDeliveryAddress.setVisibility(View.VISIBLE);
             textDeliveryAddress.setVisibility(View.VISIBLE);
-            textDeliveryAddress.setText(orderDetailData.my_delivery_detail.apt_suite + ", " + orderDetailData.my_delivery_detail.address +
-                    "\n" + orderDetailData.my_delivery_detail.state + "-" + orderDetailData.my_delivery_detail.zipcode);
+//            textDeliveryAddress.setText(orderDetailData.my_delivery_detail.apt_suite + ", " + orderDetailData.my_delivery_detail.address +
+//                    "\n" + orderDetailData.my_delivery_detail.state + "-" + orderDetailData.my_delivery_detail.zipcode);
+            textDeliveryAddress.setText( orderDetailData.my_delivery_detail.address);
         }
         textDeliveryTime.setText(orderDetailData.delivery_date);
+        textChangeDeliveryTime.setText(orderDetailData.delivery_date);
+        deliveryTakeyoutDateString=orderDetailData.delivery_date;
     }
 
     @Override
@@ -186,11 +208,11 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
 
     @Override
     public void success(Object obj) {
-        if(getActivity()==null)return;
+        if (getActivity() == null) return;
         hideProgressBar();
         if (obj instanceof OrderDetailResponse) {
             response = (OrderDetailResponse) obj;
-                    printData = ReceiptFormatUtils.setPrintData(response.data);
+            printData = ReceiptFormatUtils.setPrintData(response.data);
 
             LogUtils.d(printData);
             showDetail(response.data);
@@ -200,6 +222,8 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                 updateActionButton();
             }
         }
+        if(!StringUtils.isNullOrEmpty(deliveryTakeyoutDateString))
+        textDeliveryTime.setText(deliveryTakeyoutDateString);
     }
 
     void showProgressBar() {
@@ -214,7 +238,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     private void showDetail(OrderDetailResponseData data) {
         rootView.findViewById(R.id.layout_customer_detail).setVisibility(View.VISIBLE);
         StringBuilder nameBuilder = new StringBuilder(data.customer_first_name);
-        if(!StringUtils.isNullOrEmpty(data.customer_last_name))
+        if (!StringUtils.isNullOrEmpty(data.customer_last_name))
             nameBuilder.append(" ").append(data.customer_last_name);
         textName.setText(nameBuilder.toString());
         textTelephone.setText(data.my_delivery_detail.phone);
@@ -245,6 +269,15 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         showOrderPaymentDetail(data.order_amount_calculation);
 
         updateActionButton();
+
+        if (!StringUtils.isNullOrEmpty(data.special_instruction)) {
+            layout_instrctions.setVisibility(View.VISIBLE);
+//            String arr[]=data.special_instruction.split("||");
+//            LogUtils.e("==== instruction lengh "+arr.length);
+            if(data.special_instruction.contains("||"))
+                data.special_instruction   =   data.special_instruction.replaceAll("\\|\\|","\n");
+            textinstrctions.setText(data.special_instruction);
+        }
     }
 
     private void showOrderItem(ArrayList<MyItemList> item_list) {
@@ -266,18 +299,18 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
             itemCount.setText(itemList.item_qty);
             itemPrice.setText("$" + df.format(Utils.parseDouble(itemList.unit_price) * Utils.parseDouble(itemList.item_qty)));
             LinearLayout layoutAddons = (LinearLayout) view.findViewById(R.id.layout_add_ons);
-            if(StringUtils.isNullOrEmpty(itemList.addons_list))
+            if (StringUtils.isNullOrEmpty(itemList.addons_list))
                 layoutAddons.setVisibility(View.GONE);
             else {
                 layoutAddons.setVisibility(View.VISIBLE);
-                LogUtils.d("============== add on list size : "+itemList.addons_list.size());
-                for (AddonsList addonsItem:itemList.addons_list) {
+                LogUtils.d("============== add on list size : " + itemList.addons_list.size());
+                for (AddonsList addonsItem : itemList.addons_list) {
                     View addonView = inflater.inflate(R.layout.row_addon_item, null);
                     itemName = (TextView) addonView.findViewById(R.id.text_item_name);
                     itemCount = (TextView) addonView.findViewById(R.id.text_item_count);
                     itemPrice = (TextView) addonView.findViewById(R.id.text_item_price);
 
-                    itemName.setText("+ "+addonsItem.addon_name);
+                    itemName.setText("+ " + addonsItem.addon_name);
                     itemCount.setText(addonsItem.addon_quantity);
                     itemPrice.setText("$" + df.format(Double.valueOf(addonsItem.addons_total_price)));
                     layoutAddons.addView(addonView);
@@ -333,13 +366,12 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
 
                 PrinterSetting setting = new PrinterSetting(getActivity());
 
-                if (TextUtils.isEmpty(setting.getPortName()) || TextUtils.isEmpty(setting.getPortSettings())){
+                if (TextUtils.isEmpty(setting.getPortName()) || TextUtils.isEmpty(setting.getPortSettings())) {
                     Intent intent = new Intent(getActivity(), SearchPrinterActivity.class);
-                    intent.putExtra("printData",printData);
+                    intent.putExtra("printData", printData);
                     startActivity(intent);
-                }
-                else
-                    new StarPrinterUtils(getActivity(),"",printData);
+                } else
+                    new StarPrinterUtils(getActivity(), "", printData);
 
 
 //                if (StringUtils.isNullOrEmpty(MyApplication.printerName)) {
@@ -368,15 +400,54 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                     else
                         status = "delivered";
                 }
-                RequestController.orderProcess(response.data.id, status, "", OrderDetailFragment.this);
+                RequestController.orderProcess(response.data.id, status, "","", OrderDetailFragment.this);
                 break;
             case R.id.text_cancel:
-                if(progressBar.getVisibility()!=View.VISIBLE)
+                if (progressBar.getVisibility() != View.VISIBLE)
                     askUserForReason();
 
                 break;
+            case R.id.text_plus:
+                changeTime(30);
+                break;
+            case R.id.text_minus:
+                changeTime(-30);
+                break;
+            case R.id.btn_update:
+                showProgressBar();
+
+                RequestController.orderProcess(response.data.id, "placed", "",deliveryTakeyoutDateString, OrderDetailFragment.this);
+                break;
+
 
         }
+    }
+
+
+    private void changeTime(int minutes){
+        try {
+//            if(handler!=null && runnable!=null)
+//            {
+//                handler.removeCallbacks(runnable);
+//            }
+            date = format.parse(deliveryTakeyoutDateString);
+            calendar.setTime(date);
+            calendar.add(Calendar.MINUTE,minutes);
+            deliveryTakeyoutDateString = format.format(calendar.getTime());
+            textChangeDeliveryTime.setText(deliveryTakeyoutDateString);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+//        runnable = new Runnable() {
+//            public void run() {
+////                Toast.makeText(getActivity(),"======== start hit api====",Toast.LENGTH_SHORT).show();
+//
+//                showProgressBar();
+//                handler.removeCallbacks(runnable);
+//                RequestController.orderProcess(response.data.id, "placed", "",deliveryTakeyoutDateString, OrderDetailFragment.this);
+//            }
+//        };
+//        handler.postDelayed(runnable, 5000);
     }
 
 
@@ -397,7 +468,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                         String message = input.getText().toString().trim();
                         if (message.length() > 0) {
                             showProgressBar();
-                            RequestController.orderProcess(response.data.id, "cancelled", input.getText().toString(), OrderDetailFragment.this);
+                            RequestController.orderProcess(response.data.id, "cancelled", input.getText().toString(),"", OrderDetailFragment.this);
                         } else showToast("Invalid Reason.");
                     }
                 });

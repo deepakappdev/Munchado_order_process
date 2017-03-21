@@ -29,6 +29,13 @@
             <com.munchado.orderprocess.ui.widgets.CustomTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="Receipt No.:"
+                android:textColor="@color/grey_light"
+                app:textStyle="RobotoLight" />
+
+            <com.munchado.orderprocess.ui.widgets.CustomTextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="Type:"
                 android:textColor="@color/grey_light"
                 app:textStyle="RobotoLight" />
@@ -68,6 +75,12 @@
 
             <com.munchado.orderprocess.ui.widgets.CustomTextView
                 android:id="@+id/text_order_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/default_text_color"
+                app:textStyle="RobotoMedium" />
+            <com.munchado.orderprocess.ui.widgets.CustomTextView
+                android:id="@+id/text_receipt_no"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/default_text_color"

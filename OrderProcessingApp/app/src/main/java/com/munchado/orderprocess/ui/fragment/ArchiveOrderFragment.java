@@ -31,24 +31,30 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
 
     RecyclerView recyclerView;
     TextView tv_archive_order_count;
+    ArchiveOrderAdapter adapter;
+    private View rootView;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        return inflater.inflate(R.layout.frag_archive_order, container, false);
+        if(rootView==null)
+            rootView = inflater.inflate(R.layout.frag_archive_order, container, false);
+        return rootView;
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
-        fetchArchiveOrder();
+        if(adapter==null)
+            fetchArchiveOrder();
     }
     @Override
     FRAGMENTS getFragmentId() {
         return FRAGMENTS.ARCHIVE;
     }
+
     private void fetchArchiveOrder() {
         DialogUtil.showProgressDialog(getActivity());
         RequestController.getArchiveOrder(this);
@@ -77,10 +83,14 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
     }
 
     private void showArchiveList(ArchiveOrderResponseData data) {
-        ArchiveOrderAdapter adapter = new ArchiveOrderAdapter(onOrderClickListener);
-        adapter.setResults(data.archive_order);
+        if(adapter==null || recyclerView.getAdapter()==null) {
+            adapter = new ArchiveOrderAdapter(onOrderClickListener);
+            recyclerView.setAdapter(adapter);
+        }
+        adapter.appendResult(data.archive_order);
+        adapter.notifyDataSetChanged();
         tv_archive_order_count.setText(data.archive_order.size()+" Archive Orders");
-        recyclerView.setAdapter(adapter);
+
     }
     OnOrderClickListener onOrderClickListener = new OnOrderClickListener() {
         @Override
