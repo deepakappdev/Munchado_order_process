@@ -1,6 +1,5 @@
 package com.munchado.orderprocess.ui.adapter;
 
-import android.graphics.Color;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -153,6 +152,8 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<ActiveOrderAdapter.
             }
             textOrderItem.setText(stringBuilder.toString());
             textOrderAmount.setText("$ " + orderItem.total_amount);
+//            if(orderItem.delivery_date.contains("00:00"))
+//                orderItem.delivery_date.replaceAll("00:00","01:02");
             textDelayTime.setText(DateTimeUtils.getTimeAgo(orderItem.order_date));
             if (orderItem.inProgress) {
                 progressBar.setVisibility(View.VISIBLE);

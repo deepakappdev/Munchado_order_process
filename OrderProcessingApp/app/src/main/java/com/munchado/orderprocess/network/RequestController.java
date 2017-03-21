@@ -118,6 +118,7 @@ public class RequestController {
         GsonRequest gsonRequest = request.createServerRequest(getErrorListener(callBack), getListener(callBack, request));
         getmRequestQueue().add(gsonRequest);
     }
+
     public static void getArchiveOrder(RequestCallback callBack) {
         GetArchiveOrderRequest request = new GetArchiveOrderRequest();
         GsonRequest gsonRequest = request.createServerRequest(getErrorListener(callBack), getListener(callBack, request));
@@ -137,8 +138,8 @@ public class RequestController {
         getmRequestQueue().add(gsonRequest);
     }
 
-    public static void orderProcess(String orderId, String status, String reason, RequestCallback callBack) {
-        OrderProcessRequest request = new OrderProcessRequest(orderId, status, reason);
+    public static void orderProcess(String orderId, String status, String reason, String deliverytime, RequestCallback callBack) {
+        OrderProcessRequest request = new OrderProcessRequest(orderId, status, reason, deliverytime);
         GsonRequest gsonRequest = request.createServerRequest(getErrorListener(callBack), getListener(callBack, request));
         getmRequestQueue().add(gsonRequest);
     }

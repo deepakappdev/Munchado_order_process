@@ -22,7 +22,6 @@ import com.munchado.orderprocess.model.archiveorder.ActiveOrderResponse;
 import com.munchado.orderprocess.model.archiveorder.ActiveOrderResponseData;
 import com.munchado.orderprocess.model.archiveorder.OrderItem;
 import com.munchado.orderprocess.model.orderprocess.OrderProcessResponse;
-import com.munchado.orderprocess.model.orderprocess.OrderProcessResponseData;
 import com.munchado.orderprocess.network.RequestController;
 import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
@@ -42,6 +41,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
     private TextView textActiveOrderCount;
     private View rootView;
     private ActiveOrderAdapter adapter;
+    private LinearLayoutManager mLinearLayoutManager;
 
     @Nullable
     @Override
@@ -68,7 +68,8 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
         textActiveOrderCount = (TextView) view.findViewById(R.id.text_active_order_count);
         view.findViewById(R.id.text_archive_order).setOnClickListener(this);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mLinearLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(mLinearLayoutManager);
         recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), R.drawable.horizontal_line));
     }
 
@@ -97,6 +98,11 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
                 else
                     moveToArchive(((OrderProcessResponse) obj).data.order_id);
 
+                if(((OrderProcessResponse) obj).data.status.equalsIgnoreCase("delivered"))
+                showToast("Order Successfully Sent.");
+                else if(((OrderProcessResponse) obj).data.status.equalsIgnoreCase("arrived"))
+                    showToast("Order Successfully Pickedup.");
+                else
                 showToast("Order Successfully " + ((OrderProcessResponse) obj).data.status);
             }
         }
@@ -136,6 +142,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
         }
 //        data.live_order.subList(20, data.live_order.size()).clear();
         adapter.updateResult(data.live_order);
+        mLinearLayoutManager.scrollToPositionWithOffset(0, 0);
     }
 
     OnOrderClickListener onOrderClickListener = new OnOrderClickListener() {
@@ -157,7 +164,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
                 else
                     status = "delivered";
             }
-            RequestController.orderProcess(orderItem.id, status, "", ActiveOrderFragment.this);
+            RequestController.orderProcess(orderItem.id, status, "","", ActiveOrderFragment.this);
             orderItem.inProgress = true;
             adapter.updateResult(orderItem);
         }

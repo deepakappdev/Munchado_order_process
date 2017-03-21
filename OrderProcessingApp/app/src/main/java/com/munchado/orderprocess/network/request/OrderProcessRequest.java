@@ -2,11 +2,11 @@ package com.munchado.orderprocess.network.request;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.munchado.orderprocess.model.login.StatusResponse;
 import com.munchado.orderprocess.model.orderprocess.OrderProcessResponse;
 import com.munchado.orderprocess.network.volley.GsonRequest;
 import com.munchado.orderprocess.network.volley.NetworkConstants;
 import com.munchado.orderprocess.utils.PrefUtil;
+import com.munchado.orderprocess.utils.StringUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,11 +21,13 @@ public class OrderProcessRequest extends BaseRequest{
     private final String orderId;
     private final String status;
     private final String reason;
+    private final String delivery_time;
 
-    public OrderProcessRequest(String orderId, String status, String reason) {
+    public OrderProcessRequest(String orderId, String status, String reason, String deliverytime) {
         this.orderId = orderId;
         this.status = status;
         this.reason = reason;
+        this.delivery_time = deliverytime;
     }
 
     public String getServiceUrl() {
@@ -47,6 +49,8 @@ public class OrderProcessRequest extends BaseRequest{
         try {
             object.put("status", status);
             object.put("reason", reason);
+            if(!StringUtils.isNullOrEmpty(delivery_time))
+                object.put("delivery_date", delivery_time);
         } catch (JSONException e) {}
         return object;
     }
