@@ -77,10 +77,11 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     private TextView textAction;
     private TextView textCancel;
     private TextView textPrint;
+    private TextView textChange_Time;
     private LinearLayout layout_instrctions;
     private TextView textinstrctions;
     private String printData = "";
-    private String deliveryTakeyoutDateString="";
+    private String deliveryTakeyoutDateString = "";
 
     public static int REQUEST_CODE_DISCOVER_PRINTER = 111;
     private View rootView;
@@ -88,13 +89,14 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     private TextView textPlus;
     private TextView textMinus;
     DecimalFormat df = new DecimalFormat();
-    Calendar calendar = Calendar. getInstance();
+    Calendar calendar = Calendar.getInstance();
     Date date;
-//    long startClickTime=-1;
+    //    long startClickTime=-1;
 //    CountDownTimer timer;
     Handler handler = new Handler();
     Runnable runnable;
-    SimpleDateFormat format =new SimpleDateFormat(DateTimeUtils.FORMAT_YYYY_MM_DD_HHMMSS);
+    SimpleDateFormat format = new SimpleDateFormat(DateTimeUtils.FORMAT_YYYY_MM_DD_HHMMSS);
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -155,7 +157,10 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         textMinus.setOnClickListener(this);
 
         (textPrint = (TextView) view.findViewById(R.id.text_print)).setOnClickListener(this);
+        (textChange_Time = (TextView) view.findViewById(R.id.text_change)).setOnClickListener(this);
+
         textPrint.setPaintFlags(textPrint.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        textChange_Time.setPaintFlags(textPrint.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         (textCancel = (TextView) view.findViewById(R.id.text_cancel)).setOnClickListener(this);
         textCancel.setPaintFlags(textCancel.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
@@ -170,7 +175,8 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         textOrderId.setText(orderDetailData.id);
         text_receipt_no.setText(orderDetailData.payment_receipt);
         textOrderType.setText(orderDetailData.order_type);
-        textOrderTime.setText(orderDetailData.order_date);
+
+        textOrderTime.setText(DateTimeUtils.getFormattedDate(orderDetailData.order_date, DateTimeUtils.FORMAT_MMM_DD_YYYY) + " @ " + DateTimeUtils.getFormattedDate(orderDetailData.order_date, DateTimeUtils.FORMAT_HH_MM_A));
         if (orderDetailData.order_type.equalsIgnoreCase("takeout")) {
             labelOrderTime.setText("Time of Takeout");
             tv_change_delivery_time.setText("Change Takeout Time");
@@ -188,11 +194,12 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
             textDeliveryAddress.setVisibility(View.VISIBLE);
 //            textDeliveryAddress.setText(orderDetailData.my_delivery_detail.apt_suite + ", " + orderDetailData.my_delivery_detail.address +
 //                    "\n" + orderDetailData.my_delivery_detail.state + "-" + orderDetailData.my_delivery_detail.zipcode);
-            textDeliveryAddress.setText( orderDetailData.my_delivery_detail.address);
+            textDeliveryAddress.setText(orderDetailData.my_delivery_detail.address);
         }
-        textDeliveryTime.setText(orderDetailData.delivery_date);
-        textChangeDeliveryTime.setText(orderDetailData.delivery_date);
-        deliveryTakeyoutDateString=orderDetailData.delivery_date;
+        textDeliveryTime.setText(DateTimeUtils.getFormattedDate(orderDetailData.delivery_date, DateTimeUtils.FORMAT_MMM_DD_YYYY) + " @ " + DateTimeUtils.getFormattedDate(orderDetailData.delivery_date, DateTimeUtils.FORMAT_HH_MM_A));
+//        textChangeDeliveryTime.setText(orderDetailData.delivery_date);
+        textChangeDeliveryTime.setText(DateTimeUtils.getFormattedDate(orderDetailData.delivery_date, DateTimeUtils.FORMAT_MMM_DD_YYYY) + " @ " + DateTimeUtils.getFormattedDate(orderDetailData.delivery_date, DateTimeUtils.FORMAT_HH_MM_A));
+        deliveryTakeyoutDateString = orderDetailData.delivery_date;
     }
 
     @Override
@@ -222,8 +229,8 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                 updateActionButton();
             }
         }
-        if(!StringUtils.isNullOrEmpty(deliveryTakeyoutDateString))
-        textDeliveryTime.setText(deliveryTakeyoutDateString);
+        if (!StringUtils.isNullOrEmpty(deliveryTakeyoutDateString))
+            textDeliveryTime.setText(DateTimeUtils.getFormattedDate(deliveryTakeyoutDateString, DateTimeUtils.FORMAT_MMM_DD_YYYY) + " @ " + DateTimeUtils.getFormattedDate(deliveryTakeyoutDateString, DateTimeUtils.FORMAT_HH_MM_A));
     }
 
     void showProgressBar() {
@@ -244,9 +251,11 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         textTelephone.setText(data.my_delivery_detail.phone);
         textEmail.setText(data.email);
 
-        Picasso.with(getContext()).load(data.user_image)
-                .placeholder(R.drawable.profile_img)
-                .into(imageView);
+//        Picasso.with(getContext()).load(data.user_image)
+//                .placeholder(R.drawable.profile_img)
+//                .into(imageView);
+
+        Picasso.with(getContext()).load(data.user_image).resize(100 * (int) getActivity().getResources().getDisplayMetrics().density, 100 * (int) getActivity().getResources().getDisplayMetrics().density).centerCrop().placeholder(R.drawable.profile_img).into(imageView);
 
         StringBuilder pastActivity = new StringBuilder();
         if (data.user_activity != null) {
@@ -274,8 +283,8 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
             layout_instrctions.setVisibility(View.VISIBLE);
 //            String arr[]=data.special_instruction.split("||");
 //            LogUtils.e("==== instruction lengh "+arr.length);
-            if(data.special_instruction.contains("||"))
-                data.special_instruction   =   data.special_instruction.replaceAll("\\|\\|","\n");
+            if (data.special_instruction.contains("||"))
+                data.special_instruction = data.special_instruction.replaceAll("\\|\\|", "\n");
             textinstrctions.setText(data.special_instruction);
         }
     }
@@ -324,13 +333,14 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         textPrint.setVisibility(View.VISIBLE);
         textAction.setVisibility(View.VISIBLE);
         textCancel.setVisibility(View.VISIBLE);
-        rootView.findViewById(R.id.layout_change_delivery_time).setVisibility(View.GONE);
+//        rootView.findViewById(R.id.layout_change_delivery_time).setVisibility(View.GONE);
+
+        textChange_Time.setVisibility(View.GONE);
         String currentStatus = response.data.status;
         if (currentStatus.equalsIgnoreCase("placed")) {
             textAction.setText("Confirm");
             textAction.setBackgroundResource(R.drawable.green_button);
-            rootView.findViewById(R.id.layout_change_delivery_time).setVisibility(View.VISIBLE);
-
+            textChange_Time.setVisibility(View.VISIBLE);
         } else if (currentStatus.equalsIgnoreCase("confirmed")) {
             textAction.setBackgroundResource(R.drawable.grey_button);
             if (response.data.order_type.equalsIgnoreCase("takeout"))
@@ -400,7 +410,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                     else
                         status = "delivered";
                 }
-                RequestController.orderProcess(response.data.id, status, "","", OrderDetailFragment.this);
+                RequestController.orderProcess(response.data.id, status, "", "", OrderDetailFragment.this);
                 break;
             case R.id.text_cancel:
                 if (progressBar.getVisibility() != View.VISIBLE)
@@ -416,15 +426,20 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
             case R.id.btn_update:
                 showProgressBar();
 
-                RequestController.orderProcess(response.data.id, "placed", "",deliveryTakeyoutDateString, OrderDetailFragment.this);
+                RequestController.orderProcess(response.data.id, "placed", "", deliveryTakeyoutDateString, OrderDetailFragment.this);
                 break;
-
+            case R.id.text_change:
+                if (rootView.findViewById(R.id.layout_change_delivery_time).getVisibility() == View.VISIBLE)
+                    rootView.findViewById(R.id.layout_change_delivery_time).setVisibility(View.GONE);
+                else
+                    rootView.findViewById(R.id.layout_change_delivery_time).setVisibility(View.VISIBLE);
+                break;
 
         }
     }
 
 
-    private void changeTime(int minutes){
+    private void changeTime(int minutes) {
         try {
 //            if(handler!=null && runnable!=null)
 //            {
@@ -432,9 +447,11 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
 //            }
             date = format.parse(deliveryTakeyoutDateString);
             calendar.setTime(date);
-            calendar.add(Calendar.MINUTE,minutes);
+            calendar.add(Calendar.MINUTE, minutes);
             deliveryTakeyoutDateString = format.format(calendar.getTime());
-            textChangeDeliveryTime.setText(deliveryTakeyoutDateString);
+//            textChangeDeliveryTime.setText(deliveryTakeyoutDateString);
+            textChangeDeliveryTime.setText(DateTimeUtils.getFormattedDate(deliveryTakeyoutDateString, DateTimeUtils.FORMAT_MMM_DD_YYYY) + " @ " + DateTimeUtils.getFormattedDate(deliveryTakeyoutDateString, DateTimeUtils.FORMAT_HH_MM_A));
+
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -468,7 +485,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                         String message = input.getText().toString().trim();
                         if (message.length() > 0) {
                             showProgressBar();
-                            RequestController.orderProcess(response.data.id, "cancelled", input.getText().toString(),"", OrderDetailFragment.this);
+                            RequestController.orderProcess(response.data.id, "cancelled", input.getText().toString(), "", OrderDetailFragment.this);
                         } else showToast("Invalid Reason.");
                     }
                 });

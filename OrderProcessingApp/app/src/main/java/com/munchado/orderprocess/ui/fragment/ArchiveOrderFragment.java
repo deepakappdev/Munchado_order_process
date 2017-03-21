@@ -12,6 +12,7 @@ import android.widget.TextView;
 import com.munchado.orderprocess.R;
 import com.munchado.orderprocess.common.FRAGMENTS;
 import com.munchado.orderprocess.listener.OnOrderClickListener;
+import com.munchado.orderprocess.listener.OnVerticalScrollListener;
 import com.munchado.orderprocess.model.archiveorder.ArchiveOrderResponse;
 import com.munchado.orderprocess.model.archiveorder.ArchiveOrderResponseData;
 import com.munchado.orderprocess.model.archiveorder.OrderItem;
@@ -22,6 +23,9 @@ import com.munchado.orderprocess.ui.activity.BaseActivity;
 import com.munchado.orderprocess.ui.adapter.ArchiveOrderAdapter;
 import com.munchado.orderprocess.utils.DialogUtil;
 import com.munchado.orderprocess.utils.DividerItemDecoration;
+import com.munchado.orderprocess.utils.LogUtils;
+
+import java.util.ArrayList;
 
 /**
  * Created by android on 22/2/17.
@@ -33,6 +37,8 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
     TextView tv_archive_order_count;
     ArchiveOrderAdapter adapter;
     private View rootView;
+    int page=1;
+    private boolean isMoreLoaded;
 
     @Nullable
     @Override
@@ -57,7 +63,23 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
 
     private void fetchArchiveOrder() {
         DialogUtil.showProgressDialog(getActivity());
-        RequestController.getArchiveOrder(this);
+        RequestController.getArchiveOrder(this,page);
+
+        recyclerView.addOnScrollListener(new OnVerticalScrollListener() {
+            @Override
+            public void onScrolledToBottom() {
+                super.onScrolledToBottom();
+                LogUtils.d("=========== on bottom  ");
+                if (isMoreLoaded) {
+                    isMoreLoaded = false;
+                    loadMoreArchieveOrders();
+                }
+            }
+        });
+    }
+    private void loadMoreArchieveOrders(){
+        DialogUtil.showProgressDialog(getActivity());
+        RequestController.getArchiveOrder(this,++page);
     }
 
     private void initView(View view) {
@@ -87,9 +109,15 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
             adapter = new ArchiveOrderAdapter(onOrderClickListener);
             recyclerView.setAdapter(adapter);
         }
-        adapter.appendResult(data.archive_order);
+
+        int adapterSize = adapter.getItemCount();
+        ArrayList<OrderItem> archive_order = (ArrayList<OrderItem>) adapter.getAllItems();
+        archive_order.addAll(data.archive_order);
+        adapter.appendResult(archive_order);
+        if (adapterSize < adapter.getItemCount())
+            isMoreLoaded = true;
         adapter.notifyDataSetChanged();
-        tv_archive_order_count.setText(data.archive_order.size()+" Archive Orders");
+        tv_archive_order_count.setText(adapter.getItemCount()+" Archive Orders");
 
     }
     OnOrderClickListener onOrderClickListener = new OnOrderClickListener() {
