@@ -14,19 +14,20 @@
         android:orientation="vertical"
         android:visibility="gone">
 
+        <com.munchado.orderprocess.ui.widgets.CustomTextView
+            android:id="@+id/tv_change_delivery_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/margin_medium"
+            android:text="Change Delivery Time"
+            android:textColor="@color/default_text_color"
+            android:textSize="@dimen/textSizeLarge" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical">
 
-            <com.munchado.orderprocess.ui.widgets.CustomTextView
-                android:id="@+id/tv_change_delivery_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingLeft="@dimen/margin_small"
-                android:text="Change Delivery Time"
-                android:textColor="@color/default_text_color"
-                android:textSize="@dimen/textSizeLarge" />
 
             <com.munchado.orderprocess.ui.widgets.CustomTextView
                 android:id="@+id/text_minus"
@@ -64,7 +65,6 @@
                 android:id="@+id/btn_update"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/margin_medium"
                 android:background="@drawable/green_button"
                 android:paddingLeft="20dp"
                 android:paddingRight="20dp"
@@ -79,7 +79,12 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp">
+        android:layout_height="wrap_content"
+        android:paddingBottom="10dp"
+        android:paddingEnd="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingStart="10dp">
 
         <com.munchado.orderprocess.ui.widgets.CustomTextView
             android:id="@+id/text_cancel"
@@ -88,6 +93,17 @@
             android:layout_marginLeft="@dimen/margin_small"
             android:text="@string/cancel_order"
             android:textColor="@color/red_overview"
+            android:textSize="@dimen/textSizeLarge"
+            android:visibility="gone"
+            app:textStyle="RobotoRegular" />
+
+        <com.munchado.orderprocess.ui.widgets.CustomTextView
+            android:id="@+id/text_change"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="@string/change_time"
+            android:textColor="@color/default_text_color"
             android:textSize="@dimen/textSizeLarge"
             android:visibility="gone"
             app:textStyle="RobotoRegular" />

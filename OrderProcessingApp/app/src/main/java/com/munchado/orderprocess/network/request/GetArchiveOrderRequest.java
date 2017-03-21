@@ -16,8 +16,14 @@ import java.util.HashMap;
  */
 public class GetArchiveOrderRequest extends BaseRequest{
 
+
+    private final int page;
+
+    public GetArchiveOrderRequest(int page) {
+        this.page = page;
+    }
     public String getServiceUrl() {
-        return NetworkConstants.GET_ORDER_URL + "&token="+ PrefUtil.getToken()+"&type=archive";
+        return NetworkConstants.GET_ORDER_URL + "&page="+page+"&limit=50&token="+ PrefUtil.getToken()+"&type=archive";
     }
 
     public HashMap<String, String> getParameters() {

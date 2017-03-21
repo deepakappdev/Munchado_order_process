@@ -119,8 +119,8 @@ public class RequestController {
         getmRequestQueue().add(gsonRequest);
     }
 
-    public static void getArchiveOrder(RequestCallback callBack) {
-        GetArchiveOrderRequest request = new GetArchiveOrderRequest();
+    public static void getArchiveOrder(RequestCallback callBack,int page) {
+        GetArchiveOrderRequest request = new GetArchiveOrderRequest(page);
         GsonRequest gsonRequest = request.createServerRequest(getErrorListener(callBack), getListener(callBack, request));
         getmRequestQueue().add(gsonRequest);
     }

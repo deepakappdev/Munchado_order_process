@@ -20,6 +20,7 @@
     <string name="action_settings">Settings</string>
     <string name="cancel_order">Cancel Order</string>
     <string name="confirm">Confirm</string>
+    <string name="change_time">Change Time</string>
     <string name="update_time">Update Time</string>
     <string name="print_order">Print Order</string>
 

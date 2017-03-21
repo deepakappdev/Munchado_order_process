@@ -12,6 +12,7 @@ import com.munchado.orderprocess.model.archiveorder.ItemList;
 import com.munchado.orderprocess.model.archiveorder.OrderItem;
 import com.munchado.orderprocess.utils.DateTimeUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,7 +20,7 @@ import java.util.List;
  */
 public class ArchiveOrderAdapter extends RecyclerView.Adapter<ArchiveOrderAdapter.MyViewHolder>{
     private final OnOrderClickListener clickListener;
-    private List<OrderItem> orderItems;
+    private List<OrderItem> orderItems =new ArrayList<>();
     public ArchiveOrderAdapter(OnOrderClickListener clickListener) {
         this.clickListener = clickListener;
     }
@@ -40,6 +41,11 @@ public class ArchiveOrderAdapter extends RecyclerView.Adapter<ArchiveOrderAdapte
     @Override
     public int getItemCount() {
         return orderItems.size();
+    }
+
+    public List<OrderItem> getAllItems()
+    {
+        return orderItems;
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{
