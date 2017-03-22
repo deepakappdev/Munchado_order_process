@@ -10,6 +10,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -52,7 +53,9 @@ public class SearchPrinterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_printer);
 
-        setTitle(R.string.select_device);
+        setupActionbar();
+//        setTitle(R.string.select_device);
+        mBtAdapter = BluetoothAdapter.getDefaultAdapter();
         mBtAdapter = BluetoothAdapter.getDefaultAdapter();
 
         printData = getIntent().getStringExtra("printData");
@@ -69,6 +72,18 @@ public class SearchPrinterActivity extends AppCompatActivity {
 
     }
 
+    private void setupActionbar() {
+        getSupportActionBar().setTitle(R.string.select_device);
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        if (item.getItemId() == android.R.id.home)
+            finish();
+        return true;
+    }
     private void setupBTdevices() {
 // Initialize the button to perform device discovery
         Button scanButton = (Button) findViewById(R.id.button_scan);

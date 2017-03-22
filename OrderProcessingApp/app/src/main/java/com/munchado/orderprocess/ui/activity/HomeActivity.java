@@ -51,6 +51,7 @@ public class HomeActivity extends BaseActivity
         }
     }
 
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {

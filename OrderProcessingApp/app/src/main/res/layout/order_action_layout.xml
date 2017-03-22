@@ -4,12 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/margin_small"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/layout_change_delivery_time"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="vertical"
         android:visibility="gone">
@@ -89,24 +91,26 @@
         <com.munchado.orderprocess.ui.widgets.CustomTextView
             android:id="@+id/text_cancel"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginLeft="@dimen/margin_small"
+            android:clickable="true"
             android:text="@string/cancel_order"
             android:textColor="@color/red_overview"
-            android:textSize="@dimen/textSizeLarge"
+            android:textSize="@dimen/textSizeXLarge"
             android:visibility="gone"
-            app:textStyle="RobotoRegular" />
+            app:textStyle="AvenirNextBold" />
 
         <com.munchado.orderprocess.ui.widgets.CustomTextView
             android:id="@+id/text_change"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginLeft="10dp"
+            android:clickable="true"
             android:text="@string/change_time"
             android:textColor="@color/default_text_color"
-            android:textSize="@dimen/textSizeLarge"
+            android:textSize="@dimen/textSizeXLarge"
             android:visibility="gone"
-            app:textStyle="RobotoRegular" />
+            app:textStyle="AvenirNextBold" />
 
         <View
             android:layout_width="0dp"
@@ -122,9 +126,9 @@
             android:gravity="center"
             android:text="@string/print_order"
             android:textColor="@color/dark_grey"
-            android:textSize="@dimen/textSizeLarge"
+            android:textSize="@dimen/textSizeXLarge"
             android:visibility="gone"
-            app:textStyle="RobotoRegular" />
+            app:textStyle="AvenirNextBold" />
 
         <com.munchado.orderprocess.ui.widgets.CustomButton
             android:id="@+id/btn_action"
@@ -134,8 +138,8 @@
             android:text="@string/confirm"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="@dimen/textSizeLarge"
+            android:textSize="@dimen/textSizeXLarge"
             android:visibility="gone"
-            app:textStyle="RobotoRegular" />
+            app:textStyle="AvenirNextBold" />
     </LinearLayout>
 </LinearLayout>

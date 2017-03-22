@@ -16,23 +16,27 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Archive Orders"
+            android:text="ARCHIVE ORDERS"
             android:textColor="@color/default_text_color"
-            android:textSize="@dimen/textSizeXLarge"
-            app:textStyle="RobotoMedium" />
+            android:textSize="@dimen/textSizeXXLarge"
+            app:textStyle="AvenirNextBold" />
 
         <com.munchado.orderprocess.ui.widgets.CustomTextView
             android:id="@+id/text_archive_order"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="View Active Order"
-            android:textColor="@color/dark_grey" />
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/textSizeXLarge"
+            app:textStyle="AvenirNextCondensedMedium" />
     </LinearLayout>
 
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp" />
 
 </LinearLayout>

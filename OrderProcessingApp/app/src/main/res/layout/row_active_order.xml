@@ -1,59 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:layout_height="90dp"
+    android:background="@drawable/grey_border"
     android:padding="@dimen/margin_normal">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.munchado.orderprocess.ui.widgets.CustomTextView
-            android:id="@+id/text_order_type"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Takeout"
-            android:textColor="@color/default_text_color"
-            android:textSize="@dimen/textSizeXLarge"
-            app:textStyle="RobotoMedium" />
-
-
-        <com.munchado.orderprocess.ui.widgets.CustomTextView
-            android:id="@+id/text_order_amount"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Takeout"
-            android:textColor="@color/default_text_color"
-            android:textSize="@dimen/textSizeLarge"
-            app:textStyle="RobotoMedium" />
-
-    </LinearLayout>
-
-    <com.munchado.orderprocess.ui.widgets.CustomTextView
-        android:id="@+id/text_order_item"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Takeout"
-        android:textColor="@color/text_light_black"
-        android:textSize="@dimen/textSizeMedium"
-        android:textStyle="italic"
-        app:textStyle="RobotoRegular" />
-
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <com.munchado.orderprocess.ui.widgets.CustomTextView
-            android:id="@+id/text_delay_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:text="Takeout"
-            android:textColor="@color/text_light_black"
-            app:textStyle="RobotoLight" />
+        android:id="@+id/ll_action"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp">
 
         <com.munchado.orderprocess.ui.widgets.CustomButton
             android:id="@+id/btn_action"
@@ -64,7 +24,9 @@
             android:paddingLeft="@dimen/margin_normal"
             android:paddingRight="@dimen/margin_normal"
             android:text="Sent"
-            android:textColor="@color/white" />
+            android:textSize="13sp"
+            android:textColor="@color/white"
+            app:textStyle="AvenirNextDemiBold" />
 
         <android.support.v4.widget.ContentLoadingProgressBar
             android:id="@+id/progress_bar"
@@ -76,4 +38,64 @@
             android:visibility="invisible" />
 
     </RelativeLayout>
-</LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/lltop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_toLeftOf="@+id/ll_action">
+
+        <com.munchado.orderprocess.ui.widgets.CustomTextView
+            android:id="@+id/text_order_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Takeout"
+            android:textColor="@color/default_text_color"
+            android:textSize="@dimen/textSizeXXLarge"
+            app:textStyle="AvenirNextBold"/>
+
+        <com.munchado.orderprocess.ui.widgets.CustomTextView
+            android:id="@+id/text_order_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_xx_large"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="Takeout"
+            android:textColor="@color/text_light_black"
+            android:textSize="@dimen/textSizeXXLarge"
+            app:textStyle="AvenirNextCondensedItalic"  />
+
+        <com.munchado.orderprocess.ui.widgets.CustomTextView
+            android:id="@+id/text_order_amount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
+            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
+            android:text="Takeout"
+            android:textColor="@color/default_text_color"
+            android:textSize="@dimen/textSizeXXLarge"
+            app:textStyle="AvenirNextBold" />
+
+        <com.munchado.orderprocess.ui.widgets.CustomTextView
+            android:id="@+id/text_delay_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="2dp"
+            android:text="Takeout"
+            android:textColor="@color/text_light_black"
+            android:textSize="@dimen/textSizeXXLarge"
+            app:textStyle="AvenirNextCondensedMedium"/>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

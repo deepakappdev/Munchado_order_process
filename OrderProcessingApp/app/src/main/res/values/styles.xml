@@ -98,6 +98,13 @@
         <enum name="AvenirNextBold" value="9" />
         <enum name="FuturaMedium" value="10" />
         <enum name="FuturaBook" value="11" />
+        <enum name="AvenirLight" value="12" />
+        <enum name="AvenirMedium" value="13" />
+        <enum name="AvenirNextCondensedMedium" value="14" />
+        <enum name="AvenirNextCondensedItalic" value="15" />
+        <enum name="AvenirNextRegular" value="16" />
+        <enum name="AvenirNextUltraLight" value="17" />
+
     </attr>
     <declare-styleable name="CustomTextView">
         <attr name="textStyle" />

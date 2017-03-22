@@ -87,11 +87,67 @@ public final class PrefUtil {
         PrefUtil.putString(Constants.PREF_IP_ADDRESS, token);
     }
 
+    public static String getBluetoothModel() {
+        return getString(Constants.PREF_BLUETOOTH_MODEL, "");
+    }
+
+    public static void putBluetoothModel(String token) {
+        PrefUtil.putString(Constants.PREF_BLUETOOTH_MODEL, token);
+    }
+
+    public static int getBluetoothModelCode() {
+        return getInt(Constants.PREF_BLUETOOTH_MODEL_CODE, -1);
+    }
+
+    public static void putBluetoothModelCode(int model) {
+        PrefUtil.putInt(Constants.PREF_BLUETOOTH_MODEL_CODE, model);
+    }
     public static boolean isManualPrint() {
         return getBoolean(Constants.PREF_MANUAL_PRINT, false);
     }
 
     public static void setManualPrint(boolean login) {
         putBoolean(Constants.PREF_MANUAL_PRINT, login);
+    }
+
+    public static int getVersionCode() {
+        return getInt(Constants.PREF_VERSION_CODE, 0);
+    }
+
+    public static void setVersionCode(int versionCode) {
+        putInt(Constants.PREF_VERSION_CODE, versionCode);
+
+
+    }
+
+    public static void setUpgradeClearData(boolean clearData) {
+        putBoolean(Constants.PREF_UPGRADE_CLEAR_DATA, clearData);
+    }
+
+    public static boolean getUpgradeCleanData() {
+        return getBoolean(Constants.PREF_UPGRADE_CLEAR_DATA, false);
+    }
+
+    public static void setUpgradeDisplayCount(int count) {
+        putInt(Constants.PREF_DISPLAY_COUNT, count);
+    }
+
+    public static int getUpgradeDisplayCount() {
+        return getInt(Constants.PREF_DISPLAY_COUNT, 0);
+    }
+
+    public static void setUpgradeType(String upgradeType) {
+        putString(Constants.PREF_UPGRADE_TYPE, upgradeType);
+    }
+
+    public static String getUpgradeType() {
+        return getString(Constants.PREF_UPGRADE_TYPE, "");
+    }
+
+    public static void setUpgradeMessage( String message) {
+        putString( Constants.PREF_UPGRADE_MESSAGE, message);
+    }
+    public static String getUpgradeMessage() {
+        return getString( Constants.PREF_UPGRADE_MESSAGE, "");
     }
 }

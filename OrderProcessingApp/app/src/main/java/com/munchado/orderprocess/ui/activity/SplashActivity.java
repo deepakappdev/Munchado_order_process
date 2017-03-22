@@ -1,12 +1,19 @@
 package com.munchado.orderprocess.ui.activity;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 
 import com.munchado.orderprocess.R;
+import com.munchado.orderprocess.model.update.UpgradeData;
+import com.munchado.orderprocess.network.RequestController;
+import com.munchado.orderprocess.network.volley.NetworkError;
+import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.utils.PrefUtil;
+import com.munchado.orderprocess.utils.StringUtils;
 
 public class SplashActivity extends AppCompatActivity {
     // Splash screen timer
@@ -16,6 +23,20 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
+
+
+        int versionCode = 1;
+        try {
+            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            versionCode = pInfo.versionCode;
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+        int savedVersionCode = PrefUtil.getVersionCode();
+        if (versionCode > savedVersionCode)
+            doWorkAfterUpdate();
+
+        checkUpdate(versionCode + "");
 
         new Handler().postDelayed(new Runnable() {
 
@@ -41,5 +62,48 @@ public class SplashActivity extends AppCompatActivity {
                 finish();
             }
         }, SPLASH_TIME_OUT);
+    }
+
+    private void checkUpdate(String version) {
+        RequestController.getUpdateApp(version, new RequestCallback() {
+            @Override
+            public void error(NetworkError volleyError) {
+
+            }
+
+            @Override
+            public void success(Object obj) {
+                UpgradeData upgradeData = (UpgradeData) obj;
+                if (upgradeData != null && upgradeData.data != null && !StringUtils.isNullOrEmpty(upgradeData.data.upgrade_type)) {
+                    if (upgradeData.data.upgrade_type.equalsIgnoreCase("hard") || upgradeData.data.upgrade_type.equalsIgnoreCase("soft")) {
+                        if (PrefUtil.getUpgradeType().isEmpty()) {
+                            PrefUtil.setUpgradeDisplayCount(upgradeData.data.counter);
+                        }
+                        PrefUtil.setUpgradeClearData(upgradeData.data.clear_data);
+                        PrefUtil.setUpgradeType(upgradeData.data.upgrade_type);
+                        PrefUtil.setUpgradeMessage(upgradeData.data.message);
+                    } else {
+                        PrefUtil.setUpgradeDisplayCount(0);
+                        PrefUtil.setUpgradeType("");
+                    }
+                }
+            }
+
+
+        });
+    }
+
+    private void doWorkAfterUpdate() {
+        if (PrefUtil.getUpgradeCleanData()) {
+            PrefUtil.clearAllData();
+        }
+        PrefUtil.setUpgradeDisplayCount(0);
+        PrefUtil.setUpgradeType("");
+        try {
+            PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+            PrefUtil.setVersionCode(pInfo.versionCode);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
     }
 }

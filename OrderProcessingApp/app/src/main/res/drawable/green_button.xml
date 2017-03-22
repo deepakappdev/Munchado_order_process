@@ -3,7 +3,7 @@
     <item>
         <inset xmlns:android="http://schemas.android.com/apk/res/android" android:insetBottom="@dimen/margin_small" android:insetLeft="@dimen/margin_small" android:insetRight="@dimen/margin_small" android:insetTop="@dimen/margin_small">
             <shape android:shape="rectangle">
-                <corners android:radius="@dimen/control_corner_material" />
+                <corners android:radius="@dimen/control_padding_material" />
                 <solid android:color="@color/login_bg" />
             </shape>
         </inset>

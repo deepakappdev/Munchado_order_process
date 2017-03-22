@@ -7,6 +7,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -27,7 +28,6 @@ import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.ui.activity.BaseActivity;
 import com.munchado.orderprocess.ui.adapter.ActiveOrderAdapter;
-import com.munchado.orderprocess.utils.DividerItemDecoration;
 
 import java.util.List;
 
@@ -70,7 +70,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         mLinearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLinearLayoutManager);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), R.drawable.horizontal_line));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
 
@@ -126,7 +126,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
 
     private void moveToArchive(String orderId) {
         adapter.removeOrder(orderId);
-        textActiveOrderCount.setText(adapter.getItemCount() + " Active Orders");
+        textActiveOrderCount.setText(adapter.getItemCount() + " ACTIVE ORDERS");
 
     }
     private void moveToConfirmed(String orderId) {
@@ -135,9 +135,9 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
 
 
     private void updateActiveList(ActiveOrderResponseData data) {
-        textActiveOrderCount.setText(data.total_live_records + " Active Orders");
+        textActiveOrderCount.setText(data.total_live_records + " ACTIVE ORDERS");
         if (adapter == null || recyclerView.getAdapter() != adapter) {
-            adapter = new ActiveOrderAdapter(onOrderClickListener);
+            adapter = new ActiveOrderAdapter(getActivity(),onOrderClickListener);
             recyclerView.setAdapter(adapter);
         }
 //        data.live_order.subList(20, data.live_order.size()).clear();

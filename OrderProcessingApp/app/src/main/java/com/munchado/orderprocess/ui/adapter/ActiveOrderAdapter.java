@@ -1,5 +1,9 @@
 package com.munchado.orderprocess.ui.adapter;
 
+import android.content.Context;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,9 +27,11 @@ import java.util.List;
 public class ActiveOrderAdapter extends RecyclerView.Adapter<ActiveOrderAdapter.MyViewHolder> {
     private final OnOrderClickListener clickListener;
     private List<OrderItem> orderItems = new ArrayList<>();
+    private Context context;
 
-    public ActiveOrderAdapter(OnOrderClickListener clickListener) {
+    public ActiveOrderAdapter(Context ctx,OnOrderClickListener clickListener) {
         this.clickListener = clickListener;
+        context = ctx;
     }
 
     public void updateResult(List<OrderItem> orderItems) {
@@ -38,6 +44,9 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<ActiveOrderAdapter.
                     this.orderItems.add(0, orderItem);
                     notifyItemInserted(0);
                     notifyItemRangeChanged(0, getItemCount());
+                    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                    Ringtone r = RingtoneManager.getRingtone(context, notification);
+                    r.play();
                 }
             }
     }
@@ -150,10 +159,10 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<ActiveOrderAdapter.
                 stringBuilder.append(itemList.item_qty).append("  ").append(itemList.item_name);
             }
             textOrderItem.setText(stringBuilder.toString());
-            textOrderAmount.setText("$ " + orderItem.total_amount);
+            textOrderAmount.setText("$" + orderItem.total_amount);
 //            if(orderItem.delivery_date.contains("00:00"))
 //                orderItem.delivery_date.replaceAll("00:00","01:02");
-            textDelayTime.setText(DateTimeUtils.getTimeAgo(orderItem.order_date));
+            textDelayTime.setText(DateTimeUtils.getFormattedDate(orderItem.delivery_date, DateTimeUtils.FORMAT_MMM_DD_YYYY));
             if (orderItem.inProgress) {
                 progressBar.setVisibility(View.VISIBLE);
                 btnAction.setVisibility(View.INVISIBLE);
