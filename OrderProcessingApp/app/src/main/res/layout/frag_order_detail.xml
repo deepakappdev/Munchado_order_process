@@ -112,8 +112,7 @@
                 layout="@layout/order_action_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_below="@+id/home_layout_1" />
+                android:layout_alignParentBottom="true" />
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>
 
@@ -121,23 +120,25 @@
     <include layout="@layout/progress_bar_layout" />
 
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/rl_close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:clickable="true"
-        android:paddingBottom="10dp"
-        android:paddingLeft="10dp"
-        android:paddingStart="10dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:paddingBottom="20dp"
+        android:paddingLeft="20dp"
+        android:paddingStart="20dp"
         android:visibility="gone">
 
         <ImageView
-
+            android:id="@+id/iv_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/cross_icon_black" />
-    </RelativeLayout>
+    </LinearLayout>
 
 </RelativeLayout>

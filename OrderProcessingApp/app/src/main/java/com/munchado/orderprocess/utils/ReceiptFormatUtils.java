@@ -40,17 +40,17 @@ public class ReceiptFormatUtils {
 //        LogUtils.d(builder.toString());
         int i = 1;
         for (MyItemList printItemModel : orderDetailResponseData.item_list) {
-            if(printItemModel.addons_list!=null && printItemModel.addons_list.size()>0 && printItemModel.addons_list.get(0).addon_price.equalsIgnoreCase("0.00"))
-            {
-
-                builder.append(getItemPriceData(i, printItemModel.item_name+" ("+printItemModel.addons_list.get(0).addon_name+")",printItemModel.item_qty, Integer.valueOf(printItemModel.item_qty) * Float.valueOf(printItemModel.unit_price) + ""));
-            }
-            else
+//            if(printItemModel.addons_list!=null && printItemModel.addons_list.size()>0 && printItemModel.addons_list.get(0).addon_price.equalsIgnoreCase("0.00"))
+//            {
+//
+//                builder.append(getItemPriceData(i, printItemModel.item_name+" ("+printItemModel.addons_list.get(0).addon_name+")",printItemModel.item_qty, Integer.valueOf(printItemModel.item_qty) * Float.valueOf(printItemModel.unit_price) + ""));
+//            }
+//            else
                 builder.append(getItemPriceData(i, printItemModel.item_name,printItemModel.item_qty, Integer.valueOf(printItemModel.item_qty) * Float.valueOf(printItemModel.unit_price) + ""));
             int j = 1;
             for (AddonsList addonsListModel : printItemModel.addons_list) {
-                if(addonsListModel.addon_price.equalsIgnoreCase("0.00"))
-                    continue;
+//                if(addonsListModel.addon_price.equalsIgnoreCase("0.00"))
+//                    continue;
                 builder.append(getSubItemPriceData(j, addonsListModel.addon_name,addonsListModel.addon_quantity, Integer.valueOf(addonsListModel.addon_quantity) * Float.valueOf(addonsListModel.addon_price) + ""));
                 j++;
             }
@@ -58,15 +58,15 @@ public class ReceiptFormatUtils {
         }
 
         builder.append(seperator);
-        builder.append(getAmountCalculation("Subtotal", "$" + orderDetailResponseData.order_amount_calculation.subtotal));
-        builder.append(getAmountCalculation("Discount", "$" + orderDetailResponseData.order_amount_calculation.discount));
+        builder.append(getAmountCalculation("Subtotal", orderDetailResponseData.order_amount_calculation.subtotal));
+        builder.append(getAmountCalculation("Discount", orderDetailResponseData.order_amount_calculation.discount));
         if(!orderDetailResponseData.order_type.equalsIgnoreCase("takeout"))
-        builder.append(getAmountCalculation("Delivery", "$" + orderDetailResponseData.order_amount_calculation.delivery_charge));
-        builder.append(getAmountCalculation("Tax", "$" + orderDetailResponseData.order_amount_calculation.tax_amount));
+        builder.append(getAmountCalculation("Delivery",  orderDetailResponseData.order_amount_calculation.delivery_charge));
+        builder.append(getAmountCalculation("Tax", orderDetailResponseData.order_amount_calculation.tax_amount));
         if(!orderDetailResponseData.order_type.equalsIgnoreCase("takeout"))
-        builder.append(getAmountCalculation("Tip", "$" + orderDetailResponseData.order_amount_calculation.tip_amount));
+        builder.append(getAmountCalculation("Tip", orderDetailResponseData.order_amount_calculation.tip_amount));
         builder.append(seperator);
-        builder.append(getAmountCalculation("Total", "$" + orderDetailResponseData.order_amount_calculation.total_order_price));
+        builder.append(getAmountCalculation("Total", orderDetailResponseData.order_amount_calculation.total_order_price));
         builder.append(seperator);
         builder.append(getCenterAlignedData("See you soon!!")).append("\n");
         return builder.toString();
@@ -74,8 +74,18 @@ public class ReceiptFormatUtils {
 
     public static String getAmountCalculation(String string, String amount) {
         StringBuilder stringBuilder = new StringBuilder();
+//        amount = amount.substring(1);
         if (!amount.contains("."))
             amount = amount + ".00";
+        else
+        {
+            float value = Float.valueOf(amount);
+//            LogUtils.d("==== value : "+value+"==== int value : "+(int)value);
+            if((int)value<10){
+                amount = "0"+amount ;
+            }
+        }
+        amount = "$"+amount;
         int remainingspace = CONTENT_LENGTH - string.length() - amount.length();
         if (remainingspace > 0) {
             char[] chars = new char[remainingspace];
@@ -95,6 +105,10 @@ public class ReceiptFormatUtils {
         String p = df.format(Float.valueOf(price));
         if (!p.contains("."))
             p = p + ".00";
+        float value = Float.valueOf(p);
+        if((int)value<10){
+            p = "0"+p ;
+        }
         if (Integer.parseInt(qty)  < 10)
             qty=" "+qty;
 //        if (serialNo > 9)
@@ -114,7 +128,7 @@ public class ReceiptFormatUtils {
                     char[] chars = new char[remainingspace+2];
                     Arrays.fill(chars, ' ');
 
-                    String prc=Float.valueOf(p)>=100?(" $" + p):(Float.valueOf(p)>=10?("  $" + p):("   $" + p));
+                    String prc=Float.valueOf(p)>=100?(" $" + p):("  $" + p);
                     stringBuilder.append(list.get(j)).append(chars).append(qty).append(prc).append("\n");
                 }
                 else
@@ -129,7 +143,7 @@ public class ReceiptFormatUtils {
             if (remainingspace > 1) {
                 char[] chars = new char[remainingspace];
                 Arrays.fill(chars, ' ');
-                String prc=Float.valueOf(p)>=100?(" $" + p):(Float.valueOf(p)>=10?("  $" + p):("   $" + p));
+                String prc=Float.valueOf(p)>=100?(" $" + p):("  $" + p);
                 stringBuilder.append(name).append(chars).append("  ").append(qty).append(prc).append("\n");
 //                stringBuilder.append(name).append(chars).append("  $" + p).append("\n");
             } else
@@ -144,10 +158,15 @@ public class ReceiptFormatUtils {
         name = name.replaceAll("&amp;", "&");
         StringBuilder stringBuilder = new StringBuilder();
         price+="00";
+
         df.setMaximumFractionDigits(2);
         String p = df.format(Float.valueOf(price));
         if (!p.contains("."))
             p = p + ".00";
+        float value = Float.valueOf(p);
+        if((int)value<10){
+            p = "0"+p ;
+        }
         if (Integer.parseInt(qty)  < 10)
             qty=" "+qty;
 //        else
@@ -168,7 +187,7 @@ public class ReceiptFormatUtils {
                         char[] chars = new char[remainingspace+2];
                         Arrays.fill(chars, ' ');
 
-                    String prc=Float.valueOf(p)>=100?(" $" + p):(Float.valueOf(p)>=10?("  $" + p):("   $" + p));
+                    String prc=Float.valueOf(p)>=100?(" $" + p):("  $" + p);
                     stringBuilder.append(list.get(j)).append(chars).append(qty).append(prc).append("\n");
                 }
                 else
@@ -181,7 +200,7 @@ public class ReceiptFormatUtils {
             if (remainingspace > 0) {
                 char[] chars = new char[remainingspace];
                 Arrays.fill(chars, ' ');
-                String prc=Float.valueOf(p)>=100?(" $" + p):(Float.valueOf(p)>=10?("  $" + p):("   $" + p));
+                String prc=Float.valueOf(p)>=100?(" $" + p):("  $" + p);
                 stringBuilder.append(name).append(chars).append("  ").append(qty).append(prc).append("\n");
 //                stringBuilder.append(name).append(chars).append("  $" + p).append("\n");
             } else

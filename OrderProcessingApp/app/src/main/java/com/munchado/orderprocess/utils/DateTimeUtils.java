@@ -1,5 +1,6 @@
 package com.munchado.orderprocess.utils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,7 +24,7 @@ public class DateTimeUtils {
             sdf.setTimeZone(TimeZone.getTimeZone("America/New_York"));
             String formattedStr = sdf.format(calendar.getTime());
             return new SimpleDateFormat(FORMAT_YYYY_MM_DD_HHMMSS).parse(formattedStr);
-        } catch(Exception x){
+        } catch (Exception x) {
             return null;
         }
     }
@@ -61,7 +62,7 @@ public class DateTimeUtils {
         return "";
     }
 
-    public static String getFormattedDate(String dateStr,String format) {
+    public static String getFormattedDate(String dateStr, String format) {
         String dt = "";  // Start date
 
         try {
@@ -75,5 +76,53 @@ public class DateTimeUtils {
             e.printStackTrace();
             return dt;
         }
+    }
+
+    public static boolean isFutureDateWithMinutes(String datestr,int minutes) {
+        try {
+            Calendar calendar = Calendar.getInstance();
+
+            SimpleDateFormat format = new SimpleDateFormat(FORMAT_YYYY_MM_DD_HHMMSS);
+            Date date = format.parse(datestr);
+            calendar.setTime(date);
+            calendar.add(Calendar.MINUTE, minutes);
+            Date date1 = calendar.getTime();
+            Date current_date_time = new Date();
+            current_date_time = format.parse(format.format(current_date_time));
+            if (date1.after(current_date_time))
+                return true;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+
+    public static boolean isFutureDate(String datestr) {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat(FORMAT_YYYY_MM_DD_HHMMSS);
+            Date date = format.parse(datestr);
+            Date current_date_time = new Date();
+            current_date_time = format.parse(format.format(current_date_time));
+            if (date.after(current_date_time))
+                return true;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
+    public static boolean isToday(String datestr) {
+        try {
+            SimpleDateFormat format = new SimpleDateFormat(FORMAT_YYYY_MM_DD_HHMMSS);
+            Date date = format.parse(datestr);
+            Date current_date_time = new Date();
+            current_date_time = format.parse(format.format(current_date_time));
+            if (DateUtils.isSameDay(date,current_date_time))
+                return true;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 }
