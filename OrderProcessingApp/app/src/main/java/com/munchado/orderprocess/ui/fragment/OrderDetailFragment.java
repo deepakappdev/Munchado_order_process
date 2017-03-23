@@ -6,6 +6,7 @@ import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
@@ -83,9 +84,11 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     private TextView textPrint;
     private TextView textChange_Time;
     private LinearLayout layout_instrctions;
-    LinearLayout layout_profile,empty_layout;
-    RelativeLayout layout_close,layout_base;
+    LinearLayout layout_profile, empty_layout;
+    RelativeLayout layout_close, layout_base;
     private TextView textinstrctions;
+    private NestedScrollView scrollView;
+
     private String printData = "";
     private String deliveryTakeyoutDateString = "";
 
@@ -97,7 +100,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     DecimalFormat df = new DecimalFormat();
     Calendar calendar = Calendar.getInstance();
     Date date;
-    int layoutheight=0;
+    int layoutheight = 0;
     //    long startClickTime=-1;
 //    CountDownTimer timer;
     Handler handler = new Handler();
@@ -161,8 +164,9 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         textChangeDeliveryTime = (TextView) view.findViewById(R.id.text_change_delivery_time);
         textMinus = (TextView) view.findViewById(R.id.text_minus);
 
-        layout_close= (RelativeLayout) view.findViewById(R.id.rl_close);
-        layout_base= (RelativeLayout) view.findViewById(R.id.home_layout);
+        layout_close = (RelativeLayout) view.findViewById(R.id.rl_close);
+        layout_base = (RelativeLayout) view.findViewById(R.id.home_layout);
+        scrollView = (NestedScrollView) view.findViewById(R.id.scrollView);
 
         textPlus.setOnClickListener(this);
         textMinus.setOnClickListener(this);
@@ -255,7 +259,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
 
     private void showDetail(OrderDetailResponseData data) {
         layout_profile = (LinearLayout) rootView.findViewById(R.id.layout_customer_detail_1);
-        empty_layout= (LinearLayout) rootView.findViewById(R.id.empty_layout);
+        empty_layout = (LinearLayout) rootView.findViewById(R.id.empty_layout);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int height = displayMetrics.heightPixels;
@@ -293,18 +297,43 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
             textPastActivity.setText(pastActivity.toString());
 
         showOrderDetail(data);
-        showOrderPaymentDetail(data,data.order_amount_calculation);
+        showOrderPaymentDetail(data, data.order_amount_calculation);
 
 
         updateActionButton();
 
         if (!StringUtils.isNullOrEmpty(data.special_instruction)) {
             layout_instrctions.setVisibility(View.VISIBLE);
-//            String arr[]=data.special_instruction.split("||");
-//            LogUtils.e("==== instruction lengh "+arr.length);
             if (data.special_instruction.contains("||"))
                 data.special_instruction = data.special_instruction.replaceAll("\\|\\|", "\n");
-            textinstrctions.setText(data.special_instruction);
+
+            if (data.item_list.size() < 3){
+                textinstrctions.setText(data.special_instruction+"\n\n\n\n  ");
+            }
+            else
+                textinstrctions.setText(data.special_instruction);
+        } else {
+            layout_instrctions.setVisibility(View.VISIBLE);
+
+            TextView tvtitle = (TextView) rootView.findViewById(R.id.special_instruction_title);
+            if (data.item_list.size() > 3) {
+                tvtitle.setText("\n\n\n\n  ");
+                textinstrctions.setText("\n" +
+                        "\n" +
+                        "\n" +
+                        "\n" +
+                        "    ");
+            } else {
+                tvtitle.setText("\n\n\n\n\n\n\n\n  ");
+                textinstrctions.setText("\n" +
+                        "\n" +
+                        "\n" +
+                        "\n" + "\n" +
+                        "\n" +
+                        "\n" +
+                        "    ");
+            }
+
         }
     }
 
@@ -351,10 +380,9 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
             orderLayout.addView(view);
         }
 
-        LogUtils.e("============== layout_instrctions  "+layout_instrctions.getVisibility());
+        LogUtils.e("============== layout_instrctions  " + layout_instrctions.getVisibility());
 
-        if (layout_instrctions.getVisibility()==View.VISIBLE)
-        {
+        if (layout_instrctions.getVisibility() == View.VISIBLE) {
 
             LogUtils.e("============== layout_instrctions VISIBLE ");
             ViewTreeObserver viewTreeObserver = layout_instrctions.getViewTreeObserver();
@@ -363,8 +391,8 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                     @Override
                     public void onGlobalLayout() {
                         layout_instrctions.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                        layoutheight+=layout_instrctions.getHeight();
-                        LogUtils.e("============== layout_instrctions height : " + layoutheight+"====="+layout_instrctions.getHeight());
+                        layoutheight += layout_instrctions.getHeight();
+                        LogUtils.e("============== layout_instrctions height : " + layoutheight + "=====" + layout_instrctions.getHeight());
                     }
                 });
             }
@@ -375,17 +403,15 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                     @Override
                     public void onGlobalLayout() {
                         layout_instrctions.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                        layoutheight+=orderLayout.getHeight();
+                        layoutheight += orderLayout.getHeight();
                         empty_layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, layoutheight));
                         layout_close.setVisibility(View.VISIBLE);
                         layout_base.setVisibility(View.VISIBLE);
-                        LogUtils.e("============== orderLayout height : " + layoutheight+"====="+orderLayout.getHeight());
+                        LogUtils.e("============== orderLayout height : " + layoutheight + "=====" + orderLayout.getHeight());
                     }
                 });
             }
-        }
-        else
-        {
+        } else {
             LogUtils.e("============== layout_instrctions goNE ");
             ViewTreeObserver viewTreeObserver = orderLayout.getViewTreeObserver();
             if (viewTreeObserver.isAlive()) {
@@ -400,7 +426,6 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                 });
             }
         }
-
 
 
     }
@@ -451,8 +476,8 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                 @Override
                 public void onGlobalLayout() {
                     layout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    layoutheight+=layout.getHeight();
-                    LogUtils.e("============== layout_order_payment height : " + layoutheight+"====="+layout.getHeight());
+                    layoutheight += layout.getHeight();
+                    LogUtils.e("============== layout_order_payment height : " + layoutheight + "=====" + layout.getHeight());
                     showOrderItem(data.item_list);
                 }
             });
@@ -524,11 +549,14 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                 if (rootView.findViewById(R.id.layout_change_delivery_time).getVisibility() == View.VISIBLE)
                     rootView.findViewById(R.id.layout_change_delivery_time).setVisibility(View.GONE);
                 else
+                {
                     rootView.findViewById(R.id.layout_change_delivery_time).setVisibility(View.VISIBLE);
+                    scrollView.fullScroll(View.FOCUS_DOWN);
+                }
                 break;
 
             case R.id.rl_close:
-                ((BaseActivity)getActivity()).backPressed();
+                ((BaseActivity) getActivity()).backPressed();
                 break;
 
 

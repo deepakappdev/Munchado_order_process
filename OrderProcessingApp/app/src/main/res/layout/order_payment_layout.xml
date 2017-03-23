@@ -19,7 +19,7 @@
         <com.munchado.orderprocess.ui.widgets.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Subtotal:"
+            android:text="Subtotal:    "
             android:textColor="@color/grey_light"
 
             android:textSize="@dimen/textSizeXLarge"
@@ -28,7 +28,7 @@
         <com.munchado.orderprocess.ui.widgets.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Deal Discount:"
+            android:text="Deal Discount:    "
             android:textColor="@color/grey_light"
             android:textSize="@dimen/textSizeXLarge"
             app:textStyle="AvenirNextCondensedMedium" />
@@ -37,7 +37,7 @@
             android:id="@+id/text_delivery_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Delivery:"
+            android:text="Delivery:    "
             android:textColor="@color/grey_light"
             android:textSize="@dimen/textSizeXLarge"
             app:textStyle="AvenirNextCondensedMedium" />
@@ -45,7 +45,7 @@
         <com.munchado.orderprocess.ui.widgets.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tax:"
+            android:text="Tax:    "
             android:textColor="@color/grey_light"
             android:textSize="@dimen/textSizeXLarge"
             app:textStyle="AvenirNextCondensedMedium" />
@@ -54,7 +54,7 @@
             android:id="@+id/text_tip_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Tip:"
+            android:text="Tip:    "
             android:textColor="@color/grey_light"
             android:textSize="@dimen/textSizeXLarge"
             app:textStyle="AvenirNextCondensedMedium" />
@@ -62,7 +62,7 @@
         <com.munchado.orderprocess.ui.widgets.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Total:"
+            android:text="Total:    "
             android:textColor="@color/grey_light"
             android:textSize="@dimen/textSizeXLarge"
             app:textStyle="AvenirNextCondensedMedium" />
@@ -75,7 +75,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/margin_normal"
         android:layout_marginRight="@dimen/margin_normal"
-        android:gravity="left"
+        android:gravity="right"
         android:orientation="vertical">
 
         <com.munchado.orderprocess.ui.widgets.CustomTextView

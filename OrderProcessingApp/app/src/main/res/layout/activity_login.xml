@@ -75,8 +75,8 @@
             android:layout_margin="@dimen/margin_normal"
             android:background="@drawable/green_button"
             android:text="Sign In"
-            android:textAllCaps="false"
             android:textColor="@color/white"
-            app:textStyle="AvenirNextMedium" />
+            android:textSize="13sp"
+            app:textStyle="AvenirNextDemiBold" />
     </LinearLayout>
 </RelativeLayout>

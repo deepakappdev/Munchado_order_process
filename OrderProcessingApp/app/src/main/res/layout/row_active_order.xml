@@ -55,7 +55,7 @@
             android:text="Takeout"
             android:textColor="@color/default_text_color"
             android:textSize="@dimen/textSizeXXLarge"
-            app:textStyle="AvenirNextBold"/>
+            app:textStyle="AvenirNextMedium"/>
 
         <com.munchado.orderprocess.ui.widgets.CustomTextView
             android:id="@+id/text_order_item"
@@ -81,7 +81,7 @@
             android:text="Takeout"
             android:textColor="@color/default_text_color"
             android:textSize="@dimen/textSizeXXLarge"
-            app:textStyle="AvenirNextBold" />
+            app:textStyle="AvenirNextMedium" />
 
         <com.munchado.orderprocess.ui.widgets.CustomTextView
             android:id="@+id/text_delay_time"

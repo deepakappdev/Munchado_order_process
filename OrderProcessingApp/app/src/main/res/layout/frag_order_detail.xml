@@ -20,86 +20,100 @@
             android:layout_height="match_parent">
 
 
-            <com.munchado.orderprocess.ui.widgets.CustomTextView
-                android:id="@+id/temp_view"
+            <RelativeLayout
+                android:id="@+id/home_layout_1"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_alignParentTop="true"
-                app:textStyle="AvenirNextMedium" />
+                android:layout_height="wrap_content">
 
-            <include
-                android:id="@+id/layout_customer_detail_1"
-                layout="@layout/person_detail_layout"
-                android:layout_width="250dp"
-                android:layout_height="match_parent"
-                android:layout_above="@+id/layout_action_button"
-                android:layout_below="@+id/temp_view" />
+                <com.munchado.orderprocess.ui.widgets.CustomTextView
+                    android:id="@+id/temp_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    app:textStyle="AvenirNextMedium" />
+
+                <com.munchado.orderprocess.ui.widgets.CustomTextView
+                    android:id="@+id/temp_view2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    app:textStyle="AvenirNextMedium" />
+
+                <include
+                    android:id="@+id/layout_customer_detail_1"
+                    layout="@layout/person_detail_layout"
+                    android:layout_width="250dp"
+                    android:layout_height="match_parent"
+                    android:layout_above="@+id/temp_view2"
+                    android:layout_below="@+id/temp_view" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@+id/layout_customer_detail_1"
+                    android:orientation="vertical">
+
+                    <include
+                        layout="@layout/order_detail_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+
+                    <LinearLayout
+                        android:id="@+id/order_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/margin_normal"
+                        android:orientation="vertical" />
+
+
+                    <include
+                        layout="@layout/order_payment_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+
+                    <LinearLayout
+                        android:id="@+id/special_instruction_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/margin_normal"
+                        android:layout_marginTop="@dimen/margin_normal"
+                        android:orientation="vertical"
+                        android:visibility="gone">
+
+                        <com.munchado.orderprocess.ui.widgets.CustomTextView
+                            android:id="@+id/special_instruction_title"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/margin_normal"
+                            android:text="Speical Instructions :"
+                            android:textColor="@color/default_text_color"
+                            android:textSize="@dimen/textSizeMedium"
+                            app:textStyle="AvenirNextMedium" />
+
+                        <com.munchado.orderprocess.ui.widgets.CustomTextView
+                            android:id="@+id/speical_instruction"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="@dimen/margin_normal"
+                            android:layout_marginRight="@dimen/margin_normal"
+                            android:textColor="@color/grey_light"
+                            android:textStyle="italic"
+                            app:textStyle="AvenirNextMedium" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
+            </RelativeLayout>
 
             <include
                 android:id="@+id/layout_action_button"
                 layout="@layout/order_action_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_toRightOf="@+id/layout_customer_detail_1"
-                android:orientation="vertical">
-
-
-                <include
-                    layout="@layout/order_detail_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-
-                <LinearLayout
-                    android:id="@+id/order_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin_normal"
-                    android:orientation="vertical" />
-
-
-                <include
-                    layout="@layout/order_payment_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
-
-                <LinearLayout
-                    android:id="@+id/special_instruction_layout"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin_normal"
-                    android:layout_marginTop="@dimen/margin_normal"
-                    android:orientation="vertical"
-                    android:visibility="gone">
-
-                    <com.munchado.orderprocess.ui.widgets.CustomTextView
-                        android:id="@+id/text_item_price"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_normal"
-                        android:text="Speical Instructions :"
-                        android:textColor="@color/default_text_color"
-                        android:textSize="@dimen/textSizeMedium"
-                        app:textStyle="AvenirNextMedium" />
-
-                    <com.munchado.orderprocess.ui.widgets.CustomTextView
-                        android:id="@+id/speical_instruction"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_normal"
-                        android:layout_marginRight="@dimen/margin_normal"
-                        android:textColor="@color/grey_light"
-                        android:textStyle="italic"
-                        app:textStyle="AvenirNextMedium" />
-                </LinearLayout>
-
-
-            </LinearLayout>
+                android:layout_alignParentBottom="true"
+                android:layout_below="@+id/home_layout_1" />
         </RelativeLayout>
     </android.support.v4.widget.NestedScrollView>
 
