@@ -31,7 +31,6 @@ import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.ui.activity.BaseActivity;
 import com.munchado.orderprocess.ui.adapter.ActiveOrderAdapter;
-import com.munchado.orderprocess.utils.LogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -97,15 +96,6 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
             updateActiveList(((ActiveOrderResponse) obj).data);
             cleanRemainingItem(((ActiveOrderResponse) obj).data);
 
-//            handlerRing.postDelayed(new Runnable() {
-//                @Override
-//                public void run() {
-//                    playRing();
-//                    handlerRing.postDelayed(this, 5000);
-//                }
-//            }, 5000);
-
-
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -113,9 +103,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
                 }
             }, 30000);
 
-            if (!isFirst)
-            {
-                LogUtils.d("========= handlerRing");
+            if (!isFirst) {
                 isFirst = true;
                 new Timer().scheduleAtFixedRate(new TimerTask() {
                     @Override
@@ -144,15 +132,15 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
     }
 
     private void playRing() {
-        LogUtils.d("========= playRing()");
-        for (OrderItem item : live_orderList) {
-            if (item.status.equalsIgnoreCase("placed")) {
-                Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                Ringtone r = RingtoneManager.getRingtone(getActivity(), notification);
-                r.play();
-                break;
+        if (live_orderList != null && live_orderList.size() > 0)
+            for (OrderItem item : live_orderList) {
+                if (item.status.equalsIgnoreCase("placed")) {
+                    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                    Ringtone r = RingtoneManager.getRingtone(getActivity(), notification);
+                    r.play();
+                    break;
+                }
             }
-        }
 
     }
 
@@ -250,9 +238,12 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
     @Override
     public void onPause() {
         super.onPause();
-
         // Unregister since the activity is not visible
 //        LocalBroadcastManager.getInstance(getActivity()).unregisterReceiver(mMessageReceiver);
+    }
+
+    public void updateOrderFromDetail() {
+        fetchActiveOrder();
     }
 
     @Override

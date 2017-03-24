@@ -17,7 +17,7 @@ import com.munchado.orderprocess.utils.StringUtils;
 
 public class SplashActivity extends AppCompatActivity {
     // Splash screen timer
-    private static int SPLASH_TIME_OUT = 3000;
+    private static int SPLASH_TIME_OUT = 1500;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,36 +32,14 @@ public class SplashActivity extends AppCompatActivity {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+//        versionCode = 2;
         int savedVersionCode = PrefUtil.getVersionCode();
-        if (versionCode > savedVersionCode)
+        if (versionCode >= savedVersionCode)
             doWorkAfterUpdate();
 
         checkUpdate(versionCode + "");
 
-        new Handler().postDelayed(new Runnable() {
 
-            /*
-             * Showing splash screen with a timer. This will be useful when you
-             * want to show case your app logo / company
-             */
-
-            @Override
-            public void run() {
-                // This method will be executed once the timer is over
-                // Start your app main activity
-                if (PrefUtil.isLogin()) {
-                    Intent i = new Intent(SplashActivity.this, HomeActivity.class);
-                    startActivity(i);
-                } else {
-                    Intent i = new Intent(SplashActivity.this, LoginActivity.class);
-                    startActivity(i);
-                }
-
-
-                // close this activity
-                finish();
-            }
-        }, SPLASH_TIME_OUT);
     }
 
     private void checkUpdate(String version) {
@@ -80,12 +58,46 @@ public class SplashActivity extends AppCompatActivity {
                             PrefUtil.setUpgradeDisplayCount(upgradeData.data.counter);
                         }
                         PrefUtil.setUpgradeClearData(upgradeData.data.clear_data);
+//                        PrefUtil.setUpgradeClearData(true);
                         PrefUtil.setUpgradeType(upgradeData.data.upgrade_type);
                         PrefUtil.setUpgradeMessage(upgradeData.data.message);
+
+//                        if (upgradeData.data.upgrade_type.equalsIgnoreCase("hard") || (upgradeData.data.upgrade_type.equalsIgnoreCase("soft") && PrefUtil.getUpgradeDisplayCount() == 3)) {
+//
+//                            Intent i = new Intent(Intent.ACTION_VIEW);
+//                            i.setData(Uri.parse(upgradeData.data.apk_link));
+//                            startActivity(i);
+//                        }
+
                     } else {
                         PrefUtil.setUpgradeDisplayCount(0);
                         PrefUtil.setUpgradeType("");
                     }
+
+                    new Handler().postDelayed(new Runnable() {
+
+            /*
+             * Showing splash screen with a timer. This will be useful when you
+             * want to show case your app logo / company
+             */
+
+                        @Override
+                        public void run() {
+                            // This method will be executed once the timer is over
+                            // Start your app main activity
+                            if (PrefUtil.isLogin()) {
+                                Intent i = new Intent(SplashActivity.this, HomeActivity.class);
+                                startActivity(i);
+                            } else {
+                                Intent i = new Intent(SplashActivity.this, LoginActivity.class);
+                                startActivity(i);
+                            }
+
+
+                            // close this activity
+                            finish();
+                        }
+                    }, SPLASH_TIME_OUT);
                 }
             }
 

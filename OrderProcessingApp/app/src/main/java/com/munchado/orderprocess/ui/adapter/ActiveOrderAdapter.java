@@ -118,6 +118,7 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             orderItems.get(position).inProgress = false;
             notifyItemChanged(position);
             notifyItemRangeChanged(position, getItemCount());
+            notifyDataSetChanged();
         }
     }
 

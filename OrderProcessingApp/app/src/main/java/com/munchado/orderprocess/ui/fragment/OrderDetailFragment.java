@@ -176,7 +176,6 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 if (event.getAction() == MotionEvent.ACTION_UP) {
-
                     ((BaseActivity) getActivity()).backPressed();
                     return true;
                 }
@@ -586,10 +585,6 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                 }
                 break;
 
-//            case R.id.rl_close:
-//            case R.id.iv_close:
-//                ((BaseActivity) getActivity()).backPressed();
-//                break;
             case R.id.text_email:
                 if (!StringUtils.isNullOrEmpty(textEmail.getText().toString())) {
                     Intent i = new Intent(Intent.ACTION_SEND);

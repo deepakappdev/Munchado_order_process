@@ -23,7 +23,7 @@ import com.munchado.orderprocess.ui.fragment.PrintSettingFragment;
 public class BaseActivity extends AppCompatActivity {
 
     private Toast toast;
-
+    BaseFragment fragmentActiveOrder;
 
     public void addFragment(FRAGMENTS fragmentId, Bundle bundle) {
         BaseFragment fragment = getFragment(fragmentId);
@@ -41,6 +41,7 @@ public class BaseActivity extends AppCompatActivity {
         switch (fragmentId) {
             case ACTIVE:
                 fragment = new ActiveOrderFragment();
+                fragmentActiveOrder = fragment;
                 break;
             case ARCHIVE:
                 fragment = new ArchiveOrderFragment();
@@ -62,10 +63,12 @@ public class BaseActivity extends AppCompatActivity {
         getSupportFragmentManager().popBackStack(FRAGMENTS.ACTIVE.name(), 0);
 
     }
-    public void backPressed(){
-        if (getSupportFragmentManager().getBackStackEntryCount() > 1)
+
+    public void backPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
             getSupportFragmentManager().popBackStack();
-        else
+            ((ActiveOrderFragment) fragmentActiveOrder).updateOrderFromDetail();
+        } else
             finish();
     }
 
@@ -86,7 +89,6 @@ public class BaseActivity extends AppCompatActivity {
         toast.setText(message);
         toast.show();
     }
-
 
 
 }
