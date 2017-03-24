@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
+    <com.munchado.orderprocess.ui.widgets.CustomTextView
         android:id="@+id/tv_print_setting"
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -16,8 +17,10 @@
         android:gravity="center_vertical"
         android:text="Printer Settings"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/dark_grey" />
-    <TextView
+        android:textColor="@color/dark_grey"
+        app:textStyle="AvenirNextCondensedMedium" />
+
+    <com.munchado.orderprocess.ui.widgets.CustomTextView
         android:id="@+id/tv_profile_setting"
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -29,8 +32,10 @@
         android:gravity="center_vertical"
         android:text="Profile Settings"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/dark_grey" />
-    <TextView
+        android:textColor="@color/dark_grey"
+        app:textStyle="AvenirNextCondensedMedium" />
+
+    <com.munchado.orderprocess.ui.widgets.CustomTextView
         android:id="@+id/tv_order_processing_setting"
         android:layout_width="match_parent"
         android:layout_height="40dp"
@@ -42,5 +47,6 @@
         android:gravity="center_vertical"
         android:text="Order Processing Settings"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/dark_grey" />
+        android:textColor="@color/dark_grey"
+        app:textStyle="AvenirNextCondensedMedium" />
 </LinearLayout>

@@ -1,5 +1,6 @@
 package com.munchado.orderprocess.ui.activity.settings;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -20,7 +21,8 @@ import com.munchado.orderprocess.utils.Utils;
 
 public class ProfileSettingActivity extends AppCompatActivity implements RequestCallback {
 
-    TextInputLayout txt_resname_layout, txt_address_layout, txt_phone_layout, txt_email_layout;
+    TextInputLayout txt_resname_layout,  txt_phone_layout, txt_email_layout,txt_city_layout,  txt_state_layout, txt_zip_layout;
+    com.munchado.orderprocess.ui.widgets.CustomTextInputLayout txt_address_layout;
     TextView txt_resname, txt_address, txt_phone, txt_email, txt_zip, txt_state, txt_city;
 
     @Override
@@ -33,9 +35,12 @@ public class ProfileSettingActivity extends AppCompatActivity implements Request
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         txt_resname_layout = (TextInputLayout) findViewById(R.id.txt_resname_layout);
-        txt_address_layout = (TextInputLayout) findViewById(R.id.txt_address_layout);
+        txt_address_layout = (com.munchado.orderprocess.ui.widgets.CustomTextInputLayout) findViewById(R.id.txt_address_layout);
         txt_phone_layout = (TextInputLayout) findViewById(R.id.txt_phone_layout);
         txt_email_layout = (TextInputLayout) findViewById(R.id.txt_email_layout);
+        txt_city_layout = (TextInputLayout) findViewById(R.id.txt_city_layout);
+        txt_state_layout = (TextInputLayout) findViewById(R.id.txt_state_layout);
+        txt_zip_layout = (TextInputLayout) findViewById(R.id.txt_zip_layout);
 
         txt_resname = (TextView) findViewById(R.id.txt_resname);
         txt_address = (TextView) findViewById(R.id.txt_address);
@@ -44,6 +49,24 @@ public class ProfileSettingActivity extends AppCompatActivity implements Request
         txt_city = (TextView) findViewById(R.id.txt_city);
         txt_state = (TextView) findViewById(R.id.txt_state);
         txt_zip = (TextView) findViewById(R.id.txt_zip);
+
+
+        final Typeface tf = Typeface.createFromAsset(getAssets(), "Avenir-Next-Medium.ttf");
+        txt_resname_layout.getEditText().setTypeface(tf);
+        txt_resname_layout.setTypeface(tf);
+        txt_address_layout.getEditText().setTypeface(tf);
+        txt_address_layout.setTypeface(tf);
+        txt_phone_layout.getEditText().setTypeface(tf);
+        txt_phone_layout.setTypeface(tf);
+        txt_email_layout.getEditText().setTypeface(tf);
+        txt_email_layout.setTypeface(tf);
+        txt_city_layout.getEditText().setTypeface(tf);
+        txt_city_layout.setTypeface(tf);
+        txt_zip_layout.getEditText().setTypeface(tf);
+        txt_zip_layout.setTypeface(tf);
+        txt_state_layout.getEditText().setTypeface(tf);
+        txt_state_layout.setTypeface(tf);
+
 
         DialogUtil.showProgressDialog(this);
         RequestController.getRestaurantProfileDetail(this);

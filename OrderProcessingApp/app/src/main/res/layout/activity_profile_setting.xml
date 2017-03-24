@@ -23,14 +23,15 @@
             android:paddingRight="@dimen/fifteendp"
             android:paddingStart="@dimen/fifteendp">
 
-            <android.support.design.widget.TextInputLayout
+            <com.munchado.orderprocess.ui.widgets.CustomTextInputLayout
                 android:id="@+id/txt_resname_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="30dp"
                 app:counterOverflowTextAppearance="@color/prmary_txt_color"
                 app:errorTextAppearance="@style/TextErrorAppearance"
-                app:hintTextAppearance="@style/TextFloatLabelAppearance">
+                app:hintTextAppearance="@style/TextFloatLabelAppearance"
+                app:textStyle="AvenirNextMedium">
 
                 <EditText
                     android:id="@+id/txt_resname"
@@ -41,16 +42,17 @@
                     android:hint="Restaurant Name"
                     android:inputType="text"
                     android:textColor="@color/default_text_color" />
-            </android.support.design.widget.TextInputLayout>
+            </com.munchado.orderprocess.ui.widgets.CustomTextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.munchado.orderprocess.ui.widgets.CustomTextInputLayout
                 android:id="@+id/txt_address_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 app:counterOverflowTextAppearance="@color/prmary_txt_color"
                 app:errorTextAppearance="@style/TextErrorAppearance"
-                app:hintTextAppearance="@style/TextFloatLabelAppearance">
+                app:hintTextAppearance="@style/TextFloatLabelAppearance"
+                app:textStyle="AvenirNextUltraLight">
 
                 <EditText
                     android:id="@+id/txt_address"
@@ -62,16 +64,17 @@
                     android:maxLines="4"
                     android:singleLine="false"
                     android:textColor="@color/default_text_color" />
-            </android.support.design.widget.TextInputLayout>
+            </com.munchado.orderprocess.ui.widgets.CustomTextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.munchado.orderprocess.ui.widgets.CustomTextInputLayout
                 android:id="@+id/txt_city_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 app:counterOverflowTextAppearance="@color/prmary_txt_color"
                 app:errorTextAppearance="@style/TextErrorAppearance"
-                app:hintTextAppearance="@style/TextFloatLabelAppearance">
+                app:hintTextAppearance="@style/TextFloatLabelAppearance"
+                app:textStyle="AvenirNextUltraLight">
 
                 <EditText
                     android:id="@+id/txt_city"
@@ -84,16 +87,17 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textColor="@color/default_text_color" />
-            </android.support.design.widget.TextInputLayout>
+            </com.munchado.orderprocess.ui.widgets.CustomTextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.munchado.orderprocess.ui.widgets.CustomTextInputLayout
                 android:id="@+id/txt_state_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 app:counterOverflowTextAppearance="@color/prmary_txt_color"
                 app:errorTextAppearance="@style/TextErrorAppearance"
-                app:hintTextAppearance="@style/TextFloatLabelAppearance">
+                app:hintTextAppearance="@style/TextFloatLabelAppearance"
+                app:textStyle="AvenirNextUltraLight">
 
                 <EditText
                     android:id="@+id/txt_state"
@@ -106,16 +110,17 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textColor="@color/default_text_color" />
-            </android.support.design.widget.TextInputLayout>
+            </com.munchado.orderprocess.ui.widgets.CustomTextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.munchado.orderprocess.ui.widgets.CustomTextInputLayout
                 android:id="@+id/txt_zip_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 app:counterOverflowTextAppearance="@color/prmary_txt_color"
                 app:errorTextAppearance="@style/TextErrorAppearance"
-                app:hintTextAppearance="@style/TextFloatLabelAppearance">
+                app:hintTextAppearance="@style/TextFloatLabelAppearance"
+                app:textStyle="AvenirNextUltraLight">
 
                 <EditText
                     android:id="@+id/txt_zip"
@@ -128,16 +133,17 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textColor="@color/default_text_color" />
-            </android.support.design.widget.TextInputLayout>
+            </com.munchado.orderprocess.ui.widgets.CustomTextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.munchado.orderprocess.ui.widgets.CustomTextInputLayout
                 android:id="@+id/txt_phone_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 app:counterOverflowTextAppearance="@color/prmary_txt_color"
                 app:errorTextAppearance="@style/TextErrorAppearance"
-                app:hintTextAppearance="@style/TextFloatLabelAppearance">
+                app:hintTextAppearance="@style/TextFloatLabelAppearance"
+                app:textStyle="AvenirNextUltraLight">
 
                 <EditText
                     android:id="@+id/txt_phone"
@@ -150,16 +156,17 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textColor="@color/default_text_color" />
-            </android.support.design.widget.TextInputLayout>
+            </com.munchado.orderprocess.ui.widgets.CustomTextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.munchado.orderprocess.ui.widgets.CustomTextInputLayout
                 android:id="@+id/txt_email_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 app:counterOverflowTextAppearance="@color/prmary_txt_color"
                 app:errorTextAppearance="@style/TextErrorAppearance"
-                app:hintTextAppearance="@style/TextFloatLabelAppearance">
+                app:hintTextAppearance="@style/TextFloatLabelAppearance"
+                app:textStyle="AvenirNextUltraLight">
 
                 <EditText
                     android:id="@+id/txt_email"
@@ -172,9 +179,9 @@
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textColor="@color/default_text_color" />
-            </android.support.design.widget.TextInputLayout>
+            </com.munchado.orderprocess.ui.widgets.CustomTextInputLayout>
 
-            <Button
+            <com.munchado.orderprocess.ui.widgets.CustomButton
                 android:id="@+id/submit_btn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -183,7 +190,8 @@
                 android:onClick="save"
                 android:text="Save"
                 android:textColor="@color/white"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                app:textStyle="AvenirNextMedium" />
         </LinearLayout>
     </ScrollView>
 

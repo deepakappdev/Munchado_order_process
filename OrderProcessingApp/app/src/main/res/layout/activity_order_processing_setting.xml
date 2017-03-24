@@ -1,33 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.munchado.orderprocess.ui.activity.settings.OrderProcessingSettingActivity">
+
+    <com.munchado.orderprocess.ui.widgets.CustomTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="60dp"
+        android:background="@color/grey_background"
+        android:paddingBottom="5dp"
+        android:paddingLeft="@dimen/twentyeightdp"
+        android:paddingRight="@dimen/twentyeightdp"
+        android:paddingTop="5dp"
+        android:text="Print"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        app:textStyle="AvenirNextDemiBold" />
 
     <CheckBox
         android:id="@+id/checkBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:layout_marginLeft="@dimen/twentyeightdp"
         android:layout_marginStart="@dimen/twentyeightdp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="10dp"
         android:button="@drawable/checkbok_register"
         android:gravity="top"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:text="Manual Print" />
+        android:text="Manual Print"
+        android:textSize="16sp" />
 
-    <Button
+    <com.munchado.orderprocess.ui.widgets.CustomTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:background="@color/grey_background"
+        android:paddingBottom="5dp"
+        android:paddingLeft="@dimen/twentyeightdp"
+        android:paddingRight="@dimen/twentyeightdp"
+        android:paddingTop="5dp"
+        android:text="Screen"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        app:textStyle="AvenirNextDemiBold" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup_setting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/twentyeightdp"
+        android:layout_marginStart="@dimen/twentyeightdp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
+
+        <RadioButton
+            android:id="@+id/radioButton_alwayson"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@drawable/radio_button_selector"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="Always keep screen On"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <RadioButton
+            android:id="@+id/radioButton_sleep"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:button="@drawable/radio_button_selector"
+            android:checked="true"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="Sleep after sometime"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+    </RadioGroup>
+
+    <com.munchado.orderprocess.ui.widgets.CustomButton
         android:id="@+id/submit_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/checkBox"
         android:layout_margin="@dimen/fifteendp"
         android:background="@drawable/green_button"
         android:onClick="saveSetting"
         android:text="Save"
-        android:textColor="@color/white" />
-</RelativeLayout>
+        android:textColor="@color/white"
+        android:textSize="18sp"
+        app:textStyle="AvenirNextMedium" />
+
+
+</LinearLayout>

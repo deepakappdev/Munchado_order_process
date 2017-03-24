@@ -11,6 +11,7 @@ public class Constants {
     public static final String PREF_BLUETOOTH_MODEL= "pref_bluetooth_model";
     public static final String PREF_BLUETOOTH_MODEL_CODE= "pref_bluetooth_model_code";
     public static final String PREF_MANUAL_PRINT = "pref_manual_print";
+    public static final String PREF_SCREEN_ON = "pref_screen_on";
     public static final String PREF_USER_ID = "pref_user_id";
     public static final String PREF_VERSION_CODE = "pref_version_code";
     public static final String PREF_UPGRADE_TYPE = "pref_upgrade_type";

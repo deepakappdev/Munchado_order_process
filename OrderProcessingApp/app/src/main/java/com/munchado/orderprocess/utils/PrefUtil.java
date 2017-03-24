@@ -110,6 +110,15 @@ public final class PrefUtil {
         putBoolean(Constants.PREF_MANUAL_PRINT, login);
     }
 
+    public static boolean isScreenOn() {
+        return getBoolean(Constants.PREF_SCREEN_ON, false);
+    }
+
+    public static void setScreenON(boolean login) {
+        putBoolean(Constants.PREF_SCREEN_ON, login);
+    }
+
+
     public static int getVersionCode() {
         return getInt(Constants.PREF_VERSION_CODE, 0);
     }
