@@ -521,7 +521,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         switch (view.getId()) {
             case R.id.text_print:
 
-                if (textAction.getText().toString().equalsIgnoreCase("Archive")) {
+                if (textAction.getText().toString().equalsIgnoreCase("Archive") || textAction.getVisibility() == View.GONE) {
                     PrinterSetting setting = new PrinterSetting(getActivity());
 
                     if (TextUtils.isEmpty(setting.getPortName()) || TextUtils.isEmpty(setting.getPortSettings())) {
