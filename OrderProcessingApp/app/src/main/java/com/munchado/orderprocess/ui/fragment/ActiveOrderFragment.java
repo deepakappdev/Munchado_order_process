@@ -4,6 +4,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
@@ -28,8 +31,12 @@ import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.ui.activity.BaseActivity;
 import com.munchado.orderprocess.ui.adapter.ActiveOrderAdapter;
+import com.munchado.orderprocess.utils.LogUtils;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by android on 22/2/17.
@@ -42,6 +49,8 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
     private View rootView;
     private ActiveOrderAdapter adapter;
     private LinearLayoutManager mLinearLayoutManager;
+    ArrayList<OrderItem> live_orderList;
+    boolean isFirst;
 
     @Nullable
     @Override
@@ -56,6 +65,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
+        live_orderList = new ArrayList<>();
         fetchActiveOrder();
     }
 
@@ -83,43 +93,81 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
     public void success(Object obj) {
         if (getActivity() == null) return;
         if (obj instanceof ActiveOrderResponse) {
+            live_orderList.addAll(((ActiveOrderResponse) obj).data.live_order);
             updateActiveList(((ActiveOrderResponse) obj).data);
             cleanRemainingItem(((ActiveOrderResponse) obj).data);
+
+//            handlerRing.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    playRing();
+//                    handlerRing.postDelayed(this, 5000);
+//                }
+//            }, 5000);
+
+
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     fetchActiveOrder();
                 }
             }, 30000);
+
+            if (!isFirst)
+            {
+                LogUtils.d("========= handlerRing");
+                isFirst = true;
+                new Timer().scheduleAtFixedRate(new TimerTask() {
+                    @Override
+                    public void run() {
+                        playRing();
+                    }
+                }, 0, 5000);
+            }
+//            else
+//                LogUtils.d("=========else handlerRing");
         } else if (obj instanceof OrderProcessResponse) {
             if (((OrderProcessResponse) obj).data.message) {
-                if(((OrderProcessResponse) obj).data.status.equalsIgnoreCase("confirmed"))
+                if (((OrderProcessResponse) obj).data.status.equalsIgnoreCase("confirmed"))
                     moveToConfirmed(((OrderProcessResponse) obj).data.order_id);
                 else
                     moveToArchive(((OrderProcessResponse) obj).data.order_id);
 
-                if(((OrderProcessResponse) obj).data.status.equalsIgnoreCase("delivered"))
-                showToast("Order Successfully Sent.");
-                else if(((OrderProcessResponse) obj).data.status.equalsIgnoreCase("arrived"))
+                if (((OrderProcessResponse) obj).data.status.equalsIgnoreCase("delivered"))
+                    showToast("Order Successfully Sent.");
+                else if (((OrderProcessResponse) obj).data.status.equalsIgnoreCase("arrived"))
                     showToast("Order Successfully Pickedup.");
                 else
-                showToast("Order Successfully " + ((OrderProcessResponse) obj).data.status);
+                    showToast("Order Successfully " + ((OrderProcessResponse) obj).data.status);
             }
         }
     }
 
+    private void playRing() {
+        LogUtils.d("========= playRing()");
+        for (OrderItem item : live_orderList) {
+            if (item.status.equalsIgnoreCase("placed")) {
+                Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                Ringtone r = RingtoneManager.getRingtone(getActivity(), notification);
+                r.play();
+                break;
+            }
+        }
+
+    }
+
     private void cleanRemainingItem(ActiveOrderResponseData data) {
         List<OrderItem> allItems = adapter.getAllItems();
-        for(int index = 0;index<allItems.size();index++) {
+        for (int index = 0; index < allItems.size(); index++) {
             OrderItem orderItem = allItems.get(index);
             boolean found = false;
-            for(OrderItem updatedItem:data.live_order) {
-                if(updatedItem.id.equalsIgnoreCase(orderItem.id)) {
+            for (OrderItem updatedItem : data.live_order) {
+                if (updatedItem.id.equalsIgnoreCase(orderItem.id)) {
                     found = true;
                     break;
                 }
             }
-            if(!found)
+            if (!found)
                 moveToArchive(orderItem.id);
         }
     }
@@ -129,6 +177,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
         textActiveOrderCount.setText(adapter.getItemCount() + " ACTIVE ORDERS");
 
     }
+
     private void moveToConfirmed(String orderId) {
         adapter.confirmOrder(orderId);
     }
@@ -137,7 +186,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
     private void updateActiveList(ActiveOrderResponseData data) {
         textActiveOrderCount.setText(data.total_live_records + " ACTIVE ORDERS");
         if (adapter == null || recyclerView.getAdapter() != adapter) {
-            adapter = new ActiveOrderAdapter(getActivity(),onOrderClickListener);
+            adapter = new ActiveOrderAdapter(getActivity(), onOrderClickListener);
             recyclerView.setAdapter(adapter);
         }
 //        data.live_order.subList(20, data.live_order.size()).clear();
@@ -164,7 +213,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
                 else
                     status = "delivered";
             }
-            RequestController.orderProcess(orderItem.id, status, "","", ActiveOrderFragment.this);
+            RequestController.orderProcess(orderItem.id, status, "", "", ActiveOrderFragment.this);
             orderItem.inProgress = true;
             adapter.updateResult(orderItem);
         }

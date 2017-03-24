@@ -87,25 +87,24 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     private TextView textPrint;
     private TextView textChange_Time;
     private LinearLayout layout_instrctions;
-    LinearLayout layout_profile, empty_layout,layout_close;
-    RelativeLayout  layout_base;
+    LinearLayout layout_profile, empty_layout, layout_close;
+    RelativeLayout layout_base;
     private TextView textinstrctions;
     private NestedScrollView scrollView;
 
     private String printData = "";
     private String deliveryTakeyoutDateString = "";
 
-    public static int REQUEST_CODE_DISCOVER_PRINTER = 111;
     private View rootView;
     private TextView textChangeDeliveryTime;
     private TextView textPlus;
     private TextView textMinus;
+    private String clickFrom = "";
+    private String PRINT = "print_click", CONFIRM = "confirm_click";
     DecimalFormat df = new DecimalFormat();
     Calendar calendar = Calendar.getInstance();
     Date date;
     int layoutheight = 0;
-    //    long startClickTime=-1;
-//    CountDownTimer timer;
     Handler handler = new Handler();
     Runnable runnable;
     SimpleDateFormat format = new SimpleDateFormat(DateTimeUtils.FORMAT_YYYY_MM_DD_HHMMSS);
@@ -170,11 +169,8 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         layout_close = (LinearLayout) view.findViewById(R.id.rl_close);
         layout_base = (RelativeLayout) view.findViewById(R.id.home_layout);
         scrollView = (NestedScrollView) view.findViewById(R.id.scrollView);
-
-//        view.findViewById(R.id.iv_close).setOnClickListener(this);
         textPlus.setOnClickListener(this);
         textMinus.setOnClickListener(this);
-//        layout_close.setOnClickListener(this);
 
         layout_close.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -187,26 +183,14 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                 return true;
             }
         });
-//        view.findViewById(R.id.iv_close).setOnTouchListener(new View.OnTouchListener() {
-//            @Override
-//            public boolean onTouch(View v, MotionEvent event) {
-//                if (event.getAction() == MotionEvent.ACTION_UP) {
-//
-//                    ((BaseActivity) getActivity()).backPressed();
-//                    return true;
-//                }
-//                return false;
-//
-//            }
-//        });
 
         (textPrint = (TextView) view.findViewById(R.id.text_print)).setOnClickListener(this);
         (textChange_Time = (TextView) view.findViewById(R.id.text_change)).setOnClickListener(this);
 
-        textPrint.setPaintFlags(textPrint.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        textEmail.setPaintFlags(textPrint.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        textTelephone.setPaintFlags(textPrint.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
-        textChange_Time.setPaintFlags(textPrint.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+//        textPrint.setPaintFlags(textPrint.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        textEmail.setPaintFlags(textEmail.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        textTelephone.setPaintFlags(textTelephone.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        textChange_Time.setPaintFlags(textChange_Time.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
         (textCancel = (TextView) view.findViewById(R.id.text_cancel)).setOnClickListener(this);
         textCancel.setPaintFlags(textCancel.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
@@ -234,8 +218,6 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
             textTip.setVisibility(View.GONE);
             textDelivery.setVisibility(View.GONE);
             textDeliverytitle.setVisibility(View.GONE);
-
-
         } else {
             labelOrderTime.setText("Time of Delivery: ");
             labelDeliveryAddress.setVisibility(View.VISIBLE);
@@ -275,6 +257,21 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
             if (((OrderProcessResponse) obj).data.message) {
                 response.data.status = ((OrderProcessResponse) obj).data.status;
                 updateActionButton();
+
+                if (clickFrom.equalsIgnoreCase(PRINT)) {
+                    if (response.data.status.equalsIgnoreCase("confirmed") || response.data.status.equalsIgnoreCase("arrived") || response.data.status.equalsIgnoreCase("delivered")) {
+                        PrinterSetting setting = new PrinterSetting(getActivity());
+
+                        if (TextUtils.isEmpty(setting.getPortName()) || TextUtils.isEmpty(setting.getPortSettings())) {
+                            Intent intent = new Intent(getActivity(), SearchPrinterActivity.class);
+                            intent.putExtra("printData", printData);
+                            startActivity(intent);
+                        } else
+                            new StarPrinterUtils(getActivity(), "", printData);
+                    }
+                }
+
+
             }
         }
         if (!StringUtils.isNullOrEmpty(deliveryTakeyoutDateString))
@@ -471,14 +468,17 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         String currentStatus = response.data.status;
         if (currentStatus.equalsIgnoreCase("placed")) {
             textAction.setText("Confirm");
+//            textAction.setText("Archive");
             textAction.setBackgroundResource(R.drawable.green_button);
             textChange_Time.setVisibility(View.VISIBLE);
         } else if (currentStatus.equalsIgnoreCase("confirmed")) {
             textAction.setBackgroundResource(R.drawable.grey_button);
             if (response.data.order_type.equalsIgnoreCase("takeout"))
-                textAction.setText("Picked Up");
+//                textAction.setText("Picked Up");
+                textAction.setText("Archive");
             else
-                textAction.setText("Sent");
+//                textAction.setText("Sent");
+                textAction.setText("Archive");
         } else {
             textAction.setVisibility(View.GONE);
             textCancel.setVisibility(View.GONE);
@@ -522,17 +522,33 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         switch (view.getId()) {
             case R.id.text_print:
 
-                PrinterSetting setting = new PrinterSetting(getActivity());
+                if (textAction.getText().toString().equalsIgnoreCase("Archive")) {
+                    PrinterSetting setting = new PrinterSetting(getActivity());
 
-                if (TextUtils.isEmpty(setting.getPortName()) || TextUtils.isEmpty(setting.getPortSettings())) {
-                    Intent intent = new Intent(getActivity(), SearchPrinterActivity.class);
-                    intent.putExtra("printData", printData);
-                    startActivity(intent);
-                } else
-                    new StarPrinterUtils(getActivity(), "", printData);
+                    if (TextUtils.isEmpty(setting.getPortName()) || TextUtils.isEmpty(setting.getPortSettings())) {
+                        Intent intent = new Intent(getActivity(), SearchPrinterActivity.class);
+                        intent.putExtra("printData", printData);
+                        startActivity(intent);
+                    } else
+                        new StarPrinterUtils(getActivity(), "", printData);
+                } else {
+                    clickFrom = PRINT;
+                    showProgressBar();
+                    String status2 = "";
+                    if (currentStatus.equalsIgnoreCase("placed"))
+                        status2 = "confirmed";
+                    else if (currentStatus.equalsIgnoreCase("confirmed")) {
+                        if (currentStatus.equalsIgnoreCase("takeout"))
+                            status2 = "arrived";
+                        else
+                            status2 = "delivered";
+                    }
+                    RequestController.orderProcess(response.data.id, status2, "", "", OrderDetailFragment.this);
+                }
 
                 break;
             case R.id.btn_action:
+                clickFrom = CONFIRM;
                 showProgressBar();
                 String status = "";
                 if (currentStatus.equalsIgnoreCase("placed"))
@@ -624,27 +640,6 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                     textChangeDeliveryTime.setText(DateTimeUtils.getFormattedDate(deliveryTakeyoutDateString, DateTimeUtils.FORMAT_MMM_DD_YYYY) + " @ " + DateTimeUtils.getFormattedDate(deliveryTakeyoutDateString, DateTimeUtils.FORMAT_HH_MM_A));
                 }
             }
-
-
-//
-//            Date date1 = calendar.getTime();
-//            Date current_date_time = new Date();
-//            current_date_time = format.parse(format.format(current_date_time));
-//            if (date1.after(current_date_time)) {
-//                deliveryTakeyoutDateString = format.format(calendar.getTime());
-//                textChangeDeliveryTime.setText(DateTimeUtils.getFormattedDate(deliveryTakeyoutDateString, DateTimeUtils.FORMAT_MMM_DD_YYYY) + " @ " + DateTimeUtils.getFormattedDate(deliveryTakeyoutDateString, DateTimeUtils.FORMAT_HH_MM_A));
-//            } else {
-//                if(minutes<0){
-//                    date = format.parse(deliveryTakeyoutDateString);
-//                    calendar.setTime(date);
-//                    calendar.add(Calendar.MINUTE, -1 * minutes);
-//                }
-//                else {
-//                    deliveryTakeyoutDateString = format.format(calendar.getTime());
-//                    textChangeDeliveryTime.setText(DateTimeUtils.getFormattedDate(deliveryTakeyoutDateString, DateTimeUtils.FORMAT_MMM_DD_YYYY) + " @ " + DateTimeUtils.getFormattedDate(deliveryTakeyoutDateString, DateTimeUtils.FORMAT_HH_MM_A));
-//                }
-//
-//            }
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -698,7 +693,6 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                 //else dialog stays open. Make sure you have an obvious way to close the dialog especially if you set cancellable to false.
             }
         });
-//        alertDialog.show();
     }
 
 }

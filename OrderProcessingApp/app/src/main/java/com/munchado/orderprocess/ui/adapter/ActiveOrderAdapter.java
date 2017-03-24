@@ -187,14 +187,17 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 btnAction.setVisibility(View.VISIBLE);
                 if (orderItem.status.equalsIgnoreCase("confirmed")) {
                     if (orderItem.order_type.equalsIgnoreCase("takeout")) {
-                        btnAction.setText("Picked Up");
+//                        btnAction.setText("Picked Up");
+                        btnAction.setText("Archive");
                     } else if (orderItem.order_type.equalsIgnoreCase("delivery")) {
-                        btnAction.setText("Sent");
+//                        btnAction.setText("Sent");
+                        btnAction.setText("Archive");
                     }
                     btnAction.setBackgroundResource(R.drawable.grey_button);
 
                 } else if (orderItem.status.equalsIgnoreCase("placed")) {
                     btnAction.setText("Confirm");
+//                    btnAction.setText("Archive");
                     btnAction.setBackgroundResource(R.drawable.green_button);
                 }
             }
@@ -257,14 +260,17 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 btnAction.setVisibility(View.VISIBLE);
                 if (orderItem.status.equalsIgnoreCase("confirmed")) {
                     if (orderItem.order_type.equalsIgnoreCase("takeout")) {
-                        btnAction.setText("Picked Up");
+//                        btnAction.setText("Picked Up");
+                        btnAction.setText("Archive");
                     } else if (orderItem.order_type.equalsIgnoreCase("delivery")) {
-                        btnAction.setText("Sent");
+//                        btnAction.setText("Sent");
+                        btnAction.setText("Archive");
                     }
                     btnAction.setBackgroundResource(R.drawable.grey_button);
 
                 } else if (orderItem.status.equalsIgnoreCase("placed")) {
                     btnAction.setText("Confirm");
+//                    btnAction.setText("Archive");
                     btnAction.setBackgroundResource(R.drawable.green_button);
                 }
             }

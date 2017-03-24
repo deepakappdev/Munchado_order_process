@@ -159,6 +159,7 @@ public class ReceiptFormatUtils {
         StringBuilder stringBuilder = new StringBuilder();
         price+="00";
 
+        df.setMinimumFractionDigits(2);
         df.setMaximumFractionDigits(2);
         String p = df.format(Float.valueOf(price));
         if (!p.contains("."))
