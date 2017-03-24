@@ -179,6 +179,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
             adapter = new ActiveOrderAdapter(getActivity(), onOrderClickListener);
             recyclerView.setAdapter(adapter);
 //        }
+
         adapter.updateResult(data.live_order);
         recyclerView.invalidate();
 
