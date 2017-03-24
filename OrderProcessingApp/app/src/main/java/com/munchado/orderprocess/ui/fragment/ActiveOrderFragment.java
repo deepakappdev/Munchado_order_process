@@ -135,10 +135,14 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
         if (live_orderList != null && live_orderList.size() > 0)
             for (OrderItem item : live_orderList) {
                 if (item.status.equalsIgnoreCase("placed")) {
-                    Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-                    Ringtone r = RingtoneManager.getRingtone(getActivity(), notification);
-                    r.play();
-                    break;
+                    try {
+                        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                        Ringtone r = RingtoneManager.getRingtone(getActivity(), notification);
+                        r.play();
+                        break;
+                    } catch (Exception e) {
+                    }
+
                 }
             }
 
@@ -163,22 +167,21 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
     private void moveToArchive(String orderId) {
         adapter.removeOrder(orderId);
         textActiveOrderCount.setText(adapter.getItemCount() + " ACTIVE ORDERS");
-
     }
 
     private void moveToConfirmed(String orderId) {
         adapter.confirmOrder(orderId);
     }
 
-
     private void updateActiveList(ActiveOrderResponseData data) {
         textActiveOrderCount.setText(data.total_live_records + " ACTIVE ORDERS");
-        if (adapter == null || recyclerView.getAdapter() != adapter) {
+//        if (adapter == null || recyclerView.getAdapter() != adapter) {
             adapter = new ActiveOrderAdapter(getActivity(), onOrderClickListener);
             recyclerView.setAdapter(adapter);
-        }
-//        data.live_order.subList(20, data.live_order.size()).clear();
+//        }
         adapter.updateResult(data.live_order);
+        recyclerView.invalidate();
+
         mLinearLayoutManager.scrollToPositionWithOffset(0, 0);
     }
 

@@ -115,5 +115,8 @@
     <declare-styleable name="CustomEditText">
         <attr name="textStyle" />
     </declare-styleable>
+    <declare-styleable name="CustomTextInputLayout">
+        <attr name="textStyle" />
+    </declare-styleable>
 
 </resources>
