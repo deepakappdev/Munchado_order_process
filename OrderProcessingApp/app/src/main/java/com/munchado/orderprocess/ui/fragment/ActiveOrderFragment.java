@@ -136,11 +136,10 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
 
 
     private void updateActiveList(ActiveOrderResponseData data) {
-        if (adapter == null || recyclerView.getAdapter() != adapter) {
-            adapter = new ActiveOrderAdapter(onOrderClickListener);
+//        if (adapter == null || recyclerView.getAdapter() != adapter) {
+            adapter = new ActiveOrderAdapter(getActivity(), onOrderClickListener);
             recyclerView.setAdapter(adapter);
-        }
-//        data.live_order.subList(20, data.live_order.size()).clear();
+
         adapter.updateResult(data.live_order);
         mLinearLayoutManager.scrollToPositionWithOffset(0, 0);
     }
