@@ -1,14 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:layout_height="90dp"
+    android:background="@drawable/grey_border"
     android:padding="@dimen/margin_normal">
 
+
+    <com.munchado.orderprocess.ui.widgets.CustomButton
+        android:id="@+id/btn_action"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp"
+        android:background="@drawable/grey_button"
+        android:paddingLeft="@dimen/margin_normal"
+        android:paddingRight="@dimen/margin_normal"
+        android:text="View"
+        android:textColor="@color/white"
+        android:textSize="13sp"
+        app:textStyle="AvenirNextDemiBold" />
+
     <LinearLayout
+        android:id="@+id/lltop"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_toLeftOf="@+id/btn_action">
 
         <com.munchado.orderprocess.ui.widgets.CustomTextView
             android:id="@+id/text_order_type"
@@ -16,8 +38,8 @@
             android:layout_height="wrap_content"
             android:text="Takeout"
             android:textColor="@color/default_text_color"
-            android:textSize="@dimen/textSizeLarge"
-            app:textStyle="RobotoMedium" />
+            android:textSize="@dimen/textSizeXXLarge"
+            app:textStyle="AvenirNextMedium" />
 
         <com.munchado.orderprocess.ui.widgets.CustomTextView
             android:id="@+id/text_order_item"
@@ -25,38 +47,40 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margin_xx_large"
             android:layout_weight="1"
-            android:text="Takeout"
             android:ellipsize="end"
             android:maxLines="1"
+            android:text="Takeout"
             android:textColor="@color/text_light_black"
-            android:textSize="@dimen/textSizeLarge"
-            app:textStyle="RobotoMedium" />
+            android:textSize="@dimen/textSizeXXLarge"
+            app:textStyle="AvenirNextCondensedItalic" />
 
         <com.munchado.orderprocess.ui.widgets.CustomTextView
             android:id="@+id/text_order_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
+            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
             android:text="Takeout"
             android:textColor="@color/default_text_color"
-            android:textSize="@dimen/textSizeLarge"
-            app:textStyle="RobotoMedium" />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/margin_small">
+            android:textSize="@dimen/textSizeXXLarge"
+            app:textStyle="AvenirNextMedium" />
 
         <com.munchado.orderprocess.ui.widgets.CustomTextView
             android:id="@+id/text_delay_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_below="@+id/lltop"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="2dp"
             android:text="Takeout"
             android:textColor="@color/text_light_black"
-            android:textSize="@dimen/textSizeLarge"
-            app:textStyle="RobotoMedium" />
+            android:textSize="@dimen/textSizeXXLarge"
+            app:textStyle="AvenirNextCondensedMedium" />
 
     </LinearLayout>
-</LinearLayout>
+
+
+</RelativeLayout>

@@ -2,6 +2,7 @@ package com.munchado.orderprocess.ui.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -22,7 +23,6 @@ import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.ui.activity.BaseActivity;
 import com.munchado.orderprocess.ui.adapter.ArchiveOrderAdapter;
 import com.munchado.orderprocess.utils.DialogUtil;
-import com.munchado.orderprocess.utils.DividerItemDecoration;
 import com.munchado.orderprocess.utils.LogUtils;
 
 import java.util.ArrayList;
@@ -87,7 +87,8 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         tv_archive_order_count = (TextView) view.findViewById(R.id.tv_archive_order_count);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), R.drawable.horizontal_line));
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+//        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), R.drawable.grey_border));
     }
 
 
@@ -117,7 +118,7 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
         if (adapterSize < adapter.getItemCount())
             isMoreLoaded = true;
         adapter.notifyDataSetChanged();
-        tv_archive_order_count.setText(adapter.getItemCount()+" Archive Orders");
+        tv_archive_order_count.setText(data.total_archive_records+" ARCHIVE ORDERS");
 
     }
     OnOrderClickListener onOrderClickListener = new OnOrderClickListener() {

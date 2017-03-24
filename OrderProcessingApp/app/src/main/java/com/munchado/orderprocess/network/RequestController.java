@@ -21,6 +21,7 @@ import com.munchado.orderprocess.network.request.GetRestaurantProfileRequest;
 import com.munchado.orderprocess.network.request.LoginRequest;
 import com.munchado.orderprocess.network.request.NewTokenRequest;
 import com.munchado.orderprocess.network.request.OrderProcessRequest;
+import com.munchado.orderprocess.network.request.UpdateAppRequest;
 import com.munchado.orderprocess.network.volley.GsonRequest;
 import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
@@ -93,8 +94,6 @@ public class RequestController {
     public static synchronized RequestQueue getmRequestQueue() {
         if (mRequestQueue != null) return mRequestQueue;
         Cache cache = new DiskBasedCache(MyApplication.mContext.getCacheDir(), 1024 * 1024); // 1/8MB cap
-        //System.setProperty("http.proxyHost", "192.168.2.5");//for charles
-        //System.setProperty("http.proxyPort", "8888");
         Network network = new BasicNetwork(new HurlStack());
         mRequestQueue = new RequestQueue(cache, network);
         mRequestQueue.start();
@@ -150,4 +149,12 @@ public class RequestController {
         GsonRequest gsonRequest = request.createServerRequest(getErrorListener(callBack), getListener(callBack, request));
         getmRequestQueue().add(gsonRequest);
     }
+
+
+    public static void getUpdateApp(String version, RequestCallback callBack) {
+        UpdateAppRequest request = new UpdateAppRequest(version);
+        GsonRequest gsonRequest = request.createServerRequest(getErrorListener(callBack), getListener(callBack, request));
+        getmRequestQueue().add(gsonRequest);
+    }
+
 }

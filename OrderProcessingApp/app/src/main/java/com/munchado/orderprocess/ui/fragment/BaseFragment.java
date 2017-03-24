@@ -13,6 +13,7 @@ import com.munchado.orderprocess.ui.activity.HomeActivity;
 
 public abstract class BaseFragment extends Fragment {
     Handler handler = new Handler();
+    Handler handlerRing = new Handler();
 
     abstract FRAGMENTS getFragmentId();
 

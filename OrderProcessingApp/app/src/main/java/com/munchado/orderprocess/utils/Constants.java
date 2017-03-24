@@ -8,8 +8,15 @@ public class Constants {
     public static final String PREF_IS_LOGGED_IN = "pref_is_login";
     public static final String PREF_TOKEN = "pref_token";
     public static final String PREF_IP_ADDRESS = "pref_ip";
+    public static final String PREF_BLUETOOTH_MODEL= "pref_bluetooth_model";
+    public static final String PREF_BLUETOOTH_MODEL_CODE= "pref_bluetooth_model_code";
     public static final String PREF_MANUAL_PRINT = "pref_manual_print";
     public static final String PREF_USER_ID = "pref_user_id";
+    public static final String PREF_VERSION_CODE = "pref_version_code";
+    public static final String PREF_UPGRADE_TYPE = "pref_upgrade_type";
+    public static final String PREF_DISPLAY_COUNT = "pref_display_count";
+    public static final String PREF_UPGRADE_CLEAR_DATA = "pref_upgrade_clear_data";
+    public static final String PREF_UPGRADE_MESSAGE = "pref_upgrade_message";
 
     public static final String FRAGMENT_ARGS = "frag_args";
     public static final String FRAGMENT_PRINT_SETTING = "frag_PrintSettingFragment";

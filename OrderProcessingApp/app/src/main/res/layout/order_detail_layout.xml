@@ -4,118 +4,180 @@
     android:id="@+id/layout_order_detail"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@color/white"
     android:orientation="vertical"
     android:visibility="gone">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/margin_normal">
+        android:layout_margin="@dimen/margin_normal"
+        android:orientation="vertical">
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="2"
             android:gravity="right"
-            android:orientation="vertical">
+            android:orientation="horizontal">
 
             <com.munchado.orderprocess.ui.widgets.CustomTextView
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:text="Order ID:"
+                android:layout_weight="2"
+                android:gravity="right|end"
+                android:text="Order ID: "
                 android:textColor="@color/grey_light"
-                app:textStyle="RobotoLight" />
-
-            <com.munchado.orderprocess.ui.widgets.CustomTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Receipt No.:"
-                android:textColor="@color/grey_light"
-                app:textStyle="RobotoLight" />
-
-            <com.munchado.orderprocess.ui.widgets.CustomTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Type:"
-                android:textColor="@color/grey_light"
-                app:textStyle="RobotoLight" />
-
-            <com.munchado.orderprocess.ui.widgets.CustomTextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Time of Order:"
-                android:textColor="@color/grey_light"
-                app:textStyle="RobotoLight" />
-
-            <com.munchado.orderprocess.ui.widgets.CustomTextView
-                android:id="@+id/label_order_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Time of Delivery:"
-                android:textColor="@color/grey_light"
-                app:textStyle="RobotoLight" />
-
-            <com.munchado.orderprocess.ui.widgets.CustomTextView
-                android:id="@+id/label_delivery_address"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Deliver to:"
-                android:textColor="@color/grey_light"
-                android:visibility="gone"
-                app:textStyle="RobotoLight" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_medium"
-            android:layout_weight="3"
-            android:orientation="vertical">
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="AvenirNextCondensedMedium" />
 
             <com.munchado.orderprocess.ui.widgets.CustomTextView
                 android:id="@+id/text_order_id"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="3"
                 android:textColor="@color/default_text_color"
-                app:textStyle="RobotoMedium" />
+                android:textSize="@dimen/textSizeLarge"
+                app:textStyle="AvenirNextMedium" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <com.munchado.orderprocess.ui.widgets.CustomTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="right|end"
+                android:text="Receipt No.: "
+                android:textColor="@color/grey_light"
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="AvenirNextCondensedMedium" />
+
             <com.munchado.orderprocess.ui.widgets.CustomTextView
                 android:id="@+id/text_receipt_no"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="3"
                 android:textColor="@color/default_text_color"
-                app:textStyle="RobotoMedium" />
+                android:textSize="@dimen/textSizeLarge"
+                app:textStyle="AvenirNextMedium" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <com.munchado.orderprocess.ui.widgets.CustomTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="right|end"
+                android:text="Type: "
+                android:textColor="@color/grey_light"
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="AvenirNextCondensedMedium" />
 
             <com.munchado.orderprocess.ui.widgets.CustomTextView
                 android:id="@+id/text_order_type"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="3"
                 android:textColor="@color/default_text_color"
-                app:textStyle="RobotoMedium" />
+                android:textSize="@dimen/textSizeLarge"
+                app:textStyle="AvenirNextMedium" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <com.munchado.orderprocess.ui.widgets.CustomTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="right|end"
+                android:text="Time of Order: "
+                android:textColor="@color/grey_light"
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="AvenirNextCondensedMedium" />
 
             <com.munchado.orderprocess.ui.widgets.CustomTextView
                 android:id="@+id/text_order_time"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="3"
                 android:textColor="@color/default_text_color"
-                app:textStyle="RobotoMedium" />
+                android:textSize="@dimen/textSizeLarge"
+                app:textStyle="AvenirNextMedium" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <com.munchado.orderprocess.ui.widgets.CustomTextView
+                android:id="@+id/label_order_time"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="right|end"
+                android:text="Time of Delivery: "
+                android:textColor="@color/grey_light"
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="AvenirNextCondensedMedium" />
 
             <com.munchado.orderprocess.ui.widgets.CustomTextView
                 android:id="@+id/text_delivery_time"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="3"
                 android:textColor="@color/default_text_color"
-                app:textStyle="RobotoMedium" />
+                android:textSize="@dimen/textSizeLarge"
+                app:textStyle="AvenirNextMedium" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:orientation="horizontal">
+
+            <com.munchado.orderprocess.ui.widgets.CustomTextView
+                android:id="@+id/label_delivery_address"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:gravity="right|end"
+                android:text="Deliver to: "
+                android:textColor="@color/grey_light"
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="AvenirNextCondensedMedium" />
 
             <com.munchado.orderprocess.ui.widgets.CustomTextView
                 android:id="@+id/text_delivery_address"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_weight="3"
                 android:textColor="@color/default_text_color"
-                android:visibility="gone"
-                app:textStyle="RobotoMedium" />
+                android:textSize="@dimen/textSizeLarge"
+                app:textStyle="AvenirNextMedium" />
 
         </LinearLayout>
+
 
     </LinearLayout>
 
@@ -137,7 +199,9 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/margin_normal"
             android:text="@string/order"
-            android:textColor="@color/default_text_color" />
+            android:textColor="@color/default_text_color"
+            android:textSize="@dimen/textSizeLarge"
+            app:textStyle="AvenirNextMedium" />
 
         <View
             android:layout_width="0dp"

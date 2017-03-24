@@ -78,7 +78,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             mEmailLayout.setErrorEnabled(true);
             mEmailLayout.setError(getString(R.string.error_email_register));
             isValid = false;
-        } else {
+        }
+        /*else {
             if (!StringUtils.isValidEmail(mEmail.getText().toString().trim(), false)) {
                 mEmailLayout.setErrorEnabled(true);
                 mEmailLayout.setError(getString(R.string.email_error));
@@ -86,7 +87,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             } else {
                 mEmailLayout.setErrorEnabled(false);
             }
-        }
+        }*/
         if (StringUtils.isNullOrEmpty(mPassword.getText().toString())) {
             mPasswordLayout.setErrorEnabled(true);
             mPasswordLayout.setError(getString(R.string.error_password_register));

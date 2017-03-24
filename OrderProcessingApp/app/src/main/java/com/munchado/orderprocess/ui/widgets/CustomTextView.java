@@ -81,6 +81,24 @@ public class CustomTextView extends TextView {
             case 11:
                 fontFile = "Futura_Book.ttf";
                 break;
+            case 12:
+                fontFile = "Avenir_Light.ttf";
+                break;
+            case 13:
+                fontFile = "Avenir_Medium.ttf";
+                break;
+            case 14:
+                fontFile = "Avenir-Next-Condensed-Medium.ttf";
+                break;
+            case 15:
+                fontFile = "Avenir-Next-Condensed-Italic.ttf";
+                break;
+            case 16:
+                fontFile = "Avenir-Next-Regular.ttf";
+                break;
+            case 17:
+                fontFile = "Avenir-Next-UltraLight.ttf";
+                break;
         }
         return fontFile;
     }

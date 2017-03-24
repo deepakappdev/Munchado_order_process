@@ -65,7 +65,7 @@
     <string name="handlingmsg_err_wrong_paper">Please set correct roll paper.\n</string>
     <string name="handlingmsg_err_battery_real_end">Please connect AC adapter or change the battery.\nBattery of printer is almost empty.\n</string>
     <string name="handlingmsg_err_offline">Printer is offline.\n</string>
-    <string name="order">Order</string>
+    <string name="order">ORDER</string>
 
 
     <string name="send">Send</string>
