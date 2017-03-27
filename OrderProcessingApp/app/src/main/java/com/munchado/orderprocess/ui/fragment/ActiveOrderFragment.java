@@ -112,8 +112,6 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
                     }
                 }, 0, 5000);
             }
-//            else
-//                LogUtils.d("=========else handlerRing");
         } else if (obj instanceof OrderProcessResponse) {
             if (((OrderProcessResponse) obj).data.message) {
                 if (((OrderProcessResponse) obj).data.status.equalsIgnoreCase("confirmed"))
@@ -127,7 +125,16 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
                     showToast("Order Successfully Pickedup.");
                 else
                     showToast("Order Successfully " + ((OrderProcessResponse) obj).data.status);
+                for (int i = 0; i < live_orderList.size(); i++) {
+                    if (live_orderList.get(i).id.equalsIgnoreCase(((OrderProcessResponse) obj).data.order_id)) {
+                        OrderItem item = live_orderList.get(i);
+                        item.status = ((OrderProcessResponse) obj).data.status;
+                        live_orderList.set(i, item);
+                    }
+                }
             }
+
+
         }
     }
 
@@ -176,8 +183,8 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
     private void updateActiveList(ActiveOrderResponseData data) {
         textActiveOrderCount.setText(data.total_live_records + " ACTIVE ORDERS");
 //        if (adapter == null || recyclerView.getAdapter() != adapter) {
-            adapter = new ActiveOrderAdapter(getActivity(), onOrderClickListener);
-            recyclerView.setAdapter(adapter);
+        adapter = new ActiveOrderAdapter(getActivity(), onOrderClickListener);
+        recyclerView.setAdapter(adapter);
 //        }
 
         adapter.updateResult(data.live_order);

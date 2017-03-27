@@ -89,11 +89,9 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fifteendp"
         android:background="@drawable/green_button"
-        android:onClick="saveSetting"
         android:text="Save"
         android:textColor="@color/white"
         android:textSize="18sp"
         app:textStyle="AvenirNextMedium" />
-
 
 </LinearLayout>
