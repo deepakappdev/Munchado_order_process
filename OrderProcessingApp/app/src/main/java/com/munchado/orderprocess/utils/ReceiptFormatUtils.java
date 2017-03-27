@@ -74,15 +74,23 @@ public class ReceiptFormatUtils {
 
     public static String getAmountCalculation(String string, String amount) {
         StringBuilder stringBuilder = new StringBuilder();
-//        amount = amount.substring(1);
         if (!amount.contains("."))
+        {
             amount = amount + ".00";
+            float value = Float.valueOf(amount);
+            if((int)value==0){
+                amount = "00.00" ;
+            }
+        }
         else
         {
             float value = Float.valueOf(amount);
 //            LogUtils.d("==== value : "+value+"==== int value : "+(int)value);
             if((int)value<10){
                 amount = "0"+amount ;
+            }
+            if((int)value==0){
+                amount = "00.00" ;
             }
         }
         amount = "$"+amount;
@@ -105,6 +113,8 @@ public class ReceiptFormatUtils {
         String p = df.format(Float.valueOf(price));
         if (!p.contains("."))
             p = p + ".00";
+        if(p.contains(","))
+            p = p.replaceAll(",","");
         float value = Float.valueOf(p);
         if((int)value<10){
             p = "0"+p ;
@@ -164,6 +174,8 @@ public class ReceiptFormatUtils {
         String p = df.format(Float.valueOf(price));
         if (!p.contains("."))
             p = p + ".00";
+        if(p.contains(","))
+            p = p.replaceAll(",","");
         float value = Float.valueOf(p);
         if((int)value<10){
             p = "0"+p ;
