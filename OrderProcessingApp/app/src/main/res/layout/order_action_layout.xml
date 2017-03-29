@@ -23,7 +23,8 @@
             android:paddingLeft="@dimen/margin_medium"
             android:text="Change Delivery Time"
             android:textColor="@color/default_text_color"
-            android:textSize="@dimen/textSizeLarge" />
+            android:textSize="20sp"
+            app:textStyle="AvenirNextCondensedMedium" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -41,7 +42,8 @@
                 android:gravity="center"
                 android:text="-"
                 android:textColor="@color/default_text_color"
-                android:textSize="@dimen/textSizeXXLarge" />
+                android:textSize="20sp"
+                app:textStyle="AvenirNextCondensedMedium" />
 
             <com.munchado.orderprocess.ui.widgets.CustomTextView
                 android:id="@+id/text_change_delivery_time"
@@ -49,7 +51,8 @@
                 android:layout_height="wrap_content"
                 android:text="15-15-2015 12:45"
                 android:textColor="@color/default_text_color"
-                android:textSize="@dimen/textSizeLarge" />
+                android:textSize="20sp"
+                app:textStyle="AvenirNextCondensedMedium" />
 
             <com.munchado.orderprocess.ui.widgets.CustomTextView
                 android:id="@+id/text_plus"
@@ -61,7 +64,8 @@
                 android:gravity="center"
                 android:text="+"
                 android:textColor="@color/default_text_color"
-                android:textSize="@dimen/textSizeXXLarge" />
+                android:textSize="20sp"
+                app:textStyle="AvenirNextCondensedMedium" />
 
             <com.munchado.orderprocess.ui.widgets.CustomButton
                 android:id="@+id/btn_update"
@@ -73,8 +77,8 @@
                 android:text="@string/update_time"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="@dimen/textSizeLarge"
-                app:textStyle="RobotoRegular" />
+                android:textSize="20sp"
+                app:textStyle="AvenirNextCondensedMedium" />
         </LinearLayout>
 
     </LinearLayout>
@@ -96,9 +100,9 @@
             android:clickable="true"
             android:text="@string/cancel_order"
             android:textColor="@color/red_overview"
-            android:textSize="@dimen/textSizeXLarge"
+            android:textSize="20sp"
             android:visibility="gone"
-            app:textStyle="AvenirNextBold" />
+            app:textStyle="AvenirNextCondensedMedium" />
 
         <com.munchado.orderprocess.ui.widgets.CustomTextView
             android:id="@+id/text_change"
@@ -108,9 +112,9 @@
             android:clickable="true"
             android:text="@string/change_time"
             android:textColor="@color/default_text_color"
-            android:textSize="@dimen/textSizeXLarge"
+            android:textSize="20sp"
             android:visibility="gone"
-            app:textStyle="AvenirNextBold" />
+            app:textStyle="AvenirNextCondensedMedium" />
 
         <View
             android:layout_width="0dp"
@@ -122,12 +126,12 @@
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:background="@drawable/green_button"
-            android:text="Print"
+            android:text="PRINT"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="@dimen/textSizeXLarge"
+            android:textSize="15sp"
             android:visibility="gone"
-            app:textStyle="AvenirNextBold" />
+            app:textStyle="AvenirNextDemiBold" />
 
         <com.munchado.orderprocess.ui.widgets.CustomButton
             android:id="@+id/btn_action"
@@ -137,8 +141,8 @@
             android:text="@string/confirm"
             android:textAllCaps="false"
             android:textColor="@color/white"
-            android:textSize="@dimen/textSizeXLarge"
+            android:textSize="15sp"
             android:visibility="gone"
-            app:textStyle="AvenirNextBold" />
+            app:textStyle="AvenirNextDemiBold" />
     </LinearLayout>
 </LinearLayout>

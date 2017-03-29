@@ -102,6 +102,7 @@ public final class PrefUtil {
     public static void putBluetoothModelCode(int model) {
         PrefUtil.putInt(Constants.PREF_BLUETOOTH_MODEL_CODE, model);
     }
+
     public static boolean isManualPrint() {
         return getBoolean(Constants.PREF_MANUAL_PRINT, false);
     }
@@ -111,7 +112,7 @@ public final class PrefUtil {
     }
 
     public static boolean isScreenOn() {
-        return getBoolean(Constants.PREF_SCREEN_ON, false);
+        return getBoolean(Constants.PREF_SCREEN_ON, true);
     }
 
     public static void setScreenON(boolean login) {
@@ -153,10 +154,11 @@ public final class PrefUtil {
         return getString(Constants.PREF_UPGRADE_TYPE, "");
     }
 
-    public static void setUpgradeMessage( String message) {
-        putString( Constants.PREF_UPGRADE_MESSAGE, message);
+    public static void setUpgradeMessage(String message) {
+        putString(Constants.PREF_UPGRADE_MESSAGE, message);
     }
+
     public static String getUpgradeMessage() {
-        return getString( Constants.PREF_UPGRADE_MESSAGE, "");
+        return getString(Constants.PREF_UPGRADE_MESSAGE, "");
     }
 }

@@ -83,6 +83,7 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         else
             ((MyViewTodayOrderHolder) holder).populateItem(orderItems.get(position));
     }
+
     @Override
     public long getItemId(int position) {
         return position;
@@ -119,10 +120,14 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             return -1;
     }
 
-    public void confirmOrder(String orderId) {
+    public void confirmOrder(String orderId, String status) {
+        LogUtils.d("======confirmOrder=== status : " + status);
         int position = getItemPosition(orderId);
         if (position > -1) {
-            orderItems.get(position).status = "confirmed";
+            if (status.equalsIgnoreCase("arrived"))
+                orderItems.get(position).status = "arrived";
+            else
+                orderItems.get(position).status = "confirmed";
             orderItems.get(position).inProgress = false;
             notifyItemChanged(position);
             notifyItemRangeChanged(position, getItemCount());
@@ -188,7 +193,7 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 //            if(orderItem.delivery_date.contains("00:00"))
 //                orderItem.delivery_date.replaceAll("00:00","01:02");
 
-//            LogUtils.d("========= status : " + orderItem.status);
+            LogUtils.d("========= status : " + orderItem.status+"====="+btnAction.getText().toString());
             textDelayTime.setText(DateTimeUtils.getFormattedDate(orderItem.delivery_date, DateTimeUtils.FORMAT_MMM_DD_YYYY));
             if (orderItem.inProgress) {
                 progressBar.setVisibility(View.VISIBLE);
@@ -199,18 +204,18 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
                 if (orderItem.status.equalsIgnoreCase("confirmed")) {
                     if (orderItem.order_type.equalsIgnoreCase("takeout")) {
-//                        btnAction.setText("Picked Up");
-                        btnAction.setText("Archive");
+                        btnAction.setText("READY");
+                        btnAction.setBackgroundResource(R.drawable.green_button);
                     } else if (orderItem.order_type.equalsIgnoreCase("delivery")) {
-//                        btnAction.setText("Sent");
-                        btnAction.setText("Archive");
+                        btnAction.setText("ARCHIVE");
+                        btnAction.setBackgroundResource(R.drawable.grey_button);
                     }
-                    btnAction.setBackgroundResource(R.drawable.grey_button);
-
                 } else if (orderItem.status.equalsIgnoreCase("placed")) {
-                    btnAction.setText("Confirm");
-//                    btnAction.setText("Archive");
+                    btnAction.setText("CONFIRM");
                     btnAction.setBackgroundResource(R.drawable.green_button);
+                } else if (orderItem.status.equalsIgnoreCase("arrived") && btnAction.getText().toString().equalsIgnoreCase("READY")) {
+                    btnAction.setText("ARCHIVE");
+                    btnAction.setBackgroundResource(R.drawable.grey_button);
                 }
             }
         }
@@ -263,7 +268,7 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             textOrderItem.setText(stringBuilder.toString());
             textOrderAmount.setText("$" + orderItem.total_amount);
 
-            LogUtils.d("========= status : " + orderItem.status);
+            LogUtils.d("========= status : " + orderItem.status+"====="+btnAction.getText().toString());
             textDelayTime.setText(DateTimeUtils.getFormattedDate(orderItem.delivery_date, DateTimeUtils.FORMAT_MMM_DD_YYYY));
             textDelayTimeHourMinute.setText(DateTimeUtils.getFormattedDate(orderItem.delivery_date, DateTimeUtils.FORMAT_HH_MM_A));
             if (orderItem.inProgress) {
@@ -274,18 +279,18 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 btnAction.setVisibility(View.VISIBLE);
                 if (orderItem.status.equalsIgnoreCase("confirmed")) {
                     if (orderItem.order_type.equalsIgnoreCase("takeout")) {
-//                        btnAction.setText("Picked Up");
-                        btnAction.setText("Archive");
+                        btnAction.setText("READY");
+                        btnAction.setBackgroundResource(R.drawable.green_button);
                     } else if (orderItem.order_type.equalsIgnoreCase("delivery")) {
-//                        btnAction.setText("Sent");
-                        btnAction.setText("Archive");
+                        btnAction.setText("ARCHIVE");
+                        btnAction.setBackgroundResource(R.drawable.grey_button);
                     }
-                    btnAction.setBackgroundResource(R.drawable.grey_button);
-
                 } else if (orderItem.status.equalsIgnoreCase("placed")) {
-                    btnAction.setText("Confirm");
-//                    btnAction.setText("Archive");
+                    btnAction.setText("CONFIRM");
                     btnAction.setBackgroundResource(R.drawable.green_button);
+                } else if (orderItem.status.equalsIgnoreCase("arrived") && btnAction.getText().toString().equalsIgnoreCase("READY")) {
+                    btnAction.setText("ARCHIVE");
+                    btnAction.setBackgroundResource(R.drawable.grey_button);
                 }
             }
         }

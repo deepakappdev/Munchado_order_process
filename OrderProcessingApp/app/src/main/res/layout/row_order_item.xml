@@ -17,19 +17,19 @@
             android:id="@+id/text_item_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/textSizeXLarge"
             android:layout_weight="1"
             android:textColor="@color/default_text_color"
-            app:textStyle="AvenirNextMedium" />
+            android:textSize="@dimen/textSizeXXLarge"
+            app:textStyle="AvenirNextCondensedMedium" />
 
         <com.munchado.orderprocess.ui.widgets.CustomTextView
             android:id="@+id/text_item_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/textSizeXLarge"
             android:textColor="@color/default_text_color"
+            android:textSize="@dimen/textSizeXXLarge"
             android:textStyle="italic"
-            app:textStyle="AvenirNextMedium" />
+            app:textStyle="AvenirNextCondensedMedium" />
 
         <com.munchado.orderprocess.ui.widgets.CustomTextView
             android:id="@+id/text_item_price"
@@ -37,26 +37,27 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="right"
-            android:textSize="@dimen/textSizeXLarge"
             android:textColor="@color/default_text_color"
-            app:textStyle="AvenirNextMedium" />
+            android:textSize="@dimen/textSizeXXLarge"
+            app:textStyle="AvenirNextCondensedMedium" />
     </LinearLayout>
+
     <com.munchado.orderprocess.ui.widgets.CustomTextView
+        android:id="@+id/text_instruction"
         android:layout_width="wrap_content"
-        android:textColor="@color/grey_light"
-        android:textStyle="italic"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/margin_normal"
         android:layout_marginRight="@dimen/margin_normal"
-        app:textStyle="AvenirNextMedium"
-        android:id="@+id/text_instruction"
-        android:layout_height="wrap_content" />
+        android:textColor="@color/grey_light"
+        android:textStyle="italic"
+        app:textStyle="AvenirNextCondensedMedium" />
 
     <LinearLayout
-        android:layout_width="match_parent"
         android:id="@+id/layout_add_ons"
-        android:visibility="gone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/margin_normal"
         android:layout_marginRight="@dimen/margin_normal"
         android:orientation="vertical"
-        android:layout_height="wrap_content" />
+        android:visibility="gone" />
 </LinearLayout>

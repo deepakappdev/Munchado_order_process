@@ -30,14 +30,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentTop="true"
-                    app:textStyle="AvenirNextMedium" />
+                    app:textStyle="AvenirNextCondensedMedium" />
 
                 <com.munchado.orderprocess.ui.widgets.CustomTextView
                     android:id="@+id/temp_view2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    app:textStyle="AvenirNextMedium" />
+                    app:textStyle="AvenirNextCondensedMedium" />
 
                 <include
                     android:id="@+id/layout_customer_detail_1"
@@ -89,8 +89,8 @@
                             android:layout_marginLeft="@dimen/margin_normal"
                             android:text="Speical Instructions :"
                             android:textColor="@color/default_text_color"
-                            android:textSize="@dimen/textSizeMedium"
-                            app:textStyle="AvenirNextMedium" />
+                            android:textSize="@dimen/textSizeXXLarge"
+                            app:textStyle="AvenirNextCondensedMedium" />
 
                         <com.munchado.orderprocess.ui.widgets.CustomTextView
                             android:id="@+id/speical_instruction"
@@ -100,7 +100,7 @@
                             android:layout_marginRight="@dimen/margin_normal"
                             android:textColor="@color/grey_light"
                             android:textStyle="italic"
-                            app:textStyle="AvenirNextMedium" />
+                            app:textStyle="AvenirNextCondensedMedium" />
                     </LinearLayout>
 
 

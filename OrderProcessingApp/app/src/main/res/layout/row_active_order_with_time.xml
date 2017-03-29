@@ -24,8 +24,8 @@
             android:paddingLeft="@dimen/margin_normal"
             android:paddingRight="@dimen/margin_normal"
             android:text="Sent"
-            android:textSize="13sp"
             android:textColor="@color/white"
+            android:textSize="15sp"
             app:textStyle="AvenirNextDemiBold" />
 
         <android.support.v4.widget.ContentLoadingProgressBar
@@ -55,7 +55,7 @@
             android:text="Takeout"
             android:textColor="@color/default_text_color"
             android:textSize="@dimen/textSizeXXLarge"
-            app:textStyle="AvenirNextMedium"/>
+            app:textStyle="AvenirNextDemiBold" />
 
         <com.munchado.orderprocess.ui.widgets.CustomTextView
             android:id="@+id/text_order_item"
@@ -68,7 +68,7 @@
             android:text="Takeout"
             android:textColor="@color/text_light_black"
             android:textSize="@dimen/textSizeXXLarge"
-            app:textStyle="AvenirNextCondensedItalic"  />
+            app:textStyle="AvenirNextCondensedMedium" />
 
         <com.munchado.orderprocess.ui.widgets.CustomTextView
             android:id="@+id/text_order_amount"
@@ -81,7 +81,7 @@
             android:text="Takeout"
             android:textColor="@color/default_text_color"
             android:textSize="@dimen/textSizeXXLarge"
-            app:textStyle="AvenirNextMedium" />
+            app:textStyle="AvenirNextDemiBold" />
 
         <com.munchado.orderprocess.ui.widgets.CustomTextView
             android:id="@+id/text_delay_time"
@@ -93,7 +93,8 @@
             android:text="Takeout"
             android:textColor="@color/text_light_black"
             android:textSize="@dimen/textSizeXXLarge"
-            app:textStyle="AvenirNextCondensedMedium"/>
+            app:textStyle="AvenirNextCondensedMedium" />
+
         <com.munchado.orderprocess.ui.widgets.CustomTextView
             android:id="@+id/text_delay_time_1"
             android:layout_width="wrap_content"
@@ -103,8 +104,8 @@
             android:layout_marginTop="2dp"
             android:text="Takeout"
             android:textColor="@color/text_light_black"
-            android:textSize="@dimen/textSizeLarge"
-            app:textStyle="AvenirNextCondensedMedium"/>
+            android:textSize="@dimen/textSizeXXLarge"
+            app:textStyle="AvenirNextCondensedMedium" />
     </LinearLayout>
 
 

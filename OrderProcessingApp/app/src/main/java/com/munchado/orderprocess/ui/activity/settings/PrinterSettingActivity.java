@@ -12,35 +12,40 @@ import android.widget.TextView;
 
 import com.munchado.orderprocess.R;
 import com.munchado.orderprocess.print.ModelCapability;
+import com.munchado.orderprocess.ui.widgets.CustomButton;
 import com.munchado.orderprocess.utils.IPAddressValidator;
 import com.munchado.orderprocess.utils.PrefUtil;
 import com.munchado.orderprocess.utils.StringUtils;
 
-public class PrinterSettingActivity extends AppCompatActivity {
+public class PrinterSettingActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText txt_ip;
     private TextView tv_Bluetooth_Model;
-    String modelName="";
-    int modelCode=-1;
+    private CustomButton btn_select_printer, btn_submit;
+    String modelName = "";
+    int modelCode = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_printer_setting);
         txt_ip = (EditText) findViewById(R.id.ip);
+        btn_select_printer = (CustomButton) findViewById(R.id.select_printer);
+        btn_submit = (CustomButton) findViewById(R.id.submit_btn);
         tv_Bluetooth_Model = (TextView) findViewById(R.id.bluetooth_model);
         setupActionbar();
 
         if (!StringUtils.isNullOrEmpty(PrefUtil.getIPAddress()))
             txt_ip.setText(PrefUtil.getIPAddress());
 
-        if (!StringUtils.isNullOrEmpty(PrefUtil.getBluetoothModel()))
-        {
-            tv_Bluetooth_Model.setText("Select Printer Model: "+PrefUtil.getBluetoothModel());
+        if (!StringUtils.isNullOrEmpty(PrefUtil.getBluetoothModel())) {
+            tv_Bluetooth_Model.setText("Select Printer Model: " + PrefUtil.getBluetoothModel());
             modelName = PrefUtil.getBluetoothModel();
             modelCode = PrefUtil.getBluetoothModelCode();
-        }
-        else tv_Bluetooth_Model.setText("No Model selected");
+        } else tv_Bluetooth_Model.setText("No Model selected");
+
+        btn_select_printer.setOnClickListener(this);
+        btn_submit.setOnClickListener(this);
     }
 
     private void setupActionbar() {
@@ -57,7 +62,7 @@ public class PrinterSettingActivity extends AppCompatActivity {
         return true;
     }
 
-    public void saveIP(View view) {
+    public void saveIP() {
         if (!StringUtils.isNullOrEmpty(txt_ip.getText().toString()) && new IPAddressValidator().validate(txt_ip.getText().toString())) {
             PrefUtil.putIPAddress(txt_ip.getText().toString());
 
@@ -70,7 +75,7 @@ public class PrinterSettingActivity extends AppCompatActivity {
 //        }
     }
 
-    public void showDialog(View view) {
+    public void showDialog() {
         AlertDialog.Builder builderSingle = new AlertDialog.Builder(this);
         builderSingle.setTitle("Select Printer Model:-");
 
@@ -169,11 +174,23 @@ public class PrinterSettingActivity extends AppCompatActivity {
                         break;
 
                 }
-                tv_Bluetooth_Model.setText("Select Printer Model: "+strName);
+                tv_Bluetooth_Model.setText("Select Printer Model: " + strName);
                 modelName = strName;
                 modelCode = model;
             }
         });
         builderSingle.show();
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.select_printer:
+                showDialog();
+                break;
+            case R.id.submit_btn:
+                saveIP();
+                break;
+        }
     }
 }

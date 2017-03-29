@@ -100,6 +100,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     private TextView textPlus;
     private TextView textMinus;
     private String clickFrom = "";
+    private String order_type = "", sent_status = "";
     private String PRINT = "print_click", CONFIRM = "confirm_click";
     DecimalFormat df = new DecimalFormat();
     Calendar calendar = Calendar.getInstance();
@@ -209,6 +210,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
 
         textOrderTime.setText(DateTimeUtils.getFormattedDate(orderDetailData.order_date, DateTimeUtils.FORMAT_MMM_DD_YYYY) + " @ " + DateTimeUtils.getFormattedDate(orderDetailData.order_date, DateTimeUtils.FORMAT_HH_MM_A));
         if (orderDetailData.order_type.equalsIgnoreCase("takeout")) {
+            order_type = "takeout";
             labelOrderTime.setText("Time of Takeout: ");
             tv_change_delivery_time.setText("Change Takeout Time");
             labelDeliveryAddress.setVisibility(View.GONE);
@@ -218,6 +220,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
             textDelivery.setVisibility(View.GONE);
             textDeliverytitle.setVisibility(View.GONE);
         } else {
+            order_type = "delivery";
             labelOrderTime.setText("Time of Delivery: ");
             labelDeliveryAddress.setVisibility(View.VISIBLE);
             textDeliveryAddress.setVisibility(View.VISIBLE);
@@ -258,6 +261,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                 updateActionButton();
 
                 if (clickFrom.equalsIgnoreCase(PRINT)) {
+
                     if (response.data.status.equalsIgnoreCase("confirmed") || response.data.status.equalsIgnoreCase("arrived") || response.data.status.equalsIgnoreCase("delivered")) {
                         PrinterSetting setting = new PrinterSetting(getActivity());
 
@@ -330,38 +334,50 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
 
         updateActionButton();
 
+//        if (!StringUtils.isNullOrEmpty(data.special_instruction)) {
+//            layout_instrctions.setVisibility(View.VISIBLE);
+//            if (data.special_instruction.contains("||"))
+//                data.special_instruction = data.special_instruction.replaceAll("\\|\\|", "\n");
+//
+//            if (data.item_list.size() < 3) {
+//                textinstrctions.setText(data.special_instruction + "\n\n\n\n  ");
+//            } else
+//                textinstrctions.setText(data.special_instruction);
+//        } else {
+//            layout_instrctions.setVisibility(View.VISIBLE);
+//
+//            TextView tvtitle = (TextView) rootView.findViewById(R.id.special_instruction_title);
+//            if (data.item_list.size() > 3) {
+//                tvtitle.setText("\n\n\n\n  ");
+//                textinstrctions.setText("\n" +
+//                        "\n" +
+//                        "\n" +
+//                        "\n" +
+//                        "    ");
+//            } else {
+//                tvtitle.setText("\n\n\n\n\n\n\n\n  ");
+//                textinstrctions.setText("\n" +
+//                        "\n" +
+//                        "\n" +
+//                        "\n" + "\n" +
+//                        "\n" +
+//                        "\n" +
+//                        "    ");
+//            }
+//
+//        }
+
         if (!StringUtils.isNullOrEmpty(data.special_instruction)) {
             layout_instrctions.setVisibility(View.VISIBLE);
             if (data.special_instruction.contains("||"))
                 data.special_instruction = data.special_instruction.replaceAll("\\|\\|", "\n");
 
-            if (data.item_list.size() < 3) {
-                textinstrctions.setText(data.special_instruction + "\n\n\n\n  ");
-            } else
-                textinstrctions.setText(data.special_instruction);
-        } else {
-            layout_instrctions.setVisibility(View.VISIBLE);
-
-            TextView tvtitle = (TextView) rootView.findViewById(R.id.special_instruction_title);
-            if (data.item_list.size() > 3) {
-                tvtitle.setText("\n\n\n\n  ");
-                textinstrctions.setText("\n" +
-                        "\n" +
-                        "\n" +
-                        "\n" +
-                        "    ");
-            } else {
-                tvtitle.setText("\n\n\n\n\n\n\n\n  ");
-                textinstrctions.setText("\n" +
-                        "\n" +
-                        "\n" +
-                        "\n" + "\n" +
-                        "\n" +
-                        "\n" +
-                        "    ");
-            }
-
-        }
+//            if (data.item_list.size() < 3) {
+//                textinstrctions.setText(data.special_instruction + "\n\n\n\n  ");
+//            } else
+            textinstrctions.setText(data.special_instruction);
+        } else
+            layout_instrctions.setVisibility(View.GONE);
     }
 
     private void showOrderItem(ArrayList<MyItemList> item_list) {
@@ -466,21 +482,34 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         textChange_Time.setVisibility(View.GONE);
         String currentStatus = response.data.status;
         if (currentStatus.equalsIgnoreCase("placed")) {
-            textAction.setText("Confirm");
+            textAction.setText("CONFIRM");
 //            textAction.setText("Archive");
             textAction.setBackgroundResource(R.drawable.green_button);
             textChange_Time.setVisibility(View.VISIBLE);
         } else if (currentStatus.equalsIgnoreCase("confirmed")) {
-            textAction.setBackgroundResource(R.drawable.grey_button);
+
             if (response.data.order_type.equalsIgnoreCase("takeout"))
 //                textAction.setText("Picked Up");
-                textAction.setText("Archive");
-            else
+            {
+                textAction.setText("READY");
+                textAction.setBackgroundResource(R.drawable.green_button);
+            } else
 //                textAction.setText("Sent");
-                textAction.setText("Archive");
+            {
+                textAction.setText("ARCHIVE");
+                textAction.setBackgroundResource(R.drawable.grey_button);
+            }
+        } else if (currentStatus.equalsIgnoreCase("Arrived")) {
+            textAction.setBackgroundResource(R.drawable.grey_button);
+            textAction.setText("ARCHIVE");
         } else {
-            textAction.setVisibility(View.GONE);
-            textCancel.setVisibility(View.GONE);
+            if (response.data.order_type.equalsIgnoreCase("takeout") && sent_status.equalsIgnoreCase("arrived") && currentStatus.equalsIgnoreCase("archived")) {
+                textAction.setBackgroundResource(R.drawable.grey_button);
+                textAction.setText("ARCHIVE");
+            } else {
+                textAction.setVisibility(View.GONE);
+                textCancel.setVisibility(View.GONE);
+            }
         }
     }
 
@@ -533,15 +562,17 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                 } else {
                     clickFrom = PRINT;
                     showProgressBar();
-                    String status2 = "";
+                    String status2 = "archived";
                     if (currentStatus.equalsIgnoreCase("placed"))
                         status2 = "confirmed";
                     else if (currentStatus.equalsIgnoreCase("confirmed")) {
-                        if (currentStatus.equalsIgnoreCase("takeout"))
+                        if (order_type.equalsIgnoreCase("takeout"))
                             status2 = "arrived";
                         else
                             status2 = "delivered";
-                    }
+                    } else if (currentStatus.equalsIgnoreCase("arrived"))
+                        status2 = "archived";
+                    sent_status = status2;
                     RequestController.orderProcess(response.data.id, status2, "", "", OrderDetailFragment.this);
                 }
 
@@ -549,15 +580,25 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
             case R.id.btn_action:
                 clickFrom = CONFIRM;
                 showProgressBar();
-                String status = "";
+                String status = "archived";
+//                if (currentStatus.equalsIgnoreCase("placed"))
+//                    status = "confirmed";
+//                else if (currentStatus.equalsIgnoreCase("confirmed")) {
+//                    if (currentStatus.equalsIgnoreCase("takeout"))
+//                        status = "arrived";
+//                    else
+//                        status = "delivered";
+//                }
                 if (currentStatus.equalsIgnoreCase("placed"))
                     status = "confirmed";
                 else if (currentStatus.equalsIgnoreCase("confirmed")) {
-                    if (currentStatus.equalsIgnoreCase("takeout"))
+                    if (order_type.equalsIgnoreCase("takeout"))
                         status = "arrived";
                     else
                         status = "delivered";
-                }
+                } else if (currentStatus.equalsIgnoreCase("arrived"))
+                    status = "archived";
+                sent_status = status;
                 RequestController.orderProcess(response.data.id, status, "", "", OrderDetailFragment.this);
                 break;
             case R.id.text_cancel:

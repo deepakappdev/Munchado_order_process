@@ -27,7 +27,7 @@
                 android:gravity="right|end"
                 android:text="Order ID: "
                 android:textColor="@color/grey_light"
-                android:textSize="@dimen/textSizeXLarge"
+                android:textSize="@dimen/textSizeXXLarge"
                 app:textStyle="AvenirNextCondensedMedium" />
 
             <com.munchado.orderprocess.ui.widgets.CustomTextView
@@ -36,14 +36,15 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:textColor="@color/default_text_color"
-                android:textSize="@dimen/textSizeLarge"
-                app:textStyle="AvenirNextMedium" />
+                android:textSize="@dimen/textSizeXXLarge"
+                app:textStyle="AvenirNextCondensedMedium" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:gravity="right"
             android:orientation="horizontal">
 
@@ -54,7 +55,7 @@
                 android:gravity="right|end"
                 android:text="Receipt No.: "
                 android:textColor="@color/grey_light"
-                android:textSize="@dimen/textSizeXLarge"
+                android:textSize="@dimen/textSizeXXLarge"
                 app:textStyle="AvenirNextCondensedMedium" />
 
             <com.munchado.orderprocess.ui.widgets.CustomTextView
@@ -63,14 +64,15 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:textColor="@color/default_text_color"
-                android:textSize="@dimen/textSizeLarge"
-                app:textStyle="AvenirNextMedium" />
+                android:textSize="@dimen/textSizeXXLarge"
+                app:textStyle="AvenirNextCondensedMedium" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:gravity="right"
             android:orientation="horizontal">
 
@@ -81,7 +83,7 @@
                 android:gravity="right|end"
                 android:text="Type: "
                 android:textColor="@color/grey_light"
-                android:textSize="@dimen/textSizeXLarge"
+                android:textSize="@dimen/textSizeXXLarge"
                 app:textStyle="AvenirNextCondensedMedium" />
 
             <com.munchado.orderprocess.ui.widgets.CustomTextView
@@ -90,14 +92,15 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:textColor="@color/default_text_color"
-                android:textSize="@dimen/textSizeLarge"
-                app:textStyle="AvenirNextMedium" />
+                android:textSize="@dimen/textSizeXXLarge"
+                app:textStyle="AvenirNextCondensedMedium" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:gravity="right"
             android:orientation="horizontal">
 
@@ -108,7 +111,7 @@
                 android:gravity="right|end"
                 android:text="Time of Order: "
                 android:textColor="@color/grey_light"
-                android:textSize="@dimen/textSizeXLarge"
+                android:textSize="@dimen/textSizeXXLarge"
                 app:textStyle="AvenirNextCondensedMedium" />
 
             <com.munchado.orderprocess.ui.widgets.CustomTextView
@@ -117,14 +120,15 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:textColor="@color/default_text_color"
-                android:textSize="@dimen/textSizeLarge"
-                app:textStyle="AvenirNextMedium" />
+                android:textSize="@dimen/textSizeXXLarge"
+                app:textStyle="AvenirNextCondensedMedium" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:gravity="right"
             android:orientation="horizontal">
 
@@ -136,7 +140,7 @@
                 android:gravity="right|end"
                 android:text="Time of Delivery: "
                 android:textColor="@color/grey_light"
-                android:textSize="@dimen/textSizeXLarge"
+                android:textSize="@dimen/textSizeXXLarge"
                 app:textStyle="AvenirNextCondensedMedium" />
 
             <com.munchado.orderprocess.ui.widgets.CustomTextView
@@ -145,14 +149,15 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:textColor="@color/default_text_color"
-                android:textSize="@dimen/textSizeLarge"
-                app:textStyle="AvenirNextMedium" />
+                android:textSize="@dimen/textSizeXXLarge"
+                app:textStyle="AvenirNextCondensedMedium" />
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:gravity="right"
             android:orientation="horizontal">
 
@@ -164,7 +169,7 @@
                 android:gravity="right|end"
                 android:text="Deliver to: "
                 android:textColor="@color/grey_light"
-                android:textSize="@dimen/textSizeXLarge"
+                android:textSize="@dimen/textSizeXXLarge"
                 app:textStyle="AvenirNextCondensedMedium" />
 
             <com.munchado.orderprocess.ui.widgets.CustomTextView
@@ -173,8 +178,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:textColor="@color/default_text_color"
-                android:textSize="@dimen/textSizeLarge"
-                app:textStyle="AvenirNextMedium" />
+                android:textSize="@dimen/textSizeXXLarge"
+                app:textStyle="AvenirNextCondensedMedium" />
 
         </LinearLayout>
 
@@ -200,8 +205,8 @@
             android:layout_margin="@dimen/margin_normal"
             android:text="@string/order"
             android:textColor="@color/default_text_color"
-            android:textSize="@dimen/textSizeLarge"
-            app:textStyle="AvenirNextMedium" />
+            android:textSize="@dimen/textSizeXXLarge"
+            app:textStyle="AvenirNextCondensedMedium" />
 
         <View
             android:layout_width="0dp"

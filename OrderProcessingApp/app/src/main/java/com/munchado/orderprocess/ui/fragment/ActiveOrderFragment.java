@@ -42,6 +42,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
     private View rootView;
     private ActiveOrderAdapter adapter;
     private LinearLayoutManager mLinearLayoutManager;
+    private String sent_status = "";
 
     @Nullable
     @Override
@@ -93,52 +94,58 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
             }, 30000);
         } else if (obj instanceof OrderProcessResponse) {
             if (((OrderProcessResponse) obj).data.message) {
-                if(((OrderProcessResponse) obj).data.status.equalsIgnoreCase("confirmed"))
-                    moveToConfirmed(((OrderProcessResponse) obj).data.order_id);
+                if (((OrderProcessResponse) obj).data.status.equalsIgnoreCase("confirmed"))
+                    moveToConfirmed(((OrderProcessResponse) obj).data.order_id, "confirmed");
+                else if (sent_status.equalsIgnoreCase("arrived") && ((OrderProcessResponse) obj).data.status.equalsIgnoreCase("archived"))
+
+                    moveToConfirmed(((OrderProcessResponse) obj).data.order_id, "arrived");
                 else
                     moveToArchive(((OrderProcessResponse) obj).data.order_id);
 
-                if(((OrderProcessResponse) obj).data.status.equalsIgnoreCase("delivered"))
-                showToast("Order Successfully Sent.");
-                else if(((OrderProcessResponse) obj).data.status.equalsIgnoreCase("arrived"))
-                    showToast("Order Successfully Pickedup.");
+                if (((OrderProcessResponse) obj).data.status.equalsIgnoreCase("delivered"))
+                    showToast("Order Successfully Sent.");
+                else if (sent_status.equalsIgnoreCase("arrived") && ((OrderProcessResponse) obj).data.status.equalsIgnoreCase("archived"))//"arrived"
+                    showToast("Order is ready for Pickedup.");
+//                else if (((OrderProcessResponse) obj).data.status.equalsIgnoreCase("archived"))//"arrived"
+//                    showToast("Order Successfully Pickedup.");
                 else
-                showToast("Order Successfully " + ((OrderProcessResponse) obj).data.status);
+                    showToast("Order Successfully " + ((OrderProcessResponse) obj).data.status);
             }
         }
     }
 
     private void cleanRemainingItem(ActiveOrderResponseData data) {
         List<OrderItem> allItems = adapter.getAllItems();
-        for(int index = 0;index<allItems.size();index++) {
+        for (int index = 0; index < allItems.size(); index++) {
             OrderItem orderItem = allItems.get(index);
             boolean found = false;
-            for(OrderItem updatedItem:data.live_order) {
-                if(updatedItem.id.equalsIgnoreCase(orderItem.id)) {
+            for (OrderItem updatedItem : data.live_order) {
+                if (updatedItem.id.equalsIgnoreCase(orderItem.id)) {
                     found = true;
                     break;
                 }
             }
-            if(!found)
+            if (!found)
                 moveToArchive(orderItem.id);
         }
-        textActiveOrderCount.setText(adapter.getItemCount() + " Active Orders");
+        textActiveOrderCount.setText(adapter.getItemCount() + " ACTIVE ORDERS");
     }
 
     private void moveToArchive(String orderId) {
         adapter.removeOrder(orderId);
-        textActiveOrderCount.setText(adapter.getItemCount() + " Active Orders");
+        textActiveOrderCount.setText(adapter.getItemCount() + "  ACTIVE ORDERS");
 
     }
-    private void moveToConfirmed(String orderId) {
-        adapter.confirmOrder(orderId);
+
+    private void moveToConfirmed(String orderId, String status) {
+        adapter.confirmOrder(orderId, status);
     }
 
 
     private void updateActiveList(ActiveOrderResponseData data) {
 //        if (adapter == null || recyclerView.getAdapter() != adapter) {
-            adapter = new ActiveOrderAdapter(getActivity(), onOrderClickListener);
-            recyclerView.setAdapter(adapter);
+        adapter = new ActiveOrderAdapter(getActivity(), onOrderClickListener);
+        recyclerView.setAdapter(adapter);
 
         adapter.updateResult(data.live_order);
         mLinearLayoutManager.scrollToPositionWithOffset(0, 0);
@@ -154,7 +161,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
 
         @Override
         public void onClickOrderAction(OrderItem orderItem) {
-            String status = "";
+            String status = "archived";
             if (orderItem.status.equalsIgnoreCase("placed"))
                 status = "confirmed";
             else if (orderItem.status.equalsIgnoreCase("confirmed")) {
@@ -162,8 +169,10 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
                     status = "arrived";
                 else
                     status = "delivered";
-            }
-            RequestController.orderProcess(orderItem.id, status, "","", ActiveOrderFragment.this);
+            } else if (sent_status.equalsIgnoreCase("arrived") && orderItem.order_type.equalsIgnoreCase("archived"))
+                status = "archived";
+            sent_status = status;
+            RequestController.orderProcess(orderItem.id, status, "", "", ActiveOrderFragment.this);
             orderItem.inProgress = true;
             adapter.updateResult(orderItem);
         }

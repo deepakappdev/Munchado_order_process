@@ -17,8 +17,8 @@
         android:paddingTop="5dp"
         android:text="  Wifi Settings"
         android:textColor="@color/white"
-        android:textSize="15sp"
-        app:textStyle="AvenirNextDemiBold" />
+        android:textSize="@dimen/textSizeXXLarge"
+        app:textStyle="AvenirNextCondensedMedium" />
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/email_layout"
@@ -55,8 +55,8 @@
         android:padding="5dp"
         android:text="  Bluetooth Settings"
         android:textColor="@color/white"
-        android:textSize="15sp"
-        app:textStyle="AvenirNextDemiBold" />
+        android:textSize="@dimen/textSizeXXLarge"
+        app:textStyle="AvenirNextCondensedMedium" />
 
     <com.munchado.orderprocess.ui.widgets.CustomTextView
         android:id="@+id/bluetooth_model"
@@ -67,20 +67,21 @@
         android:text="No Model selected"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/dark_grey"
-        app:textStyle="AvenirNextMedium" />
+        android:textSize="@dimen/textSizeXXLarge"
+        app:textStyle="AvenirNextCondensedMedium" />
 
     <com.munchado.orderprocess.ui.widgets.CustomButton
+        android:id="@+id/select_printer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="50dp"
         android:layout_marginLeft="@dimen/fifteendp"
         android:layout_marginRight="@dimen/fifteendp"
         android:background="@drawable/green_button"
-        android:onClick="showDialog"
         android:text="Select Printer Model"
+        android:textSize="15sp"
         android:textColor="@color/white"
-        android:textSize="18sp"
-        app:textStyle="AvenirNextMedium" />
+        app:textStyle="AvenirNextDemiBold" />
 
     <com.munchado.orderprocess.ui.widgets.CustomButton
         android:id="@+id/submit_btn"
@@ -88,9 +89,8 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fifteendp"
         android:background="@drawable/green_button"
-        android:onClick="saveIP"
         android:text="Save"
+        android:textSize="15sp"
         android:textColor="@color/white"
-        android:textSize="18sp"
-        app:textStyle="AvenirNextMedium" />
+        app:textStyle="AvenirNextDemiBold" />
 </LinearLayout>

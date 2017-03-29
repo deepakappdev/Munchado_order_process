@@ -18,8 +18,8 @@
         android:paddingTop="5dp"
         android:text="Print"
         android:textColor="@color/white"
-        android:textSize="15sp"
-        app:textStyle="AvenirNextDemiBold" />
+        android:textSize="@dimen/textSizeXXLarge"
+        app:textStyle="AvenirNextCondensedMedium"  />
 
     <CheckBox
         android:id="@+id/checkBox"
@@ -46,8 +46,8 @@
         android:paddingTop="5dp"
         android:text="Screen"
         android:textColor="@color/white"
-        android:textSize="15sp"
-        app:textStyle="AvenirNextDemiBold" />
+        android:textSize="@dimen/textSizeXXLarge"
+        app:textStyle="AvenirNextCondensedMedium"  />
 
     <RadioGroup
         android:id="@+id/radioGroup_setting"
@@ -63,6 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:button="@drawable/radio_button_selector"
+            android:checked="true"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:text="Always keep screen On"
@@ -75,7 +76,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:button="@drawable/radio_button_selector"
-            android:checked="true"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:text="Sleep after sometime"
@@ -90,8 +90,8 @@
         android:layout_margin="@dimen/fifteendp"
         android:background="@drawable/green_button"
         android:text="Save"
+        android:textSize="15sp"
         android:textColor="@color/white"
-        android:textSize="18sp"
-        app:textStyle="AvenirNextMedium" />
+        app:textStyle="AvenirNextDemiBold" />
 
 </LinearLayout>

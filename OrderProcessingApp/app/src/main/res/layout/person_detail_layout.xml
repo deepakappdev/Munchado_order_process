@@ -32,9 +32,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:gravity="right|end"
-                android:text="Name: "
+                android:text="Name:  "
                 android:textColor="@color/grey_light"
-                android:textSize="@dimen/textSizeXLarge"
+                android:textSize="@dimen/textSizeXXLarge"
                 app:textStyle="AvenirNextCondensedMedium" />
 
             <com.munchado.orderprocess.ui.widgets.CustomTextView
@@ -43,8 +43,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:textColor="@color/white"
-                android:textSize="@dimen/textSizeXLarge"
-                app:textStyle="AvenirNextMedium" />
+                android:textSize="@dimen/textSizeXXLarge"
+                app:textStyle="AvenirNextCondensedMedium" />
         </LinearLayout>
 
         <LinearLayout
@@ -57,9 +57,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:gravity="right|end"
-                android:text="Email: "
+                android:text="Email:  "
                 android:textColor="@color/grey_light"
-                android:textSize="@dimen/textSizeXLarge"
+                android:textSize="@dimen/textSizeXXLarge"
                 app:textStyle="AvenirNextCondensedMedium" />
 
             <com.munchado.orderprocess.ui.widgets.CustomTextView
@@ -68,8 +68,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:textColor="@color/white"
-                android:textSize="@dimen/textSizeXLarge"
-                app:textStyle="AvenirNextMedium" />
+                android:textSize="@dimen/textSizeXXLarge"
+                app:textStyle="AvenirNextCondensedMedium" />
         </LinearLayout>
 
         <LinearLayout
@@ -82,9 +82,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:gravity="right|end"
-                android:text="Tel: "
+                android:text="Tel:  "
                 android:textColor="@color/grey_light"
-                android:textSize="@dimen/textSizeXLarge"
+                android:textSize="@dimen/textSizeXXLarge"
                 app:textStyle="AvenirNextCondensedMedium" />
 
             <com.munchado.orderprocess.ui.widgets.CustomTextView
@@ -93,8 +93,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:textColor="@color/white"
-                android:textSize="@dimen/textSizeXLarge"
-                app:textStyle="AvenirNextMedium" />
+                android:textSize="@dimen/textSizeXXLarge"
+                app:textStyle="AvenirNextCondensedMedium" />
         </LinearLayout>
 
         <LinearLayout
@@ -107,9 +107,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="2"
                 android:gravity="right|end"
-                android:text="Past Activity: "
+                android:text="Past Activity:  "
                 android:textColor="@color/grey_light"
-                android:textSize="@dimen/textSizeXLarge"
+                android:textSize="@dimen/textSizeXXLarge"
                 app:textStyle="AvenirNextCondensedMedium" />
 
             <com.munchado.orderprocess.ui.widgets.CustomTextView
@@ -118,8 +118,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:textColor="@color/white"
-                android:textSize="@dimen/textSizeXLarge"
-                app:textStyle="AvenirNextMedium" />
+                android:textSize="@dimen/textSizeXXLarge"
+                app:textStyle="AvenirNextCondensedMedium" />
         </LinearLayout>
 
 

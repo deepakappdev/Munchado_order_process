@@ -3,9 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:paddingTop="@dimen/fifteendp">
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/margin_large">
@@ -13,9 +14,8 @@
 
         <com.munchado.orderprocess.ui.widgets.CustomTextView
             android:id="@+id/tv_archive_order_count"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="ARCHIVE ORDERS"
             android:textColor="@color/default_text_color"
             android:textSize="@dimen/textSizeXXLarge"
@@ -25,11 +25,12 @@
             android:id="@+id/text_archive_order"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
             android:text="View Active Order"
-            android:textColor="@color/dark_grey"
-            android:textSize="@dimen/textSizeXLarge"
+            android:textColor="@color/text_light_black"
+            android:textSize="@dimen/textSizeXXLarge"
             app:textStyle="AvenirNextCondensedMedium" />
-    </LinearLayout>
+    </RelativeLayout>
 
 
     <android.support.v7.widget.RecyclerView

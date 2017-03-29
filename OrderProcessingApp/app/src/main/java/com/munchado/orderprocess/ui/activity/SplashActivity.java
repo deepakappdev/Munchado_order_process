@@ -3,7 +3,6 @@ package com.munchado.orderprocess.ui.activity;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -63,9 +62,9 @@ public class SplashActivity extends AppCompatActivity {
 
                         if (upgradeData.data.upgrade_type.equalsIgnoreCase("hard") || (upgradeData.data.upgrade_type.equalsIgnoreCase("soft") && PrefUtil.getUpgradeDisplayCount() == 3)) {
 
-                            Intent i = new Intent(Intent.ACTION_VIEW);
-                            i.setData(Uri.parse(upgradeData.data.apk_link));
-                            startActivity(i);
+//                            Intent i = new Intent(Intent.ACTION_VIEW);
+//                            i.setData(Uri.parse(upgradeData.data.apk_link));
+//                            startActivity(i);
                         }
 
                     } else {
@@ -106,7 +105,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private void doWorkAfterUpdate() {
         if (PrefUtil.getUpgradeCleanData()) {
-            PrefUtil.clearAllData();
+//            PrefUtil.clearAllData();
         }
         PrefUtil.setUpgradeDisplayCount(0);
         PrefUtil.setUpgradeType("");

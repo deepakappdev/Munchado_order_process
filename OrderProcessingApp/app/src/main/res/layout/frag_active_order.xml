@@ -8,6 +8,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/fifteendp"
         android:orientation="vertical">
 
         <LinearLayout
@@ -29,9 +30,9 @@
                 android:id="@+id/text_archive_order"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Orders Archive"
-                android:textColor="@color/dark_grey"
-                android:textSize="@dimen/textSizeXLarge"
+                android:text="Archived orders"
+                android:textColor="@color/text_light_black"
+                android:textSize="@dimen/textSizeXXLarge"
                 app:textStyle="AvenirNextCondensedMedium" />
         </LinearLayout>
 
