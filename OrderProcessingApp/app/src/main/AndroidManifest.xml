@@ -20,7 +20,8 @@
         <activity
             android:name=".ui.activity.LoginActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="stateHidden|adjustPan"></activity>
         <activity
             android:name=".ui.activity.HomeActivity"
             android:screenOrientation="portrait"
@@ -28,14 +29,17 @@
         <activity
             android:name=".ui.activity.settings.PrinterSettingActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.activity.settings.ProfileSettingActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".ui.activity.settings.OrderProcessingSettingActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.activity.DiscoveryActivity"
             android:screenOrientation="portrait" />

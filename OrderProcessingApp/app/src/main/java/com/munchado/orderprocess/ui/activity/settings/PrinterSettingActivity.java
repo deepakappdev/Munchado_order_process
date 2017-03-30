@@ -1,9 +1,12 @@
 package com.munchado.orderprocess.ui.activity.settings;
 
 import android.content.DialogInterface;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -17,10 +20,14 @@ import com.munchado.orderprocess.utils.IPAddressValidator;
 import com.munchado.orderprocess.utils.PrefUtil;
 import com.munchado.orderprocess.utils.StringUtils;
 
+import java.lang.reflect.Field;
+
 public class PrinterSettingActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText txt_ip;
+    private TextInputLayout txtInput;
     private TextView tv_Bluetooth_Model;
+    private Toolbar mToolbar;
     private CustomButton btn_select_printer, btn_submit;
     String modelName = "";
     int modelCode = -1;
@@ -30,11 +37,15 @@ public class PrinterSettingActivity extends AppCompatActivity implements View.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_printer_setting);
         txt_ip = (EditText) findViewById(R.id.ip);
+        txtInput = (TextInputLayout) findViewById(R.id.email_layout);
         btn_select_printer = (CustomButton) findViewById(R.id.select_printer);
         btn_submit = (CustomButton) findViewById(R.id.submit_btn);
         tv_Bluetooth_Model = (TextView) findViewById(R.id.bluetooth_model);
         setupActionbar();
 
+        Typeface type = Typeface.createFromAsset(getAssets(), "HelveticaNeueLight.ttf");
+        txtInput.getEditText().setTypeface(type);
+        txtInput.setTypeface(type);
         if (!StringUtils.isNullOrEmpty(PrefUtil.getIPAddress()))
             txt_ip.setText(PrefUtil.getIPAddress());
 
@@ -49,9 +60,28 @@ public class PrinterSettingActivity extends AppCompatActivity implements View.On
     }
 
     private void setupActionbar() {
-        getSupportActionBar().setTitle("Printer Setting");
+        mToolbar = (Toolbar) findViewById(R.id.toolbar_1);
+        setSupportActionBar(mToolbar);
+
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setTypeFace();
+        getSupportActionBar().setTitle("Printer Setting");
+    }
+
+    private void setTypeFace() {
+        TextView titleTextView = null;
+
+        try {
+            Field f = mToolbar.getClass().getDeclaredField("mTitleTextView");
+            f.setAccessible(true);
+            titleTextView = (TextView) f.get(mToolbar);
+            Typeface face = Typeface.createFromAsset(getAssets(),
+                    "HelveticaNeue-Medium.ttf");
+            titleTextView.setTypeface(face, Typeface.BOLD);
+        } catch (NoSuchFieldException e) {
+        } catch (IllegalAccessException e) {
+        }
     }
 
     @Override

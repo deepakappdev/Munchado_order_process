@@ -90,7 +90,7 @@
                             android:text="Speical Instructions :"
                             android:textColor="@color/default_text_color"
                             android:textSize="@dimen/textSizeXXLarge"
-                            app:textStyle="AvenirNextCondensedMedium" />
+                            app:textStyle="HelveticaLight" />
 
                         <com.munchado.orderprocess.ui.widgets.CustomTextView
                             android:id="@+id/speical_instruction"
@@ -100,7 +100,7 @@
                             android:layout_marginRight="@dimen/margin_normal"
                             android:textColor="@color/grey_light"
                             android:textStyle="italic"
-                            app:textStyle="AvenirNextCondensedMedium" />
+                            app:textStyle="HelveticaLight" />
                     </LinearLayout>
 
 
@@ -136,8 +136,8 @@
 
         <ImageView
             android:id="@+id/iv_close"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
             android:src="@mipmap/ic_cross" />
     </LinearLayout>
 

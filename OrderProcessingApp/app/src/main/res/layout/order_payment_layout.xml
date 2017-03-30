@@ -28,7 +28,7 @@
         <com.munchado.orderprocess.ui.widgets.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="7dp"
             android:text="Deal Discount:    "
             android:textColor="@color/grey_light"
             android:textSize="@dimen/textSizeXLarge"
@@ -38,7 +38,7 @@
             android:id="@+id/text_delivery_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="7dp"
             android:text="Delivery:    "
             android:textColor="@color/grey_light"
             android:textSize="@dimen/textSizeXLarge"
@@ -47,7 +47,7 @@
         <com.munchado.orderprocess.ui.widgets.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="7dp"
             android:text="Tax:    "
             android:textColor="@color/grey_light"
             android:textSize="@dimen/textSizeXLarge"
@@ -57,7 +57,7 @@
             android:id="@+id/text_tip_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="7dp"
             android:text="Tip:    "
             android:textColor="@color/grey_light"
             android:textSize="@dimen/textSizeXLarge"
@@ -66,7 +66,7 @@
         <com.munchado.orderprocess.ui.widgets.CustomTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="7dp"
             android:text="Total:    "
             android:textColor="@color/grey_light"
             android:textSize="@dimen/textSizeXLarge"
@@ -95,7 +95,7 @@
             android:id="@+id/text_deal_discount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="7dp"
             android:textColor="@color/default_text_color"
             android:textSize="@dimen/textSizeXLarge"
             app:textStyle="HelveticaLight" />
@@ -104,7 +104,7 @@
             android:id="@+id/text_delivery"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="7dp"
             android:textColor="@color/default_text_color"
             android:textSize="@dimen/textSizeXLarge"
             app:textStyle="HelveticaLight" />
@@ -113,7 +113,7 @@
             android:id="@+id/text_tax"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="7dp"
             android:textColor="@color/default_text_color"
             android:textSize="@dimen/textSizeXLarge"
             app:textStyle="HelveticaLight" />
@@ -122,7 +122,7 @@
             android:id="@+id/text_tip"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="7dp"
             android:textColor="@color/default_text_color"
             android:textSize="@dimen/textSizeXLarge"
             app:textStyle="HelveticaLight" />
@@ -131,7 +131,7 @@
             android:id="@+id/text_total"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
+            android:layout_marginTop="7dp"
             android:textColor="@color/default_text_color"
             android:textSize="@dimen/textSizeXLarge"
             app:textStyle="HelveticaLight" />

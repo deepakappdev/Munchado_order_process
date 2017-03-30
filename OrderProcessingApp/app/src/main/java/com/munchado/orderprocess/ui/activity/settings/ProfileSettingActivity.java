@@ -4,6 +4,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
@@ -19,9 +20,11 @@ import com.munchado.orderprocess.utils.LogUtils;
 import com.munchado.orderprocess.utils.StringUtils;
 import com.munchado.orderprocess.utils.Utils;
 
+import java.lang.reflect.Field;
+
 public class ProfileSettingActivity extends AppCompatActivity implements RequestCallback {
 
-    TextInputLayout txt_resname_layout,  txt_phone_layout, txt_email_layout,txt_city_layout,  txt_state_layout, txt_zip_layout;
+    TextInputLayout txt_resname_layout, txt_phone_layout, txt_email_layout, txt_city_layout, txt_state_layout, txt_zip_layout;
     com.munchado.orderprocess.ui.widgets.CustomTextInputLayout txt_address_layout;
     TextView txt_resname, txt_address, txt_phone, txt_email, txt_zip, txt_state, txt_city;
 
@@ -29,10 +32,7 @@ public class ProfileSettingActivity extends AppCompatActivity implements Request
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_setting);
-
-        getSupportActionBar().setTitle("Profile Setting");
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        setupToolbar();
 
         txt_resname_layout = (TextInputLayout) findViewById(R.id.txt_resname_layout);
         txt_address_layout = (com.munchado.orderprocess.ui.widgets.CustomTextInputLayout) findViewById(R.id.txt_address_layout);
@@ -51,7 +51,7 @@ public class ProfileSettingActivity extends AppCompatActivity implements Request
         txt_zip = (TextView) findViewById(R.id.txt_zip);
 
 
-        final Typeface tf = Typeface.createFromAsset(getAssets(), "Avenir-Next-Medium.ttf");
+        final Typeface tf = Typeface.createFromAsset(getAssets(), "HelveticaNeueLight.ttf");
         txt_resname_layout.getEditText().setTypeface(tf);
         txt_resname_layout.setTypeface(tf);
         txt_address_layout.getEditText().setTypeface(tf);
@@ -70,6 +70,28 @@ public class ProfileSettingActivity extends AppCompatActivity implements Request
 
         DialogUtil.showProgressDialog(this);
         RequestController.getRestaurantProfileDetail(this);
+    }
+
+    private void setupToolbar() {
+
+        Toolbar mToolbar = (Toolbar) findViewById(R.id.toolbar_1);
+        setSupportActionBar(mToolbar);
+
+        getSupportActionBar().setHomeButtonEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        TextView titleTextView = null;
+
+        try {
+            Field f = mToolbar.getClass().getDeclaredField("mTitleTextView");
+            f.setAccessible(true);
+            titleTextView = (TextView) f.get(mToolbar);
+            Typeface face = Typeface.createFromAsset(getAssets(),
+                    "HelveticaNeue-Medium.ttf");
+            titleTextView.setTypeface(face, Typeface.BOLD);
+        } catch (NoSuchFieldException e) {
+        } catch (IllegalAccessException e) {
+        }
+        getSupportActionBar().setTitle("Profile Setting");
     }
 
     @Override
@@ -137,7 +159,7 @@ public class ProfileSettingActivity extends AppCompatActivity implements Request
         RestaurantProfileResponse response = (RestaurantProfileResponse) obj;
         if (response.result) {
             txt_resname.setText(response.data.restaurant_name);
-            LogUtils.d("===== address : "+response.data.address);
+            LogUtils.d("===== address : " + response.data.address);
             txt_address.setText(Utils.decodeHtml(response.data.address));
             txt_phone.setText(response.data.phone);
             txt_email.setText(response.data.email);

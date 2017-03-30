@@ -5,5 +5,5 @@
     android:layout_height="wrap_content"
     android:padding="5dp"
     android:textColor="@color/default_text_color"
-    android:textSize="18sp"
-    app:textStyle="RobotoRegular" />
+    android:textSize="20sp"
+    app:textStyle="HelveticaLight" />

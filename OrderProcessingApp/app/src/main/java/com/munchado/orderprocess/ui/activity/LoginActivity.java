@@ -49,11 +49,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mEmail = (EditText) findViewById(R.id.email);
         mPassword = (EditText) findViewById(R.id.password);
 
-        Typeface type = Typeface.createFromAsset(getAssets(),"Avenir-Next-Medium.ttf");
-        mEmail.setTypeface(type);
-        mPassword.setTypeface(type);
+        Typeface type = Typeface.createFromAsset(getAssets(),"HelveticaNeueLight.ttf");
+        mEmailLayout.getEditText().setTypeface(type);
         mEmailLayout.setTypeface(type);
+        mPasswordLayout.getEditText().setTypeface(type);
         mPasswordLayout.setTypeface(type);
+
+
         findViewById(R.id.submit_btn).setOnClickListener(this);
     }
 

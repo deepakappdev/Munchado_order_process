@@ -135,7 +135,7 @@ public class HomeActivity extends BaseActivity
         }
     }
 
-    private TextView setTypeFace() {
+    private void setTypeFace() {
         TextView titleTextView = null;
 
         try {
@@ -148,7 +148,6 @@ public class HomeActivity extends BaseActivity
         } catch (NoSuchFieldException e) {
         } catch (IllegalAccessException e) {
         }
-        return titleTextView;
     }
 
     @Override
