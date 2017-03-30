@@ -6,6 +6,7 @@ import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.design.widget.NavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -23,6 +24,7 @@ import com.munchado.orderprocess.notification.PubnubService;
 import com.munchado.orderprocess.utils.Constants;
 import com.munchado.orderprocess.utils.PrefUtil;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 
 public class HomeActivity extends BaseActivity
@@ -48,6 +50,7 @@ public class HomeActivity extends BaseActivity
         toggle.syncState();
 
         toolbar.setTitle("Active Orders");
+        setTypeFace();
         addFragment(FRAGMENTS.ACTIVE, null);
         final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 
@@ -57,21 +60,22 @@ public class HomeActivity extends BaseActivity
             @Override
             public void onGlobalLayout() {
                 navigationView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                    String id = "nav_order";
-                    MenuItem item = navMenu.findItem(getResources().getIdentifier(id, "id", getPackageName()));
-                    navigationView.findViewsWithText(mMenuItems, item.getTitle(), View.FIND_VIEWS_WITH_TEXT);
-                    id = "nav_manage";
-                    MenuItem item1 = navMenu.findItem(getResources().getIdentifier(id, "id", getPackageName()));
-                    navigationView.findViewsWithText(mMenuItems, item1.getTitle(), View.FIND_VIEWS_WITH_TEXT);
-                    id = "nav_logout";
-                    MenuItem item2 = navMenu.findItem(getResources().getIdentifier(id, "id", getPackageName()));
-                    navigationView.findViewsWithText(mMenuItems, item2.getTitle(), View.FIND_VIEWS_WITH_TEXT);
+                String id = "nav_order";
+                MenuItem item = navMenu.findItem(getResources().getIdentifier(id, "id", getPackageName()));
+                navigationView.findViewsWithText(mMenuItems, item.getTitle(), View.FIND_VIEWS_WITH_TEXT);
+                id = "nav_manage";
+                MenuItem item1 = navMenu.findItem(getResources().getIdentifier(id, "id", getPackageName()));
+                navigationView.findViewsWithText(mMenuItems, item1.getTitle(), View.FIND_VIEWS_WITH_TEXT);
+                id = "nav_logout";
+                MenuItem item2 = navMenu.findItem(getResources().getIdentifier(id, "id", getPackageName()));
+                navigationView.findViewsWithText(mMenuItems, item2.getTitle(), View.FIND_VIEWS_WITH_TEXT);
 
                 Typeface face = Typeface.createFromAsset(getAssets(),
-                        "Avenir-Next-Demi-Bold.ttf");
+                        "HelveticaNeue-Medium.ttf");
                 for (final View menuItem : mMenuItems) {
-                    ((TextView) menuItem).setTextSize(20.0f);
+                    ((TextView) menuItem).setTextSize(18.0f);
                     ((TextView) menuItem).setTypeface(face, Typeface.NORMAL);
+                    ((TextView) menuItem).setTextColor(ContextCompat.getColor(HomeActivity.this, R.color.dark_grey));
                 }
             }
         });
@@ -125,10 +129,27 @@ public class HomeActivity extends BaseActivity
     }
 
     public void setCustomTitle(String title) {
-        if (toolbar != null)
+        if (toolbar != null) {
             toolbar.setTitle(title);
+            setTypeFace();
+        }
     }
 
+    private TextView setTypeFace() {
+        TextView titleTextView = null;
+
+        try {
+            Field f = toolbar.getClass().getDeclaredField("mTitleTextView");
+            f.setAccessible(true);
+            titleTextView = (TextView) f.get(toolbar);
+            Typeface face = Typeface.createFromAsset(getAssets(),
+                    "HelveticaNeue-Medium.ttf");
+            titleTextView.setTypeface(face, Typeface.BOLD);
+        } catch (NoSuchFieldException e) {
+        } catch (IllegalAccessException e) {
+        }
+        return titleTextView;
+    }
 
     @Override
     public void onResume() {

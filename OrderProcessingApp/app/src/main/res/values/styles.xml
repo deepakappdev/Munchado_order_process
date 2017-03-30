@@ -104,6 +104,11 @@
         <enum name="AvenirNextCondensedItalic" value="15" />
         <enum name="AvenirNextRegular" value="16" />
         <enum name="AvenirNextUltraLight" value="17" />
+        <enum name="HelveticaBold" value="18" />
+        <enum name="HelveticaRegular" value="19" />
+        <enum name="HelveticaMedium" value="20" />
+        <enum name="HelveticaLight" value="21" />
+        <enum name="HelveticaLightItalic" value="22" />
 
     </attr>
     <declare-styleable name="CustomTextView">

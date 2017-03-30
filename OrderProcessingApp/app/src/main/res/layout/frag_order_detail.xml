@@ -138,7 +138,7 @@
             android:id="@+id/iv_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/cross_icon_black" />
+            android:src="@mipmap/ic_cross" />
     </LinearLayout>
 
 </RelativeLayout>

@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
 
+    android:id="@+id/layout_customer_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dark_grey"
@@ -34,8 +35,8 @@
                 android:gravity="right|end"
                 android:text="Name:  "
                 android:textColor="@color/grey_light"
-                android:textSize="@dimen/textSizeXXLarge"
-                app:textStyle="AvenirNextCondensedMedium" />
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="HelveticaLight" />
 
             <com.munchado.orderprocess.ui.widgets.CustomTextView
                 android:id="@+id/text_name"
@@ -43,8 +44,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:textColor="@color/white"
-                android:textSize="@dimen/textSizeXXLarge"
-                app:textStyle="AvenirNextCondensedMedium" />
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="HelveticaLight" />
         </LinearLayout>
 
         <LinearLayout
@@ -59,8 +60,8 @@
                 android:gravity="right|end"
                 android:text="Email:  "
                 android:textColor="@color/grey_light"
-                android:textSize="@dimen/textSizeXXLarge"
-                app:textStyle="AvenirNextCondensedMedium" />
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="HelveticaLight" />
 
             <com.munchado.orderprocess.ui.widgets.CustomTextView
                 android:id="@+id/text_email"
@@ -68,8 +69,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:textColor="@color/white"
-                android:textSize="@dimen/textSizeXXLarge"
-                app:textStyle="AvenirNextCondensedMedium" />
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="HelveticaLight" />
         </LinearLayout>
 
         <LinearLayout
@@ -84,8 +85,8 @@
                 android:gravity="right|end"
                 android:text="Tel:  "
                 android:textColor="@color/grey_light"
-                android:textSize="@dimen/textSizeXXLarge"
-                app:textStyle="AvenirNextCondensedMedium" />
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="HelveticaLight" />
 
             <com.munchado.orderprocess.ui.widgets.CustomTextView
                 android:id="@+id/text_telephone"
@@ -93,8 +94,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:textColor="@color/white"
-                android:textSize="@dimen/textSizeXXLarge"
-                app:textStyle="AvenirNextCondensedMedium" />
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="HelveticaLight" />
         </LinearLayout>
 
         <LinearLayout
@@ -109,8 +110,8 @@
                 android:gravity="right|end"
                 android:text="Past Activity:  "
                 android:textColor="@color/grey_light"
-                android:textSize="@dimen/textSizeXXLarge"
-                app:textStyle="AvenirNextCondensedMedium" />
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="HelveticaLight" />
 
             <com.munchado.orderprocess.ui.widgets.CustomTextView
                 android:id="@+id/text_past_activity"
@@ -118,8 +119,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:textColor="@color/white"
-                android:textSize="@dimen/textSizeXXLarge"
-                app:textStyle="AvenirNextCondensedMedium" />
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="HelveticaLight" />
         </LinearLayout>
 
 

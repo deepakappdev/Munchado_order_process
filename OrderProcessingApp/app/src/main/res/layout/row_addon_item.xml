@@ -18,17 +18,17 @@
             android:layout_weight="1"
             android:paddingLeft="@dimen/margin_normal"
             android:textColor="@color/default_text_color"
-            android:textSize="@dimen/textSizeXXLarge"
-            app:textStyle="AvenirNextCondensedMedium" />
+            android:textSize="@dimen/textSizeXLarge"
+            app:textStyle="HelveticaLight" />
 
         <com.munchado.orderprocess.ui.widgets.CustomTextView
             android:id="@+id/text_item_count"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/default_text_color"
-            android:textSize="@dimen/textSizeXXLarge"
+            android:textSize="@dimen/textSizeXLarge"
             android:textStyle="italic"
-            app:textStyle="AvenirNextCondensedMedium" />
+            app:textStyle="HelveticaLight" />
 
         <com.munchado.orderprocess.ui.widgets.CustomTextView
             android:id="@+id/text_item_price"
@@ -37,7 +37,7 @@
             android:layout_weight="1"
             android:gravity="right"
             android:textColor="@color/default_text_color"
-            android:textSize="@dimen/textSizeXXLarge"
-            app:textStyle="AvenirNextCondensedMedium" />
+            android:textSize="@dimen/textSizeXLarge"
+            app:textStyle="HelveticaLight" />
     </LinearLayout>
 </LinearLayout>

@@ -27,8 +27,8 @@
                 android:gravity="right|end"
                 android:text="Order ID: "
                 android:textColor="@color/grey_light"
-                android:textSize="@dimen/textSizeXXLarge"
-                app:textStyle="AvenirNextCondensedMedium" />
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="HelveticaLight" />
 
             <com.munchado.orderprocess.ui.widgets.CustomTextView
                 android:id="@+id/text_order_id"
@@ -36,8 +36,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:textColor="@color/default_text_color"
-                android:textSize="@dimen/textSizeXXLarge"
-                app:textStyle="AvenirNextCondensedMedium" />
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="HelveticaLight" />
 
         </LinearLayout>
 
@@ -55,8 +55,8 @@
                 android:gravity="right|end"
                 android:text="Receipt No.: "
                 android:textColor="@color/grey_light"
-                android:textSize="@dimen/textSizeXXLarge"
-                app:textStyle="AvenirNextCondensedMedium" />
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="HelveticaLight" />
 
             <com.munchado.orderprocess.ui.widgets.CustomTextView
                 android:id="@+id/text_receipt_no"
@@ -64,8 +64,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:textColor="@color/default_text_color"
-                android:textSize="@dimen/textSizeXXLarge"
-                app:textStyle="AvenirNextCondensedMedium" />
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="HelveticaLight" />
 
         </LinearLayout>
 
@@ -83,8 +83,8 @@
                 android:gravity="right|end"
                 android:text="Type: "
                 android:textColor="@color/grey_light"
-                android:textSize="@dimen/textSizeXXLarge"
-                app:textStyle="AvenirNextCondensedMedium" />
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="HelveticaLight" />
 
             <com.munchado.orderprocess.ui.widgets.CustomTextView
                 android:id="@+id/text_order_type"
@@ -92,8 +92,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:textColor="@color/default_text_color"
-                android:textSize="@dimen/textSizeXXLarge"
-                app:textStyle="AvenirNextCondensedMedium" />
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="HelveticaLight" />
 
         </LinearLayout>
 
@@ -111,8 +111,8 @@
                 android:gravity="right|end"
                 android:text="Time of Order: "
                 android:textColor="@color/grey_light"
-                android:textSize="@dimen/textSizeXXLarge"
-                app:textStyle="AvenirNextCondensedMedium" />
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="HelveticaLight" />
 
             <com.munchado.orderprocess.ui.widgets.CustomTextView
                 android:id="@+id/text_order_time"
@@ -120,8 +120,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:textColor="@color/default_text_color"
-                android:textSize="@dimen/textSizeXXLarge"
-                app:textStyle="AvenirNextCondensedMedium" />
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="HelveticaLight" />
 
         </LinearLayout>
 
@@ -140,8 +140,8 @@
                 android:gravity="right|end"
                 android:text="Time of Delivery: "
                 android:textColor="@color/grey_light"
-                android:textSize="@dimen/textSizeXXLarge"
-                app:textStyle="AvenirNextCondensedMedium" />
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="HelveticaLight" />
 
             <com.munchado.orderprocess.ui.widgets.CustomTextView
                 android:id="@+id/text_delivery_time"
@@ -149,8 +149,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:textColor="@color/default_text_color"
-                android:textSize="@dimen/textSizeXXLarge"
-                app:textStyle="AvenirNextCondensedMedium" />
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="HelveticaLight" />
 
         </LinearLayout>
 
@@ -169,8 +169,8 @@
                 android:gravity="right|end"
                 android:text="Deliver to: "
                 android:textColor="@color/grey_light"
-                android:textSize="@dimen/textSizeXXLarge"
-                app:textStyle="AvenirNextCondensedMedium" />
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="HelveticaLight" />
 
             <com.munchado.orderprocess.ui.widgets.CustomTextView
                 android:id="@+id/text_delivery_address"
@@ -178,8 +178,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:textColor="@color/default_text_color"
-                android:textSize="@dimen/textSizeXXLarge"
-                app:textStyle="AvenirNextCondensedMedium" />
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="HelveticaLight" />
 
         </LinearLayout>
 
@@ -205,8 +205,8 @@
             android:layout_margin="@dimen/margin_normal"
             android:text="@string/order"
             android:textColor="@color/default_text_color"
-            android:textSize="@dimen/textSizeXXLarge"
-            app:textStyle="AvenirNextCondensedMedium" />
+            android:textSize="@dimen/textSizeXLarge"
+            app:textStyle="HelveticaLight" />
 
         <View
             android:layout_width="0dp"

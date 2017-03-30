@@ -1,6 +1,7 @@
 package com.munchado.orderprocess.ui.adapter;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -16,6 +17,7 @@ import com.munchado.orderprocess.R;
 import com.munchado.orderprocess.listener.OnOrderClickListener;
 import com.munchado.orderprocess.model.archiveorder.ItemList;
 import com.munchado.orderprocess.model.archiveorder.OrderItem;
+import com.munchado.orderprocess.ui.widgets.CustomTextView;
 import com.munchado.orderprocess.utils.DateTimeUtils;
 import com.munchado.orderprocess.utils.LogUtils;
 
@@ -151,7 +153,7 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         private final TextView textOrderType;
         private final TextView textOrderItem;
-        private final TextView textOrderAmount;
+        private final CustomTextView textOrderAmount;
         private final TextView textDelayTime;
         private final Button btnAction;
         private final ContentLoadingProgressBar progressBar;
@@ -167,9 +169,10 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             });
             textOrderType = (TextView) itemView.findViewById(R.id.text_order_type);
             textOrderItem = (TextView) itemView.findViewById(R.id.text_order_item);
-            textOrderAmount = (TextView) itemView.findViewById(R.id.text_order_amount);
+            textOrderAmount = (CustomTextView) itemView.findViewById(R.id.text_order_amount);
             textDelayTime = (TextView) itemView.findViewById(R.id.text_delay_time);
             progressBar = (ContentLoadingProgressBar) itemView.findViewById(R.id.progress_bar);
+            textOrderAmount.setTextStyle(Typeface.BOLD);
             btnAction = (Button) itemView.findViewById(R.id.btn_action);
             btnAction.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -193,7 +196,7 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 //            if(orderItem.delivery_date.contains("00:00"))
 //                orderItem.delivery_date.replaceAll("00:00","01:02");
 
-            LogUtils.d("========= status : " + orderItem.status+"====="+btnAction.getText().toString());
+            LogUtils.d("========= status : " + orderItem.status + "=====" + btnAction.getText().toString());
             textDelayTime.setText(DateTimeUtils.getFormattedDate(orderItem.delivery_date, DateTimeUtils.FORMAT_MMM_DD_YYYY));
             if (orderItem.inProgress) {
                 progressBar.setVisibility(View.VISIBLE);
@@ -213,7 +216,7 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 } else if (orderItem.status.equalsIgnoreCase("placed")) {
                     btnAction.setText("CONFIRM");
                     btnAction.setBackgroundResource(R.drawable.green_button);
-                } else if (orderItem.status.equalsIgnoreCase("arrived") && btnAction.getText().toString().equalsIgnoreCase("READY")) {
+                } else if (orderItem.status.equalsIgnoreCase("arrived")) {
                     btnAction.setText("ARCHIVE");
                     btnAction.setBackgroundResource(R.drawable.grey_button);
                 }
@@ -226,7 +229,7 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
         private final TextView textOrderType;
         private final TextView textOrderItem;
-        private final TextView textOrderAmount;
+        private final CustomTextView textOrderAmount;
         private final TextView textDelayTime;
         private final TextView textDelayTimeHourMinute;
         private final Button btnAction;
@@ -243,10 +246,11 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             });
             textOrderType = (TextView) itemView.findViewById(R.id.text_order_type);
             textOrderItem = (TextView) itemView.findViewById(R.id.text_order_item);
-            textOrderAmount = (TextView) itemView.findViewById(R.id.text_order_amount);
+            textOrderAmount = (CustomTextView) itemView.findViewById(R.id.text_order_amount);
             textDelayTime = (TextView) itemView.findViewById(R.id.text_delay_time);
             textDelayTimeHourMinute = (TextView) itemView.findViewById(R.id.text_delay_time_1);
             progressBar = (ContentLoadingProgressBar) itemView.findViewById(R.id.progress_bar);
+            textOrderAmount.setTextStyle(Typeface.BOLD);
             btnAction = (Button) itemView.findViewById(R.id.btn_action);
             btnAction.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -268,7 +272,7 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             textOrderItem.setText(stringBuilder.toString());
             textOrderAmount.setText("$" + orderItem.total_amount);
 
-            LogUtils.d("========= status : " + orderItem.status+"====="+btnAction.getText().toString());
+            LogUtils.d("========= status : " + orderItem.status + "=====" + btnAction.getText().toString());
             textDelayTime.setText(DateTimeUtils.getFormattedDate(orderItem.delivery_date, DateTimeUtils.FORMAT_MMM_DD_YYYY));
             textDelayTimeHourMinute.setText(DateTimeUtils.getFormattedDate(orderItem.delivery_date, DateTimeUtils.FORMAT_HH_MM_A));
             if (orderItem.inProgress) {

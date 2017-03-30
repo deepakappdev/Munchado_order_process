@@ -15,6 +15,7 @@ import com.munchado.orderprocess.utils.StringUtils;
 
 public class CustomTextView extends TextView {
     public static String TAG = "CustomTextView";
+    String fontFile = "";
 
     public CustomTextView(Context context) {
         super(context);
@@ -24,6 +25,7 @@ public class CustomTextView extends TextView {
         super(context, attrs);
         initStyle(attrs);
     }
+
     public CustomTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initStyle(attrs);
@@ -37,11 +39,16 @@ public class CustomTextView extends TextView {
                 R.styleable.CustomTextView,
                 0, 0);
         int mTextStyle = a.getInteger(R.styleable.CustomTextView_textStyle, -1);
-        String fontFile = getFontFileName(mTextStyle);
-        if(StringUtils.isNullOrEmpty(fontFile))
+        fontFile = getFontFileName(mTextStyle);
+        if (StringUtils.isNullOrEmpty(fontFile))
             fontFile = "Roboto-Light.ttf";
         setTypeface(Typeface.createFromAsset(getContext().getAssets(), fontFile));
     }
+
+    public void setTextStyle(int style) {
+        setTypeface(Typeface.createFromAsset(getContext().getAssets(), fontFile), style);
+    }
+
     static String getFontFileName(int mTextStyle) {
         String fontFile = "";
         switch (mTextStyle) {
@@ -99,6 +106,20 @@ public class CustomTextView extends TextView {
             case 17:
                 fontFile = "Avenir-Next-UltraLight.ttf";
                 break;
+            case 18:
+                fontFile = "Helvetica-Bold.ttf";
+                break;
+            case 19:
+                fontFile = "Helvetica-Regular.ttf";
+                break;
+            case 20:
+                fontFile = "HelveticaNeue-Medium.ttf";
+                break;
+            case 21:
+                fontFile = "HelveticaNeueLight.ttf";
+                break;
+            case 22:
+                fontFile = "HelveticaNeueLightItalic.ttf";
         }
         return fontFile;
     }

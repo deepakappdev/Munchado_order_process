@@ -1,5 +1,6 @@
 package com.munchado.orderprocess.ui.adapter;
 
+import android.graphics.Typeface;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import com.munchado.orderprocess.R;
 import com.munchado.orderprocess.listener.OnOrderClickListener;
 import com.munchado.orderprocess.model.archiveorder.ItemList;
 import com.munchado.orderprocess.model.archiveorder.OrderItem;
+import com.munchado.orderprocess.ui.widgets.CustomTextView;
 import com.munchado.orderprocess.utils.DateTimeUtils;
 
 import java.util.ArrayList;
@@ -52,9 +54,9 @@ public class ArchiveOrderAdapter extends RecyclerView.Adapter<ArchiveOrderAdapte
 
     class MyViewHolder extends RecyclerView.ViewHolder {
 
-        private final TextView textOrderType;
+        private final CustomTextView textOrderType;
         private final TextView textOrderItem;
-        private final TextView textOrderAmount;
+        private final CustomTextView textOrderAmount;
         private final TextView textDelayTime;
         private final Button btnView;
         private OrderItem orderItem;
@@ -68,11 +70,12 @@ public class ArchiveOrderAdapter extends RecyclerView.Adapter<ArchiveOrderAdapte
                 }
             });
 
-            textOrderType = (TextView) itemView.findViewById(R.id.text_order_type);
+            textOrderType = (CustomTextView) itemView.findViewById(R.id.text_order_type);
             textOrderItem = (TextView) itemView.findViewById(R.id.text_order_item);
-            textOrderAmount = (TextView) itemView.findViewById(R.id.text_order_amount);
+            textOrderAmount = (CustomTextView) itemView.findViewById(R.id.text_order_amount);
             textDelayTime = (TextView) itemView.findViewById(R.id.text_delay_time);
             btnView = (Button) itemView.findViewById(R.id.btn_action);
+            textOrderAmount.setTextStyle(Typeface.BOLD);
             btnView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -89,7 +92,7 @@ public class ArchiveOrderAdapter extends RecyclerView.Adapter<ArchiveOrderAdapte
                 stringBuilder.append(itemList.item_qty).append(" ").append(itemList.item_name).append(", ");
             }
 
-            textOrderItem.setText(stringBuilder.toString().substring(0,stringBuilder.toString().length()-2));
+            textOrderItem.setText(stringBuilder.toString().substring(0, stringBuilder.toString().length() - 2));
             textOrderAmount.setText("$" + orderItem.total_amount);
 //            textDelayTime.setText(orderItem.delivery_date);
             textDelayTime.setText(DateTimeUtils.getFormattedDate(orderItem.delivery_date, DateTimeUtils.FORMAT_MMM_DD_YYYY));

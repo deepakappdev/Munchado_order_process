@@ -21,10 +21,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/margin_medium"
+            android:paddingTop="5dp"
             android:text="Change Delivery Time"
             android:textColor="@color/default_text_color"
             android:textSize="20sp"
-            app:textStyle="AvenirNextCondensedMedium" />
+            app:textStyle="HelveticaLight" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -43,7 +44,7 @@
                 android:text="-"
                 android:textColor="@color/default_text_color"
                 android:textSize="20sp"
-                app:textStyle="AvenirNextCondensedMedium" />
+                app:textStyle="HelveticaLight" />
 
             <com.munchado.orderprocess.ui.widgets.CustomTextView
                 android:id="@+id/text_change_delivery_time"
@@ -52,7 +53,7 @@
                 android:text="15-15-2015 12:45"
                 android:textColor="@color/default_text_color"
                 android:textSize="20sp"
-                app:textStyle="AvenirNextCondensedMedium" />
+                app:textStyle="HelveticaLight" />
 
             <com.munchado.orderprocess.ui.widgets.CustomTextView
                 android:id="@+id/text_plus"
@@ -65,7 +66,7 @@
                 android:text="+"
                 android:textColor="@color/default_text_color"
                 android:textSize="20sp"
-                app:textStyle="AvenirNextCondensedMedium" />
+                app:textStyle="HelveticaLight" />
 
             <com.munchado.orderprocess.ui.widgets.CustomButton
                 android:id="@+id/btn_update"
@@ -77,8 +78,8 @@
                 android:text="@string/update_time"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="20sp"
-                app:textStyle="AvenirNextCondensedMedium" />
+                android:textSize="15sp"
+                app:textStyle="HelveticaLight" />
         </LinearLayout>
 
     </LinearLayout>
@@ -102,7 +103,7 @@
             android:textColor="@color/red_overview"
             android:textSize="20sp"
             android:visibility="gone"
-            app:textStyle="AvenirNextCondensedMedium" />
+            app:textStyle="HelveticaLight" />
 
         <com.munchado.orderprocess.ui.widgets.CustomTextView
             android:id="@+id/text_change"
@@ -114,7 +115,7 @@
             android:textColor="@color/default_text_color"
             android:textSize="20sp"
             android:visibility="gone"
-            app:textStyle="AvenirNextCondensedMedium" />
+            app:textStyle="HelveticaLight" />
 
         <View
             android:layout_width="0dp"
@@ -131,7 +132,7 @@
             android:textColor="@color/white"
             android:textSize="15sp"
             android:visibility="gone"
-            app:textStyle="AvenirNextDemiBold" />
+            app:textStyle="HelveticaLight" />
 
         <com.munchado.orderprocess.ui.widgets.CustomButton
             android:id="@+id/btn_action"
@@ -143,6 +144,6 @@
             android:textColor="@color/white"
             android:textSize="15sp"
             android:visibility="gone"
-            app:textStyle="AvenirNextDemiBold" />
+            app:textStyle="HelveticaLight" />
     </LinearLayout>
 </LinearLayout>

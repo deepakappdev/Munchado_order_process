@@ -310,7 +310,6 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
 //                .placeholder(R.drawable.profile_img)
 //                .into(imageView);
 
-        Picasso.with(getContext()).load(data.user_image).resize(200 * (int) getActivity().getResources().getDisplayMetrics().density, 200 * (int) getActivity().getResources().getDisplayMetrics().density).centerCrop().placeholder(R.drawable.profile_img).into(imageView);
 
         StringBuilder pastActivity = new StringBuilder();
         if (data.user_activity != null) {
@@ -536,12 +535,27 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                 public void onGlobalLayout() {
                     layout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     layoutheight += layout.getHeight();
-                    LogUtils.e("============== layout_order_payment height : " + layoutheight + "=====" + layout.getHeight());
+//                    LogUtils.e("============== layout_order_payment height : " + layoutheight + "=====" + layout.getHeight());
                     showOrderItem(data.item_list);
                 }
             });
         }
 
+        final LinearLayout layout2 = (LinearLayout) rootView.findViewById(R.id.layout_customer_detail_1);
+
+        ViewTreeObserver viewTreeObserver2 = layout2.getViewTreeObserver();
+        if (viewTreeObserver2.isAlive()) {
+            viewTreeObserver2.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    layout2.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    int width = layout2.getWidth();
+                    imageView.setLayoutParams(new LinearLayout.LayoutParams(width,width));
+                            Picasso.with(getContext()).load(data.user_image).resize(200 * (int) getActivity().getResources().getDisplayMetrics().density, 200 * (int) getActivity().getResources().getDisplayMetrics().density).centerCrop().placeholder(R.drawable.profile_img).into(imageView);
+
+                }
+            });
+        }
     }
 
     @Override
@@ -567,7 +581,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                         status2 = "confirmed";
                     else if (currentStatus.equalsIgnoreCase("confirmed")) {
                         if (order_type.equalsIgnoreCase("takeout"))
-                            status2 = "arrived";
+                            status2 = "ready";
                         else
                             status2 = "delivered";
                     } else if (currentStatus.equalsIgnoreCase("arrived"))
@@ -593,7 +607,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                     status = "confirmed";
                 else if (currentStatus.equalsIgnoreCase("confirmed")) {
                     if (order_type.equalsIgnoreCase("takeout"))
-                        status = "arrived";
+                        status = "ready";
                     else
                         status = "delivered";
                 } else if (currentStatus.equalsIgnoreCase("arrived"))

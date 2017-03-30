@@ -23,6 +23,7 @@ public class CustomEditText extends TextView {
         super(context, attrs);
         initStyle(attrs);
     }
+
     public CustomEditText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initStyle(attrs);
@@ -37,10 +38,11 @@ public class CustomEditText extends TextView {
                 0, 0);
         int mTextStyle = a.getInteger(R.styleable.CustomEditText_textStyle, -1);
         String fontFile = getFontFileName(mTextStyle);
-        if(StringUtils.isNullOrEmpty(fontFile))
+        if (StringUtils.isNullOrEmpty(fontFile))
             fontFile = "Roboto-Light.ttf";
         setTypeface(Typeface.createFromAsset(getContext().getAssets(), fontFile));
     }
+
     static String getFontFileName(int mTextStyle) {
         String fontFile = "";
         switch (mTextStyle) {
@@ -100,6 +102,20 @@ public class CustomEditText extends TextView {
             case 17:
                 fontFile = "Avenir-Next-UltraLight.ttf";
                 break;
+            case 18:
+                fontFile = "Helvetica-Bold.ttf";
+                break;
+            case 19:
+                fontFile = "Helvetica-Regular.ttf";
+                break;
+            case 20:
+                fontFile = "HelveticaNeue-Medium.ttf";
+                break;
+            case 21:
+                fontFile = "HelveticaNeueLight.ttf";
+                break;
+            case 22:
+                fontFile = "HelveticaNeueLightItalic.ttf";
         }
         return fontFile;
     }

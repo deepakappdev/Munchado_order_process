@@ -101,6 +101,20 @@ public class CustomButton extends AppCompatButton {
             case 17:
                 fontFile = "Avenir-Next-UltraLight.ttf";
                 break;
+            case 18:
+                fontFile = "Helvetica-Bold.ttf";
+                break;
+            case 19:
+                fontFile = "Helvetica-Regular.ttf";
+                break;
+            case 20:
+                fontFile = "HelveticaNeue-Medium.ttf";
+                break;
+            case 21:
+                fontFile = "HelveticaNeueLight.ttf";
+                break;
+            case 22:
+                fontFile = "HelveticaNeueLightItalic.ttf";
         }
         return fontFile;
     }

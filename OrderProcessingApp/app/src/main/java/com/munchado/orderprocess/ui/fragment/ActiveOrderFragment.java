@@ -30,7 +30,6 @@ import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.ui.activity.BaseActivity;
 import com.munchado.orderprocess.ui.adapter.ActiveOrderAdapter;
-import com.munchado.orderprocess.utils.DividerItemDecoration;
 import com.munchado.orderprocess.utils.LogUtils;
 
 import java.util.ArrayList;
@@ -81,7 +80,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         mLinearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLinearLayoutManager);
-        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), R.drawable.horizontal_line));
+//        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), R.drawable.horizontal_line));
     }
 
 
@@ -118,7 +117,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
             if (((OrderProcessResponse) obj).data.message) {
                 if (((OrderProcessResponse) obj).data.status.equalsIgnoreCase("confirmed"))
                     moveToConfirmed(((OrderProcessResponse) obj).data.order_id, "confirmed");
-                else if (sent_status.equalsIgnoreCase("arrived") && ((OrderProcessResponse) obj).data.status.equalsIgnoreCase("archived"))
+                else if (sent_status.equalsIgnoreCase("ready") && ((OrderProcessResponse) obj).data.status.equalsIgnoreCase("arrived"))
 
                     moveToConfirmed(((OrderProcessResponse) obj).data.order_id, "arrived");
                 else
@@ -126,7 +125,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
 
                 if (((OrderProcessResponse) obj).data.status.equalsIgnoreCase("delivered"))
                     showToast("Order Successfully Sent.");
-                else if (sent_status.equalsIgnoreCase("arrived") && ((OrderProcessResponse) obj).data.status.equalsIgnoreCase("archived"))//"arrived"
+                else if (sent_status.equalsIgnoreCase("ready") && ((OrderProcessResponse) obj).data.status.equalsIgnoreCase("arrived"))//"arrived"
                     showToast("Order is ready for Pickedup.");
 //                else if (((OrderProcessResponse) obj).data.status.equalsIgnoreCase("archived"))//"arrived"
 //                    showToast("Order Successfully Pickedup.");
@@ -214,10 +213,10 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
                 status = "confirmed";
             else if (orderItem.status.equalsIgnoreCase("confirmed")) {
                 if (orderItem.order_type.equalsIgnoreCase("takeout"))
-                    status = "arrived";
+                    status = "ready";//"arrived";
                 else
                     status = "delivered";
-            } else if (sent_status.equalsIgnoreCase("arrived") && orderItem.order_type.equalsIgnoreCase("archived"))
+            } else if (sent_status.equalsIgnoreCase("ready") && orderItem.order_type.equalsIgnoreCase("archived"))
                 status = "archived";
             sent_status = status;
             RequestController.orderProcess(orderItem.id, status, "", "", ActiveOrderFragment.this);
