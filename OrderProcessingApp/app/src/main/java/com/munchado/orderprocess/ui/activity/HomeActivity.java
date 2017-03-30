@@ -2,6 +2,7 @@ package com.munchado.orderprocess.ui.activity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.design.widget.NavigationView;
@@ -9,8 +10,12 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 import com.munchado.orderprocess.R;
 import com.munchado.orderprocess.common.FRAGMENTS;
@@ -18,10 +23,13 @@ import com.munchado.orderprocess.notification.PubnubService;
 import com.munchado.orderprocess.utils.Constants;
 import com.munchado.orderprocess.utils.PrefUtil;
 
+import java.util.ArrayList;
+
 public class HomeActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     Toolbar toolbar;
     PowerManager.WakeLock mWakeLock;
+    private final ArrayList<View> mMenuItems = new ArrayList<>(3);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +49,34 @@ public class HomeActivity extends BaseActivity
 
         toolbar.setTitle("Active Orders");
         addFragment(FRAGMENTS.ACTIVE, null);
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        final NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+        final Menu navMenu = navigationView.getMenu();
+        // Install an OnGlobalLayoutListener and wait for the NavigationMenu to fully initialize
+        navigationView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                navigationView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    String id = "nav_order";
+                    MenuItem item = navMenu.findItem(getResources().getIdentifier(id, "id", getPackageName()));
+                    navigationView.findViewsWithText(mMenuItems, item.getTitle(), View.FIND_VIEWS_WITH_TEXT);
+                    id = "nav_manage";
+                    MenuItem item1 = navMenu.findItem(getResources().getIdentifier(id, "id", getPackageName()));
+                    navigationView.findViewsWithText(mMenuItems, item1.getTitle(), View.FIND_VIEWS_WITH_TEXT);
+                    id = "nav_logout";
+                    MenuItem item2 = navMenu.findItem(getResources().getIdentifier(id, "id", getPackageName()));
+                    navigationView.findViewsWithText(mMenuItems, item2.getTitle(), View.FIND_VIEWS_WITH_TEXT);
+
+                Typeface face = Typeface.createFromAsset(getAssets(),
+                        "Avenir-Next-Demi-Bold.ttf");
+                for (final View menuItem : mMenuItems) {
+                    ((TextView) menuItem).setTextSize(20.0f);
+                    ((TextView) menuItem).setTypeface(face, Typeface.NORMAL);
+                }
+            }
+        });
+
+
         navigationView.setNavigationItemSelectedListener(this);
     }
 

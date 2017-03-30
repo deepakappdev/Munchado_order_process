@@ -4,6 +4,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
@@ -28,8 +31,12 @@ import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.ui.activity.BaseActivity;
 import com.munchado.orderprocess.ui.adapter.ActiveOrderAdapter;
 import com.munchado.orderprocess.utils.DividerItemDecoration;
+import com.munchado.orderprocess.utils.LogUtils;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 /**
  * Created by android on 22/2/17.
@@ -43,6 +50,8 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
     private ActiveOrderAdapter adapter;
     private LinearLayoutManager mLinearLayoutManager;
     private String sent_status = "";
+    ArrayList<OrderItem> live_orderList;
+    boolean isFirst;
 
     @Nullable
     @Override
@@ -57,6 +66,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
+        live_orderList = new ArrayList<>();
         fetchActiveOrder();
     }
 
@@ -84,6 +94,9 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
     public void success(Object obj) {
         if (getActivity() == null) return;
         if (obj instanceof ActiveOrderResponse) {
+            live_orderList.clear();
+            live_orderList.addAll(((ActiveOrderResponse) obj).data.live_order);
+
             updateActiveList(((ActiveOrderResponse) obj).data);
             cleanRemainingItem(((ActiveOrderResponse) obj).data);
             handler.postDelayed(new Runnable() {
@@ -92,6 +105,15 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
                     fetchActiveOrder();
                 }
             }, 30000);
+            if (!isFirst) {
+                isFirst = true;
+                new Timer().scheduleAtFixedRate(new TimerTask() {
+                    @Override
+                    public void run() {
+                        playRing();
+                    }
+                }, 0, 5000);
+            }
         } else if (obj instanceof OrderProcessResponse) {
             if (((OrderProcessResponse) obj).data.message) {
                 if (((OrderProcessResponse) obj).data.status.equalsIgnoreCase("confirmed"))
@@ -110,8 +132,34 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
 //                    showToast("Order Successfully Pickedup.");
                 else
                     showToast("Order Successfully " + ((OrderProcessResponse) obj).data.status);
+
+                for (int i = 0; i < live_orderList.size(); i++) {
+                    if (live_orderList.get(i).id.equalsIgnoreCase(((OrderProcessResponse) obj).data.order_id)) {
+                        OrderItem item = live_orderList.get(i);
+                        item.status = ((OrderProcessResponse) obj).data.status;
+                        live_orderList.set(i, item);
+                    }
+                }
             }
         }
+    }
+
+    private void playRing() {
+        if (live_orderList != null && live_orderList.size() > 0)
+            for (OrderItem item : live_orderList) {
+                LogUtils.d("========= " + item.status);
+                if (item.status.equalsIgnoreCase("placed")) {
+                    try {
+                        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                        Ringtone r = RingtoneManager.getRingtone(getActivity(), notification);
+                        r.play();
+                        break;
+                    } catch (Exception e) {
+                    }
+
+                }
+            }
+
     }
 
     private void cleanRemainingItem(ActiveOrderResponseData data) {

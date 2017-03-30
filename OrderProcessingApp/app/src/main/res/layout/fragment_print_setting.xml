@@ -19,7 +19,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/dark_grey"
         android:textSize="@dimen/textSizeXXLarge"
-        app:textStyle="AvenirNextCondensedMedium" />
+        app:textStyle="AvenirNextDemiBold" />
 
     <com.munchado.orderprocess.ui.widgets.CustomTextView
         android:id="@+id/tv_profile_setting"
@@ -35,7 +35,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/dark_grey"
         android:textSize="@dimen/textSizeXXLarge"
-        app:textStyle="AvenirNextCondensedMedium" />
+        app:textStyle="AvenirNextDemiBold" />
 
     <com.munchado.orderprocess.ui.widgets.CustomTextView
         android:id="@+id/tv_order_processing_setting"
@@ -51,5 +51,5 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textColor="@color/dark_grey"
         android:textSize="@dimen/textSizeXXLarge"
-        app:textStyle="AvenirNextCondensedMedium" />
+        app:textStyle="AvenirNextDemiBold" />
 </LinearLayout>
