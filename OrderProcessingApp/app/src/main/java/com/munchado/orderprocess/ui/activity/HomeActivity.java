@@ -33,6 +33,7 @@ public class HomeActivity extends BaseActivity
     PowerManager.WakeLock mWakeLock;
     private final ArrayList<View> mMenuItems = new ArrayList<>(3);
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

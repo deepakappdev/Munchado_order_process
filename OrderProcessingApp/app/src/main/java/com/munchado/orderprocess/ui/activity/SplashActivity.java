@@ -103,6 +103,11 @@ public class SplashActivity extends AppCompatActivity {
                         DownloadManager.Request request = new DownloadManager.Request(
                                 Uri.parse(upgradeData.data.apk_link));
                         enqueue = dm.enqueue(request);
+                        if (upgradeData.data.upgrade_type.equalsIgnoreCase("hard")) {
+                            PrefUtil.setUpgradeDisplayCount(0);
+                            PrefUtil.setUpgradeType("");
+                        }
+
                     }
                     break;
 

@@ -129,6 +129,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         showProgressBar();
         Bundle bundle = getArguments();
         String orderId = bundle.getString("ORDER_ID");
+        ((BaseActivity) getActivity()).order_ID = orderId;
         RequestController.getOrderDetail(orderId, this);
     }
 
@@ -261,7 +262,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                 updateActionButton();
 
                 if (clickFrom.equalsIgnoreCase(PRINT)) {
-
+                    ((BaseActivity) getActivity()).order_Status = response.data.status;
                     if (response.data.status.equalsIgnoreCase("confirmed") || response.data.status.equalsIgnoreCase("arrived") || response.data.status.equalsIgnoreCase("delivered")) {
 
                         sendToPrinter();
@@ -552,15 +553,15 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                 public void onGlobalLayout() {
                     layout2.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     int width = layout2.getWidth();
-                    imageView.setLayoutParams(new LinearLayout.LayoutParams(width,width));
-                            Picasso.with(getContext()).load(data.user_image).resize(200 * (int) getActivity().getResources().getDisplayMetrics().density, 200 * (int) getActivity().getResources().getDisplayMetrics().density).centerCrop().placeholder(R.drawable.profile_img).into(imageView);
+                    imageView.setLayoutParams(new LinearLayout.LayoutParams(width, width));
+                    Picasso.with(getContext()).load(data.user_image).resize(200 * (int) getActivity().getResources().getDisplayMetrics().density, 200 * (int) getActivity().getResources().getDisplayMetrics().density).centerCrop().placeholder(R.drawable.profile_img).into(imageView);
 
                 }
             });
         }
     }
 
-    private void sendToPrinter(){
+    private void sendToPrinter() {
         PrinterSetting setting = new PrinterSetting(getActivity());
 
         if (TextUtils.isEmpty(setting.getPortName()) || TextUtils.isEmpty(setting.getPortSettings())) {
@@ -570,6 +571,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         } else
             new StarPrinterUtils(getActivity(), "", printData);
     }
+
     @Override
     public void onClick(View view) {
         String currentStatus = response.data.status;

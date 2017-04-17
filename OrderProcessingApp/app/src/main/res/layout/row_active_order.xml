@@ -23,7 +23,6 @@
             android:background="@drawable/green_button"
             android:paddingLeft="@dimen/margin_normal"
             android:paddingRight="@dimen/margin_normal"
-            android:text="Sent"
             android:textSize="15sp"
             android:textColor="@color/white"
             app:textStyle="HelveticaLight" />

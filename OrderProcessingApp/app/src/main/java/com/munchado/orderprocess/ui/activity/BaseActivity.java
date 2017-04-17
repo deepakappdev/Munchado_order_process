@@ -25,6 +25,8 @@ public class BaseActivity extends AppCompatActivity {
     private Toast toast;
     BaseFragment fragmentActiveOrder;
 
+    public String order_ID = "", order_Status = "";
+
     public void addFragment(FRAGMENTS fragmentId, Bundle bundle) {
         BaseFragment fragment = getFragment(fragmentId);
         if (fragment != null) {
