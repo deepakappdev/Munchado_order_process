@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="View Active Order"
+            android:text="View Active Orders"
             android:textColor="@color/text_light_black"
             android:textSize="@dimen/textSizeXXLarge"
             app:textStyle="HelveticaLight" />

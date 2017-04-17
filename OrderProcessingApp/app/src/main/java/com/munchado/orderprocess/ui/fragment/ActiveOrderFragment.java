@@ -126,7 +126,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
                 if (((OrderProcessResponse) obj).data.status.equalsIgnoreCase("delivered"))
                     showToast("Order Successfully Sent.");
                 else if (sent_status.equalsIgnoreCase("ready") && ((OrderProcessResponse) obj).data.status.equalsIgnoreCase("arrived"))//"arrived"
-                    showToast("Order is ready for Pickedup.");
+                    showToast("Order is ready for Pick Up.");
 //                else if (((OrderProcessResponse) obj).data.status.equalsIgnoreCase("archived"))//"arrived"
 //                    showToast("Order Successfully Pickedup.");
                 else

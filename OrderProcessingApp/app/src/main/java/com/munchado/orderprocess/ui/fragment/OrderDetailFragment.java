@@ -263,14 +263,16 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                 if (clickFrom.equalsIgnoreCase(PRINT)) {
 
                     if (response.data.status.equalsIgnoreCase("confirmed") || response.data.status.equalsIgnoreCase("arrived") || response.data.status.equalsIgnoreCase("delivered")) {
-                        PrinterSetting setting = new PrinterSetting(getActivity());
 
-                        if (TextUtils.isEmpty(setting.getPortName()) || TextUtils.isEmpty(setting.getPortSettings())) {
-                            Intent intent = new Intent(getActivity(), SearchPrinterActivity.class);
-                            intent.putExtra("printData", printData);
-                            startActivity(intent);
-                        } else
-                            new StarPrinterUtils(getActivity(), "", printData);
+                        sendToPrinter();
+//                        PrinterSetting setting = new PrinterSetting(getActivity());
+
+//                        if (TextUtils.isEmpty(setting.getPortName()) || TextUtils.isEmpty(setting.getPortSettings())) {
+//                            Intent intent = new Intent(getActivity(), SearchPrinterActivity.class);
+//                            intent.putExtra("printData", printData);
+//                            startActivity(intent);
+//                        } else
+//                            new StarPrinterUtils(getActivity(), "", printData);
                     }
                 }
 
@@ -558,6 +560,16 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         }
     }
 
+    private void sendToPrinter(){
+        PrinterSetting setting = new PrinterSetting(getActivity());
+
+        if (TextUtils.isEmpty(setting.getPortName()) || TextUtils.isEmpty(setting.getPortSettings())) {
+            Intent intent = new Intent(getActivity(), SearchPrinterActivity.class);
+            intent.putExtra("printData", printData);
+            startActivity(intent);
+        } else
+            new StarPrinterUtils(getActivity(), "", printData);
+    }
     @Override
     public void onClick(View view) {
         String currentStatus = response.data.status;
@@ -565,14 +577,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
             case R.id.text_print:
 
                 if (textAction.getText().toString().equalsIgnoreCase("Archive") || textAction.getVisibility() == View.GONE) {
-                    PrinterSetting setting = new PrinterSetting(getActivity());
-
-                    if (TextUtils.isEmpty(setting.getPortName()) || TextUtils.isEmpty(setting.getPortSettings())) {
-                        Intent intent = new Intent(getActivity(), SearchPrinterActivity.class);
-                        intent.putExtra("printData", printData);
-                        startActivity(intent);
-                    } else
-                        new StarPrinterUtils(getActivity(), "", printData);
+                    sendToPrinter();
                 } else {
                     clickFrom = PRINT;
                     showProgressBar();
