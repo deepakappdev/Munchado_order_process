@@ -19,7 +19,6 @@ import com.munchado.orderprocess.model.archiveorder.ItemList;
 import com.munchado.orderprocess.model.archiveorder.OrderItem;
 import com.munchado.orderprocess.ui.widgets.CustomTextView;
 import com.munchado.orderprocess.utils.DateTimeUtils;
-import com.munchado.orderprocess.utils.LogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,6 +66,14 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             orderItems.add(position, selectedItem);
             notifyItemChanged(position);
             notifyItemRangeChanged(position, getItemCount());
+        }
+    }
+
+    public void updateStatusResult(OrderItem selectedItem) {
+        int position = getItemPosition(selectedItem.id);
+        if (position >= 0) {
+            orderItems.set(position, selectedItem);
+            notifyItemChanged(position);
         }
     }
 

@@ -254,15 +254,16 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
             response = (OrderDetailResponse) obj;
             printData = ReceiptFormatUtils.setPrintData(response.data);
 
-            LogUtils.d(printData);
+//            LogUtils.d(printData);
             showDetail(response.data);
         } else if (obj instanceof OrderProcessResponse) {
             if (((OrderProcessResponse) obj).data.message) {
                 response.data.status = ((OrderProcessResponse) obj).data.status;
+                ((BaseActivity) getActivity()).order_Status = response.data.status;
                 updateActionButton();
 
                 if (clickFrom.equalsIgnoreCase(PRINT)) {
-                    ((BaseActivity) getActivity()).order_Status = response.data.status;
+
                     if (response.data.status.equalsIgnoreCase("confirmed") || response.data.status.equalsIgnoreCase("arrived") || response.data.status.equalsIgnoreCase("delivered")) {
 
                         sendToPrinter();

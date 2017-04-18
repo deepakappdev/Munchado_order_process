@@ -29,6 +29,7 @@ import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.ui.activity.BaseActivity;
 import com.munchado.orderprocess.ui.adapter.ActiveOrderAdapter;
+import com.munchado.orderprocess.utils.LogUtils;
 import com.munchado.orderprocess.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -71,7 +72,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
 
     public void fetchActiveOrder() {
         if ((System.currentTimeMillis() - lastApiHitTimeInMillies) / 1000 >= 30)
-            RequestController.getActiveOrder((BaseActivity)getActivity(),this);
+            RequestController.getActiveOrder((BaseActivity) getActivity(), this);
     }
 
 
@@ -81,7 +82,6 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         mLinearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLinearLayoutManager);
-//        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), R.drawable.horizontal_line));
     }
 
 
@@ -253,19 +253,27 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
         // Register mMessageReceiver to receive messages.
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMessageReceiver,
                 new IntentFilter("com.munchado.orderprocess.notification.refresh"));
-//        LogUtils.d("========= Order Id : " + ((BaseActivity) getActivity()).order_ID);
-        if (!StringUtils.isNullOrEmpty(((BaseActivity) getActivity()).order_ID) && !StringUtils.isNullOrEmpty(((BaseActivity) getActivity()).order_Status)) {
-            for (int i = 0; i < live_orderList.size(); i++) {
-                if (live_orderList.get(i).id.equalsIgnoreCase(((BaseActivity) getActivity()).order_ID)) {
-                    if (!live_orderList.get(i).status.equalsIgnoreCase(((BaseActivity) getActivity()).order_Status)) {
-                        OrderItem item = live_orderList.get(i);
-                        item.status = ((BaseActivity) getActivity()).order_Status;
-                        live_orderList.set(i, item);
-                        adapter.updateResult(item);
+        if (adapter != null && adapter.getAllItems() != null && adapter.getAllItems().size() > 0) {
+            LogUtils.d("========= Order Id : " + ((BaseActivity) getActivity()).order_ID + "=======" + ((BaseActivity) getActivity()).order_Status + "=======" + adapter.getAllItems().size());
+            if (!StringUtils.isNullOrEmpty(((BaseActivity) getActivity()).order_ID) && !StringUtils.isNullOrEmpty(((BaseActivity) getActivity()).order_Status)) {
+                for (int i = 0; i < adapter.getAllItems().size(); i++) {
+                    if (adapter.getAllItems().get(i).id.equalsIgnoreCase(((BaseActivity) getActivity()).order_ID)) {
+                        LogUtils.d("========= status: " + adapter.getAllItems().get(i).status + "=======" + ((BaseActivity) getActivity()).order_Status);
+                        if (!adapter.getAllItems().get(i).status.equalsIgnoreCase(((BaseActivity) getActivity()).order_Status)) {
+
+                            OrderItem item = adapter.getAllItems().get(i);
+                            item.status = ((BaseActivity) getActivity()).order_Status;
+                            adapter.getAllItems().set(i, item);
+                            if (!((BaseActivity) getActivity()).order_Status.equalsIgnoreCase("archived"))
+                                adapter.updateStatusResult(item);
+                            else
+                                adapter.updateResult(item);
+                        }
+                        break;
                     }
-                    break;
                 }
             }
+
             ((BaseActivity) getActivity()).order_ID = "";
             ((BaseActivity) getActivity()).order_Status = "";
         }
