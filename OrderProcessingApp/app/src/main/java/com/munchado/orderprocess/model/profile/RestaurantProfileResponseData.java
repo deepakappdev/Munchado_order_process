@@ -1,5 +1,7 @@
 package com.munchado.orderprocess.model.profile;
 
+import com.munchado.orderprocess.model.update.Upgrade;
+
 /**
  * Created by munchado on 23/2/17.
  */
@@ -33,4 +35,5 @@ public class RestaurantProfileResponseData {
     public String rest_code;
 
     public String restaurant_name;
+    public Upgrade fource_update;
 }

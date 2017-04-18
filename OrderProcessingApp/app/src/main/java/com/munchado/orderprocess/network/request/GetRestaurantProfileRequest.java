@@ -5,7 +5,6 @@ import com.android.volley.Response;
 import com.munchado.orderprocess.model.profile.RestaurantProfileResponse;
 import com.munchado.orderprocess.network.volley.GsonRequest;
 import com.munchado.orderprocess.network.volley.NetworkConstants;
-import com.munchado.orderprocess.utils.LogUtils;
 import com.munchado.orderprocess.utils.PrefUtil;
 
 import org.json.JSONObject;
@@ -15,10 +14,15 @@ import java.util.HashMap;
 /**
  * Created by munchado on 23/2/17.
  */
-public class GetRestaurantProfileRequest extends BaseRequest{
+public class GetRestaurantProfileRequest extends BaseRequest {
+    public String versionCode;
+
+    public GetRestaurantProfileRequest(String str) {
+        versionCode = str;
+    }
 
     public String getServiceUrl() {
-        return NetworkConstants.GET_RESTAURANT_PROFILE_URL + "&token="+ PrefUtil.getToken();
+        return NetworkConstants.GET_RESTAURANT_PROFILE_URL + "&token=" + PrefUtil.getToken() + "&current_version=" + versionCode;
     }
 
     public HashMap<String, String> getParameters() {

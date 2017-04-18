@@ -23,7 +23,6 @@ public class SplashActivity extends AppCompatActivity {
     // Splash screen timer
     private static int SPLASH_TIME_OUT = 1500;
     UpgradeData upgradeData;
-    private long enqueue;
     private DownloadManager dm;
 
     @Override
@@ -42,7 +41,6 @@ public class SplashActivity extends AppCompatActivity {
         int savedVersionCode = PrefUtil.getVersionCode();
         if (versionCode >= savedVersionCode)
             doWorkAfterUpdate();
-
         checkUpdate(versionCode + "");
 
 //        registerReceiver(receiver, new IntentFilter(
@@ -69,16 +67,17 @@ public class SplashActivity extends AppCompatActivity {
                         PrefUtil.setUpgradeMessage(upgradeData.data.message);
                         if (upgradeData.data.upgrade_type.equalsIgnoreCase("hard")) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this);
-                            builder.setMessage("MA App Update Available.").setPositiveButton("Install", dialogClickListener).setCancelable(false).show();
+                            builder.setMessage("MA App Update Available.").setPositiveButton("Update", dialogClickListener).setCancelable(false).show();
                         } else if ((upgradeData.data.upgrade_type.equalsIgnoreCase("soft") && PrefUtil.getUpgradeDisplayCount() == 3)) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this);
-                            builder.setMessage("MA App Update Available.").setPositiveButton("Install", dialogClickListener)
-                                    .setNegativeButton("Cancel", dialogClickListener).show();
-                        }
-
+                            builder.setMessage("MA App Update Available.").setPositiveButton("Update", dialogClickListener)
+                                    .setNegativeButton("Cancel", dialogClickListener).setCancelable(false).show();
+                        } else
+                            gotoHome();
                     } else {
                         PrefUtil.setUpgradeDisplayCount(0);
                         PrefUtil.setUpgradeType("");
+                        gotoHome();
                     }
 
 
@@ -87,6 +86,31 @@ public class SplashActivity extends AppCompatActivity {
 
 
         });
+    }
+
+    private void gotoHome() {
+        new Handler().postDelayed(new Runnable() {
+
+            /*
+             * Showing splash screen with a timer. This will be useful when you
+             * want to show case your app logo / company
+             */
+
+            @Override
+            public void run() {
+                // This method will be executed once the timer is over
+                // Start your app main activity
+                if (PrefUtil.isLogin()) {
+                    Intent i = new Intent(SplashActivity.this, HomeActivity.class);
+                    startActivity(i);
+                } else {
+                    Intent i = new Intent(SplashActivity.this, LoginActivity.class);
+                    startActivity(i);
+                }
+                // close this activity
+                finish();
+            }
+        }, SPLASH_TIME_OUT);
     }
 
     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -102,12 +126,11 @@ public class SplashActivity extends AppCompatActivity {
                         dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
                         DownloadManager.Request request = new DownloadManager.Request(
                                 Uri.parse(upgradeData.data.apk_link));
-                        enqueue = dm.enqueue(request);
+                        long enqueue = dm.enqueue(request);
                         if (upgradeData.data.upgrade_type.equalsIgnoreCase("hard")) {
                             PrefUtil.setUpgradeDisplayCount(0);
                             PrefUtil.setUpgradeType("");
                         }
-
                     }
                     break;
 
@@ -116,53 +139,10 @@ public class SplashActivity extends AppCompatActivity {
                     break;
             }
             dialog.dismiss();
-            new Handler().postDelayed(new Runnable() {
-
-            /*
-             * Showing splash screen with a timer. This will be useful when you
-             * want to show case your app logo / company
-             */
-
-                @Override
-                public void run() {
-                    // This method will be executed once the timer is over
-                    // Start your app main activity
-                    if (PrefUtil.isLogin()) {
-                        Intent i = new Intent(SplashActivity.this, HomeActivity.class);
-                        startActivity(i);
-                    } else {
-                        Intent i = new Intent(SplashActivity.this, LoginActivity.class);
-                        startActivity(i);
-                    }
-                    // close this activity
-                    finish();
-                }
-            }, SPLASH_TIME_OUT);
+            gotoHome();
         }
     };
 
-//    BroadcastReceiver receiver = new BroadcastReceiver() {
-//        @Override
-//        public void onReceive(Context context, Intent intent) {
-//            String action = intent.getAction();
-//            if (DownloadManager.ACTION_DOWNLOAD_COMPLETE.equals(action)) {
-//                long downloadId = intent.getLongExtra(
-//                        DownloadManager.EXTRA_DOWNLOAD_ID, 0);
-//                DownloadManager.Query query = new DownloadManager.Query();
-//                query.setFilterById(enqueue);
-//                Cursor c = dm.query(query);
-//                if (c.moveToFirst()) {
-//                    int columnIndex = c
-//                            .getColumnIndex(DownloadManager.COLUMN_STATUS);
-//                    if (DownloadManager.STATUS_SUCCESSFUL == c
-//                            .getInt(columnIndex)) {
-//
-//                        Toast.makeText(SplashActivity.this, "Updated apk has been downloaded successfully.", Toast.LENGTH_SHORT).show();
-//                    }
-//                }
-//            }
-//        }
-//    };
 
     private void doWorkAfterUpdate() {
         if (PrefUtil.getUpgradeCleanData()) {

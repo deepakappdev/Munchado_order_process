@@ -69,7 +69,7 @@ public class ProfileSettingActivity extends AppCompatActivity implements Request
 
 
         DialogUtil.showProgressDialog(this);
-        RequestController.getRestaurantProfileDetail(this);
+        RequestController.getRestaurantProfileDetail(ProfileSettingActivity.this, this);
     }
 
     private void setupToolbar() {

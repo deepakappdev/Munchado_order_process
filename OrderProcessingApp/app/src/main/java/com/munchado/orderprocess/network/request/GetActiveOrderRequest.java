@@ -14,10 +14,17 @@ import java.util.HashMap;
 /**
  * Created by user on 6/23/2015.
  */
-public class GetActiveOrderRequest extends BaseRequest{
+public class GetActiveOrderRequest extends BaseRequest {
+
+    public String versionCode;
+
+    public GetActiveOrderRequest(String str) {
+        versionCode = str;
+    }
 
     public String getServiceUrl() {
-        return NetworkConstants.GET_ORDER_URL + "&token="+ PrefUtil.getToken()+"&type=live";
+
+        return NetworkConstants.GET_ORDER_URL + "&token=" + PrefUtil.getToken() + "&type=live&current_version=" + versionCode;
     }
 
     public HashMap<String, String> getParameters() {

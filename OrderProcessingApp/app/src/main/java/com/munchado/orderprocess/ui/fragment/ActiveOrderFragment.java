@@ -12,7 +12,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +29,6 @@ import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.ui.activity.BaseActivity;
 import com.munchado.orderprocess.ui.adapter.ActiveOrderAdapter;
-import com.munchado.orderprocess.utils.LogUtils;
 import com.munchado.orderprocess.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -52,6 +50,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
     private String sent_status = "";
     ArrayList<OrderItem> live_orderList;
     boolean isFirst;
+    long lastApiHitTimeInMillies = 0L;
 
     @Nullable
     @Override
@@ -71,7 +70,8 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
     }
 
     public void fetchActiveOrder() {
-        RequestController.getActiveOrder(this);
+        if ((System.currentTimeMillis() - lastApiHitTimeInMillies) / 1000 >= 30)
+            RequestController.getActiveOrder((BaseActivity)getActivity(),this);
     }
 
 
@@ -94,6 +94,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
     public void success(Object obj) {
         if (getActivity() == null) return;
         if (obj instanceof ActiveOrderResponse) {
+            lastApiHitTimeInMillies = System.currentTimeMillis();
             live_orderList.clear();
             live_orderList.addAll(((ActiveOrderResponse) obj).data.live_order);
 
@@ -147,7 +148,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
     private void playRing() {
         if (live_orderList != null && live_orderList.size() > 0)
             for (OrderItem item : live_orderList) {
-                LogUtils.d("========= " + item.status);
+//                LogUtils.d("========= " + item.status);
                 if (item.status.equalsIgnoreCase("placed")) {
                     try {
                         Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
@@ -241,7 +242,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
         public void onReceive(Context context, Intent intent) {
             // Extract data included in the Intent
             String message = intent.getStringExtra("message");
-            Log.d("receiver", "=============Got message: " + message);
+//            Log.d("receiver", "=============Got message: " + message);
             fetchActiveOrder();
         }
     };
@@ -252,7 +253,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
         // Register mMessageReceiver to receive messages.
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMessageReceiver,
                 new IntentFilter("com.munchado.orderprocess.notification.refresh"));
-        LogUtils.d("========= Order Id : " + ((BaseActivity) getActivity()).order_ID);
+//        LogUtils.d("========= Order Id : " + ((BaseActivity) getActivity()).order_ID);
         if (!StringUtils.isNullOrEmpty(((BaseActivity) getActivity()).order_ID) && !StringUtils.isNullOrEmpty(((BaseActivity) getActivity()).order_Status)) {
             for (int i = 0; i < live_orderList.size(); i++) {
                 if (live_orderList.get(i).id.equalsIgnoreCase(((BaseActivity) getActivity()).order_ID)) {

@@ -1,5 +1,7 @@
 package com.munchado.orderprocess.model.orderdetail;
 
+import com.munchado.orderprocess.model.update.Upgrade;
+
 import java.util.ArrayList;
 
 /**
@@ -38,4 +40,5 @@ public class OrderDetailResponseData {
     public ArrayList<MyItemList> item_list = new ArrayList<>();
     public UserActivity user_activity;
     public String user_image;
+    public Upgrade fource_update;
 }

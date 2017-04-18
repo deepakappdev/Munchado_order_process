@@ -1,6 +1,5 @@
 package com.munchado.orderprocess.network.volley;
 
-import android.util.Log;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.NetworkResponse;

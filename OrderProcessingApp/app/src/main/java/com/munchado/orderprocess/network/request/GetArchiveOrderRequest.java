@@ -18,12 +18,14 @@ public class GetArchiveOrderRequest extends BaseRequest{
 
 
     private final int page;
+    public String versionCode;
 
-    public GetArchiveOrderRequest(int page) {
+    public GetArchiveOrderRequest(String str,int page) {
         this.page = page;
+        versionCode = str;
     }
     public String getServiceUrl() {
-        return NetworkConstants.GET_ORDER_URL + "&page="+page+"&limit=50&token="+ PrefUtil.getToken()+"&type=archive";
+        return NetworkConstants.GET_ORDER_URL + "&page="+page+"&limit=50&token="+ PrefUtil.getToken()+"&type=archive&current_version=" + versionCode;
     }
 
     public HashMap<String, String> getParameters() {

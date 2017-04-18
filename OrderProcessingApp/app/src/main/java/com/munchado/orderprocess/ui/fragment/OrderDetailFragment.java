@@ -130,7 +130,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         Bundle bundle = getArguments();
         String orderId = bundle.getString("ORDER_ID");
         ((BaseActivity) getActivity()).order_ID = orderId;
-        RequestController.getOrderDetail(orderId, this);
+        RequestController.getOrderDetail((BaseActivity) getActivity(), orderId, this);
     }
 
     private void initView(View view) {
@@ -336,38 +336,6 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
 
         updateActionButton();
 
-//        if (!StringUtils.isNullOrEmpty(data.special_instruction)) {
-//            layout_instrctions.setVisibility(View.VISIBLE);
-//            if (data.special_instruction.contains("||"))
-//                data.special_instruction = data.special_instruction.replaceAll("\\|\\|", "\n");
-//
-//            if (data.item_list.size() < 3) {
-//                textinstrctions.setText(data.special_instruction + "\n\n\n\n  ");
-//            } else
-//                textinstrctions.setText(data.special_instruction);
-//        } else {
-//            layout_instrctions.setVisibility(View.VISIBLE);
-//
-//            TextView tvtitle = (TextView) rootView.findViewById(R.id.special_instruction_title);
-//            if (data.item_list.size() > 3) {
-//                tvtitle.setText("\n\n\n\n  ");
-//                textinstrctions.setText("\n" +
-//                        "\n" +
-//                        "\n" +
-//                        "\n" +
-//                        "    ");
-//            } else {
-//                tvtitle.setText("\n\n\n\n\n\n\n\n  ");
-//                textinstrctions.setText("\n" +
-//                        "\n" +
-//                        "\n" +
-//                        "\n" + "\n" +
-//                        "\n" +
-//                        "\n" +
-//                        "    ");
-//            }
-//
-//        }
 
         if (!StringUtils.isNullOrEmpty(data.special_instruction)) {
             layout_instrctions.setVisibility(View.VISIBLE);
@@ -425,11 +393,11 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
             orderLayout.addView(view);
         }
 
-        LogUtils.e("============== layout_instrctions  " + layout_instrctions.getVisibility());
+//        LogUtils.e("============== layout_instrctions  " + layout_instrctions.getVisibility());
 
         if (layout_instrctions.getVisibility() == View.VISIBLE) {
 
-            LogUtils.e("============== layout_instrctions VISIBLE ");
+//            LogUtils.e("============== layout_instrctions VISIBLE ");
             ViewTreeObserver viewTreeObserver = layout_instrctions.getViewTreeObserver();
             if (viewTreeObserver.isAlive()) {
                 viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -437,7 +405,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                     public void onGlobalLayout() {
                         layout_instrctions.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                         layoutheight += layout_instrctions.getHeight();
-                        LogUtils.e("============== layout_instrctions height : " + layoutheight + "=====" + layout_instrctions.getHeight());
+//                        LogUtils.e("============== layout_instrctions height : " + layoutheight + "=====" + layout_instrctions.getHeight());
                     }
                 });
             }
@@ -452,12 +420,12 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                         empty_layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, layoutheight));
                         layout_close.setVisibility(View.VISIBLE);
                         layout_base.setVisibility(View.VISIBLE);
-                        LogUtils.e("============== orderLayout height : " + layoutheight + "=====" + orderLayout.getHeight());
+//                        LogUtils.e("============== orderLayout height : " + layoutheight + "=====" + orderLayout.getHeight());
                     }
                 });
             }
         } else {
-            LogUtils.e("============== layout_instrctions goNE ");
+//            LogUtils.e("============== layout_instrctions goNE ");
             ViewTreeObserver viewTreeObserver = orderLayout.getViewTreeObserver();
             if (viewTreeObserver.isAlive()) {
                 viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -578,23 +546,24 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         switch (view.getId()) {
             case R.id.text_print:
 
-                if (textAction.getText().toString().equalsIgnoreCase("Archive") || textAction.getVisibility() == View.GONE) {
-                    sendToPrinter();
-                } else {
+                if (textAction.getVisibility() == View.VISIBLE && textAction.getText().toString().equalsIgnoreCase("CONFIRM") || currentStatus.equalsIgnoreCase("placed")) {
                     clickFrom = PRINT;
                     showProgressBar();
-                    String status2 = "archived";
+                    String status2 = "";// "archived";
                     if (currentStatus.equalsIgnoreCase("placed"))
                         status2 = "confirmed";
-                    else if (currentStatus.equalsIgnoreCase("confirmed")) {
-                        if (order_type.equalsIgnoreCase("takeout"))
-                            status2 = "ready";
-                        else
-                            status2 = "delivered";
-                    } else if (currentStatus.equalsIgnoreCase("arrived"))
-                        status2 = "archived";
+//                    else if (currentStatus.equalsIgnoreCase("confirmed")) {
+//                        if (order_type.equalsIgnoreCase("takeout"))
+//                            status2 = "ready";
+//                        else
+//                            status2 = "delivered";
+//                    } else if (currentStatus.equalsIgnoreCase("arrived"))
+//                        status2 = "archived";
                     sent_status = status2;
                     RequestController.orderProcess(response.data.id, status2, "", "", OrderDetailFragment.this);
+                } else {
+
+                    sendToPrinter();
                 }
 
                 break;

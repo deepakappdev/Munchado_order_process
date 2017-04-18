@@ -63,7 +63,7 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
 
     private void fetchArchiveOrder() {
         DialogUtil.showProgressDialog(getActivity());
-        RequestController.getArchiveOrder(this,page);
+        RequestController.getArchiveOrder((BaseActivity)getActivity(),this,page);
 
         recyclerView.addOnScrollListener(new OnVerticalScrollListener() {
             @Override
@@ -79,7 +79,7 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
     }
     private void loadMoreArchieveOrders(){
         DialogUtil.showProgressDialog(getActivity());
-        RequestController.getArchiveOrder(this,++page);
+        RequestController.getArchiveOrder((BaseActivity)getActivity(),this,++page);
     }
 
     private void initView(View view) {

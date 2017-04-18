@@ -69,7 +69,6 @@ public class BaseActivity extends AppCompatActivity {
     public void backPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
             getSupportFragmentManager().popBackStack();
-//            ((ActiveOrderFragment) fragmentActiveOrder).updateOrderFromDetail();
         } else
             finish();
     }

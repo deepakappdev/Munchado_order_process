@@ -18,13 +18,15 @@ import java.util.HashMap;
 public class GetOrderDetailRequest extends BaseRequest {
 
     private final String orderId;
+    public String versionCode;
 
-    public GetOrderDetailRequest(String orderId) {
+    public GetOrderDetailRequest(String str, String orderId) {
         this.orderId = orderId;
+        versionCode = str;
     }
 
     public String getServiceUrl() {
-        return NetworkConstants.GET_ORDER_DETAIL_URL + orderId + "?mob=true&token=" + PrefUtil.getToken();
+        return NetworkConstants.GET_ORDER_DETAIL_URL + orderId + "?mob=true&token=" + PrefUtil.getToken() + "&current_version=" + versionCode;
     }
 
     public HashMap<String, String> getParameters() {

@@ -46,7 +46,7 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 //            notifyDataSetChanged();
         } else
             for (OrderItem orderItem : orderItems) {
-                LogUtils.d("========= updateResult status : " + orderItem.status);
+//                LogUtils.d("========= updateResult status : " + orderItem.status);
                 int position = getItemPosition(orderItem.id);
                 if (position == -1) {
                     this.orderItems.add(0, orderItem);
@@ -123,7 +123,7 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     public void confirmOrder(String orderId, String status) {
-        LogUtils.d("======confirmOrder=== status : " + status);
+//        LogUtils.d("======confirmOrder=== status : " + status);
         int position = getItemPosition(orderId);
         if (position > -1) {
             if (status.equalsIgnoreCase("arrived"))
@@ -196,7 +196,7 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 //            if(orderItem.delivery_date.contains("00:00"))
 //                orderItem.delivery_date.replaceAll("00:00","01:02");
 
-            LogUtils.d("========= status 1 : " + orderItem.status + "=====" + btnAction.getText().toString() + "=====" + orderItem.inProgress);
+//            LogUtils.d("========= status 1 : " + orderItem.status + "=====" + btnAction.getText().toString() + "=====" + orderItem.inProgress);
             textDelayTime.setText(DateTimeUtils.getFormattedDate(orderItem.delivery_date, DateTimeUtils.FORMAT_MMM_DD_YYYY));
             if (orderItem.inProgress) {
                 progressBar.setVisibility(View.VISIBLE);
@@ -204,7 +204,7 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             } else {
                 progressBar.setVisibility(View.INVISIBLE);
                 btnAction.setVisibility(View.VISIBLE);
-                LogUtils.d("========= status 2 : " + orderItem.status);
+//                LogUtils.d("========= status 2 : " + orderItem.status);
                 if (orderItem.status.equalsIgnoreCase("confirmed")) {
                     if (orderItem.order_type.equalsIgnoreCase("takeout")) {
                         btnAction.setText("READY");
@@ -272,7 +272,7 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             textOrderItem.setText(stringBuilder.toString());
             textOrderAmount.setText("$" + orderItem.total_amount);
 
-            LogUtils.d("========= status 1 : " + orderItem.status + "=====" + btnAction.getText().toString() + "=====" + orderItem.inProgress);
+//            LogUtils.d("========= status 1 : " + orderItem.status + "=====" + btnAction.getText().toString() + "=====" + orderItem.inProgress);
             textDelayTime.setText(DateTimeUtils.getFormattedDate(orderItem.delivery_date, DateTimeUtils.FORMAT_MMM_DD_YYYY));
             textDelayTimeHourMinute.setText(DateTimeUtils.getFormattedDate(orderItem.delivery_date, DateTimeUtils.FORMAT_HH_MM_A));
             if (orderItem.inProgress) {
@@ -280,7 +280,7 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 btnAction.setVisibility(View.INVISIBLE);
             } else {
 
-                LogUtils.d("========= status 2 : " + orderItem.status);
+//                LogUtils.d("========= status 2 : " + orderItem.status);
                 progressBar.setVisibility(View.INVISIBLE);
                 btnAction.setVisibility(View.VISIBLE);
                 if (orderItem.status.equalsIgnoreCase("confirmed")) {
