@@ -62,10 +62,13 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public void updateResult(OrderItem selectedItem) {
         int position = getItemPosition(selectedItem.id);
         if (position >= 0) {
+
             orderItems.remove(position);
-            orderItems.add(position, selectedItem);
-            notifyItemChanged(position);
-            notifyItemRangeChanged(position, getItemCount());
+            if (!selectedItem.status.equalsIgnoreCase("archived")) {
+                orderItems.add(position, selectedItem);
+                notifyItemChanged(position);
+                notifyItemRangeChanged(position, getItemCount());
+            } else notifyDataSetChanged();
         }
     }
 

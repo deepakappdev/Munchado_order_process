@@ -22,9 +22,9 @@
             android:layout_margin="@dimen/margin_normal"
             android:gravity="center"
             android:text="Sign in to Your Munch Ado Dashboard"
-            android:textSize="20sp"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@color/dark_grey"
+            android:textSize="20sp"
             app:textStyle="HelveticaLight" />
 
         <android.support.design.widget.TextInputLayout
@@ -45,9 +45,10 @@
                 android:inputType="textEmailAddress"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:text="info@baserany.com"
+                android:text=""
                 android:textColor="@color/default_text_color" />
         </android.support.design.widget.TextInputLayout>
+        <!-- android:text="info@baserany.com" -->
 
         <android.support.design.widget.TextInputLayout
             android:id="@+id/pwd_layout"
@@ -67,10 +68,11 @@
                 android:inputType="textPassword"
                 android:maxLines="1"
                 android:singleLine="true"
-                android:text="204654"
+                android:text=""
                 android:textColor="@color/default_text_color" />
         </android.support.design.widget.TextInputLayout>
-
+        <!--
+                        android:text="204654" -->
         <com.munchado.orderprocess.ui.widgets.CustomButton
             android:id="@+id/submit_btn"
             android:layout_width="match_parent"

@@ -85,7 +85,7 @@ public class RequestController {
                                     if (PrefUtil.getUpgradeType().isEmpty()) {
                                         PrefUtil.setUpgradeDisplayCount(((ActiveOrderResponse) response).data.fource_update.counter);
                                     }
-//                                    updateForceUpgradeData(ctx, ((ActiveOrderResponse) response).data.fource_update.clear_data, ((ActiveOrderResponse) response).data.fource_update.upgrade_type, ((ActiveOrderResponse) response).data.fource_update.message, ((ActiveOrderResponse) response).data.fource_update.apk_link);
+                                    updateForceUpgradeData(ctx, ((ActiveOrderResponse) response).data.fource_update.clear_data, ((ActiveOrderResponse) response).data.fource_update.upgrade_type, ((ActiveOrderResponse) response).data.fource_update.message, ((ActiveOrderResponse) response).data.fource_update.apk_link);
 
                                     callback.success(response);
                                 } else {
@@ -160,19 +160,23 @@ public class RequestController {
     }
 
     public static void updateForceUpgradeData(Context ctx, boolean cleardata, String upgradetype, String message, String apklink) {
-        PrefUtil.setUpgradeClearData(cleardata);
-        PrefUtil.setUpgradeType(upgrade_type);
-        PrefUtil.setUpgradeMessage(message);
-        apk_link = apklink;
-        upgrade_type = upgradetype;
-        if (upgrade_type.equalsIgnoreCase("hard")) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-            builder.setMessage("MA App Update Available.").setPositiveButton("Update", dialogClickListener).setCancelable(false).show();
-        } else if (upgrade_type.equalsIgnoreCase("soft") && PrefUtil.getUpgradeDisplayCount() == 3) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-            builder.setMessage("MA App Update Available.").setPositiveButton("Update", dialogClickListener)
-                    .setNegativeButton("Cancel", dialogClickListener).setCancelable(false).show();
+        if (!MyApplication.isDialogShown) {
+            PrefUtil.setUpgradeClearData(cleardata);
+            PrefUtil.setUpgradeType(upgrade_type);
+            PrefUtil.setUpgradeMessage(message);
+            apk_link = apklink;
+            upgrade_type = upgradetype;
+            if (upgrade_type.equalsIgnoreCase("hard")) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                builder.setMessage("MA App Update Available.").setPositiveButton("Update", dialogClickListener).setCancelable(false).show();
+            } else if (upgrade_type.equalsIgnoreCase("soft") && PrefUtil.getUpgradeDisplayCount() == 3) {
+                AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
+                builder.setMessage("MA App Update Available.").setPositiveButton("Update", dialogClickListener)
+                        .setNegativeButton("Cancel", dialogClickListener).setCancelable(false).show();
+            }
+            MyApplication.isDialogShown = true;
         }
+
     }
 
     public static DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
@@ -188,10 +192,12 @@ public class RequestController {
                         PrefUtil.setUpgradeDisplayCount(0);
                         PrefUtil.setUpgradeType("");
                     }
+                    MyApplication.isDialogShown = false;
                 }
                 break;
 
                 case DialogInterface.BUTTON_NEGATIVE:
+                    MyApplication.isDialogShown = false;
                     //No button clicked
                     break;
             }

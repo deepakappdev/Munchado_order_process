@@ -20,6 +20,7 @@ public class MyApplication extends Application {
     public static String printData = null;
     public static int mDeviceType = EasySelectDeviceType.TCP;
 
+    public static boolean isDialogShown=false;
     @Override
     public void onCreate() {
         super.onCreate();

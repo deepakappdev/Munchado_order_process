@@ -24,17 +24,17 @@ public class ReceiptFormatUtils {
 
     public static String setPrintData(OrderDetailResponseData orderDetailResponseData) {
         StringBuilder builder = new StringBuilder();
-        builder.append(getCenterSplitArray(orderDetailResponseData.restaurant_name,CONTENT_LENGTH));
-        builder.append(getCenterSplitArray(orderDetailResponseData.restaurant_address,CONTENT_LENGTH)).append("\n");
-        builder.append(getLeftNRightAlignedString("Receipt No.: "+orderDetailResponseData.payment_receipt,""));
-        builder.append(getLeftNRightAlignedString("Order Id: "+orderDetailResponseData.id,""));
+        builder.append(getCenterSplitArray(orderDetailResponseData.restaurant_name, CONTENT_LENGTH));
+        builder.append(getCenterSplitArray(orderDetailResponseData.restaurant_address, CONTENT_LENGTH)).append("\n");
+        builder.append(getLeftNRightAlignedString("Receipt No.: " + orderDetailResponseData.payment_receipt, ""));
+        builder.append(getLeftNRightAlignedString("Order Id: " + orderDetailResponseData.id, ""));
         Calendar cal = Calendar.getInstance();
         SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yyyy");
         SimpleDateFormat sdf2 = new SimpleDateFormat("HH:mm");
 
         String strDate = sdf.format(cal.getTime());
         String strDate2 = sdf2.format(cal.getTime());
-        builder.append(getLeftNRightAlignedString("Date: "+strDate,"Time: "+strDate2));
+        builder.append(getLeftNRightAlignedString("Date: " + strDate, "Time: " + strDate2));
 
         builder.append(seperator);
 //        LogUtils.d(builder.toString());
@@ -46,12 +46,12 @@ public class ReceiptFormatUtils {
 //                builder.append(getItemPriceData(i, printItemModel.item_name+" ("+printItemModel.addons_list.get(0).addon_name+")",printItemModel.item_qty, Integer.valueOf(printItemModel.item_qty) * Float.valueOf(printItemModel.unit_price) + ""));
 //            }
 //            else
-                builder.append(getItemPriceData(i, printItemModel.item_name,printItemModel.item_qty, Integer.valueOf(printItemModel.item_qty) * Float.valueOf(printItemModel.unit_price) + ""));
+            builder.append(getItemPriceData(i, printItemModel.item_name, printItemModel.item_qty, Integer.valueOf(printItemModel.item_qty) * Float.valueOf(printItemModel.unit_price) + ""));
             int j = 1;
             for (AddonsList addonsListModel : printItemModel.addons_list) {
 //                if(addonsListModel.addon_price.equalsIgnoreCase("0.00"))
 //                    continue;
-                builder.append(getSubItemPriceData(j, addonsListModel.addon_name,addonsListModel.addon_quantity, Integer.valueOf(addonsListModel.addon_quantity) * Float.valueOf(addonsListModel.addon_price) + ""));
+                builder.append(getSubItemPriceData(j, addonsListModel.addon_name, addonsListModel.addon_quantity, Integer.valueOf(addonsListModel.addon_quantity) * Float.valueOf(addonsListModel.addon_price) + ""));
                 j++;
             }
             i++;
@@ -60,11 +60,11 @@ public class ReceiptFormatUtils {
         builder.append(seperator);
         builder.append(getAmountCalculation("Subtotal", orderDetailResponseData.order_amount_calculation.subtotal));
         builder.append(getAmountCalculation("Discount", orderDetailResponseData.order_amount_calculation.discount));
-        if(!orderDetailResponseData.order_type.equalsIgnoreCase("takeout"))
-        builder.append(getAmountCalculation("Delivery",  orderDetailResponseData.order_amount_calculation.delivery_charge));
+        if (!orderDetailResponseData.order_type.equalsIgnoreCase("takeout"))
+            builder.append(getAmountCalculation("Delivery", orderDetailResponseData.order_amount_calculation.delivery_charge));
         builder.append(getAmountCalculation("Tax", orderDetailResponseData.order_amount_calculation.tax_amount));
-        if(!orderDetailResponseData.order_type.equalsIgnoreCase("takeout"))
-        builder.append(getAmountCalculation("Tip", orderDetailResponseData.order_amount_calculation.tip_amount));
+        if (!orderDetailResponseData.order_type.equalsIgnoreCase("takeout"))
+            builder.append(getAmountCalculation("Tip", orderDetailResponseData.order_amount_calculation.tip_amount));
         builder.append(seperator);
         builder.append(getAmountCalculation("Total", orderDetailResponseData.order_amount_calculation.total_order_price));
         builder.append(seperator);
@@ -74,26 +74,27 @@ public class ReceiptFormatUtils {
 
     public static String getAmountCalculation(String string, String amount) {
         StringBuilder stringBuilder = new StringBuilder();
-        if (!amount.contains("."))
-        {
+        if (!amount.contains(".")) {
             amount = amount + ".00";
             float value = Float.valueOf(amount);
-            if((int)value==0){
-                amount = "00.00" ;
+            if ((int) value == 0) {
+                amount = "00.00";
             }
-        }
-        else
-        {
+        } else {
             float value = Float.valueOf(amount);
-//            LogUtils.d("==== value : "+value+"==== int value : "+(int)value);
-            if((int)value<10){
-                amount = "0"+amount ;
+            if ((int) value < 10) {
+                amount = "0" + amount;
             }
-            if((int)value==0){
-                amount = "00.00" ;
+
+            if ((int) value == 0) {
+
+                int retval = Float.compare(value, 0.00f);
+                if (retval > 0){}
+                else
+                    amount = "00.00";
             }
         }
-        amount = "$"+amount;
+        amount = "$" + amount;
         int remainingspace = CONTENT_LENGTH - string.length() - amount.length();
         if (remainingspace > 0) {
             char[] chars = new char[remainingspace];
@@ -104,44 +105,43 @@ public class ReceiptFormatUtils {
         return stringBuilder.toString();
     }
 
-    public static String getSubItemPriceData(int serialNo, String name,String qty, String price) {
+    public static String getSubItemPriceData(int serialNo, String name, String qty, String price) {
         name = name.replaceAll("&amp;", "&");
         StringBuilder stringBuilder = new StringBuilder();
-        price+="00";
+        price += "00";
         df.setMinimumFractionDigits(2);
         df.setMaximumFractionDigits(2);
         String p = df.format(Float.valueOf(price));
         if (!p.contains("."))
             p = p + ".00";
-        if(p.contains(","))
-            p = p.replaceAll(",","");
+        if (p.contains(","))
+            p = p.replaceAll(",", "");
         float value = Float.valueOf(p);
-        if((int)value<10){
-            p = "0"+p ;
+        if ((int) value < 10) {
+            p = "0" + p;
         }
-        if (Integer.parseInt(qty)  < 10)
-            qty=" "+qty;
+        if (Integer.parseInt(qty) < 10)
+            qty = " " + qty;
 //        if (serialNo > 9)
 //            stringBuilder.append(" " + serialNo + ". ");
 //        else
-            stringBuilder.append(" - ");
+        stringBuilder.append(" - ");
         int spaceforitemname = CONTENT_LENGTH - ("      $" + p).length() - 3;
-        spaceforitemname=15;
+        spaceforitemname = 15;
         if (name.length() > spaceforitemname) {
 
-            List<String> list =new ArrayList<>();
-            list.addAll(getSplitArray(name,spaceforitemname));
-            for(int j=0;j<list.size();j++){
-                if(j==0){
+            List<String> list = new ArrayList<>();
+            list.addAll(getSplitArray(name, spaceforitemname));
+            for (int j = 0; j < list.size(); j++) {
+                if (j == 0) {
 
                     int remainingspace = spaceforitemname - list.get(j).length();
-                    char[] chars = new char[remainingspace+2];
+                    char[] chars = new char[remainingspace + 2];
                     Arrays.fill(chars, ' ');
 
-                    String prc=Float.valueOf(p)>=100?(" $" + p):("  $" + p);
+                    String prc = Float.valueOf(p) >= 100 ? (" $" + p) : ("  $" + p);
                     stringBuilder.append(list.get(j)).append(chars).append(qty).append(prc).append("\n");
-                }
-                else
+                } else
                     stringBuilder.append(list.get(j)).append("\n");
             }
 
@@ -153,7 +153,7 @@ public class ReceiptFormatUtils {
             if (remainingspace > 1) {
                 char[] chars = new char[remainingspace];
                 Arrays.fill(chars, ' ');
-                String prc=Float.valueOf(p)>=100?(" $" + p):("  $" + p);
+                String prc = Float.valueOf(p) >= 100 ? (" $" + p) : ("  $" + p);
                 stringBuilder.append(name).append(chars).append("  ").append(qty).append(prc).append("\n");
 //                stringBuilder.append(name).append(chars).append("  $" + p).append("\n");
             } else
@@ -164,46 +164,45 @@ public class ReceiptFormatUtils {
         return stringBuilder.toString();
     }
 
-    public static String getItemPriceData(int serialNo, String name,String qty, String price) {
+    public static String getItemPriceData(int serialNo, String name, String qty, String price) {
         name = name.replaceAll("&amp;", "&");
         StringBuilder stringBuilder = new StringBuilder();
-        price+="00";
+        price += "00";
 
         df.setMinimumFractionDigits(2);
         df.setMaximumFractionDigits(2);
         String p = df.format(Float.valueOf(price));
         if (!p.contains("."))
             p = p + ".00";
-        if(p.contains(","))
-            p = p.replaceAll(",","");
+        if (p.contains(","))
+            p = p.replaceAll(",", "");
         float value = Float.valueOf(p);
-        if((int)value<10){
-            p = "0"+p ;
+        if ((int) value < 10) {
+            p = "0" + p;
         }
-        if (Integer.parseInt(qty)  < 10)
-            qty=" "+qty;
+        if (Integer.parseInt(qty) < 10)
+            qty = " " + qty;
 //        else
 //            stringBuilder.append("0" + serialNo + ". ");
         int spaceforitemname = CONTENT_LENGTH - ("      $" + p).length() - 3;
-        spaceforitemname=18;
+        spaceforitemname = 18;
 //        stringBuilder.append(displayMultilineString(serialNo,name,spaceforitemname,p));
         if (name.length() >= spaceforitemname) {
 
-            List<String> list =new ArrayList<>();
-            list.addAll(getSplitArray(name,spaceforitemname));
+            List<String> list = new ArrayList<>();
+            list.addAll(getSplitArray(name, spaceforitemname));
 //            LogUtils.d("===== name: "+name+"==== length: "+list.get(0).length());
-            for(int j=0;j<list.size();j++){
-                if(j==0){
+            for (int j = 0; j < list.size(); j++) {
+                if (j == 0) {
 
                     int remainingspace = spaceforitemname - list.get(j).length();
 
-                        char[] chars = new char[remainingspace+2];
-                        Arrays.fill(chars, ' ');
+                    char[] chars = new char[remainingspace + 2];
+                    Arrays.fill(chars, ' ');
 
-                    String prc=Float.valueOf(p)>=100?(" $" + p):("  $" + p);
+                    String prc = Float.valueOf(p) >= 100 ? (" $" + p) : ("  $" + p);
                     stringBuilder.append(list.get(j)).append(chars).append(qty).append(prc).append("\n");
-                }
-                else
+                } else
                     stringBuilder.append(list.get(j)).append("\n");
             }
 
@@ -213,7 +212,7 @@ public class ReceiptFormatUtils {
             if (remainingspace > 0) {
                 char[] chars = new char[remainingspace];
                 Arrays.fill(chars, ' ');
-                String prc=Float.valueOf(p)>=100?(" $" + p):("  $" + p);
+                String prc = Float.valueOf(p) >= 100 ? (" $" + p) : ("  $" + p);
                 stringBuilder.append(name).append(chars).append("  ").append(qty).append(prc).append("\n");
 //                stringBuilder.append(name).append(chars).append("  $" + p).append("\n");
             } else
@@ -224,9 +223,9 @@ public class ReceiptFormatUtils {
         return stringBuilder.toString();
     }
 
-    public static String getLeftNRightAlignedString(String left,String right){
+    public static String getLeftNRightAlignedString(String left, String right) {
         StringBuilder stringBuilder = new StringBuilder();
-        int remainingspace=CONTENT_LENGTH-left.length()-right.length();
+        int remainingspace = CONTENT_LENGTH - left.length() - right.length();
         char[] chars = new char[remainingspace];
         Arrays.fill(chars, ' ');
         stringBuilder.append(left).append(chars).append(right).append("\n");
@@ -334,13 +333,11 @@ public class ReceiptFormatUtils {
         int i = 0;
         int count = 1;
         while ((i = sb.indexOf(" ", i + length)) != -1) {
-            if (count == 1)
-            {
+            if (count == 1) {
 //                if(no>0)
                 sb.replace(i, i + 1, "$" + price + "\n");
 //                else sb.replace(i, i + 1, "$" + price + "\n");
-            }
-            else
+            } else
                 sb.replace(i, i + 1, "\n");
         }
         return sb.toString();
@@ -352,12 +349,12 @@ public class ReceiptFormatUtils {
         int nameLength = splitString.length;
         ArrayList<String> stringArray = new ArrayList<>();
         int index = 0;
-        while (index<nameLength) {
-            String finalLine=splitString[index];
+        while (index < nameLength) {
+            String finalLine = splitString[index];
 
-            while (index<nameLength-1) {
-                String testLine = finalLine + " " + splitString[index+1];
-                if(testLine.length()<=maxLength) {
+            while (index < nameLength - 1) {
+                String testLine = finalLine + " " + splitString[index + 1];
+                if (testLine.length() <= maxLength) {
                     finalLine = testLine;
                     index++;
                 } else {
@@ -375,21 +372,21 @@ public class ReceiptFormatUtils {
         String[] splitString = itemName.split(" ");
         int nameLength = splitString.length;
 //        ArrayList<String> stringArray = new ArrayList<>();
-        StringBuilder stringBuilder=new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder();
         int index = 0;
-        while (index<nameLength) {
-            String finalLine=splitString[index];
+        while (index < nameLength) {
+            String finalLine = splitString[index];
 
-            while (index<nameLength-1) {
-                String testLine = finalLine + " " + splitString[index+1];
-                if(testLine.length()<=maxLength) {
+            while (index < nameLength - 1) {
+                String testLine = finalLine + " " + splitString[index + 1];
+                if (testLine.length() <= maxLength) {
                     finalLine = testLine;
                     index++;
                 } else {
                     break;
                 }
             }
-            int spaceCount = (maxLength-finalLine.length())/2;
+            int spaceCount = (maxLength - finalLine.length()) / 2;
             stringBuilder.append(getSpaceString(spaceCount) + finalLine).append("\n");
             index++;
         }
@@ -398,7 +395,7 @@ public class ReceiptFormatUtils {
 
     private static String getSpaceString(int spaceCount) {
         StringBuilder builder = new StringBuilder();
-        for(int index=0;index<spaceCount;index++) {
+        for (int index = 0; index < spaceCount; index++) {
             builder.append(" ");
         }
         return builder.toString();
