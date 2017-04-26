@@ -132,12 +132,13 @@
         android:paddingBottom="20dp"
         android:paddingLeft="20dp"
         android:paddingStart="20dp"
-        android:visibility="gone">
+        android:visibility="visible">
 
-        <ImageView
+        <ImageButton
             android:id="@+id/iv_close"
             android:layout_width="35dp"
             android:layout_height="35dp"
+            android:background="@null" android:scaleType="centerInside"
             android:src="@mipmap/ic_cross" />
     </LinearLayout>
 

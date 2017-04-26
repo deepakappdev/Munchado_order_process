@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -88,6 +89,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     private TextView textChange_Time;
     private LinearLayout layout_instrctions;
     LinearLayout layout_profile, empty_layout, layout_close;
+    ImageButton btn_close;
     RelativeLayout layout_base;
     private TextView textinstrctions;
     private NestedScrollView scrollView;
@@ -140,6 +142,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         imageView = (ImageView) view.findViewById(R.id.image_view);
         textTelephone = (TextView) view.findViewById(R.id.text_telephone);
         textPastActivity = (TextView) view.findViewById(R.id.text_past_activity);
+        btn_close = (ImageButton) view.findViewById(R.id.iv_close);
 
         textOrderId = (TextView) view.findViewById(R.id.text_order_id);
         text_receipt_no = (TextView) view.findViewById(R.id.text_receipt_no);
@@ -173,6 +176,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         scrollView = (NestedScrollView) view.findViewById(R.id.scrollView);
         textPlus.setOnClickListener(this);
         textMinus.setOnClickListener(this);
+        btn_close.setOnClickListener(this);
 
         layout_close.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -602,6 +606,9 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                 break;
             case R.id.text_minus:
                 changeTime(-30);
+                break;
+            case R.id.iv_close:
+                ((BaseActivity) getActivity()).backPressed();
                 break;
             case R.id.btn_update:
                 showProgressBar();
