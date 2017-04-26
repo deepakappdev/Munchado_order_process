@@ -49,12 +49,12 @@ public class ReceiptFormatUtils {
 //                builder.append(getItemPriceData(i, printItemModel.item_name+" ("+printItemModel.addons_list.get(0).addon_name+")",printItemModel.item_qty, Integer.valueOf(printItemModel.item_qty) * Float.valueOf(printItemModel.unit_price) + ""));
 //            }
 //            else
-            builder.append(getItemPriceData(i, printItemModel.item_name, printItemModel.item_qty, Integer.valueOf(printItemModel.item_qty) * Float.valueOf(printItemModel.unit_price) + ""));
+            builder.append(getItemPriceData(i, Utils.decodeHtml(printItemModel.item_name), printItemModel.item_qty, Integer.valueOf(printItemModel.item_qty) * Float.valueOf(printItemModel.unit_price) + ""));
             int j = 1;
             for (AddonsList addonsListModel : printItemModel.addons_list) {
 //                if(addonsListModel.addon_price.equalsIgnoreCase("0.00"))
 //                    continue;
-                builder.append(getSubItemPriceData(j, addonsListModel.addon_name, addonsListModel.addon_quantity, Integer.valueOf(addonsListModel.addon_quantity) * Float.valueOf(addonsListModel.addon_price) + ""));
+                builder.append(getSubItemPriceData(j, Utils.decodeHtml(addonsListModel.addon_name), addonsListModel.addon_quantity, Integer.valueOf(addonsListModel.addon_quantity) * Float.valueOf(addonsListModel.addon_price) + ""));
                 j++;
             }
             i++;
@@ -153,14 +153,14 @@ public class ReceiptFormatUtils {
             int remainingspace = spaceforitemname - name.length();
 //            int remainingspace = 15 - name.length();
 //            LogUtils.d("===== subitem : else spaceforitemname : "+spaceforitemname+"== name.length():"+name.length()+"=== remainingspace : "+remainingspace);
-            if (remainingspace >= 1) {
-                char[] chars = new char[remainingspace];
-                Arrays.fill(chars, ' ');
-                String prc = Float.valueOf(p) >= 100 ? (" $" + p) : ("  $" + p);
-                stringBuilder.append(name).append(chars).append("  ").append(qty).append(prc).append("\n");
+//            if (remainingspace >= 1) {
+            char[] chars = new char[remainingspace];
+            Arrays.fill(chars, ' ');
+            String prc = Float.valueOf(p) >= 100 ? (" $" + p) : ("  $" + p);
+            stringBuilder.append(name).append(chars).append("  ").append(qty).append(prc).append("\n");
 //                stringBuilder.append(name).append(chars).append("  $" + p).append("\n");
-            } else
-                stringBuilder.append("   ").append(name).append("\n");
+//            } else
+//                stringBuilder.append("   ").append(name).append("\n");
         }
 
 
