@@ -66,11 +66,12 @@ public class SplashActivity extends AppCompatActivity {
                         PrefUtil.setUpgradeType(upgradeData.data.upgrade_type);
                         PrefUtil.setUpgradeMessage(upgradeData.data.message);
                         if (upgradeData.data.upgrade_type.equalsIgnoreCase("hard")) {
+
                             AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this);
-                            builder.setMessage("MA App Update Available.").setPositiveButton("Update", dialogClickListener).setCancelable(false).show();
+                            builder.setMessage(getResources().getString(R.string.app_name)+" Update Available.").setPositiveButton("Update", dialogClickListener).setCancelable(false).show();
                         } else if ((upgradeData.data.upgrade_type.equalsIgnoreCase("soft") && PrefUtil.getUpgradeDisplayCount() == 3)) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this);
-                            builder.setMessage("MA App Update Available.").setPositiveButton("Update", dialogClickListener)
+                            builder.setMessage(getResources().getString(R.string.app_name)+" Update Available.").setPositiveButton("Update", dialogClickListener)
                                     .setNegativeButton("Cancel", dialogClickListener).setCancelable(false).show();
                         } else
                             gotoHome();
@@ -107,7 +108,6 @@ public class SplashActivity extends AppCompatActivity {
                     Intent i = new Intent(SplashActivity.this, LoginActivity.class);
                     startActivity(i);
                 }
-                // close this activity
                 finish();
             }
         }, SPLASH_TIME_OUT);
@@ -120,13 +120,22 @@ public class SplashActivity extends AppCompatActivity {
                 case DialogInterface.BUTTON_POSITIVE:
                     //Yes button clicked
                     if (upgradeData != null) {
-//                        Intent i = new Intent(Intent.ACTION_VIEW);
-//                        i.setData(Uri.parse(upgradeData.data.apk_link));
-//                        startActivity(i);
-                        dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-                        DownloadManager.Request request = new DownloadManager.Request(
-                                Uri.parse(upgradeData.data.apk_link));
-                        long enqueue = dm.enqueue(request);
+                        dialog.dismiss();
+                        if (PrefUtil.isLogin()) {
+                            Intent i = new Intent(SplashActivity.this, HomeActivity.class);
+                            startActivity(i);
+                        } else {
+                            Intent i = new Intent(SplashActivity.this, LoginActivity.class);
+                            startActivity(i);
+                        }
+                        Intent webIntent = new Intent(Intent.ACTION_VIEW,
+                                Uri.parse("https://play.google.com/store/apps/details?id=" + getPackageName()));
+                        startActivity(webIntent);
+                        finish();
+//                        dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+//                        DownloadManager.Request request = new DownloadManager.Request(
+//                                Uri.parse(upgradeData.data.apk_link));
+//                        long enqueue = dm.enqueue(request);
                         if (upgradeData.data.upgrade_type.equalsIgnoreCase("hard")) {
                             PrefUtil.setUpgradeDisplayCount(0);
                             PrefUtil.setUpgradeType("");
@@ -135,11 +144,13 @@ public class SplashActivity extends AppCompatActivity {
                     break;
 
                 case DialogInterface.BUTTON_NEGATIVE:
+                    dialog.dismiss();
+                    gotoHome();
                     //No button clicked
                     break;
             }
-            dialog.dismiss();
-            gotoHome();
+
+
         }
     };
 

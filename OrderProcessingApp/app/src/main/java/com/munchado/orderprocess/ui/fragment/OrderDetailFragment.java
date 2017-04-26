@@ -227,7 +227,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
             textDeliveryAddress.setVisibility(View.VISIBLE);
 //            textDeliveryAddress.setText(orderDetailData.my_delivery_detail.apt_suite + ", " + orderDetailData.my_delivery_detail.address +
 //                    "\n" + orderDetailData.my_delivery_detail.state + "-" + orderDetailData.my_delivery_detail.zipcode);
-            textDeliveryAddress.setText(orderDetailData.my_delivery_detail.address);
+            textDeliveryAddress.setText(Utils.decodeHtml(orderDetailData.my_delivery_detail.address));
         }
         textDeliveryTime.setText(DateTimeUtils.getFormattedDate(orderDetailData.delivery_date, DateTimeUtils.FORMAT_MMM_DD_YYYY) + " @ " + DateTimeUtils.getFormattedDate(orderDetailData.delivery_date, DateTimeUtils.FORMAT_HH_MM_A));
 //        textChangeDeliveryTime.setText(orderDetailData.delivery_date);
@@ -253,8 +253,8 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         if (obj instanceof OrderDetailResponse) {
             response = (OrderDetailResponse) obj;
             printData = ReceiptFormatUtils.setPrintData(response.data);
-
-            LogUtils.d(printData);
+            printData = Utils.decodeHtml(printData);
+            LogUtils.e(printData);
             showDetail(response.data);
         } else if (obj instanceof OrderProcessResponse) {
             if (((OrderProcessResponse) obj).data.message) {
@@ -329,7 +329,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         if (pastActivity.toString().isEmpty())
             textPastActivity.setText("No Past Activity");
         else
-            textPastActivity.setText(pastActivity.toString());
+            textPastActivity.setText(Utils.decodeHtml(pastActivity.toString()));
 
         showOrderDetail(data);
         showOrderPaymentDetail(data, data.order_amount_calculation);
@@ -346,7 +346,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
 //            if (data.item_list.size() < 3) {
 //                textinstrctions.setText(data.special_instruction + "\n\n\n\n  ");
 //            } else
-            textinstrctions.setText(data.special_instruction);
+            textinstrctions.setText(Utils.decodeHtml(data.special_instruction));
         } else
             layout_instrctions.setVisibility(View.GONE);
     }
@@ -363,11 +363,11 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
             TextView itemCount = (TextView) view.findViewById(R.id.text_item_count);
             TextView itemPrice = (TextView) view.findViewById(R.id.text_item_price);
 
-            itemName.setText(itemList.item_name);
+            itemName.setText(Utils.decodeHtml(itemList.item_name));
             if (StringUtils.isNullOrEmpty(itemList.item_special_instruction)) {
                 textInstruction.setVisibility(View.GONE);
             } else {
-                textInstruction.setText(itemList.item_special_instruction);
+                textInstruction.setText(Utils.decodeHtml(itemList.item_special_instruction));
             }
             itemCount.setText(itemList.item_qty);
             itemPrice.setText("$" + df.format(Utils.parseDouble(itemList.unit_price) * Utils.parseDouble(itemList.item_qty)));
@@ -383,7 +383,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                     itemCount = (TextView) addonView.findViewById(R.id.text_item_count);
                     itemPrice = (TextView) addonView.findViewById(R.id.text_item_price);
 
-                    itemName.setText("+ " + addonsItem.addon_name);
+                    itemName.setText("+ " + Utils.decodeHtml(addonsItem.addon_name));
                     itemCount.setText(addonsItem.addon_quantity);
                     itemPrice.setText("$" + df.format(Double.valueOf(addonsItem.addons_total_price)));
                     view_count++;

@@ -1,8 +1,8 @@
 package com.munchado.orderprocess.network;
 
-import android.app.DownloadManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -19,6 +19,7 @@ import com.android.volley.toolbox.BasicNetwork;
 import com.android.volley.toolbox.DiskBasedCache;
 import com.android.volley.toolbox.HurlStack;
 import com.munchado.orderprocess.MyApplication;
+import com.munchado.orderprocess.R;
 import com.munchado.orderprocess.model.BaseResponse;
 import com.munchado.orderprocess.model.archiveorder.ActiveOrderResponse;
 import com.munchado.orderprocess.model.archiveorder.ArchiveOrderResponse;
@@ -168,10 +169,10 @@ public class RequestController {
             upgrade_type = upgradetype;
             if (upgrade_type.equalsIgnoreCase("hard")) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-                builder.setMessage("MA App Update Available.").setPositiveButton("Update", dialogClickListener).setCancelable(false).show();
+                builder.setMessage(ctx.getResources().getString(R.string.app_name)+" Update Available.").setPositiveButton("Update", dialogClickListener).setCancelable(false).show();
             } else if (upgrade_type.equalsIgnoreCase("soft") && PrefUtil.getUpgradeDisplayCount() == 3) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-                builder.setMessage("MA App Update Available.").setPositiveButton("Update", dialogClickListener)
+                builder.setMessage(ctx.getResources().getString(R.string.app_name)+" Update Available.").setPositiveButton("Update", dialogClickListener)
                         .setNegativeButton("Cancel", dialogClickListener).setCancelable(false).show();
             }
             MyApplication.isDialogShown = true;
@@ -184,10 +185,14 @@ public class RequestController {
         public void onClick(DialogInterface dialog, int which) {
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE: {
-                    DownloadManager dm = (DownloadManager) context.getSystemService(context.DOWNLOAD_SERVICE);
-                    DownloadManager.Request request = new DownloadManager.Request(
-                            Uri.parse(apk_link));
-                    long enqueue = dm.enqueue(request);
+                    dialog.dismiss();
+                    Intent webIntent = new Intent(Intent.ACTION_VIEW,
+                            Uri.parse("https://play.google.com/store/apps/details?id=" + context.getPackageName()));
+                    context.startActivity(webIntent);
+//                    DownloadManager dm = (DownloadManager) context.getSystemService(context.DOWNLOAD_SERVICE);
+//                    DownloadManager.Request request = new DownloadManager.Request(
+//                            Uri.parse(apk_link));
+//                    long enqueue = dm.enqueue(request);
                     if (upgrade_type.equalsIgnoreCase("hard")) {
                         PrefUtil.setUpgradeDisplayCount(0);
                         PrefUtil.setUpgradeType("");
@@ -198,10 +203,11 @@ public class RequestController {
 
                 case DialogInterface.BUTTON_NEGATIVE:
                     MyApplication.isDialogShown = false;
+                    dialog.dismiss();
                     //No button clicked
                     break;
             }
-            dialog.dismiss();
+
         }
     };
 
