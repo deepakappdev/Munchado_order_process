@@ -6,4 +6,6 @@ package com.munchado.orderprocess.model.login;
 
 public class StatusResponseData {
     public boolean message;
+    public String restaurant_id;
+
 }

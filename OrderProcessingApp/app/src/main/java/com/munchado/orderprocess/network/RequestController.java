@@ -32,6 +32,7 @@ import com.munchado.orderprocess.network.request.GetArchiveOrderRequest;
 import com.munchado.orderprocess.network.request.GetOrderDetailRequest;
 import com.munchado.orderprocess.network.request.GetRestaurantProfileRequest;
 import com.munchado.orderprocess.network.request.LoginRequest;
+import com.munchado.orderprocess.network.request.LogoutRequest;
 import com.munchado.orderprocess.network.request.NewTokenRequest;
 import com.munchado.orderprocess.network.request.OrderProcessRequest;
 import com.munchado.orderprocess.network.request.UpdateAppRequest;
@@ -269,7 +270,7 @@ public class RequestController {
     }
 
     public static void logout(String username, String password, RequestCallback callBack) {
-        LoginRequest request = new LoginRequest(username, password);
+        LogoutRequest request = new LogoutRequest(username, password);
         GsonRequest gsonRequest = request.createServerRequest(getErrorListener(callBack), getListener(callBack, request));
         getmRequestQueue().add(gsonRequest);
     }

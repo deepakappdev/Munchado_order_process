@@ -253,7 +253,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         if (obj instanceof OrderDetailResponse) {
             response = (OrderDetailResponse) obj;
             printData = ReceiptFormatUtils.setPrintData(response.data);
-            printData = Utils.decodeHtml(printData);
+//            printData = Utils.decodeHtml(printData);
             LogUtils.e(printData);
             showDetail(response.data);
         } else if (obj instanceof OrderProcessResponse) {

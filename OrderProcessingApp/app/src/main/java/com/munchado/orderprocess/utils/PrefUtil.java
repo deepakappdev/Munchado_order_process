@@ -161,4 +161,20 @@ public final class PrefUtil {
     public static String getUpgradeMessage() {
         return getString(Constants.PREF_UPGRADE_MESSAGE, "");
     }
+
+    public static void putUsername(String username) {
+        putString(Constants.PREF_USERNAME, username);
+    }
+
+    public static void putPassword(String pwd) {
+        putString(Constants.PREF_PASSWORD, pwd);
+    }
+
+    public static String getUsername() {
+        return getString(Constants.PREF_USERNAME, "");
+    }
+
+    public static String getPassword() {
+        return getString(Constants.PREF_PASSWORD, "");
+    }
 }

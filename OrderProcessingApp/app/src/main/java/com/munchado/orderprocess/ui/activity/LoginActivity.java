@@ -49,13 +49,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mEmail = (EditText) findViewById(R.id.email);
         mPassword = (EditText) findViewById(R.id.password);
 
-        Typeface type = Typeface.createFromAsset(getAssets(),"HelveticaNeueLight.ttf");
+        Typeface type = Typeface.createFromAsset(getAssets(), "HelveticaNeueLight.ttf");
         mEmailLayout.getEditText().setTypeface(type);
         mEmailLayout.setTypeface(type);
         mPasswordLayout.getEditText().setTypeface(type);
         mPasswordLayout.setTypeface(type);
 
 
+        if (!StringUtils.isNullOrEmpty(PrefUtil.getUsername()))
+            mEmail.setText(PrefUtil.getUsername());
+        if (!StringUtils.isNullOrEmpty(PrefUtil.getPassword()))
+            mPassword.setText(PrefUtil.getPassword());
         findViewById(R.id.submit_btn).setOnClickListener(this);
     }
 
@@ -64,7 +68,12 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         if (MunchadoUtils.isNetworkAvailable(this)) {
             if (checkLoginValidation()) {
-                getNewToken();
+                if (!StringUtils.isNullOrEmpty(PrefUtil.getToken())) {
+                    DialogUtil.showProgressDialog(LoginActivity.this);
+                    hitLogin();
+                } else
+                    getNewToken();
+
             }
         } else {
             CustomErrorDialogFragment errorDialogFragment = CustomErrorDialogFragment.newInstance(getResources().getString(R.string.network_error));
@@ -145,7 +154,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 DialogUtil.hideProgressDialog();
                 StatusResponse mStatusResponse = (StatusResponse) response;
                 if (mStatusResponse.data.message) {
-                    PrefUtil.putString(Constants.PREF_USER_ID, "58285");
+                    PrefUtil.putString(Constants.PREF_USER_ID, mStatusResponse.data.restaurant_id);//58285
 
                     PrefUtil.setLogin(true);
                     startActivity(new Intent(LoginActivity.this, HomeActivity.class));

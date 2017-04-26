@@ -20,8 +20,14 @@ import android.widget.TextView;
 
 import com.munchado.orderprocess.R;
 import com.munchado.orderprocess.common.FRAGMENTS;
+import com.munchado.orderprocess.model.login.StatusResponse;
+import com.munchado.orderprocess.network.RequestController;
+import com.munchado.orderprocess.network.volley.NetworkError;
+import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.notification.PubnubService;
+import com.munchado.orderprocess.ui.fragment.CustomErrorDialogFragment;
 import com.munchado.orderprocess.utils.Constants;
+import com.munchado.orderprocess.utils.DialogUtil;
 import com.munchado.orderprocess.utils.PrefUtil;
 
 import java.lang.reflect.Field;
@@ -38,7 +44,6 @@ public class HomeActivity extends BaseActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -116,17 +121,41 @@ public class HomeActivity extends BaseActivity
             popToHomePage();
             addFragment(FRAGMENTS.PRINT, null);
         } else if (id == R.id.nav_logout) {
-            PrefUtil.clearAllData();
-            Intent i = new Intent(HomeActivity.this, PubnubService.class);
-            i.putExtra(Constants.PARAM_PUBNUB_ACTION, Constants.PARAM_PUBNUB_UNSUBSCRIBE);
-            startService(i);
-            startActivity(new Intent(HomeActivity.this, LoginActivity.class));
-            finish();
+
+            hitLogout();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    private void hitLogout() {
+        DialogUtil.showProgressDialog(HomeActivity.this);
+        RequestController.logout("", "", new RequestCallback() {
+            @Override
+            public void error(NetworkError volleyError) {
+
+            }
+
+            @Override
+            public void success(Object response) {
+                DialogUtil.hideProgressDialog();
+                StatusResponse mStatusResponse = (StatusResponse) response;
+                if (mStatusResponse.data.message) {
+                    PrefUtil.clearAllData();
+                    Intent i = new Intent(HomeActivity.this, PubnubService.class);
+                    i.putExtra(Constants.PARAM_PUBNUB_ACTION, Constants.PARAM_PUBNUB_UNSUBSCRIBE);
+                    startService(i);
+                    startActivity(new Intent(HomeActivity.this, LoginActivity.class));
+                    finish();
+                } else {
+                    CustomErrorDialogFragment errorDialogFragment = CustomErrorDialogFragment.newInstance("Unable to login.");
+                    errorDialogFragment.show(getSupportFragmentManager(), "Error");
+                }
+
+            }
+        });
     }
 
     public void setCustomTitle(String title) {
@@ -156,6 +185,7 @@ public class HomeActivity extends BaseActivity
         super.onResume();
         initPub();
         if (PrefUtil.isScreenOn()) {
+            getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             keepScreenOn();
 
         }

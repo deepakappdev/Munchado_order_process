@@ -24,8 +24,11 @@ public class ReceiptFormatUtils {
 
     public static String setPrintData(OrderDetailResponseData orderDetailResponseData) {
         StringBuilder builder = new StringBuilder();
-        builder.append(getCenterSplitArray(orderDetailResponseData.restaurant_name, CONTENT_LENGTH));
-        builder.append(getCenterSplitArray(orderDetailResponseData.restaurant_address, CONTENT_LENGTH)).append("\n");
+
+//        builder.append(getCenterSplitArray(orderDetailResponseData.restaurant_name, CONTENT_LENGTH));
+//        builder.append(getCenterSplitArray(orderDetailResponseData.restaurant_address, CONTENT_LENGTH)).append("\n");
+        builder.append(getCenterSplitArray(Utils.decodeHtml(orderDetailResponseData.restaurant_name), CONTENT_LENGTH));
+        builder.append(getCenterSplitArray(Utils.decodeHtml(orderDetailResponseData.restaurant_address), CONTENT_LENGTH)).append("\n");
         builder.append(getLeftNRightAlignedString("Receipt No.: " + orderDetailResponseData.payment_receipt, ""));
         builder.append(getLeftNRightAlignedString("Order Id: " + orderDetailResponseData.id, ""));
         Calendar cal = Calendar.getInstance();
@@ -89,8 +92,8 @@ public class ReceiptFormatUtils {
             if ((int) value == 0) {
 
                 int retval = Float.compare(value, 0.00f);
-                if (retval > 0){}
-                else
+                if (retval > 0) {
+                } else
                     amount = "00.00";
             }
         }
@@ -150,7 +153,7 @@ public class ReceiptFormatUtils {
             int remainingspace = spaceforitemname - name.length();
 //            int remainingspace = 15 - name.length();
 //            LogUtils.d("===== subitem : else spaceforitemname : "+spaceforitemname+"== name.length():"+name.length()+"=== remainingspace : "+remainingspace);
-            if (remainingspace > 1) {
+            if (remainingspace >= 1) {
                 char[] chars = new char[remainingspace];
                 Arrays.fill(chars, ' ');
                 String prc = Float.valueOf(p) >= 100 ? (" $" + p) : ("  $" + p);

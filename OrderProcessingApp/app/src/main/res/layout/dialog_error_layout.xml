@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/margin_normal"
-    android:background="@color/white"
+    android:background="@drawable/white_rounded_corner"
     android:elevation="10dp"
     android:gravity="center"
     android:minWidth="300dp"
     android:orientation="vertical">
 
-    <TextView
+    <com.munchado.orderprocess.ui.widgets.CustomTextView
         android:id="@+id/mErrortext"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,10 +19,12 @@
         android:layout_marginTop="@dimen/margin_normal"
         android:gravity="center"
         android:padding="14dp"
-        android:text="My name is mainsh"
-        android:textColor="@color/prmary_txt_color"/>
+        android:text="error text"
+        android:textColor="@color/prmary_txt_color"
+        android:textSize="18sp"
+        app:textStyle="HelveticaLight" />
 
-    <TextView
+    <com.munchado.orderprocess.ui.widgets.CustomTextView
         android:id="@+id/mCloseBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -29,6 +32,8 @@
         android:gravity="center"
         android:padding="@dimen/margin_normal"
         android:text="Close"
-        android:textColor="@color/colorPrimary" />
+        android:textColor="@color/colorPrimary"
+        android:textSize="16sp"
+        app:textStyle="HelveticaLight" />
 
 </LinearLayout>

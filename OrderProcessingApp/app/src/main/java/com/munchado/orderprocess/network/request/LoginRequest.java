@@ -5,7 +5,7 @@ import com.android.volley.Response;
 import com.munchado.orderprocess.model.login.StatusResponse;
 import com.munchado.orderprocess.network.volley.GsonRequest;
 import com.munchado.orderprocess.network.volley.NetworkConstants;
-import com.munchado.orderprocess.utils.LogUtils;
+import com.munchado.orderprocess.utils.PrefUtil;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,6 +44,7 @@ public class LoginRequest extends BaseRequest {
         try {
             object.put("dashboard_username", username);
             object.put("dashboard_password", password);
+            object.put("token", PrefUtil.getToken());
         } catch (JSONException e) {
             e.printStackTrace();
         }

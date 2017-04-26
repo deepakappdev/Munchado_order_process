@@ -146,21 +146,22 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
     }
 
     private void playRing() {
-        if (live_orderList != null && live_orderList.size() > 0)
-            for (OrderItem item : live_orderList) {
+        try {
+            if (live_orderList != null && live_orderList.size() > 0)
+                for (OrderItem item : live_orderList) {
 //                LogUtils.d("========= " + item.status);
-                if (item.status.equalsIgnoreCase("placed")) {
-                    try {
+                    if (item.status.equalsIgnoreCase("placed")) {
+
                         Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
                         Ringtone r = RingtoneManager.getRingtone(getActivity(), notification);
                         r.play();
                         break;
-                    } catch (Exception e) {
+
+
                     }
-
                 }
-            }
-
+        } catch (Exception e) {
+        }
     }
 
     private void cleanRemainingItem(ActiveOrderResponseData data) {
@@ -253,30 +254,43 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
         // Register mMessageReceiver to receive messages.
         LocalBroadcastManager.getInstance(getActivity()).registerReceiver(mMessageReceiver,
                 new IntentFilter("com.munchado.orderprocess.notification.refresh"));
-        if (adapter != null && adapter.getAllItems() != null && adapter.getAllItems().size() > 0) {
-            LogUtils.d("========= Order Id : " + ((BaseActivity) getActivity()).order_ID + "=======" + ((BaseActivity) getActivity()).order_Status + "=======" + adapter.getAllItems().size());
-            if (!StringUtils.isNullOrEmpty(((BaseActivity) getActivity()).order_ID) && !StringUtils.isNullOrEmpty(((BaseActivity) getActivity()).order_Status)) {
-                for (int i = 0; i < adapter.getAllItems().size(); i++) {
-                    if (adapter.getAllItems().get(i).id.equalsIgnoreCase(((BaseActivity) getActivity()).order_ID)) {
-                        LogUtils.d("========= status: " + adapter.getAllItems().get(i).status + "=======" + ((BaseActivity) getActivity()).order_Status);
-                        if (!adapter.getAllItems().get(i).status.equalsIgnoreCase(((BaseActivity) getActivity()).order_Status)) {
+        try {
+            if (adapter != null && adapter.getAllItems() != null && adapter.getAllItems().size() > 0) {
+                LogUtils.d("========= Order Id : " + ((BaseActivity) getActivity()).order_ID + "=======" + ((BaseActivity) getActivity()).order_Status + "=======" + adapter.getAllItems().size());
+                if (!StringUtils.isNullOrEmpty(((BaseActivity) getActivity()).order_ID) && !StringUtils.isNullOrEmpty(((BaseActivity) getActivity()).order_Status)) {
+                    for (int i = 0; i < adapter.getAllItems().size(); i++) {
+                        if (adapter.getAllItems().get(i).id.equalsIgnoreCase(((BaseActivity) getActivity()).order_ID)) {
+                            LogUtils.d("========= status: " + adapter.getAllItems().get(i).status + "=======" + ((BaseActivity) getActivity()).order_Status);
+                            if (!adapter.getAllItems().get(i).status.equalsIgnoreCase(((BaseActivity) getActivity()).order_Status)) {
+                                LogUtils.d("========= status: " + adapter.getAllItems().get(i).status + "22222" + ((BaseActivity) getActivity()).order_Status);
+                                OrderItem item = adapter.getAllItems().get(i);
+                                item.status = ((BaseActivity) getActivity()).order_Status;
+                                adapter.getAllItems().set(i, item);
 
-                            OrderItem item = adapter.getAllItems().get(i);
-                            item.status = ((BaseActivity) getActivity()).order_Status;
-                            adapter.getAllItems().set(i, item);
-                            if (!((BaseActivity) getActivity()).order_Status.equalsIgnoreCase("archived"))
-                                adapter.updateStatusResult(item);
-                            else
-                                adapter.updateResult(item);
+                                if (((BaseActivity) getActivity()).order_Status.equalsIgnoreCase("archived") || ((BaseActivity) getActivity()).order_Status.equalsIgnoreCase("cancelled"))
+                                    adapter.updateResult(item);
+                                else
+                                    adapter.updateStatusResult(item);
+
+                                /*    if (!((BaseActivity) getActivity()).order_Status.equalsIgnoreCase("archived"))
+                                    adapter.updateStatusResult(item);
+                                else
+                                    adapter.updateResult(item);*/
+                            }
+                            break;
                         }
-                        break;
                     }
+                    textActiveOrderCount.setText(adapter.getItemCount() + " ACTIVE ORDERS");
                 }
-            }
 
-            ((BaseActivity) getActivity()).order_ID = "";
-            ((BaseActivity) getActivity()).order_Status = "";
+                ((BaseActivity) getActivity()).order_ID = "";
+                ((BaseActivity) getActivity()).order_Status = "";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
+
     }
 
     @Override

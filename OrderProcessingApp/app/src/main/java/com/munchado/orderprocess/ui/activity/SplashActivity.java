@@ -1,6 +1,5 @@
 package com.munchado.orderprocess.ui.activity;
 
-import android.app.DownloadManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -12,10 +11,12 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 
 import com.munchado.orderprocess.R;
+import com.munchado.orderprocess.model.token.TokenResponse;
 import com.munchado.orderprocess.model.update.UpgradeData;
 import com.munchado.orderprocess.network.RequestController;
 import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
+import com.munchado.orderprocess.ui.fragment.CustomErrorDialogFragment;
 import com.munchado.orderprocess.utils.PrefUtil;
 import com.munchado.orderprocess.utils.StringUtils;
 
@@ -23,7 +24,8 @@ public class SplashActivity extends AppCompatActivity {
     // Splash screen timer
     private static int SPLASH_TIME_OUT = 1500;
     UpgradeData upgradeData;
-    private DownloadManager dm;
+//    private DownloadManager dm;
+    int versionCode = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +33,6 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
 
-        int versionCode = 1;
         try {
             PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             versionCode = pInfo.versionCode;
@@ -41,10 +42,29 @@ public class SplashActivity extends AppCompatActivity {
         int savedVersionCode = PrefUtil.getVersionCode();
         if (versionCode >= savedVersionCode)
             doWorkAfterUpdate();
-        checkUpdate(versionCode + "");
+        if (!StringUtils.isNullOrEmpty(PrefUtil.getToken()))
+            checkUpdate(versionCode + "");
+        else
+            getNewToken();
+    }
 
-//        registerReceiver(receiver, new IntentFilter(
-//                DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+    private void getNewToken() {
+        RequestController.createNewAccessToken(new RequestCallback() {
+            @Override
+            public void error(NetworkError networkError) {
+                if (networkError != null && !StringUtils.isNullOrEmpty(networkError.getLocalizedMessage())) {
+                    CustomErrorDialogFragment errorDialogFragment = CustomErrorDialogFragment.newInstance(networkError.getLocalizedMessage());
+                    errorDialogFragment.show(getSupportFragmentManager(), "Error");
+                }
+            }
+
+            @Override
+            public void success(Object obj) {
+                TokenResponse mTokenResponse = (TokenResponse) obj;
+                PrefUtil.putToken(mTokenResponse.data.token);
+                checkUpdate(versionCode + "");
+            }
+        });
     }
 
     private void checkUpdate(String version) {
@@ -68,10 +88,10 @@ public class SplashActivity extends AppCompatActivity {
                         if (upgradeData.data.upgrade_type.equalsIgnoreCase("hard")) {
 
                             AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this);
-                            builder.setMessage(getResources().getString(R.string.app_name)+" Update Available.").setPositiveButton("Update", dialogClickListener).setCancelable(false).show();
+                            builder.setMessage(getResources().getString(R.string.app_name) + " Update Available.").setPositiveButton("Update", dialogClickListener).setCancelable(false).show();
                         } else if ((upgradeData.data.upgrade_type.equalsIgnoreCase("soft") && PrefUtil.getUpgradeDisplayCount() == 3)) {
                             AlertDialog.Builder builder = new AlertDialog.Builder(SplashActivity.this);
-                            builder.setMessage(getResources().getString(R.string.app_name)+" Update Available.").setPositiveButton("Update", dialogClickListener)
+                            builder.setMessage(getResources().getString(R.string.app_name) + " Update Available.").setPositiveButton("Update", dialogClickListener)
                                     .setNegativeButton("Cancel", dialogClickListener).setCancelable(false).show();
                         } else
                             gotoHome();
@@ -80,12 +100,8 @@ public class SplashActivity extends AppCompatActivity {
                         PrefUtil.setUpgradeType("");
                         gotoHome();
                     }
-
-
                 }
             }
-
-
         });
     }
 
@@ -157,7 +173,7 @@ public class SplashActivity extends AppCompatActivity {
 
     private void doWorkAfterUpdate() {
         if (PrefUtil.getUpgradeCleanData()) {
-//            PrefUtil.clearAllData();
+            PrefUtil.clearAllData();
         }
         PrefUtil.setUpgradeDisplayCount(0);
         PrefUtil.setUpgradeType("");
