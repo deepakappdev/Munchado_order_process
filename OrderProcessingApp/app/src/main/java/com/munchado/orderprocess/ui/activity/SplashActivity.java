@@ -1,5 +1,6 @@
 package com.munchado.orderprocess.ui.activity;
 
+import android.app.DownloadManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -24,7 +25,7 @@ public class SplashActivity extends AppCompatActivity {
     // Splash screen timer
     private static int SPLASH_TIME_OUT = 1500;
     UpgradeData upgradeData;
-//    private DownloadManager dm;
+    private DownloadManager dm;
     int versionCode = 1;
 
     @Override
@@ -137,21 +138,22 @@ public class SplashActivity extends AppCompatActivity {
                     //Yes button clicked
                     if (upgradeData != null) {
                         dialog.dismiss();
-                        if (PrefUtil.isLogin()) {
-                            Intent i = new Intent(SplashActivity.this, HomeActivity.class);
-                            startActivity(i);
-                        } else {
-                            Intent i = new Intent(SplashActivity.this, LoginActivity.class);
-                            startActivity(i);
-                        }
-                        Intent webIntent = new Intent(Intent.ACTION_VIEW,
-                                Uri.parse("https://play.google.com/store/apps/details?id=" + getPackageName()));
-                        startActivity(webIntent);
-                        finish();
-//                        dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-//                        DownloadManager.Request request = new DownloadManager.Request(
-//                                Uri.parse(upgradeData.data.apk_link));
-//                        long enqueue = dm.enqueue(request);
+                        gotoHome();
+//                        if (PrefUtil.isLogin()) {
+//                            Intent i = new Intent(SplashActivity.this, HomeActivity.class);
+//                            startActivity(i);
+//                        } else {
+//                            Intent i = new Intent(SplashActivity.this, LoginActivity.class);
+//                            startActivity(i);
+//                        }
+//                        Intent webIntent = new Intent(Intent.ACTION_VIEW,
+//                                Uri.parse("https://play.google.com/store/apps/details?id=" + getPackageName()));
+//                        startActivity(webIntent);
+//                        finish();
+                        dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+                        DownloadManager.Request request = new DownloadManager.Request(
+                                Uri.parse(upgradeData.data.apk_link));
+                        long enqueue = dm.enqueue(request);
                         if (upgradeData.data.upgrade_type.equalsIgnoreCase("hard")) {
                             PrefUtil.setUpgradeDisplayCount(0);
                             PrefUtil.setUpgradeType("");

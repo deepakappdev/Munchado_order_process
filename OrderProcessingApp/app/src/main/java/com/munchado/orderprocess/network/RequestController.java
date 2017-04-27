@@ -1,8 +1,8 @@
 package com.munchado.orderprocess.network;
 
+import android.app.DownloadManager;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -64,8 +64,13 @@ public class RequestController {
             public void onErrorResponse(VolleyError volleyError) {
 //                LogUtils.e("====" + new String(volleyError.networkResponse.data));
                 LogUtils.e("==== Error: ", volleyError.getLocalizedMessage());
-                if (callback != null)
-                    callback.error(new NetworkError(volleyError));
+                try {
+                    if (callback != null && volleyError != null)
+                        callback.error(new NetworkError(volleyError));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
 
             }
         };
@@ -100,19 +105,6 @@ public class RequestController {
                                     if (PrefUtil.getUpgradeType().isEmpty()) {
                                         PrefUtil.setUpgradeDisplayCount(((ArchiveOrderResponse) response).data.fource_update.counter);
                                     }
-//                                    PrefUtil.setUpgradeClearData(((ArchiveOrderResponse) response).data.fource_update.clear_data);
-//                                    PrefUtil.setUpgradeType(((ArchiveOrderResponse) response).data.fource_update.upgrade_type);
-//                                    PrefUtil.setUpgradeMessage(((ArchiveOrderResponse) response).data.fource_update.message);
-//                                    apk_link = ((ArchiveOrderResponse) response).data.fource_update.apk_link;
-//                                    upgrade_type = ((ArchiveOrderResponse) response).data.fource_update.upgrade_type;
-//                                    if (((ArchiveOrderResponse) response).data.fource_update.upgrade_type.equalsIgnoreCase("hard")) {
-//                                        AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-//                                        builder.setMessage("MA App Update Available.").setPositiveButton("Update", dialogClickListener).setCancelable(false).show();
-//                                    } else if ((((ArchiveOrderResponse) response).data.fource_update.upgrade_type.equalsIgnoreCase("soft") && PrefUtil.getUpgradeDisplayCount() == 3)) {
-//                                        AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-//                                        builder.setMessage("MA App Update Available.").setPositiveButton("Update", dialogClickListener)
-//                                                .setNegativeButton("Cancel", dialogClickListener).setCancelable(false).show();
-//                                    }
                                     updateForceUpgradeData(ctx, ((ArchiveOrderResponse) response).data.fource_update.clear_data, ((ArchiveOrderResponse) response).data.fource_update.upgrade_type, ((ArchiveOrderResponse) response).data.fource_update.message, ((ArchiveOrderResponse) response).data.fource_update.apk_link);
 
                                     callback.success(response);
@@ -170,10 +162,10 @@ public class RequestController {
             upgrade_type = upgradetype;
             if (upgrade_type.equalsIgnoreCase("hard")) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-                builder.setMessage(ctx.getResources().getString(R.string.app_name)+" Update Available.").setPositiveButton("Update", dialogClickListener).setCancelable(false).show();
+                builder.setMessage(ctx.getResources().getString(R.string.app_name) + " Update Available.").setPositiveButton("Update", dialogClickListener).setCancelable(false).show();
             } else if (upgrade_type.equalsIgnoreCase("soft") && PrefUtil.getUpgradeDisplayCount() == 3) {
                 AlertDialog.Builder builder = new AlertDialog.Builder(ctx);
-                builder.setMessage(ctx.getResources().getString(R.string.app_name)+" Update Available.").setPositiveButton("Update", dialogClickListener)
+                builder.setMessage(ctx.getResources().getString(R.string.app_name) + " Update Available.").setPositiveButton("Update", dialogClickListener)
                         .setNegativeButton("Cancel", dialogClickListener).setCancelable(false).show();
             }
             MyApplication.isDialogShown = true;
@@ -187,13 +179,13 @@ public class RequestController {
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE: {
                     dialog.dismiss();
-                    Intent webIntent = new Intent(Intent.ACTION_VIEW,
-                            Uri.parse("https://play.google.com/store/apps/details?id=" + context.getPackageName()));
-                    context.startActivity(webIntent);
-//                    DownloadManager dm = (DownloadManager) context.getSystemService(context.DOWNLOAD_SERVICE);
-//                    DownloadManager.Request request = new DownloadManager.Request(
-//                            Uri.parse(apk_link));
-//                    long enqueue = dm.enqueue(request);
+//                    Intent webIntent = new Intent(Intent.ACTION_VIEW,
+//                            Uri.parse("https://play.google.com/store/apps/details?id=" + context.getPackageName()));
+//                    context.startActivity(webIntent);
+                    DownloadManager dm = (DownloadManager) context.getSystemService(context.DOWNLOAD_SERVICE);
+                    DownloadManager.Request request = new DownloadManager.Request(
+                            Uri.parse(apk_link));
+                    long enqueue = dm.enqueue(request);
                     if (upgrade_type.equalsIgnoreCase("hard")) {
                         PrefUtil.setUpgradeDisplayCount(0);
                         PrefUtil.setUpgradeType("");
