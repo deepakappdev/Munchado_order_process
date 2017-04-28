@@ -26,12 +26,14 @@ dependencies {
     })
 
     testCompile 'junit:junit:4.12'
-    compile 'com.android.support:appcompat-v7:24.1.1'
-    compile 'com.squareup.picasso:picasso:2.5.2'
 
+    compile files('libs/ePOS2.jar')
+    compile files('libs/ePOSEasySelect.jar')
+    compile files('libs/StarIOPort3.1.jar')
+    compile files('libs/starioextension.jar')
     compile 'com.android.support:appcompat-v7:24.2.1'
+    compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.android.support:design:24.2.1'
-    compile 'com.squareup.picasso:picasso:2.4.0'
     compile 'com.google.code.gson:gson:2.4'
     compile 'com.android.support:recyclerview-v7:24.2.1'
     compile 'com.mcxiaoke.volley:library:1.0.17'
@@ -40,10 +42,7 @@ dependencies {
     compile 'com.google.firebase:firebase-messaging:10.0.1'
     compile 'com.google.firebase:firebase-core:10.0.1'
     compile 'com.pubnub:pubnub-android:3.7.4'
-    compile files('libs/ePOS2.jar')
-    compile files('libs/ePOSEasySelect.jar')
-    compile files('libs/StarIOPort3.1.jar')
-    compile files('libs/starioextension.jar')
+    compile 'com.github.aakira:expandable-layout:1.4.2@aar'
 }
 
 // Add to the bottom of the file

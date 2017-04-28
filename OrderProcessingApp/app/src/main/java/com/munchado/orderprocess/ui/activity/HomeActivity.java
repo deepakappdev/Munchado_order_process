@@ -20,6 +20,8 @@ import android.widget.TextView;
 
 import com.munchado.orderprocess.R;
 import com.munchado.orderprocess.common.FRAGMENTS;
+import com.munchado.orderprocess.model.dinein.ArchiveReservation;
+import com.munchado.orderprocess.model.dinein.UpcomingReservation;
 import com.munchado.orderprocess.model.login.StatusResponse;
 import com.munchado.orderprocess.network.RequestController;
 import com.munchado.orderprocess.network.volley.NetworkError;
@@ -32,13 +34,15 @@ import com.munchado.orderprocess.utils.PrefUtil;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.List;
 
 public class HomeActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     Toolbar toolbar;
     PowerManager.WakeLock mWakeLock;
-    private final ArrayList<View> mMenuItems = new ArrayList<>(3);
-
+    private final ArrayList<View> mMenuItems = new ArrayList<>();
+    public List<UpcomingReservation> upcommingReservationList;
+    public List<ArchiveReservation> archiveReservationList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +73,9 @@ public class HomeActivity extends BaseActivity
                 String id = "nav_order";
                 MenuItem item = navMenu.findItem(getResources().getIdentifier(id, "id", getPackageName()));
                 navigationView.findViewsWithText(mMenuItems, item.getTitle(), View.FIND_VIEWS_WITH_TEXT);
+                id = "nav_dinein";
+                MenuItem item33 = navMenu.findItem(getResources().getIdentifier(id, "id", getPackageName()));
+                navigationView.findViewsWithText(mMenuItems, item33.getTitle(), View.FIND_VIEWS_WITH_TEXT);
                 id = "nav_manage";
                 MenuItem item1 = navMenu.findItem(getResources().getIdentifier(id, "id", getPackageName()));
                 navigationView.findViewsWithText(mMenuItems, item1.getTitle(), View.FIND_VIEWS_WITH_TEXT);
@@ -117,6 +124,9 @@ public class HomeActivity extends BaseActivity
         int id = item.getItemId();
         if (id == R.id.nav_order) {
             popToHomePage();
+        } else if (id == R.id.nav_dinein) {
+            popToHomePage();
+            addFragment(FRAGMENTS.DINE_IN, null);
         } else if (id == R.id.nav_manage) {
             popToHomePage();
             addFragment(FRAGMENTS.PRINT, null);

@@ -128,6 +128,7 @@
     </attr>
     <declare-styleable name="CustomTextView">
         <attr name="textStyle" />
+        <attr name="textFormatStyle" />
     </declare-styleable>
     <declare-styleable name="CustomButton">
         <attr name="textStyle" />
@@ -138,5 +139,11 @@
     <declare-styleable name="CustomTextInputLayout">
         <attr name="textStyle" />
     </declare-styleable>
+    <attr name="textFormatStyle" format="enum">
+        <enum name="NORMAL" value="0" />
+        <enum name="BOLD" value="1" />
+        <enum name="ITALIC" value="2" />
+        <enum name="UNDERLINE" value="5" />
 
+    </attr>
 </resources>

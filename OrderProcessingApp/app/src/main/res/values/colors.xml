@@ -18,6 +18,7 @@
     <color name="transparent">#00000000</color>
 
     <color name="white">#ffffff</color>
+    <color name="white_semitransparent">#90ffffff</color>
     <color name="background_grey_color">#E0E0E0</color>
     <color name="fb_bg">#4C72B9</color>
     <color name="google_bg">#F62B00</color>
@@ -78,4 +79,6 @@
 
     <color name="grey_profile_grey_background">#AEAEAE</color>
 
+    <color name="grey_bg_confirm_table">#F2F2F2</color>
+    <color name="grey_unselected_btn">#EAEAEA</color>
 </resources>

@@ -27,6 +27,7 @@ import com.munchado.orderprocess.model.orderdetail.OrderDetailResponse;
 import com.munchado.orderprocess.model.profile.RestaurantProfileResponse;
 import com.munchado.orderprocess.model.token.TokenResponse;
 import com.munchado.orderprocess.network.request.BaseRequest;
+import com.munchado.orderprocess.network.request.GetActiveDineinRequest;
 import com.munchado.orderprocess.network.request.GetActiveOrderRequest;
 import com.munchado.orderprocess.network.request.GetArchiveOrderRequest;
 import com.munchado.orderprocess.network.request.GetOrderDetailRequest;
@@ -303,6 +304,12 @@ public class RequestController {
 
     public static void getUpdateApp(String version, RequestCallback callBack) {
         UpdateAppRequest request = new UpdateAppRequest(version);
+        GsonRequest gsonRequest = request.createServerRequest(getErrorListener(callBack), getListener(callBack, request));
+        getmRequestQueue().add(gsonRequest);
+    }
+
+    public static void getBooking(RequestCallback callBack) {
+        GetActiveDineinRequest request = new GetActiveDineinRequest();
         GsonRequest gsonRequest = request.createServerRequest(getErrorListener(callBack), getListener(callBack, request));
         getmRequestQueue().add(gsonRequest);
     }

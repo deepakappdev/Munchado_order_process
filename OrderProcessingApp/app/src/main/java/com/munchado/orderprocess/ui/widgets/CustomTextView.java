@@ -2,6 +2,7 @@ package com.munchado.orderprocess.ui.widgets;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ import com.munchado.orderprocess.utils.StringUtils;
 public class CustomTextView extends TextView {
     public static String TAG = "CustomTextView";
     String fontFile = "";
+    int mTextformatStyle = 0;
 
     public CustomTextView(Context context) {
         super(context);
@@ -39,14 +41,26 @@ public class CustomTextView extends TextView {
                 R.styleable.CustomTextView,
                 0, 0);
         int mTextStyle = a.getInteger(R.styleable.CustomTextView_textStyle, -1);
+        mTextformatStyle = a.getInteger(R.styleable.CustomTextView_textFormatStyle, 0);
         fontFile = getFontFileName(mTextStyle);
         if (StringUtils.isNullOrEmpty(fontFile))
             fontFile = "Roboto-Light.ttf";
-        setTypeface(Typeface.createFromAsset(getContext().getAssets(), fontFile));
+
+        if (mTextformatStyle == 5) {
+            setTypeface(Typeface.createFromAsset(getContext().getAssets(), fontFile), Typeface.NORMAL);
+            setPaintFlags(getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        }
+        setTypeface(Typeface.createFromAsset(getContext().getAssets(), fontFile), mTextformatStyle);
+//        setTypeface(Typeface.createFromAsset(getContext().getAssets(), fontFile));
     }
 
+
     public void setTextStyle(int style) {
-        setTypeface(Typeface.createFromAsset(getContext().getAssets(), fontFile), style);
+        if (style == 5) {
+            setTypeface(Typeface.createFromAsset(getContext().getAssets(), fontFile), Typeface.NORMAL);
+            setPaintFlags(getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+        } else
+            setTypeface(Typeface.createFromAsset(getContext().getAssets(), fontFile), style);
     }
 
     static String getFontFileName(int mTextStyle) {

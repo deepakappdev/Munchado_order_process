@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+    android:id="@+id/layout_customer_detail"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/dark_grey"
+    android:orientation="vertical"
+    android:visibility="visible">
+
+    <com.munchado.orderprocess.ui.widgets.SquareImageView
+        android:id="@+id/image_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:src="@drawable/profile_img" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="@dimen/margin_normal"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <com.munchado.orderprocess.ui.widgets.CustomTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:gravity="right|end"
+                android:paddingLeft="7dp"
+                android:paddingStart="7dp"
+                android:text="Name:"
+                android:textColor="@color/grey_light"
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="HelveticaLight" />
+
+            <com.munchado.orderprocess.ui.widgets.CustomTextView
+                android:id="@+id/text_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:paddingLeft="7dp"
+                android:paddingStart="7dp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="HelveticaLight" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <com.munchado.orderprocess.ui.widgets.CustomTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_weight="4"
+                android:gravity="right|end"
+                android:paddingLeft="7dp"
+                android:paddingStart="7dp"
+                android:text="Email:"
+                android:textColor="@color/grey_light"
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="HelveticaLight" />
+
+            <com.munchado.orderprocess.ui.widgets.CustomTextView
+                android:id="@+id/text_email"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:paddingLeft="7dp"
+                android:paddingStart="7dp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="HelveticaLight" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <com.munchado.orderprocess.ui.widgets.CustomTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_weight="4"
+                android:gravity="right|end"
+                android:paddingLeft="7dp"
+                android:paddingStart="7dp"
+                android:text="Tel:"
+                android:textColor="@color/grey_light"
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="HelveticaLight" />
+
+            <com.munchado.orderprocess.ui.widgets.CustomTextView
+                android:id="@+id/text_telephone"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:paddingLeft="7dp"
+                android:paddingStart="7dp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="HelveticaLight" />
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal">
+
+            <com.munchado.orderprocess.ui.widgets.CustomTextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_weight="4"
+                android:gravity="right|end"
+                android:paddingLeft="7dp"
+                android:paddingStart="7dp"
+                android:text="Past Activity:"
+                android:textColor="@color/grey_light"
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="HelveticaLight" />
+
+            <com.munchado.orderprocess.ui.widgets.CustomTextView
+                android:id="@+id/text_past_activity"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="6"
+                android:paddingLeft="7dp"
+                android:paddingStart="7dp"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textSizeXLarge"
+                app:textStyle="HelveticaLight" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>

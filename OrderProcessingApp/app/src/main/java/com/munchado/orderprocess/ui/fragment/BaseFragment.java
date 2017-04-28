@@ -25,8 +25,8 @@ public abstract class BaseFragment extends Fragment {
     }
 
     public void showToast(String message) {
-        if(getActivity()!=null)
-            ((BaseActivity)getActivity()).showToast(message);
+        if (getActivity() != null)
+            ((BaseActivity) getActivity()).showToast(message);
     }
 
     private String getCustomTitle(FRAGMENTS fragmentId) {
@@ -41,6 +41,10 @@ public abstract class BaseFragment extends Fragment {
                 return "Order Detail";
             case PRINT:
                 return "Settings";
+            case DINE_IN:
+                return "Dine-in";
+            case DINE_IN_DETAIL:
+                return "Dine-in Details";
             default:
                 return "Order Process";
         }
