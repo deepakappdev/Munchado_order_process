@@ -9,7 +9,8 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.munchado.orderprocess.R;
-import com.munchado.orderprocess.listener.OnDineinClickListener;
+import com.munchado.orderprocess.listener.OnDineinArchiveClickListener;
+import com.munchado.orderprocess.model.dinein.ArchiveReservation;
 import com.munchado.orderprocess.model.dinein.UpcomingReservation;
 import com.munchado.orderprocess.ui.widgets.CustomTextView;
 import com.munchado.orderprocess.utils.DateTimeUtils;
@@ -19,19 +20,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by munchado on 28/4/17.
+ * Created by munchado on 29/4/17.
  */
-public class DineinAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private List<UpcomingReservation> orderItems = new ArrayList<>();
+public class DineinArchiveAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private List<ArchiveReservation> orderItems = new ArrayList<>();
     private Context context;
-    private OnDineinClickListener mOnDineinClickListener;
+    private OnDineinArchiveClickListener mOnDineinClickListener;
 
-    public DineinAdapter(Context ctx, OnDineinClickListener mOnDineinClickListener) {
+    public DineinArchiveAdapter(Context ctx, OnDineinArchiveClickListener mOnDineinClickListener) {
         this.mOnDineinClickListener = mOnDineinClickListener;
         context = ctx;
     }
 
-    public void setData(List<UpcomingReservation> orderItems) {
+    public void setData(List<ArchiveReservation> orderItems) {
         this.orderItems = orderItems;
         notifyDataSetChanged();
     }
@@ -70,7 +71,7 @@ public class DineinAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         return orderItems.size();
     }
 
-    public List<UpcomingReservation> getAllItems() {
+    public List<ArchiveReservation> getAllItems() {
         return orderItems;
     }
 
@@ -82,7 +83,7 @@ public class DineinAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         private final TextView text_noofpeople;
         private final TextView text_msg;
         private final Button btnAction;
-        private UpcomingReservation mUpcomingReservation;
+        private ArchiveReservation mUpcomingReservation;
 
         public MyViewHolder(View itemView) {
             super(itemView);
@@ -106,49 +107,50 @@ public class DineinAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             });
         }
 
-        public void updateData(UpcomingReservation mUpcomingReservation) {
+        public void updateData(ArchiveReservation mUpcomingReservation) {
             this.mUpcomingReservation = mUpcomingReservation;
             text_name.setText(mUpcomingReservation.first_name + (!StringUtils.isNullOrEmpty(mUpcomingReservation.last_name) ? " " + mUpcomingReservation.last_name : ""));
 //            text_order_time.setText("00:00 AM");
             text_order_time.setText(DateTimeUtils.getFormattedDate(mUpcomingReservation.reservation_date, DateTimeUtils.FORMAT_HH_MM_A));
             text_noofpeople.setText(mUpcomingReservation.seats + " People");
-            text_hold_time.setText("(" + mUpcomingReservation.hold_time + " min)");
-
+//            text_hold_time.setText("(" + mUpcomingReservation.hold_time + " min)");
+            text_hold_time.setVisibility(View.INVISIBLE);
             //0=new,1=confirm,2=reject,3=alternate time,4=not respond,5=cancel,6=user confirm,7=archive
-            switch (mUpcomingReservation.status) {
-                case "0":
-                    break;
-                case "1":
+//            switch (mUpcomingReservation.status) {
+//                case "0":
+//                    break;
+//                case "1":
+////                    text_msg.setVisibility(View.VISIBLE);
+////                    text_msg.setText("Waiting for user to confirm");
+////                    text_hold_time.setText("(Your Offered Time)");
+////                    btnAction.setVisibility(View.GONE);
+//                    break;
+//                case "2":
+//                    break;
+//                case "3":
 //                    text_msg.setVisibility(View.VISIBLE);
 //                    text_msg.setText("Waiting for user to confirm");
 //                    text_hold_time.setText("(Your Offered Time)");
 //                    btnAction.setVisibility(View.GONE);
-                    break;
-                case "2":
-                    break;
-                case "3":
-                    text_msg.setVisibility(View.VISIBLE);
-                    text_msg.setText("Waiting for user to confirm");
-                    text_hold_time.setText("(Your Offered Time)");
-                    btnAction.setVisibility(View.GONE);
-                    break;
-                case "4":
-                    break;
-                case "5":
-                    text_msg.setVisibility(View.VISIBLE);
-                    text_msg.setText("Sorry, the user opted out");
-                    text_hold_time.setText("(Your Offered Time)");
-                    btnAction.setText("REMOVE");
-                    break;
-                case "6":
-                    text_msg.setVisibility(View.VISIBLE);
-                    text_msg.setText("Confirmed by the user");
-                    text_hold_time.setText("(Your Offered Time)");
-                    btnAction.setText("MOVE TO ARCHIVE");
-                    break;
-                case "8":
-                    break;
-            }
+//                    break;
+//                case "4":
+//                    break;
+//                case "5":
+//                    text_msg.setVisibility(View.VISIBLE);
+//                    text_msg.setText("Sorry, the user opted out");
+//                    text_hold_time.setText("(Your Offered Time)");
+//                    btnAction.setText("REMOVE");
+//                    break;
+//                case "6":
+//                    text_msg.setVisibility(View.VISIBLE);
+//                    text_msg.setText("Confirmed by the user");
+//                    text_hold_time.setText("(Your Offered Time)");
+//                    btnAction.setText("MOVE TO ARCHIVE");
+//                    break;
+//                case "8":
+//                    break;
+//            }
         }
     }
 }
+

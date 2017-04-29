@@ -30,6 +30,7 @@ import com.munchado.orderprocess.network.request.BaseRequest;
 import com.munchado.orderprocess.network.request.GetActiveDineinRequest;
 import com.munchado.orderprocess.network.request.GetActiveOrderRequest;
 import com.munchado.orderprocess.network.request.GetArchiveOrderRequest;
+import com.munchado.orderprocess.network.request.GetDineinDetailRequest;
 import com.munchado.orderprocess.network.request.GetOrderDetailRequest;
 import com.munchado.orderprocess.network.request.GetRestaurantProfileRequest;
 import com.munchado.orderprocess.network.request.LoginRequest;
@@ -37,6 +38,7 @@ import com.munchado.orderprocess.network.request.LogoutRequest;
 import com.munchado.orderprocess.network.request.NewTokenRequest;
 import com.munchado.orderprocess.network.request.OrderProcessRequest;
 import com.munchado.orderprocess.network.request.UpdateAppRequest;
+import com.munchado.orderprocess.network.request.UpdateDineRequest;
 import com.munchado.orderprocess.network.volley.GsonRequest;
 import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
@@ -313,6 +315,19 @@ public class RequestController {
         GsonRequest gsonRequest = request.createServerRequest(getErrorListener(callBack), getListener(callBack, request));
         getmRequestQueue().add(gsonRequest);
     }
+
+    public static void getBookingDetail(String reservation_id, RequestCallback callBack) {
+        GetDineinDetailRequest request = new GetDineinDetailRequest(reservation_id);
+        GsonRequest gsonRequest = request.createServerRequest(getErrorListener(callBack), getListener(callBack, request));
+        getmRequestQueue().add(gsonRequest);
+    }
+
+    public static void updateBookingDetail(String user_id, String reservationId, String status, String offer, String restaurant_instruction, String hold_time, RequestCallback callBack) {
+        UpdateDineRequest request = new UpdateDineRequest(user_id, reservationId, status, offer, restaurant_instruction, hold_time);
+        GsonRequest gsonRequest = request.createServerRequest(getErrorListener(callBack), getListener(callBack, request));
+        getmRequestQueue().add(gsonRequest);
+    }
+
 
     public static String getVersion(Context ctx) {
         int versionCode = 1;

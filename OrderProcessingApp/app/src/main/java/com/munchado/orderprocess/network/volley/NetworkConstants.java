@@ -15,4 +15,5 @@ public class NetworkConstants {
     public static final String GET_RESTAURANT_PROFILE_URL = HTTP_BASE_URL + "api/dashboard/restaurant?mob=true";
     public static final String GET_UPDATE_APP_URL = HTTP_BASE_URL + "api/dashboard/updateapp?mob=true";
     public static final String GET_DINEIN_URL = HTTP_BASE_URL + "api/dashboard/restaurant/holdatable?mob=true&token=";
+    public static final String GET_DINEIN_DETAIL_URL = HTTP_BASE_URL + "api/dashboard/restaurant/holdatable/%s?mob=true&token=";
 }

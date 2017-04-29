@@ -23,8 +23,8 @@ import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.ui.activity.BaseActivity;
 import com.munchado.orderprocess.ui.activity.HomeActivity;
 import com.munchado.orderprocess.ui.adapter.DineinAdapter;
-
-import java.util.ArrayList;
+import com.munchado.orderprocess.utils.LogUtils;
+import com.munchado.orderprocess.utils.StringUtils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -60,9 +60,7 @@ public class DineInListFragment extends BaseFragment implements View.OnClickList
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
-        mHomeActivity.upcommingReservationList = new ArrayList<>();
-//        live_orderList = new ArrayList<>();
-//        fetchActiveOrder();
+//        mHomeActivity.upcommingReservationList = new ArrayList<>();
         fetchBookingList();
     }
 
@@ -74,10 +72,40 @@ public class DineInListFragment extends BaseFragment implements View.OnClickList
         recyclerView.setLayoutManager(mLinearLayoutManager);
         mDineinAdapter = new DineinAdapter(mHomeActivity, mOnDineinClickListener);
         recyclerView.setAdapter(mDineinAdapter);
+        if (mHomeActivity.upcommingReservationList != null) {
+            textActiveOrderCount.setText(mHomeActivity.upcommingReservationList.size() + " NEW BOOKINGS");
+            if (mHomeActivity.upcommingReservationList.size() > 0) {
+                mDineinAdapter.setData(mHomeActivity.upcommingReservationList);
+            }
+        }
     }
 
     private void fetchBookingList() {
         RequestController.getBooking(this);
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (mDineinAdapter != null && mDineinAdapter.getAllItems() != null && mDineinAdapter.getAllItems().size() > 0) {
+            if (!StringUtils.isNullOrEmpty(((BaseActivity) getActivity()).reservation_Id) && !StringUtils.isNullOrEmpty(((BaseActivity) getActivity()).reservation_status)) {
+                for (int i = 0; i < mDineinAdapter.getAllItems().size(); i++) {
+                    if (mDineinAdapter.getAllItems().get(i).reservation_id.equalsIgnoreCase(((BaseActivity) getActivity()).reservation_Id)) {
+
+                        LogUtils.d("==== onResume . status : " + mDineinAdapter.getAllItems().get(i).status + "==== detail status : " + ((BaseActivity) getActivity()).reservation_status);
+                        if (!mDineinAdapter.getAllItems().get(i).status.equalsIgnoreCase(((BaseActivity) getActivity()).reservation_status)) {
+                            fetchBookingList();
+                            break;
+                        }
+                    }
+                }
+            }
+
+            ((BaseActivity) getActivity()).reservation_Id = "";
+            ((BaseActivity) getActivity()).reservation_status = "";
+        }
     }
 
     @Override
@@ -91,6 +119,7 @@ public class DineInListFragment extends BaseFragment implements View.OnClickList
         if (obj instanceof DineinResponse) {
             DineinResponse mDineinResponse = (DineinResponse) obj;
             mHomeActivity.upcommingReservationList = mDineinResponse.data.upcomming_reservation;
+            mHomeActivity.archiveReservationList = mDineinResponse.data.archive_reservation;
             if (mHomeActivity.upcommingReservationList != null) {
                 textActiveOrderCount.setText(mHomeActivity.upcommingReservationList.size() + " NEW BOOKINGS");
                 if (mHomeActivity.upcommingReservationList.size() > 0) {
@@ -110,7 +139,7 @@ public class DineInListFragment extends BaseFragment implements View.OnClickList
         @Override
         public void onDineItemClick(UpcomingReservation reservation) {
             Bundle bundle = new Bundle();
-            bundle.putString("BOOKING_ID", reservation.booking_id);
+            bundle.putString("BOOKING_ID", reservation.reservation_id);
             ((BaseActivity) getActivity()).addOverLayFragment(FRAGMENTS.DINE_IN_DETAIL, bundle);
         }
     };
@@ -124,7 +153,7 @@ public class DineInListFragment extends BaseFragment implements View.OnClickList
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.text_archive_booking:
-//                ((BaseActivity) getActivity()).addFragment(FRAGMENTS.ARCHIVE, null);
+                ((BaseActivity) getActivity()).addFragment(FRAGMENTS.DINE_IN_ARCHIVE, null);
                 break;
         }
     }

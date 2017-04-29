@@ -43,6 +43,8 @@ public abstract class BaseFragment extends Fragment {
                 return "Settings";
             case DINE_IN:
                 return "Dine-in";
+            case DINE_IN_ARCHIVE:
+                return "Dine-in Archive";
             case DINE_IN_DETAIL:
                 return "Dine-in Details";
             default:

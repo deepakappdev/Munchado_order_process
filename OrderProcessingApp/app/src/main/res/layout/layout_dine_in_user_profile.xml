@@ -81,6 +81,7 @@
                 android:paddingStart="7dp"
                 android:textColor="@color/white"
                 android:textSize="@dimen/textSizeXLarge"
+                app:textFormatStyle="UNDERLINE"
                 app:textStyle="HelveticaLight" />
 
         </LinearLayout>
@@ -113,6 +114,7 @@
                 android:paddingStart="7dp"
                 android:textColor="@color/white"
                 android:textSize="@dimen/textSizeXLarge"
+                app:textFormatStyle="UNDERLINE"
                 app:textStyle="HelveticaLight" />
 
         </LinearLayout>

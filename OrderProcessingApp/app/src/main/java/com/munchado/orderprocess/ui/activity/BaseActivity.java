@@ -15,6 +15,7 @@ import com.munchado.orderprocess.ui.fragment.ArchiveOrderFragment;
 import com.munchado.orderprocess.ui.fragment.BaseFragment;
 import com.munchado.orderprocess.ui.fragment.DineInDetailFragment;
 import com.munchado.orderprocess.ui.fragment.DineInListFragment;
+import com.munchado.orderprocess.ui.fragment.DineinArchiveFragment;
 import com.munchado.orderprocess.ui.fragment.OrderDetailFragment;
 import com.munchado.orderprocess.ui.fragment.PrintSettingFragment;
 
@@ -28,6 +29,7 @@ public class BaseActivity extends AppCompatActivity {
     BaseFragment fragmentActiveOrder;
 
     public String order_ID = "", order_Status = "";
+    public String reservation_Id = "", reservation_status = "";
 
     public void addFragment(FRAGMENTS fragmentId, Bundle bundle) {
         BaseFragment fragment = getFragment(fragmentId);
@@ -74,6 +76,9 @@ public class BaseActivity extends AppCompatActivity {
                 break;
             case DINE_IN_DETAIL:
                 fragment = new DineInDetailFragment();
+                break;
+            case DINE_IN_ARCHIVE:
+                fragment = new DineinArchiveFragment();
                 break;
         }
         return fragment;

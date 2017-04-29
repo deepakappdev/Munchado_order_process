@@ -52,10 +52,11 @@
 
                 <include layout="@layout/layout_booking_details" />
 
-                <include
-                    layout="@layout/layout_confirm_or_reject_booking"/>
+                <include layout="@layout/layout_confirm_or_reject_booking" />
             </LinearLayout>
         </LinearLayout>
 
     </RelativeLayout>
+
+    <include layout="@layout/progress_bar_layout" />
 </RelativeLayout>
