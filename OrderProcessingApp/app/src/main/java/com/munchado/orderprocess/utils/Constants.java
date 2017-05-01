@@ -38,4 +38,14 @@ public class Constants {
 
     public static String PUBNUB_CHANNEL = "dashboard_%s";
 
+    //0=new,1=confirm,2=reject,3=alternate time,4=not respond,5=cancel,6=user confirm,7=archive
+    public static final String NEW_ORDER = "0";
+    public static final String CONFIRM = "1";
+    public static final String REJECT = "2";
+    public static final String ALTERNATE_TIME = "3";
+    public static final String NOT_RESPOND = "4";
+    public static final String CANCEL = "5";
+    public static final String USER_CONFIRM = "6";
+    public static final String ARCHIVE = "7";
+
 }

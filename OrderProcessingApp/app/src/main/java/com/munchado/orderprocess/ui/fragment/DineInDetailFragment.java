@@ -4,6 +4,7 @@ package com.munchado.orderprocess.ui.fragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -27,6 +28,7 @@ import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.ui.activity.BaseActivity;
 import com.munchado.orderprocess.ui.widgets.CustomTextView;
+import com.munchado.orderprocess.utils.Constants;
 import com.munchado.orderprocess.utils.DateTimeUtils;
 import com.munchado.orderprocess.utils.StringUtils;
 import com.munchado.orderprocess.utils.Utils;
@@ -49,14 +51,11 @@ public class DineInDetailFragment extends BaseFragment implements View.OnClickLi
     private CustomTextView text_name, text_email, text_telephone, text_past_activity;
     private CustomTextView text_booking_id, text_people, text_time, text_hold_time, text_instructions_id;
 
-    private LinearLayout ll_confirm_reject, ll_booking;
+    private LinearLayout ll_confirm_reject, ll_booking, layout_customer_detail;
     private View progressBar;
     String reservationid, user_id;
     String status, holdTime;
     int holdtimemin = 10;
-
-//    final int BOOKING_CONFIRM = 1, BOOKING_ALTERNATE_TIME = 2, BOOKING_REJECT = 3;
-//    private int user_action = BOOKING_CONFIRM;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -106,6 +105,7 @@ public class DineInDetailFragment extends BaseFragment implements View.OnClickLi
         edittext_alternate = (EditText) view.findViewById(R.id.edittext_alternate);
         edittext_reject = (EditText) view.findViewById(R.id.edittext_reject);
         ll_confirm_reject = (LinearLayout) view.findViewById(R.id.ll_confirm_reject);
+        layout_customer_detail = (LinearLayout) view.findViewById(R.id.layout_customer_detail);
         ll_booking = (LinearLayout) view.findViewById(R.id.ll_booking);
 
         reservationid = getArguments().getString("BOOKING_ID");
@@ -144,13 +144,20 @@ public class DineInDetailFragment extends BaseFragment implements View.OnClickLi
                 break;
             case R.id.btn_confirm_time:
                 layout_confirm_time.toggle();
-                if (layout_confirm_time.isExpanded()) {
-//                    user_action = BOOKING_CONFIRM;
-                    btn_confirm_time.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey_bg_confirm_table));
-                    btn_alternate_time.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey_unselected_btn));
-                    btn_reject_time.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey_unselected_btn));
-                } else
-                    btn_confirm_time.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey_unselected_btn));
+
+                new Handler().postDelayed(new Runnable() {
+                                              @Override
+                                              public void run() {
+                                                  if (layout_confirm_time.isExpanded()) {
+                                                      btn_confirm_time.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey_bg_confirm_table));
+                                                      btn_alternate_time.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey_unselected_btn));
+                                                      btn_reject_time.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey_unselected_btn));
+                                                  } else
+                                                      btn_confirm_time.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey_unselected_btn));
+                                              }
+                                          },
+                        350);
+
                 if (layout_alternate_time.isExpanded())
                     layout_alternate_time.collapse();
                 if (layout_reject_time.isExpanded())
@@ -158,13 +165,20 @@ public class DineInDetailFragment extends BaseFragment implements View.OnClickLi
                 break;
             case R.id.btn_alternate_time:
                 layout_alternate_time.toggle();
-                if (layout_alternate_time.isExpanded()) {
-//                    user_action = BOOKING_ALTERNATE_TIME;
-                    btn_alternate_time.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey_bg_confirm_table));
-                    btn_confirm_time.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey_unselected_btn));
-                    btn_reject_time.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey_unselected_btn));
-                } else
-                    btn_alternate_time.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey_unselected_btn));
+
+                new Handler().postDelayed(new Runnable() {
+                                              @Override
+                                              public void run() {
+                                                  if (layout_alternate_time.isExpanded()) {
+                                                      btn_alternate_time.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey_bg_confirm_table));
+                                                      btn_confirm_time.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey_unselected_btn));
+                                                      btn_reject_time.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey_unselected_btn));
+                                                  } else
+                                                      btn_alternate_time.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey_unselected_btn));
+                                              }
+                                          },
+                        350);
+
                 if (layout_confirm_time.isExpanded())
                     layout_confirm_time.collapse();
                 if (layout_reject_time.isExpanded())
@@ -172,13 +186,19 @@ public class DineInDetailFragment extends BaseFragment implements View.OnClickLi
                 break;
             case R.id.btn_reject_time:
                 layout_reject_time.toggle();
-                if (layout_reject_time.isExpanded()) {
-//                    user_action = BOOKING_REJECT;
-                    btn_alternate_time.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey_bg_confirm_table));
-                    btn_confirm_time.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey_unselected_btn));
-                    btn_reject_time.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey_unselected_btn));
-                } else
-                    btn_reject_time.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey_unselected_btn));
+
+                new Handler().postDelayed(new Runnable() {
+                                              @Override
+                                              public void run() {
+                                                  if (layout_reject_time.isExpanded()) {
+                                                      btn_reject_time.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey_bg_confirm_table));
+                                                      btn_confirm_time.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey_unselected_btn));
+                                                      btn_alternate_time.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey_unselected_btn));
+                                                  } else
+                                                      btn_reject_time.setBackgroundColor(ContextCompat.getColor(getActivity(), R.color.grey_unselected_btn));
+                                              }
+                                          },
+                        350);
                 if (layout_confirm_time.isExpanded())
                     layout_confirm_time.collapse();
                 if (layout_alternate_time.isExpanded())
@@ -262,19 +282,20 @@ public class DineInDetailFragment extends BaseFragment implements View.OnClickLi
         if (obj instanceof DineinConfirmResponse) {
             ((BaseActivity) getActivity()).reservation_Id = reservationid;
             ((BaseActivity) getActivity()).reservation_status = ((DineinConfirmResponse) obj).data.status;
+
+            if (((BaseActivity) getActivity()).mDineInListFragment != null)
+                ((DineInListFragment) ((BaseActivity) getActivity()).mDineInListFragment).performActionFromDetail();
             ((BaseActivity) getActivity()).backPressed();
         } else if (obj instanceof DineinDetailResponse) {
             DineinDetailResponse mDineinDetailResponse = (DineinDetailResponse) obj;
 //            if (mDineinDetailResponse instanceof DineinDetailResponse) {
-            if (mDineinDetailResponse.data.status.equalsIgnoreCase("2") || mDineinDetailResponse.data.status.equalsIgnoreCase("5") || mDineinDetailResponse.data.status.equalsIgnoreCase("6") || mDineinDetailResponse.data.status.equalsIgnoreCase("7"))
-                ll_confirm_reject.setVisibility(View.INVISIBLE);
-            else
-                ll_confirm_reject.setVisibility(View.VISIBLE);
+
             setData(mDineinDetailResponse.data);
 //            }
         }
 
     }
+
 
     private void setData(DineinDetailResponseData data) {
         user_id = data.user_id;
@@ -288,7 +309,11 @@ public class DineInDetailFragment extends BaseFragment implements View.OnClickLi
         setText(text_hold_time, "(" + data.hold_time + " min)");
         setText(text_instructions_id, data.user_instruction);
         ll_booking.setVisibility(View.VISIBLE);
-
+        layout_customer_detail.setVisibility(View.VISIBLE);
+        if (data.status.equalsIgnoreCase(Constants.CONFIRM) || data.status.equalsIgnoreCase(Constants.REJECT) || data.status.equalsIgnoreCase(Constants.USER_CONFIRM) || data.status.equalsIgnoreCase(Constants.CANCEL) || data.status.equalsIgnoreCase(Constants.ARCHIVE))
+            ll_confirm_reject.setVisibility(View.INVISIBLE);
+        else
+            ll_confirm_reject.setVisibility(View.VISIBLE);
         StringBuilder stringBuilder = new StringBuilder();
         if (!StringUtils.isNullOrEmpty(data.user_activity.totalorder) && !data.user_activity.totalorder.equalsIgnoreCase("0"))
             stringBuilder.append(data.user_activity.totalorder).append(" Orders").append("\n");

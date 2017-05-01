@@ -23,6 +23,7 @@ import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.ui.activity.BaseActivity;
 import com.munchado.orderprocess.ui.activity.HomeActivity;
 import com.munchado.orderprocess.ui.adapter.DineinAdapter;
+import com.munchado.orderprocess.utils.Constants;
 import com.munchado.orderprocess.utils.LogUtils;
 import com.munchado.orderprocess.utils.StringUtils;
 
@@ -61,6 +62,7 @@ public class DineInListFragment extends BaseFragment implements View.OnClickList
         super.onViewCreated(view, savedInstanceState);
         initView(view);
 //        mHomeActivity.upcommingReservationList = new ArrayList<>();
+
         fetchBookingList();
     }
 
@@ -88,7 +90,11 @@ public class DineInListFragment extends BaseFragment implements View.OnClickList
     @Override
     public void onResume() {
         super.onResume();
+        LogUtils.d("==== onResume .");
 
+    }
+
+    public void performActionFromDetail() {
         if (mDineinAdapter != null && mDineinAdapter.getAllItems() != null && mDineinAdapter.getAllItems().size() > 0) {
             if (!StringUtils.isNullOrEmpty(((BaseActivity) getActivity()).reservation_Id) && !StringUtils.isNullOrEmpty(((BaseActivity) getActivity()).reservation_status)) {
                 for (int i = 0; i < mDineinAdapter.getAllItems().size(); i++) {
@@ -96,6 +102,8 @@ public class DineInListFragment extends BaseFragment implements View.OnClickList
 
                         LogUtils.d("==== onResume . status : " + mDineinAdapter.getAllItems().get(i).status + "==== detail status : " + ((BaseActivity) getActivity()).reservation_status);
                         if (!mDineinAdapter.getAllItems().get(i).status.equalsIgnoreCase(((BaseActivity) getActivity()).reservation_status)) {
+                            setDialogActionMessage(((BaseActivity) getActivity()).reservation_status, mDineinAdapter.getAllItems().get(i).first_name, mDineinAdapter.getAllItems().get(i).last_name);
+
                             fetchBookingList();
                             break;
                         }
@@ -103,9 +111,39 @@ public class DineInListFragment extends BaseFragment implements View.OnClickList
                 }
             }
 
+
             ((BaseActivity) getActivity()).reservation_Id = "";
             ((BaseActivity) getActivity()).reservation_status = "";
         }
+    }
+
+    public void setDialogActionMessage(String status, String firstname, String lastname) {
+        LogUtils.d("==== onResume . in setDialogActionMessage");
+        try {
+            String fullname = firstname + (!StringUtils.isNullOrEmpty(lastname) ? " " + lastname : "");
+            CustomErrorDialogFragment errorDialogFragment = null;
+            if (status.equalsIgnoreCase(Constants.CONFIRM)) {
+                LogUtils.d("==== onResume . in CONFIRM");
+
+                String message = String.format(mHomeActivity.getResources().getString(R.string.request_confirm_booking), fullname, fullname);
+                errorDialogFragment = CustomErrorDialogFragment.newInstance(message);
+                errorDialogFragment.show(mHomeActivity.getSupportFragmentManager(), "Message");
+            } else if (status.equalsIgnoreCase(Constants.ALTERNATE_TIME)) {
+                LogUtils.d("==== onResume . in ALTERNATE_TIME");
+                String message = String.format(mHomeActivity.getResources().getString(R.string.request_alternate_time), fullname, fullname);
+                errorDialogFragment = CustomErrorDialogFragment.newInstance(message);
+                errorDialogFragment.show(mHomeActivity.getSupportFragmentManager(), "Message");
+            } else if (status.equalsIgnoreCase(Constants.REJECT)) {
+                LogUtils.d("==== onResume . in REJECT");
+                String message = String.format(mHomeActivity.getResources().getString(R.string.request_cancel), fullname);
+                errorDialogFragment = CustomErrorDialogFragment.newInstance(message);
+                errorDialogFragment.show(mHomeActivity.getSupportFragmentManager(), "Message");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
     }
 
     @Override

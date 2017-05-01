@@ -89,4 +89,9 @@
     <string name="secure_connect">Connect a device - Secure</string>
     <string name="insecure_connect">Connect a device - Insecure</string>
     <string name="discoverable">Make discoverable</string>
+
+    <!-- Reservation action message -->
+    <string name="request_cancel" formatted="false">Thanks, we have sent your cancellation back to %1s and will guide him to other nearby places.</string>
+    <string name="request_alternate_time" formatted="false">Thanks, we have sent your confirmation for an alternate time back to %1s. Once the user confirms, we will send you and update.\n\nIf you need to contact %2s, please go to the Bookings Archive and tap on this request.</string>
+    <string name="request_confirm_booking" formatted="false">Thanks, we have sent your confirmation back to %1s. If you need to contact %2s, please go to the Bookings Archive and tap on this request.</string>
 </resources>

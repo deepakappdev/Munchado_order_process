@@ -30,7 +30,7 @@
         android:background="@color/grey_bg_confirm_table"
         android:elevation="0dp"
         android:padding="10dp"
-        app:ael_duration="600"
+        app:ael_duration="300"
         app:ael_expanded="true"
         app:ael_interpolator="linear"
         app:ael_orientation="vertical">
@@ -96,7 +96,7 @@
         android:background="@color/grey_bg_confirm_table"
         android:elevation="0dp"
         android:padding="16dp"
-        app:ael_duration="600"
+        app:ael_duration="300"
         app:ael_expanded="false"
         app:ael_interpolator="linear"
         app:ael_orientation="vertical">
@@ -208,7 +208,7 @@
         android:background="@color/grey_bg_confirm_table"
         android:elevation="0dp"
         android:padding="16dp"
-        app:ael_duration="600"
+        app:ael_duration="300"
         app:ael_expanded="false"
         app:ael_interpolator="linear"
         app:ael_orientation="vertical">

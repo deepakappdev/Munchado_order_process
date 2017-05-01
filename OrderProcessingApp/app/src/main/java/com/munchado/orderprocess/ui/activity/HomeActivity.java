@@ -41,8 +41,10 @@ public class HomeActivity extends BaseActivity
     Toolbar toolbar;
     PowerManager.WakeLock mWakeLock;
     private final ArrayList<View> mMenuItems = new ArrayList<>();
-    public List<UpcomingReservation> upcommingReservationList = new ArrayList<>();;
-    public List<ArchiveReservation> archiveReservationList = new ArrayList<>();;
+    public List<UpcomingReservation> upcommingReservationList = new ArrayList<>();
+    ;
+    public List<ArchiveReservation> archiveReservationList = new ArrayList<>();
+    ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

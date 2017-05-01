@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/dark_grey"
     android:orientation="vertical"
-    android:visibility="visible">
+    android:visibility="gone">
 
     <com.munchado.orderprocess.ui.widgets.SquareImageView
         android:id="@+id/image_view"

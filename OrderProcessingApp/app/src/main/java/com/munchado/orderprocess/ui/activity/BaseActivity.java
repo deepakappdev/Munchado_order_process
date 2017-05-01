@@ -18,6 +18,7 @@ import com.munchado.orderprocess.ui.fragment.DineInListFragment;
 import com.munchado.orderprocess.ui.fragment.DineinArchiveFragment;
 import com.munchado.orderprocess.ui.fragment.OrderDetailFragment;
 import com.munchado.orderprocess.ui.fragment.PrintSettingFragment;
+import com.munchado.orderprocess.utils.LogUtils;
 
 /**
  * Created by android on 22/2/17.
@@ -26,7 +27,8 @@ import com.munchado.orderprocess.ui.fragment.PrintSettingFragment;
 public class BaseActivity extends AppCompatActivity {
 
     private Toast toast;
-    BaseFragment fragmentActiveOrder;
+    public BaseFragment mDineInListFragment;
+
 
     public String order_ID = "", order_Status = "";
     public String reservation_Id = "", reservation_status = "";
@@ -58,7 +60,7 @@ public class BaseActivity extends AppCompatActivity {
         switch (fragmentId) {
             case ACTIVE:
                 fragment = new ActiveOrderFragment();
-                fragmentActiveOrder = fragment;
+//                fragmentActiveOrder = fragment;
                 break;
             case ARCHIVE:
                 fragment = new ArchiveOrderFragment();
@@ -73,6 +75,7 @@ public class BaseActivity extends AppCompatActivity {
                 break;
             case DINE_IN:
                 fragment = new DineInListFragment();
+                mDineInListFragment = fragment;
                 break;
             case DINE_IN_DETAIL:
                 fragment = new DineInDetailFragment();
@@ -86,6 +89,9 @@ public class BaseActivity extends AppCompatActivity {
 
 
     public void popToHomePage() {
+
+        if (mDineInListFragment != null)
+            mDineInListFragment = null;
         getSupportFragmentManager().popBackStack(FRAGMENTS.ACTIVE.name(), 0);
 
     }
@@ -104,7 +110,7 @@ public class BaseActivity extends AppCompatActivity {
             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
         }
-
+        LogUtils.d("============ base activity onPause()");
         super.onPause();
     }
 
@@ -116,4 +122,9 @@ public class BaseActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        LogUtils.d("============ base activity  onStop()");
+    }
 }

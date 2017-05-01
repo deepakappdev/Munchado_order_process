@@ -12,6 +12,7 @@ import com.munchado.orderprocess.R;
 import com.munchado.orderprocess.listener.OnDineinClickListener;
 import com.munchado.orderprocess.model.dinein.UpcomingReservation;
 import com.munchado.orderprocess.ui.widgets.CustomTextView;
+import com.munchado.orderprocess.utils.Constants;
 import com.munchado.orderprocess.utils.DateTimeUtils;
 import com.munchado.orderprocess.utils.StringUtils;
 
@@ -112,43 +113,56 @@ public class DineinAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 //            text_order_time.setText("00:00 AM");
             text_order_time.setText(DateTimeUtils.getFormattedDate(mUpcomingReservation.reservation_date, DateTimeUtils.FORMAT_HH_MM_A));
             text_noofpeople.setText(mUpcomingReservation.seats + " People");
-            text_hold_time.setText("(" + mUpcomingReservation.hold_time + " min)");
 
             //0=new,1=confirm,2=reject,3=alternate time,4=not respond,5=cancel,6=user confirm,7=archive
             switch (mUpcomingReservation.status) {
-                case "0":
+                case Constants.NEW_ORDER://"0"
+                    text_hold_time.setText("(" + mUpcomingReservation.hold_time + " min)");
+                    text_msg.setVisibility(View.GONE);
+                    btnAction.setVisibility(View.VISIBLE);
                     break;
-                case "1":
-//                    text_msg.setVisibility(View.VISIBLE);
-//                    text_msg.setText("Waiting for user to confirm");
-//                    text_hold_time.setText("(Your Offered Time)");
-//                    btnAction.setVisibility(View.GONE);
+                case Constants.CONFIRM://"1"
+                    text_hold_time.setText("(" + mUpcomingReservation.hold_time + " min)");
+                    text_msg.setVisibility(View.GONE);
+                    btnAction.setVisibility(View.VISIBLE);
                     break;
-                case "2":
+                case Constants.REJECT://"2"
+                    text_hold_time.setText("(" + mUpcomingReservation.hold_time + " min)");
+
+                    text_msg.setVisibility(View.GONE);
+                    btnAction.setVisibility(View.VISIBLE);
                     break;
-                case "3":
+                case Constants.ALTERNATE_TIME://"3"
                     text_msg.setVisibility(View.VISIBLE);
                     text_msg.setText("Waiting for user to confirm");
                     text_hold_time.setText("(Your Offered Time)");
                     btnAction.setVisibility(View.GONE);
                     break;
-                case "4":
+                case Constants.NOT_RESPOND://"4"
+                    text_hold_time.setText("(" + mUpcomingReservation.hold_time + " min)");
+                    text_msg.setVisibility(View.GONE);
+                    btnAction.setVisibility(View.VISIBLE);
                     break;
-                case "5":
+                case Constants.CANCEL://"5"
                     text_msg.setVisibility(View.VISIBLE);
                     text_msg.setText("Sorry, the user opted out");
                     text_hold_time.setText("(Your Offered Time)");
                     btnAction.setText("REMOVE");
                     break;
-                case "6":
+                case Constants.USER_CONFIRM://"6"
                     text_msg.setVisibility(View.VISIBLE);
                     text_msg.setText("Confirmed by the user");
                     text_hold_time.setText("(Your Offered Time)");
                     btnAction.setText("MOVE TO ARCHIVE");
                     break;
-                case "8":
+                case Constants.ARCHIVE://"7"
+                    text_hold_time.setText("(" + mUpcomingReservation.hold_time + " min)");
+                    text_msg.setVisibility(View.GONE);
+                    btnAction.setVisibility(View.VISIBLE);
                     break;
             }
+
+
         }
     }
 }
