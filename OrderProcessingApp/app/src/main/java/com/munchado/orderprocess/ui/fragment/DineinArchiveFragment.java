@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +20,7 @@ import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.ui.activity.BaseActivity;
 import com.munchado.orderprocess.ui.activity.HomeActivity;
 import com.munchado.orderprocess.ui.adapter.DineinArchiveAdapter;
+import com.munchado.orderprocess.utils.CustomLinearLayoutManager;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -30,7 +30,7 @@ public class DineinArchiveFragment extends BaseFragment implements View.OnClickL
     private View rootView;
     RecyclerView recyclerView;
     private TextView textArchiveOrderCount;
-    private LinearLayoutManager mLinearLayoutManager;
+    private CustomLinearLayoutManager mLinearLayoutManager;
     private HomeActivity mHomeActivity;
     private DineinArchiveAdapter mDineinArchiveAdapter;
 
@@ -60,9 +60,10 @@ public class DineinArchiveFragment extends BaseFragment implements View.OnClickL
         textArchiveOrderCount = (TextView) view.findViewById(R.id.text_booking_count);
         view.findViewById(R.id.text_archive_booking).setOnClickListener(this);
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
-        mLinearLayoutManager = new LinearLayoutManager(getContext());
+        mLinearLayoutManager = new CustomLinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLinearLayoutManager);
         mDineinArchiveAdapter = new DineinArchiveAdapter(mHomeActivity, mOnDineinArchiveClickListener);
+        recyclerView.getRecycledViewPool().clear();
         recyclerView.setAdapter(mDineinArchiveAdapter);
         if (mHomeActivity.archiveReservationList != null) {
             textArchiveOrderCount.setText(mHomeActivity.archiveReservationList.size() + " ARCHIVE BOOKINGS");

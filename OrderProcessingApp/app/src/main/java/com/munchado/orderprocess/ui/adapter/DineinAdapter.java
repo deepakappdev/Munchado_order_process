@@ -71,7 +71,8 @@ public class DineinAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         int pos = getPosition(item);
         if (pos > -1) {
             orderItems.remove(pos);
-            notifyItemRemoved(pos);
+//            notifyItemRemoved(pos);
+            notifyDataSetChanged();
 
         }
     }

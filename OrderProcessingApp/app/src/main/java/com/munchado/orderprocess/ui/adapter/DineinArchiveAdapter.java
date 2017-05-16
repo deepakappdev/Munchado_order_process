@@ -42,7 +42,8 @@ public class DineinArchiveAdapter extends RecyclerView.Adapter<RecyclerView.View
         int pos = getPosition(item);
         if (pos > -1) {
             orderItems.remove(pos);
-            notifyItemRemoved(pos);
+//            notifyItemRemoved(pos);
+            notifyDataSetChanged();
 
         }
     }
@@ -63,8 +64,10 @@ public class DineinArchiveAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        ((MyViewHolder) holder).updateData(orderItems.get(position));
+        if (position < orderItems.size())
+            ((MyViewHolder) holder).updateData(orderItems.get(position));
     }
+
 
     @Override
     public int getItemCount() {
