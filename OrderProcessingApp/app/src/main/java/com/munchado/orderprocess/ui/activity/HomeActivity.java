@@ -3,6 +3,9 @@ package com.munchado.orderprocess.ui.activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.support.design.widget.NavigationView;
@@ -35,6 +38,8 @@ import com.munchado.orderprocess.utils.PrefUtil;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class HomeActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -45,6 +50,7 @@ public class HomeActivity extends BaseActivity
     ;
     public List<ArchiveReservation> archiveReservationList = new ArrayList<>();
     ;
+    boolean isFirst;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,6 +196,37 @@ public class HomeActivity extends BaseActivity
         if (toolbar != null) {
             toolbar.setTitle(title);
             setTypeFace();
+        }
+    }
+
+    public void startPlaySoundForNewBookings() {
+        if (!isFirst) {
+            isFirst = true;
+            new Timer().scheduleAtFixedRate(new TimerTask() {
+                @Override
+                public void run() {
+                    playRing();
+                }
+            }, 0, 5000);
+        }
+    }
+
+    private void playRing() {
+        try {
+            if (upcommingReservationList != null && upcommingReservationList.size() > 0)
+                for (UpcomingReservation item : upcommingReservationList) {
+//                LogUtils.d("========= " + item.status);
+                    if (item.status.equalsIgnoreCase("0")) {
+
+                        Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                        Ringtone r = RingtoneManager.getRingtone(this, notification);
+                        r.play();
+                        break;
+
+
+                    }
+                }
+        } catch (Exception e) {
         }
     }
 

@@ -7,5 +7,6 @@ import com.munchado.orderprocess.model.dinein.UpcomingReservation;
  */
 public interface OnDineinClickListener {
 
-    public void onDineItemClick(UpcomingReservation reservation);
+    void onDineItemClick(UpcomingReservation reservation);
+    void onMoveToArchive(UpcomingReservation reservation);
 }

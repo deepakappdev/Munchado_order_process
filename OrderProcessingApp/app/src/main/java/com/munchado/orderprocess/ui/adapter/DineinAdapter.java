@@ -1,11 +1,13 @@
 package com.munchado.orderprocess.ui.adapter;
 
 import android.content.Context;
+import android.support.v4.widget.ContentLoadingProgressBar;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.munchado.orderprocess.R;
@@ -14,6 +16,7 @@ import com.munchado.orderprocess.model.dinein.UpcomingReservation;
 import com.munchado.orderprocess.ui.widgets.CustomTextView;
 import com.munchado.orderprocess.utils.Constants;
 import com.munchado.orderprocess.utils.DateTimeUtils;
+import com.munchado.orderprocess.utils.LogUtils;
 import com.munchado.orderprocess.utils.StringUtils;
 
 import java.util.ArrayList;
@@ -35,6 +38,32 @@ public class DineinAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void setData(List<UpcomingReservation> orderItems) {
         this.orderItems = orderItems;
         notifyDataSetChanged();
+    }
+
+    public void updateResult(UpcomingReservation selectedItem) {
+
+        int position = getItemPosition(selectedItem.booking_id);
+        LogUtils.d("====== position of this booking : " + position);
+        if (position >= 0) {
+            orderItems.set(position, selectedItem);
+            notifyDataSetChanged();
+        }
+    }
+
+    private int getItemPosition(String orderId) {
+        int position = -1;
+        boolean found = false;
+        for (UpcomingReservation orderItem : this.orderItems) {
+            position++;
+            if (orderItem.booking_id.equalsIgnoreCase(orderId)) {
+                found = true;
+                break;
+            }
+        }
+        if (found)
+            return position;
+        else
+            return -1;
     }
 
     public void moveToArchive(UpcomingReservation item) {
@@ -83,6 +112,8 @@ public class DineinAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         private final TextView text_noofpeople;
         private final TextView text_msg;
         private final Button btnAction;
+        private final ContentLoadingProgressBar progressBar;
+        private final RelativeLayout mlayout;
         private UpcomingReservation mUpcomingReservation;
 
         public MyViewHolder(View itemView) {
@@ -98,11 +129,18 @@ public class DineinAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             text_hold_time = (CustomTextView) itemView.findViewById(R.id.text_hold_time);
             text_noofpeople = (TextView) itemView.findViewById(R.id.text_noofpeople);
             text_msg = (TextView) itemView.findViewById(R.id.text_msg);
+            mlayout = (RelativeLayout) itemView.findViewById(R.id.ll_actionbtn);
+            progressBar = (ContentLoadingProgressBar) itemView.findViewById(R.id.progress_bar);
             btnAction = (Button) itemView.findViewById(R.id.btn_action);
             btnAction.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mOnDineinClickListener.onDineItemClick(mUpcomingReservation);
+
+                    if (btnAction.getText().toString().equalsIgnoreCase("MOVE TO ARCHIVE")) {
+                        mOnDineinClickListener.onMoveToArchive(mUpcomingReservation);
+//
+                    } else
+                        mOnDineinClickListener.onDineItemClick(mUpcomingReservation);
                 }
             });
         }
@@ -114,59 +152,75 @@ public class DineinAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             text_order_time.setText(DateTimeUtils.getFormattedDate(mUpcomingReservation.reservation_date, DateTimeUtils.FORMAT_HH_MM_A));
             text_noofpeople.setText(mUpcomingReservation.seats + " People");
 
-            //0=new,1=confirm,2=reject,3=alternate time,4=not respond,5=cancel,6=user confirm,7=archive
-            switch (mUpcomingReservation.status) {
-                case Constants.NEW_ORDER://"0"
+
+            if (mUpcomingReservation.inProgress) {
+                progressBar.setVisibility(View.VISIBLE);
+                btnAction.setVisibility(View.INVISIBLE);
+            } else {
+                progressBar.setVisibility(View.INVISIBLE);
+                btnAction.setVisibility(View.VISIBLE);
+                //0=new,1=confirm,2=reject,3=alternate time,4=not respond,5=cancel,6=user confirm,7=archive
+                switch (mUpcomingReservation.status) {
+                    case Constants.NEW_ORDER://"0"
 //                    text_hold_time.setText("(" + mUpcomingReservation.hold_time + " min)");
-                    setTime(text_hold_time, mUpcomingReservation.hold_time);
-                    text_msg.setVisibility(View.GONE);
-                    btnAction.setVisibility(View.VISIBLE);
-                    break;
-                case Constants.CONFIRM://"1"
+                        setTime(text_hold_time, mUpcomingReservation.hold_time);
+                        text_msg.setVisibility(View.GONE);
+                        mlayout.setVisibility(View.VISIBLE);
+                        btnAction.setText("VIEW");
+                        break;
+                    case Constants.CONFIRM://"1"
 //                    text_hold_time.setText("(" + mUpcomingReservation.hold_time + " min)");
-                    text_msg.setVisibility(View.GONE);
-                    setTime(text_hold_time, mUpcomingReservation.hold_time);
-                    btnAction.setVisibility(View.VISIBLE);
-                    break;
-                case Constants.REJECT://"2"
+                        text_msg.setVisibility(View.GONE);
+                        setTime(text_hold_time, mUpcomingReservation.hold_time);
+                        mlayout.setVisibility(View.VISIBLE);
+                        btnAction.setText("VIEW");
+                        break;
+                    case Constants.REJECT://"2"
 //                    text_hold_time.setText("(" + mUpcomingReservation.hold_time + " min)");
-                    setTime(text_hold_time, mUpcomingReservation.hold_time);
-                    text_msg.setVisibility(View.GONE);
-                    btnAction.setVisibility(View.VISIBLE);
-                    break;
-                case Constants.ALTERNATE_TIME://"3"
-                    text_msg.setVisibility(View.VISIBLE);
-                    text_msg.setText("Waiting for user to confirm");
-                    text_hold_time.setText("(Your Offered Time)");
-                    btnAction.setVisibility(View.GONE);
-                    break;
-                case Constants.NOT_RESPOND://"4"
+                        setTime(text_hold_time, mUpcomingReservation.hold_time);
+                        text_msg.setVisibility(View.GONE);
+                        mlayout.setVisibility(View.VISIBLE);
+                        btnAction.setText("VIEW");
+                        break;
+                    case Constants.ALTERNATE_TIME://"3"
+                        text_msg.setVisibility(View.VISIBLE);
+                        text_msg.setText("Waiting for user to confirm");
+                        text_hold_time.setText("(Your Offered Time)");
+                        btnAction.setVisibility(View.GONE);
+                        mlayout.setVisibility(View.GONE);
+                        break;
+                    case Constants.NOT_RESPOND://"4"
 //                    text_hold_time.setText("(" + mUpcomingReservation.hold_time + " min)");
-                    setTime(text_hold_time, mUpcomingReservation.hold_time);
-                    text_msg.setVisibility(View.GONE);
-                    btnAction.setVisibility(View.VISIBLE);
-                    break;
-                case Constants.CANCEL://"5"
-                    text_msg.setVisibility(View.VISIBLE);
-                    text_msg.setText("Sorry, the user opted out");
-                    text_hold_time.setText("(Your Offered Time)");
-                    btnAction.setText("REMOVE");
-                    break;
-                case Constants.USER_CONFIRM://"6"
-                    text_msg.setVisibility(View.VISIBLE);
-                    text_msg.setText("Confirmed by the user");
-                    text_hold_time.setText("(Your Offered Time)");
-                    btnAction.setText("MOVE TO ARCHIVE");
-                    break;
-                case Constants.ARCHIVE://"7"
+                        setTime(text_hold_time, mUpcomingReservation.hold_time);
+                        text_msg.setVisibility(View.GONE);
+                        mlayout.setVisibility(View.VISIBLE);
+                        btnAction.setText("VIEW");
+                        break;
+                    case Constants.CANCEL://"5"
+                        text_msg.setVisibility(View.VISIBLE);
+                        text_msg.setText("Sorry, the user opted out");
+                        text_hold_time.setText("(Your Offered Time)");
+                        btnAction.setText("REMOVE");
+                        mlayout.setVisibility(View.VISIBLE);
+                        break;
+                    case Constants.USER_CONFIRM://"6"
+                        text_msg.setVisibility(View.VISIBLE);
+                        text_msg.setText("Confirmed by the user");
+                        text_hold_time.setText("(Your Offered Time)");
+                        btnAction.setText("MOVE TO ARCHIVE");
+                        mlayout.setVisibility(View.VISIBLE);
+                        break;
+                    case Constants.ARCHIVE://"7"
 //                    text_hold_time.setText("(" + mUpcomingReservation.hold_time + " min)");
-                    setTime(text_hold_time, mUpcomingReservation.hold_time);
-                    text_msg.setVisibility(View.GONE);
-                    btnAction.setVisibility(View.VISIBLE);
-                    break;
+                        setTime(text_hold_time, mUpcomingReservation.hold_time);
+                        text_msg.setVisibility(View.GONE);
+                        mlayout.setVisibility(View.VISIBLE);
+                        btnAction.setText("VIEW");
+                        break;
+                }
             }
 
-
+            LogUtils.d("============= is progress : " + mUpcomingReservation.inProgress + "===== " + btnAction.getVisibility() + "===== " + mUpcomingReservation.status);
         }
     }
 
@@ -176,4 +230,6 @@ public class DineinAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         else
             textView.setText("(" + time + " min)");
     }
+
+
 }

@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.munchado.orderprocess.R;
 import com.munchado.orderprocess.common.FRAGMENTS;
 import com.munchado.orderprocess.listener.OnDineinClickListener;
+import com.munchado.orderprocess.model.dinein.DineinConfirmResponse;
 import com.munchado.orderprocess.model.dinein.DineinResponse;
 import com.munchado.orderprocess.model.dinein.UpcomingReservation;
 import com.munchado.orderprocess.network.RequestController;
@@ -25,18 +26,20 @@ import com.munchado.orderprocess.ui.activity.HomeActivity;
 import com.munchado.orderprocess.ui.adapter.DineinAdapter;
 import com.munchado.orderprocess.utils.Constants;
 import com.munchado.orderprocess.utils.LogUtils;
+import com.munchado.orderprocess.utils.PrefUtil;
 import com.munchado.orderprocess.utils.StringUtils;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class DineInListFragment extends BaseFragment implements View.OnClickListener, RequestCallback {
+public class DineInListFragment extends BaseFragment implements View.OnClickListener {
     private View rootView;
     RecyclerView recyclerView;
     private TextView textActiveOrderCount;
     private LinearLayoutManager mLinearLayoutManager;
     private HomeActivity mHomeActivity;
     private DineinAdapter mDineinAdapter;
+
 
     public DineInListFragment() {
         // Required empty public constructor
@@ -87,7 +90,7 @@ public class DineInListFragment extends BaseFragment implements View.OnClickList
     }
 
     private void fetchBookingList() {
-        RequestController.getBooking(this);
+        RequestController.getBooking(mRequestCallback);
     }
 
 
@@ -143,37 +146,46 @@ public class DineInListFragment extends BaseFragment implements View.OnClickList
 
     }
 
-    @Override
-    public void error(NetworkError volleyError) {
+    RequestCallback mRequestCallback = new RequestCallback() {
+        @Override
+        public void error(NetworkError volleyError) {
 
-    }
+        }
 
-    @Override
-    public void success(Object obj) {
-        if (mHomeActivity == null) return;
-        if (obj instanceof DineinResponse) {
-            DineinResponse mDineinResponse = (DineinResponse) obj;
-            mHomeActivity.upcommingReservationList = mDineinResponse.data.upcomming_reservation;
-            mHomeActivity.archiveReservationList = mDineinResponse.data.archive_reservation;
-            if (mHomeActivity.upcommingReservationList != null) {
-                if (mHomeActivity.upcommingReservationList.size() == 1)
-                    textActiveOrderCount.setText(mHomeActivity.upcommingReservationList.size() + " NEW BOOKING");
-                else
-                    textActiveOrderCount.setText(mHomeActivity.upcommingReservationList.size() + " NEW BOOKINGS");
+        @Override
+        public void success(Object obj) {
+            if (mHomeActivity == null) return;
+            if (obj instanceof DineinResponse) {
+                DineinResponse mDineinResponse = (DineinResponse) obj;
+                mHomeActivity.upcommingReservationList.clear();
+                mHomeActivity.archiveReservationList.clear();
+                mHomeActivity.upcommingReservationList = mDineinResponse.data.upcomming_reservation;
+                mHomeActivity.archiveReservationList = mDineinResponse.data.archive_reservation;
+                if (mHomeActivity.upcommingReservationList != null) {
+                    if (mHomeActivity.upcommingReservationList.size() == 1)
+                        textActiveOrderCount.setText(mHomeActivity.upcommingReservationList.size() + " NEW BOOKING");
+                    else
+                        textActiveOrderCount.setText(mHomeActivity.upcommingReservationList.size() + " NEW BOOKINGS");
 
 //                textActiveOrderCount.setText(mHomeActivity.upcommingReservationList.size() + " NEW BOOKINGS");
-                if (mHomeActivity.upcommingReservationList.size() > 0) {
-                    mDineinAdapter.setData(mHomeActivity.upcommingReservationList);
+                    if (mHomeActivity.upcommingReservationList.size() > 0) {
+                        mDineinAdapter.setData(mHomeActivity.upcommingReservationList);
+                    }
                 }
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        fetchBookingList();
+                    }
+                }, 30000);
+                mHomeActivity.startPlaySoundForNewBookings();
+
+            } else if (obj instanceof DineinConfirmResponse) {
+                fetchBookingList();
             }
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    fetchBookingList();
-                }
-            }, 30000);
         }
-    }
+    };
+
 
     OnDineinClickListener mOnDineinClickListener = new OnDineinClickListener() {
         @Override
@@ -181,8 +193,18 @@ public class DineInListFragment extends BaseFragment implements View.OnClickList
             Bundle bundle = new Bundle();
             bundle.putString("BOOKING_ID", reservation.reservation_id);
             ((BaseActivity) getActivity()).addOverLayFragment(FRAGMENTS.DINE_IN_DETAIL, bundle);
+
+
+        }
+
+        @Override
+        public void onMoveToArchive(UpcomingReservation reservation) {
+            reservation.inProgress = true;
+            mDineinAdapter.updateResult(reservation);
+            RequestController.updateBookingDetail(PrefUtil.getString(Constants.PREF_USER_ID, ""), reservation.reservation_id, "7", "", "", "0", mRequestCallback);
         }
     };
+
 
     @Override
     public FRAGMENTS getFragmentId() {

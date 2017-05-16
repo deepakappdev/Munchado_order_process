@@ -32,4 +32,5 @@ public class UpcomingReservation {
 
     public String restaurant_name;
 
+    public boolean inProgress;
 }

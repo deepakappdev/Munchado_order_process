@@ -48,6 +48,8 @@ public class DineinConfirmResponseData {
 
     public String status;
 
+    public String first_hold_time;
+
     public String restaurant_offer;
 
     public String zipcode;

@@ -74,8 +74,6 @@ public class DineInDetailFragment extends BaseFragment implements View.OnClickLi
     }
 
 
-
-
     private void initView(View view) {
         iv_Profile = (com.munchado.orderprocess.ui.widgets.SquareImageView) view.findViewById(R.id.image_view);
         btn_confirm_time = (Button) view.findViewById(R.id.btn_confirm_time);
@@ -287,7 +285,7 @@ public class DineInDetailFragment extends BaseFragment implements View.OnClickLi
         if (obj instanceof DineinConfirmResponse) {
             ((BaseActivity) getActivity()).reservation_Id = reservationid;
             ((BaseActivity) getActivity()).reservation_status = ((DineinConfirmResponse) obj).data.status;
-
+//            ((HomeActivity)getActivity()).startPlaySoundForNewBookings();
             if (((BaseActivity) getActivity()).mDineInListFragment != null)
                 ((DineInListFragment) ((BaseActivity) getActivity()).mDineInListFragment).performActionFromDetail();
             ((BaseActivity) getActivity()).backPressed();
@@ -304,7 +302,8 @@ public class DineInDetailFragment extends BaseFragment implements View.OnClickLi
 
     private void setData(DineinDetailResponseData data) {
         user_id = data.user_id;
-        Picasso.with(getContext()).load(data.user_pic).resize(200 * (int) getActivity().getResources().getDisplayMetrics().density, 200 * (int) getActivity().getResources().getDisplayMetrics().density).centerCrop().placeholder(R.drawable.profile_img).into(iv_Profile);
+        if (!StringUtils.isNullOrEmpty(data.user_pic))
+            Picasso.with(getContext()).load(data.user_pic).resize(200 * (int) getActivity().getResources().getDisplayMetrics().density, 200 * (int) getActivity().getResources().getDisplayMetrics().density).centerCrop().placeholder(R.drawable.profile_img).into(iv_Profile);
         setText(text_name, data.first_name + (!StringUtils.isNullOrEmpty(data.last_name) ? " " + Utils.decodeHtml(data.last_name) : ""));
         setText(text_email, data.email);
         setText(text_telephone, data.phone);
@@ -317,10 +316,15 @@ public class DineInDetailFragment extends BaseFragment implements View.OnClickLi
         setText(text_instructions_id, data.user_instruction);
         ll_booking.setVisibility(View.VISIBLE);
         layout_customer_detail.setVisibility(View.VISIBLE);
-        if (data.status.equalsIgnoreCase(Constants.CONFIRM) || data.status.equalsIgnoreCase(Constants.REJECT) || data.status.equalsIgnoreCase(Constants.USER_CONFIRM) || data.status.equalsIgnoreCase(Constants.CANCEL) || data.status.equalsIgnoreCase(Constants.ARCHIVE) || data.status.equalsIgnoreCase(Constants.ALTERNATE_TIME)) {
-           if(!data.status.equalsIgnoreCase(Constants.ALTERNATE_TIME))
-            ll_confirm_reject.setVisibility(View.INVISIBLE);
+        if (data.status.equalsIgnoreCase(Constants.NEW_ORDER) || data.status.equalsIgnoreCase(Constants.CONFIRM) || data.status.equalsIgnoreCase(Constants.REJECT) || data.status.equalsIgnoreCase(Constants.USER_CONFIRM) || data.status.equalsIgnoreCase(Constants.CANCEL) || data.status.equalsIgnoreCase(Constants.ARCHIVE) || data.status.equalsIgnoreCase(Constants.ALTERNATE_TIME)) {
+            if (!data.status.equalsIgnoreCase(Constants.ALTERNATE_TIME) && !data.status.equalsIgnoreCase(Constants.NEW_ORDER))
+                ll_confirm_reject.setVisibility(View.INVISIBLE);
+            else
+                ll_confirm_reject.setVisibility(View.VISIBLE);
             switch (data.status) {
+                case Constants.NEW_ORDER:
+                    setText(text_status, "New");
+                    break;
                 case Constants.CONFIRM:
                     setText(text_status, "Confirmed");
                     break;
