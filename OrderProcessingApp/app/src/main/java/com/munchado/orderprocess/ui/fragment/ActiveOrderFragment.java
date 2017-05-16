@@ -302,7 +302,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
     }
 
     @Override
-    FRAGMENTS getFragmentId() {
+    public FRAGMENTS getFragmentId() {
         return FRAGMENTS.ACTIVE;
     }
 }

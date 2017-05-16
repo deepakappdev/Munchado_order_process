@@ -57,7 +57,7 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
             fetchArchiveOrder();
     }
     @Override
-    FRAGMENTS getFragmentId() {
+    public FRAGMENTS getFragmentId() {
         return FRAGMENTS.ARCHIVE;
     }
 

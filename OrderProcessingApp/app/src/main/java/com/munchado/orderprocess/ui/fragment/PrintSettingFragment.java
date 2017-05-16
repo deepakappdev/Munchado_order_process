@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.munchado.orderprocess.R;
 import com.munchado.orderprocess.common.FRAGMENTS;
-import com.munchado.orderprocess.ui.activity.HomeActivity;
 import com.munchado.orderprocess.ui.activity.settings.OrderProcessingSettingActivity;
 import com.munchado.orderprocess.ui.activity.settings.PrinterSettingActivity;
 import com.munchado.orderprocess.ui.activity.settings.ProfileSettingActivity;
@@ -27,7 +26,7 @@ public class PrintSettingFragment extends BaseFragment implements View.OnClickLi
     }
 
     @Override
-    FRAGMENTS getFragmentId() {
+    public FRAGMENTS getFragmentId() {
         return FRAGMENTS.PRINT;
     }
     @Override

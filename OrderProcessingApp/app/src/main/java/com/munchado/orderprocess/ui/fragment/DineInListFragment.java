@@ -48,6 +48,7 @@ public class DineInListFragment extends BaseFragment implements View.OnClickList
         mHomeActivity = (HomeActivity) context;
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -75,7 +76,10 @@ public class DineInListFragment extends BaseFragment implements View.OnClickList
         mDineinAdapter = new DineinAdapter(mHomeActivity, mOnDineinClickListener);
         recyclerView.setAdapter(mDineinAdapter);
         if (mHomeActivity.upcommingReservationList != null) {
-            textActiveOrderCount.setText(mHomeActivity.upcommingReservationList.size() + " NEW BOOKINGS");
+            if (mHomeActivity.upcommingReservationList.size() == 1)
+                textActiveOrderCount.setText(mHomeActivity.upcommingReservationList.size() + " NEW BOOKING");
+            else
+                textActiveOrderCount.setText(mHomeActivity.upcommingReservationList.size() + " NEW BOOKINGS");
             if (mHomeActivity.upcommingReservationList.size() > 0) {
                 mDineinAdapter.setData(mHomeActivity.upcommingReservationList);
             }
@@ -86,13 +90,6 @@ public class DineInListFragment extends BaseFragment implements View.OnClickList
         RequestController.getBooking(this);
     }
 
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        LogUtils.d("==== onResume .");
-
-    }
 
     public void performActionFromDetail() {
         if (mDineinAdapter != null && mDineinAdapter.getAllItems() != null && mDineinAdapter.getAllItems().size() > 0) {
@@ -159,7 +156,12 @@ public class DineInListFragment extends BaseFragment implements View.OnClickList
             mHomeActivity.upcommingReservationList = mDineinResponse.data.upcomming_reservation;
             mHomeActivity.archiveReservationList = mDineinResponse.data.archive_reservation;
             if (mHomeActivity.upcommingReservationList != null) {
-                textActiveOrderCount.setText(mHomeActivity.upcommingReservationList.size() + " NEW BOOKINGS");
+                if (mHomeActivity.upcommingReservationList.size() == 1)
+                    textActiveOrderCount.setText(mHomeActivity.upcommingReservationList.size() + " NEW BOOKING");
+                else
+                    textActiveOrderCount.setText(mHomeActivity.upcommingReservationList.size() + " NEW BOOKINGS");
+
+//                textActiveOrderCount.setText(mHomeActivity.upcommingReservationList.size() + " NEW BOOKINGS");
                 if (mHomeActivity.upcommingReservationList.size() > 0) {
                     mDineinAdapter.setData(mHomeActivity.upcommingReservationList);
                 }
@@ -183,7 +185,7 @@ public class DineInListFragment extends BaseFragment implements View.OnClickList
     };
 
     @Override
-    FRAGMENTS getFragmentId() {
+    public FRAGMENTS getFragmentId() {
         return FRAGMENTS.DINE_IN;
     }
 
@@ -192,6 +194,7 @@ public class DineInListFragment extends BaseFragment implements View.OnClickList
         switch (view.getId()) {
             case R.id.text_archive_booking:
                 ((BaseActivity) getActivity()).addFragment(FRAGMENTS.DINE_IN_ARCHIVE, null);
+//                ((BaseActivity) getActivity()).setCurrentFragmentTitle();
                 break;
         }
     }

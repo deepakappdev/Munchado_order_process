@@ -117,18 +117,20 @@ public class DineinAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             //0=new,1=confirm,2=reject,3=alternate time,4=not respond,5=cancel,6=user confirm,7=archive
             switch (mUpcomingReservation.status) {
                 case Constants.NEW_ORDER://"0"
-                    text_hold_time.setText("(" + mUpcomingReservation.hold_time + " min)");
+//                    text_hold_time.setText("(" + mUpcomingReservation.hold_time + " min)");
+                    setTime(text_hold_time, mUpcomingReservation.hold_time);
                     text_msg.setVisibility(View.GONE);
                     btnAction.setVisibility(View.VISIBLE);
                     break;
                 case Constants.CONFIRM://"1"
-                    text_hold_time.setText("(" + mUpcomingReservation.hold_time + " min)");
+//                    text_hold_time.setText("(" + mUpcomingReservation.hold_time + " min)");
                     text_msg.setVisibility(View.GONE);
+                    setTime(text_hold_time, mUpcomingReservation.hold_time);
                     btnAction.setVisibility(View.VISIBLE);
                     break;
                 case Constants.REJECT://"2"
-                    text_hold_time.setText("(" + mUpcomingReservation.hold_time + " min)");
-
+//                    text_hold_time.setText("(" + mUpcomingReservation.hold_time + " min)");
+                    setTime(text_hold_time, mUpcomingReservation.hold_time);
                     text_msg.setVisibility(View.GONE);
                     btnAction.setVisibility(View.VISIBLE);
                     break;
@@ -139,7 +141,8 @@ public class DineinAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     btnAction.setVisibility(View.GONE);
                     break;
                 case Constants.NOT_RESPOND://"4"
-                    text_hold_time.setText("(" + mUpcomingReservation.hold_time + " min)");
+//                    text_hold_time.setText("(" + mUpcomingReservation.hold_time + " min)");
+                    setTime(text_hold_time, mUpcomingReservation.hold_time);
                     text_msg.setVisibility(View.GONE);
                     btnAction.setVisibility(View.VISIBLE);
                     break;
@@ -156,7 +159,8 @@ public class DineinAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     btnAction.setText("MOVE TO ARCHIVE");
                     break;
                 case Constants.ARCHIVE://"7"
-                    text_hold_time.setText("(" + mUpcomingReservation.hold_time + " min)");
+//                    text_hold_time.setText("(" + mUpcomingReservation.hold_time + " min)");
+                    setTime(text_hold_time, mUpcomingReservation.hold_time);
                     text_msg.setVisibility(View.GONE);
                     btnAction.setVisibility(View.VISIBLE);
                     break;
@@ -164,5 +168,12 @@ public class DineinAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
 
         }
+    }
+
+    private void setTime(CustomTextView textView, String time) {
+        if (time.equalsIgnoreCase("0"))
+            textView.setText("(Right Now)");
+        else
+            textView.setText("(" + time + " min)");
     }
 }

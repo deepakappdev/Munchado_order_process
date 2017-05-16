@@ -22,7 +22,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="0 NEW BOOKINGS"
                 android:textColor="@color/default_text_color"
                 android:textSize="@dimen/textSizeXXLarge"
                 app:textStyle="HelveticaBold" />
@@ -31,7 +30,7 @@
                 android:id="@+id/text_archive_booking"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Bookings Archive"
+                android:text="Archived"
                 android:textColor="@color/text_light_black"
                 android:textSize="@dimen/textSizeXXLarge"
                 app:textFormatStyle="UNDERLINE"

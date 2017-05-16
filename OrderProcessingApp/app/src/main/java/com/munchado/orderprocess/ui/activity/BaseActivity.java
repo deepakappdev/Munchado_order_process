@@ -1,11 +1,16 @@
 package com.munchado.orderprocess.ui.activity;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.munchado.orderprocess.R;
@@ -20,6 +25,9 @@ import com.munchado.orderprocess.ui.fragment.OrderDetailFragment;
 import com.munchado.orderprocess.ui.fragment.PrintSettingFragment;
 import com.munchado.orderprocess.utils.LogUtils;
 
+import java.lang.reflect.Field;
+import java.util.List;
+
 /**
  * Created by android on 22/2/17.
  */
@@ -27,6 +35,7 @@ import com.munchado.orderprocess.utils.LogUtils;
 public class BaseActivity extends AppCompatActivity {
 
     private Toast toast;
+    public Toolbar toolbar;
     public BaseFragment mDineInListFragment;
 
 
@@ -99,8 +108,48 @@ public class BaseActivity extends AppCompatActivity {
     public void backPressed() {
         if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
             getSupportFragmentManager().popBackStack();
+            setCurrentFragmentTitle();
         } else
             finish();
+    }
+
+    public void setCurrentFragmentTitle(){
+        BaseFragment fragment = getVisibleFragment();
+        if (fragment != null)
+            setCustomTitle(fragment.getCustomTitle(fragment.getFragmentId()));
+    }
+    public void setCustomTitle(String title) {
+        if (toolbar != null) {
+            toolbar.setTitle(title);
+            setTypeFace();
+        }
+    }
+
+    private void setTypeFace() {
+        TextView titleTextView = null;
+
+        try {
+            Field f = toolbar.getClass().getDeclaredField("mTitleTextView");
+            f.setAccessible(true);
+            titleTextView = (TextView) f.get(toolbar);
+            Typeface face = Typeface.createFromAsset(getAssets(),
+                    "HelveticaNeue-Medium.ttf");
+            titleTextView.setTypeface(face, Typeface.BOLD);
+        } catch (NoSuchFieldException e) {
+        } catch (IllegalAccessException e) {
+        }
+    }
+
+    public BaseFragment getVisibleFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        List<Fragment> fragments = fragmentManager.getFragments();
+        if (fragments != null) {
+            for (Fragment fragment : fragments) {
+                if (fragment != null && fragment.isVisible())
+                    return (BaseFragment) fragment;
+            }
+        }
+        return null;
     }
 
     @Override

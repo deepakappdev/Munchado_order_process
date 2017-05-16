@@ -246,7 +246,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     }
 
     @Override
-    FRAGMENTS getFragmentId() {
+    public  FRAGMENTS getFragmentId() {
         return FRAGMENTS.ORDER_DETAIL;
     }
 

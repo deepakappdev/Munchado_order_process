@@ -82,7 +82,7 @@ public class DineinArchiveFragment extends BaseFragment implements View.OnClickL
     };
 
     @Override
-    FRAGMENTS getFragmentId() {
+    public FRAGMENTS getFragmentId() {
         return FRAGMENTS.DINE_IN_ARCHIVE;
     }
 
@@ -91,6 +91,7 @@ public class DineinArchiveFragment extends BaseFragment implements View.OnClickL
         switch (view.getId()) {
             case R.id.text_archive_booking:
                 ((BaseActivity) getActivity()).addFragment(FRAGMENTS.DINE_IN, null);
+//                ((BaseActivity) getActivity()).setCurrentFragmentTitle();
                 break;
         }
     }

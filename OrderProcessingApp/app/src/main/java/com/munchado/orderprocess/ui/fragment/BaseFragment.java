@@ -15,7 +15,7 @@ public abstract class BaseFragment extends Fragment {
     Handler handler = new Handler();
     Handler handlerRing = new Handler();
 
-    abstract FRAGMENTS getFragmentId();
+    public abstract FRAGMENTS getFragmentId();
 
     @Override
     public void onResume() {
@@ -29,7 +29,7 @@ public abstract class BaseFragment extends Fragment {
             ((BaseActivity) getActivity()).showToast(message);
     }
 
-    private String getCustomTitle(FRAGMENTS fragmentId) {
+    public String getCustomTitle(FRAGMENTS fragmentId) {
         switch (fragmentId) {
             case ACTIVE:
                 return "Active Orders";
@@ -42,11 +42,11 @@ public abstract class BaseFragment extends Fragment {
             case PRINT:
                 return "Settings";
             case DINE_IN:
-                return "Dine-in";
+                return "Snag A Spot";
             case DINE_IN_ARCHIVE:
-                return "Dine-in Archive";
+                return "Snag A Spot";//"Dine-in Archive";
             case DINE_IN_DETAIL:
-                return "Dine-in Details";
+                return "CAN YOU ACCOMMODATE";//"Dine-in Details";
             default:
                 return "Order Process";
         }

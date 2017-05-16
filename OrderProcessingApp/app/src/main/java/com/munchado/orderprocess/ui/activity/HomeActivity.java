@@ -38,7 +38,7 @@ import java.util.List;
 
 public class HomeActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-    Toolbar toolbar;
+
     PowerManager.WakeLock mWakeLock;
     private final ArrayList<View> mMenuItems = new ArrayList<>();
     public List<UpcomingReservation> upcommingReservationList = new ArrayList<>();
@@ -111,13 +111,29 @@ public class HomeActivity extends BaseActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            if (getSupportFragmentManager().getBackStackEntryCount() > 1)
+            if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
                 getSupportFragmentManager().popBackStack();
-            else
+//                BaseFragment fragment = getVisibleFragment();
+//                if (fragment != null)
+//                    setCustomTitle(fragment.getCustomTitle(fragment.getFragmentId()));
+                setCurrentFragmentTitle();
+
+            } else
                 finish();
         }
     }
 
+//    public BaseFragment getVisibleFragment() {
+//        FragmentManager fragmentManager = getSupportFragmentManager();
+//        List<Fragment> fragments = fragmentManager.getFragments();
+//        if (fragments != null) {
+//            for (Fragment fragment : fragments) {
+//                if (fragment != null && fragment.isVisible())
+//                    return (BaseFragment) fragment;
+//            }
+//        }
+//        return null;
+//    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override

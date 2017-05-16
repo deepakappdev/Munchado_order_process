@@ -4,18 +4,18 @@
     <item
         android:id="@+id/nav_order"
         android:icon="@drawable/ic_menu_send"
-        android:title="Order" />
+        android:title="ORDERS" />
     <item
         android:id="@+id/nav_dinein"
         android:icon="@drawable/ic_menu_send"
-        android:title="Dine-in" />
+        android:title="SNAG A SPOT" />
 
     <item
         android:id="@+id/nav_manage"
         android:icon="@drawable/ic_menu_manage"
-        android:title="Settings" />
+        android:title="SETTINGS" />
     <item
         android:id="@+id/nav_logout"
         android:icon="@mipmap/ic_logout"
-        android:title="Logout" />
+        android:title="LOGOUT" />
 </menu>

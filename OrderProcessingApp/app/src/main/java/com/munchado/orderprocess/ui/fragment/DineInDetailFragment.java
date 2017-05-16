@@ -27,6 +27,7 @@ import com.munchado.orderprocess.network.RequestController;
 import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.ui.activity.BaseActivity;
+import com.munchado.orderprocess.ui.activity.HomeActivity;
 import com.munchado.orderprocess.ui.widgets.CustomTextView;
 import com.munchado.orderprocess.utils.Constants;
 import com.munchado.orderprocess.utils.DateTimeUtils;
@@ -49,7 +50,7 @@ public class DineInDetailFragment extends BaseFragment implements View.OnClickLi
     private Button btn_confirm, btn_alternate, btn_reject;
     private CustomTextView text_minus, text_change_delivery_time, text_plus;
     private CustomTextView text_name, text_email, text_telephone, text_past_activity;
-    private CustomTextView text_booking_id, text_people, text_time, text_hold_time, text_instructions_id;
+    private CustomTextView text_booking_id, text_people, text_booking_time, text_time, text_status, text_hold_time, text_instructions_id;
 
     private LinearLayout ll_confirm_reject, ll_booking, layout_customer_detail;
     private View progressBar;
@@ -71,6 +72,8 @@ public class DineInDetailFragment extends BaseFragment implements View.OnClickLi
         super.onViewCreated(view, savedInstanceState);
         initView(view);
     }
+
+
 
 
     private void initView(View view) {
@@ -98,6 +101,8 @@ public class DineInDetailFragment extends BaseFragment implements View.OnClickLi
         text_booking_id = (CustomTextView) view.findViewById(R.id.text_booking_id);
         text_people = (CustomTextView) view.findViewById(R.id.text_people);
         text_time = (CustomTextView) view.findViewById(R.id.text_time);
+        text_booking_time = (CustomTextView) view.findViewById(R.id.text_booking_time);
+        text_status = (CustomTextView) view.findViewById(R.id.text_status);
         text_hold_time = (CustomTextView) view.findViewById(R.id.text_hold_time);
         text_instructions_id = (CustomTextView) view.findViewById(R.id.text_instructions_id);
 
@@ -140,7 +145,7 @@ public class DineInDetailFragment extends BaseFragment implements View.OnClickLi
 
         switch (v.getId()) {
             case R.id.iv_close:
-                ((BaseActivity) getActivity()).backPressed();
+                ((HomeActivity) getActivity()).backPressed();
                 break;
             case R.id.btn_confirm_time:
                 layout_confirm_time.toggle();
@@ -306,13 +311,36 @@ public class DineInDetailFragment extends BaseFragment implements View.OnClickLi
         setText(text_booking_id, data.booking_id);
         setText(text_people, data.seats + " People");
         setText(text_time, DateTimeUtils.getFormattedDate(data.hold_table_time, DateTimeUtils.FORMAT_HH_MM_A));
+//        setText(text_booking_time, DateTimeUtils.getFormattedDate(data.reservation_date, DateTimeUtils.FORMAT_MMM_DD_YYY_AT_HHMM_A));
+        setText(text_booking_time, data.reservation_date);
         setText(text_hold_time, "(" + data.hold_time + " min)");
         setText(text_instructions_id, data.user_instruction);
         ll_booking.setVisibility(View.VISIBLE);
         layout_customer_detail.setVisibility(View.VISIBLE);
-        if (data.status.equalsIgnoreCase(Constants.CONFIRM) || data.status.equalsIgnoreCase(Constants.REJECT) || data.status.equalsIgnoreCase(Constants.USER_CONFIRM) || data.status.equalsIgnoreCase(Constants.CANCEL) || data.status.equalsIgnoreCase(Constants.ARCHIVE))
+        if (data.status.equalsIgnoreCase(Constants.CONFIRM) || data.status.equalsIgnoreCase(Constants.REJECT) || data.status.equalsIgnoreCase(Constants.USER_CONFIRM) || data.status.equalsIgnoreCase(Constants.CANCEL) || data.status.equalsIgnoreCase(Constants.ARCHIVE) || data.status.equalsIgnoreCase(Constants.ALTERNATE_TIME)) {
+           if(!data.status.equalsIgnoreCase(Constants.ALTERNATE_TIME))
             ll_confirm_reject.setVisibility(View.INVISIBLE);
-        else
+            switch (data.status) {
+                case Constants.CONFIRM:
+                    setText(text_status, "Confirmed");
+                    break;
+                case Constants.REJECT:
+                    setText(text_status, "Rejected");
+                    break;
+                case Constants.ALTERNATE_TIME:
+                    setText(text_status, "Alternate time");
+                    break;
+                case Constants.USER_CONFIRM:
+                    setText(text_status, "User Confirmed");
+                    break;
+                case Constants.CANCEL:
+                    setText(text_status, "Cancelled");
+                    break;
+                case Constants.ARCHIVE:
+                    setText(text_status, "Archived");
+                    break;
+            }
+        } else
             ll_confirm_reject.setVisibility(View.VISIBLE);
         StringBuilder stringBuilder = new StringBuilder();
         if (!StringUtils.isNullOrEmpty(data.user_activity.totalorder) && !data.user_activity.totalorder.equalsIgnoreCase("0"))
@@ -350,7 +378,7 @@ public class DineInDetailFragment extends BaseFragment implements View.OnClickLi
     }
 
     @Override
-    FRAGMENTS getFragmentId() {
+    public FRAGMENTS getFragmentId() {
         return FRAGMENTS.DINE_IN_DETAIL;
     }
 
