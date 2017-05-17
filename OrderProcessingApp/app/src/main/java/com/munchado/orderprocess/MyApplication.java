@@ -3,8 +3,11 @@ package com.munchado.orderprocess;
 import android.app.Application;
 import android.content.Context;
 
+import com.crashlytics.android.Crashlytics;
 import com.epson.easyselect.EasySelectDeviceType;
 import com.munchado.orderprocess.utils.Foreground;
+
+import io.fabric.sdk.android.Fabric;
 
 /**
  * Created by android on 22/2/17.
@@ -25,6 +28,7 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         mContext = getApplicationContext();
+        Fabric.with(this, new Crashlytics());
         Foreground.init(this);
     }
 }

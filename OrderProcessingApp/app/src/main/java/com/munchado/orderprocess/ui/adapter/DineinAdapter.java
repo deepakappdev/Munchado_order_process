@@ -93,6 +93,7 @@ public class DineinAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+        if (position < orderItems.size())
         ((MyViewHolder) holder).updateData(orderItems.get(position));
     }
 

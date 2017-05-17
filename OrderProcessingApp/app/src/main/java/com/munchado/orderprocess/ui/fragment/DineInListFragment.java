@@ -158,8 +158,8 @@ public class DineInListFragment extends BaseFragment implements View.OnClickList
             if (obj instanceof DineinResponse) {
                 try {
                     DineinResponse mDineinResponse = (DineinResponse) obj;
-                    mHomeActivity.upcommingReservationList.clear();
-                    mHomeActivity.archiveReservationList.clear();
+//                    mHomeActivity.upcommingReservationList.clear();
+//                    mHomeActivity.archiveReservationList.clear();
                     mHomeActivity.upcommingReservationList = mDineinResponse.data.upcomming_reservation;
                     mHomeActivity.archiveReservationList = mDineinResponse.data.archive_reservation;
                     if (mHomeActivity.upcommingReservationList != null) {
@@ -176,16 +176,17 @@ public class DineInListFragment extends BaseFragment implements View.OnClickList
                             mHomeActivity.mDineinArchiveAdapter.setData(mHomeActivity.archiveReservationList);
                         }
                     }
-                    handler.postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            fetchBookingList();
-                        }
-                    }, 30000);
-                    mHomeActivity.startPlaySoundForNewBookings();
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        fetchBookingList();
+                    }
+                }, 30000);
+                mHomeActivity.startPlaySoundForNewBookings();
             } else if (obj instanceof DineinConfirmResponse) {
                 fetchBookingList();
             }

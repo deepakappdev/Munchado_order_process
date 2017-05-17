@@ -59,7 +59,13 @@
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".ui.activity.print.SearchPrinterActivity"></activity>
+        <activity android:name=".ui.activity.print.SearchPrinterActivity"
+            android:screenOrientation="portrait"></activity>
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="0734e607e800020d34b8e50464a1b823dc846d5f"
+            />
     </application>
 
 </manifest>
