@@ -225,7 +225,7 @@ public class DineInDetailFragment extends BaseFragment implements View.OnClickLi
                     String instructions = edittext_alternate.getText().toString();
                     updateBookintStatus(instructions);
                 } else
-                    Toast.makeText(getActivity(), "Please enter reason to reject.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "Please enter reason to modify.", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btn_reject:
                 if (!StringUtils.isNullOrEmpty(edittext_reject.getText().toString())) {
