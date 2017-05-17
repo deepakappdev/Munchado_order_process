@@ -30,6 +30,7 @@ import com.munchado.orderprocess.network.RequestController;
 import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.notification.PubnubService;
+import com.munchado.orderprocess.ui.adapter.DineinArchiveAdapter;
 import com.munchado.orderprocess.ui.fragment.CustomErrorDialogFragment;
 import com.munchado.orderprocess.utils.Constants;
 import com.munchado.orderprocess.utils.DialogUtil;
@@ -49,7 +50,8 @@ public class HomeActivity extends BaseActivity
     public List<UpcomingReservation> upcommingReservationList = new ArrayList<>();
     ;
     public List<ArchiveReservation> archiveReservationList = new ArrayList<>();
-    ;
+
+    public DineinArchiveAdapter mDineinArchiveAdapter;
     boolean isFirst;
 
     @Override
@@ -119,9 +121,6 @@ public class HomeActivity extends BaseActivity
         } else {
             if (getSupportFragmentManager().getBackStackEntryCount() > 1) {
                 getSupportFragmentManager().popBackStack();
-//                BaseFragment fragment = getVisibleFragment();
-//                if (fragment != null)
-//                    setCustomTitle(fragment.getCustomTitle(fragment.getFragmentId()));
                 setCurrentFragmentTitle();
 
             } else
@@ -129,17 +128,6 @@ public class HomeActivity extends BaseActivity
         }
     }
 
-//    public BaseFragment getVisibleFragment() {
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        List<Fragment> fragments = fragmentManager.getFragments();
-//        if (fragments != null) {
-//            for (Fragment fragment : fragments) {
-//                if (fragment != null && fragment.isVisible())
-//                    return (BaseFragment) fragment;
-//            }
-//        }
-//        return null;
-//    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override

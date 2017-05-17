@@ -32,7 +32,6 @@ public class DineinArchiveFragment extends BaseFragment implements View.OnClickL
     private TextView textArchiveOrderCount;
     private CustomLinearLayoutManager mLinearLayoutManager;
     private HomeActivity mHomeActivity;
-    private DineinArchiveAdapter mDineinArchiveAdapter;
 
     @Override
     public void onAttach(Context context) {
@@ -62,13 +61,14 @@ public class DineinArchiveFragment extends BaseFragment implements View.OnClickL
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         mLinearLayoutManager = new CustomLinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLinearLayoutManager);
-        mDineinArchiveAdapter = new DineinArchiveAdapter(mHomeActivity, mOnDineinArchiveClickListener);
+        if (mHomeActivity.mDineinArchiveAdapter == null)
+            mHomeActivity.mDineinArchiveAdapter = new DineinArchiveAdapter(mHomeActivity, mOnDineinArchiveClickListener);
         recyclerView.getRecycledViewPool().clear();
-        recyclerView.setAdapter(mDineinArchiveAdapter);
+        recyclerView.setAdapter(mHomeActivity.mDineinArchiveAdapter);
         if (mHomeActivity.archiveReservationList != null) {
             textArchiveOrderCount.setText(mHomeActivity.archiveReservationList.size() + " ARCHIVE BOOKINGS");
             if (mHomeActivity.archiveReservationList.size() > 0) {
-                mDineinArchiveAdapter.setData(mHomeActivity.archiveReservationList);
+                mHomeActivity.mDineinArchiveAdapter.setData(mHomeActivity.archiveReservationList);
             }
         }
     }

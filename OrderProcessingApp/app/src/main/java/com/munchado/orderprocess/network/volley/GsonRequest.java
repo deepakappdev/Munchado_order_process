@@ -9,6 +9,7 @@ import com.android.volley.Response;
 import com.android.volley.Response.ErrorListener;
 import com.android.volley.Response.Listener;
 import com.android.volley.RetryPolicy;
+import com.android.volley.VolleyError;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
@@ -153,12 +154,19 @@ public class GsonRequest<T> extends Request<T> {
     @Override
     protected Response<T> parseNetworkResponse(NetworkResponse response) {
         try {
-            String json = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
-            LogUtils.d("==== Response: ", json);
-            return Response.success(gson.fromJson(json, clazz), HttpHeaderParser.parseCacheHeaders(response));
+            if (response.statusCode == 200) {
+                String json = new String(response.data, HttpHeaderParser.parseCharset(response.headers));
+                LogUtils.d("==== Response: ", json);
+                return Response.success(gson.fromJson(json, clazz), HttpHeaderParser.parseCacheHeaders(response));
+            } else {
+                return Response.error(new VolleyError("No response found."));
+            }
+
         } catch (UnsupportedEncodingException e) {
             return Response.error(new ParseError(e));
         } catch (JsonSyntaxException e) {
+            return Response.error(new ParseError(e));
+        } catch (Exception e) {
             return Response.error(new ParseError(e));
         }
     }

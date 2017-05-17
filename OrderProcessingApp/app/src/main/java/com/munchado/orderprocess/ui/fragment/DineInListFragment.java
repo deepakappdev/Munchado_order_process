@@ -156,30 +156,36 @@ public class DineInListFragment extends BaseFragment implements View.OnClickList
         public void success(Object obj) {
             if (mHomeActivity == null) return;
             if (obj instanceof DineinResponse) {
-                DineinResponse mDineinResponse = (DineinResponse) obj;
-                mHomeActivity.upcommingReservationList.clear();
-                mHomeActivity.archiveReservationList.clear();
-                mHomeActivity.upcommingReservationList = mDineinResponse.data.upcomming_reservation;
-                mHomeActivity.archiveReservationList = mDineinResponse.data.archive_reservation;
-                if (mHomeActivity.upcommingReservationList != null) {
-                    if (mHomeActivity.upcommingReservationList.size() == 1)
-                        textActiveOrderCount.setText(mHomeActivity.upcommingReservationList.size() + " NEW BOOKING");
-                    else
-                        textActiveOrderCount.setText(mHomeActivity.upcommingReservationList.size() + " NEW BOOKINGS");
+                try {
+                    DineinResponse mDineinResponse = (DineinResponse) obj;
+                    mHomeActivity.upcommingReservationList.clear();
+                    mHomeActivity.archiveReservationList.clear();
+                    mHomeActivity.upcommingReservationList = mDineinResponse.data.upcomming_reservation;
+                    mHomeActivity.archiveReservationList = mDineinResponse.data.archive_reservation;
+                    if (mHomeActivity.upcommingReservationList != null) {
+                        if (mHomeActivity.upcommingReservationList.size() == 1)
+                            textActiveOrderCount.setText(mHomeActivity.upcommingReservationList.size() + " NEW BOOKING");
+                        else
+                            textActiveOrderCount.setText(mHomeActivity.upcommingReservationList.size() + " NEW BOOKINGS");
 
-//                textActiveOrderCount.setText(mHomeActivity.upcommingReservationList.size() + " NEW BOOKINGS");
-                    if (mHomeActivity.upcommingReservationList.size() > 0) {
-                        mDineinAdapter.setData(mHomeActivity.upcommingReservationList);
+                        if (mHomeActivity.upcommingReservationList != null && mHomeActivity.upcommingReservationList.size() > 0) {
+                            mDineinAdapter.setData(mHomeActivity.upcommingReservationList);
+                        }
+
+                        if (null != mHomeActivity.archiveReservationList && null != mHomeActivity.mDineinArchiveAdapter && mHomeActivity.archiveReservationList.size() > 0) {
+                            mHomeActivity.mDineinArchiveAdapter.setData(mHomeActivity.archiveReservationList);
+                        }
                     }
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            fetchBookingList();
+                        }
+                    }, 30000);
+                    mHomeActivity.startPlaySoundForNewBookings();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        fetchBookingList();
-                    }
-                }, 30000);
-                mHomeActivity.startPlaySoundForNewBookings();
-
             } else if (obj instanceof DineinConfirmResponse) {
                 fetchBookingList();
             }
