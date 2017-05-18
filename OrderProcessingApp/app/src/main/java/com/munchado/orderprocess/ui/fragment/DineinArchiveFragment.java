@@ -76,9 +76,18 @@ public class DineinArchiveFragment extends BaseFragment implements View.OnClickL
     OnDineinArchiveClickListener mOnDineinArchiveClickListener = new OnDineinArchiveClickListener() {
         @Override
         public void onDineItemClick(ArchiveReservation reservation) {
-            Bundle bundle = new Bundle();
-            bundle.putString("BOOKING_ID", reservation.reservation_id);
-            ((BaseActivity) getActivity()).addOverLayFragment(FRAGMENTS.DINE_IN_DETAIL, bundle);
+            try {
+                Bundle bundle = new Bundle();
+                bundle.putString("BOOKING_ID", reservation.reservation_id);
+                if (getActivity() != null)
+                    if (((HomeActivity) getActivity()) != null)
+                        ((HomeActivity) getActivity()).addOverLayFragment(FRAGMENTS.DINE_IN_DETAIL, bundle);
+                    else if (((BaseActivity) getActivity()) != null)
+                        ((BaseActivity) getActivity()).addOverLayFragment(FRAGMENTS.DINE_IN_DETAIL, bundle);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
         }
     };
 

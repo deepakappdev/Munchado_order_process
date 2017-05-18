@@ -57,6 +57,7 @@ public class DineInDetailFragment extends BaseFragment implements View.OnClickLi
     String reservationid, user_id;
     String status, holdTime;
     int holdtimemin = 10;
+    String booking_status, booking_hold_time;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -221,17 +222,27 @@ public class DineInDetailFragment extends BaseFragment implements View.OnClickLi
             case R.id.btn_alternate:
                 status = "3";
                 holdTime = "" + holdtimemin;
-                if (!StringUtils.isNullOrEmpty(edittext_alternate.getText().toString())) {
-                    String instructions = edittext_alternate.getText().toString();
-                    updateBookintStatus(instructions);
-                } else
-                    Toast.makeText(getActivity(), "Please enter reason to modify.", Toast.LENGTH_SHORT).show();
+
+                if (booking_status.equalsIgnoreCase(Constants.ALTERNATE_TIME) && booking_hold_time.equalsIgnoreCase("" + holdtimemin)) {
+                    Toast.makeText(getActivity(), "Please modify time.", Toast.LENGTH_SHORT).show();
+                } else {
+                    if (!StringUtils.isNullOrEmpty(edittext_alternate.getText().toString())) {
+                        String instructions = edittext_alternate.getText().toString();
+                        updateBookintStatus(instructions);
+                    } else
+                        Toast.makeText(getActivity(), "Please enter reason to modify.", Toast.LENGTH_SHORT).show();
+                }
                 break;
             case R.id.btn_reject:
                 if (!StringUtils.isNullOrEmpty(edittext_reject.getText().toString())) {
                     String instructions = edittext_reject.getText().toString();
                     status = "2";
                     holdTime = "0";
+//                    if (booking_status.equalsIgnoreCase(Constants.ALTERNATE_TIME) && booking_hold_time.equalsIgnoreCase("" + holdtimemin)) {
+//                        Toast.makeText(getActivity(), "Please modify time.", Toast.LENGTH_SHORT).show();
+//                    } else {
+//
+//                    }
                     updateBookintStatus(instructions);
                 } else
                     Toast.makeText(getActivity(), "Please enter reason to reject.", Toast.LENGTH_SHORT).show();
@@ -308,11 +319,17 @@ public class DineInDetailFragment extends BaseFragment implements View.OnClickLi
         setText(text_email, data.email);
         setText(text_telephone, data.phone);
         setText(text_booking_id, data.booking_id);
-        setText(text_people, data.seats + " People");
+        if (!StringUtils.isNullOrEmpty(data.seats) && Integer.parseInt(data.seats) >= 21)
+            setText(text_people, data.seats + "+ People");
+        else
+            setText(text_people, data.seats + " People");
+
         setText(text_time, DateTimeUtils.getFormattedDate(data.hold_table_time, DateTimeUtils.FORMAT_HH_MM_A));
 //        setText(text_booking_time, DateTimeUtils.getFormattedDate(data.reservation_date, DateTimeUtils.FORMAT_MMM_DD_YYY_AT_HHMM_A));
         setText(text_booking_time, data.reservation_date);
         setText(text_hold_time, "(" + data.hold_time + " min)");
+        booking_hold_time = data.hold_time;
+        booking_status = data.status;
         setText(text_instructions_id, data.user_instruction);
         ll_booking.setVisibility(View.VISIBLE);
         layout_customer_detail.setVisibility(View.VISIBLE);

@@ -152,7 +152,10 @@ public class DineinAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             text_name.setText(mUpcomingReservation.first_name + (!StringUtils.isNullOrEmpty(mUpcomingReservation.last_name) ? " " + mUpcomingReservation.last_name : ""));
 //            text_order_time.setText("00:00 AM");
             text_order_time.setText(DateTimeUtils.getFormattedDate(mUpcomingReservation.reservation_date, DateTimeUtils.FORMAT_HH_MM_A));
-            text_noofpeople.setText(mUpcomingReservation.seats + " People");
+            if(!StringUtils.isNullOrEmpty(mUpcomingReservation.seats) && Integer.parseInt(mUpcomingReservation.seats)>=21)
+            text_noofpeople.setText(mUpcomingReservation.seats + "+ People");
+            else
+                text_noofpeople.setText(mUpcomingReservation.seats + " People");
 
 
             if (mUpcomingReservation.inProgress) {
