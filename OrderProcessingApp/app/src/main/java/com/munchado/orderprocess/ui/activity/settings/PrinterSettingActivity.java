@@ -7,28 +7,34 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.munchado.orderprocess.R;
 import com.munchado.orderprocess.print.ModelCapability;
 import com.munchado.orderprocess.ui.widgets.CustomButton;
+import com.munchado.orderprocess.utils.Constants;
 import com.munchado.orderprocess.utils.IPAddressValidator;
 import com.munchado.orderprocess.utils.PrefUtil;
 import com.munchado.orderprocess.utils.StringUtils;
 
 import java.lang.reflect.Field;
 
-public class PrinterSettingActivity extends AppCompatActivity implements View.OnClickListener {
+public class PrinterSettingActivity extends AppCompatActivity implements View.OnClickListener, RadioGroup.OnCheckedChangeListener {
 
     private EditText txt_ip;
     private TextInputLayout txtInput;
     private TextView tv_Bluetooth_Model;
     private Toolbar mToolbar;
     private CustomButton btn_select_printer, btn_submit;
+    private RadioButton radioWifi, radioBluetooth;
+    private RadioGroup radioGroup;
     String modelName = "";
     int modelCode = -1;
 
@@ -41,13 +47,25 @@ public class PrinterSettingActivity extends AppCompatActivity implements View.On
         btn_select_printer = (CustomButton) findViewById(R.id.select_printer);
         btn_submit = (CustomButton) findViewById(R.id.submit_btn);
         tv_Bluetooth_Model = (TextView) findViewById(R.id.bluetooth_model);
+        radioWifi = (RadioButton) findViewById(R.id.radioButton_wifi);
+        radioBluetooth = (RadioButton) findViewById(R.id.radioButton_bluetooth);
+        radioGroup = (RadioGroup) findViewById(R.id.radiogroup);
         setupActionbar();
 
         Typeface type = Typeface.createFromAsset(getAssets(), "HelveticaNeueLight.ttf");
         txtInput.getEditText().setTypeface(type);
         txtInput.setTypeface(type);
+        radioWifi.setTypeface(type);
+        radioBluetooth.setTypeface(type);
+
         if (!StringUtils.isNullOrEmpty(PrefUtil.getIPAddress()))
             txt_ip.setText(PrefUtil.getIPAddress());
+
+        Log.e("","========== set printer type : " + PrefUtil.getPrinterType());
+        if (PrefUtil.getPrinterType().equalsIgnoreCase(Constants.BLUETOOTH))
+            radioBluetooth.setChecked(true);
+        else
+            radioWifi.setChecked(true);
 
         if (!StringUtils.isNullOrEmpty(PrefUtil.getBluetoothModel())) {
             tv_Bluetooth_Model.setText("Select Printer Model: " + PrefUtil.getBluetoothModel());
@@ -97,6 +115,11 @@ public class PrinterSettingActivity extends AppCompatActivity implements View.On
             PrefUtil.putIPAddress(txt_ip.getText().toString());
 
         }
+        if (radioBluetooth.isChecked())
+            PrefUtil.putPrinterType(Constants.BLUETOOTH);
+        else
+            PrefUtil.putPrinterType(Constants.WIFI);
+        Log.e("","========== set printer type : " + PrefUtil.getPrinterType());
         PrefUtil.putBluetoothModel(modelName);
         PrefUtil.putBluetoothModelCode(modelCode);
         finish();
@@ -222,5 +245,14 @@ public class PrinterSettingActivity extends AppCompatActivity implements View.On
                 saveIP();
                 break;
         }
+    }
+
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+
+        if (checkedId == R.id.radioButton_bluetooth)
+            radioBluetooth.setChecked(true);
+        else
+            radioWifi.setChecked(true);
     }
 }

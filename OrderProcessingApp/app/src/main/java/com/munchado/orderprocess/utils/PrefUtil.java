@@ -83,6 +83,14 @@ public final class PrefUtil {
         return getString(Constants.PREF_IP_ADDRESS, "");
     }
 
+    public static void putPrinterType(String token) {
+        PrefUtil.putString(Constants.PREF_PRINTER_TYPE, token);
+    }
+
+    public static String getPrinterType() {
+        return getString(Constants.PREF_PRINTER_TYPE, Constants.BLUETOOTH);
+    }
+
     public static void putIPAddress(String token) {
         PrefUtil.putString(Constants.PREF_IP_ADDRESS, token);
     }

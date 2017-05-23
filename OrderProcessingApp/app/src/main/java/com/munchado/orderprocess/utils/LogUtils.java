@@ -15,7 +15,7 @@ public class LogUtils {
     }
 
     public static void e(String s) {
-        if (BuildConfig.DEBUG)
+//        if (BuildConfig.DEBUG)
             Log.e("", s);
     }
 

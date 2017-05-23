@@ -125,7 +125,7 @@ public class DineInDetailFragment extends BaseFragment implements View.OnClickLi
         text_plus.setOnClickListener(this);
         text_email.setOnClickListener(this);
         text_telephone.setOnClickListener(this);
-        text_change_delivery_time.setText(holdtimemin + " Min");
+
         fetchDetail();
     }
 
@@ -223,7 +223,7 @@ public class DineInDetailFragment extends BaseFragment implements View.OnClickLi
                 status = "3";
                 holdTime = "" + holdtimemin;
 
-                if (booking_status.equalsIgnoreCase(Constants.ALTERNATE_TIME) && booking_hold_time.equalsIgnoreCase("" + holdtimemin)) {
+                if (booking_hold_time.equalsIgnoreCase("" + holdtimemin)) { //booking_status.equalsIgnoreCase(Constants.ALTERNATE_TIME) &&
                     Toast.makeText(getActivity(), "Please modify time.", Toast.LENGTH_SHORT).show();
                 } else {
                     if (!StringUtils.isNullOrEmpty(edittext_alternate.getText().toString())) {
@@ -313,8 +313,8 @@ public class DineInDetailFragment extends BaseFragment implements View.OnClickLi
 
     private void setData(DineinDetailResponseData data) {
         user_id = data.user_id;
-        if (!StringUtils.isNullOrEmpty(data.user_pic))
-            Picasso.with(getContext()).load(data.user_pic).resize(200 * (int) getActivity().getResources().getDisplayMetrics().density, 200 * (int) getActivity().getResources().getDisplayMetrics().density).centerCrop().placeholder(R.drawable.profile_img).into(iv_Profile);
+        if (!StringUtils.isNullOrEmpty(data.user_pic) && null != getActivity())
+            Picasso.with(getActivity()).load(data.user_pic).resize(200 * (int) getActivity().getResources().getDisplayMetrics().density, 200 * (int) getActivity().getResources().getDisplayMetrics().density).centerCrop().placeholder(R.drawable.profile_img).into(iv_Profile);
         setText(text_name, data.first_name + (!StringUtils.isNullOrEmpty(data.last_name) ? " " + Utils.decodeHtml(data.last_name) : ""));
         setText(text_email, data.email);
         setText(text_telephone, data.phone);
@@ -330,6 +330,10 @@ public class DineInDetailFragment extends BaseFragment implements View.OnClickLi
         setText(text_hold_time, "(" + data.hold_time + " min)");
         booking_hold_time = data.hold_time;
         booking_status = data.status;
+        holdtimemin = Integer.parseInt(data.hold_time);
+//        if (booking_status.equalsIgnoreCase(Constants.ALTERNATE_TIME) )
+//        text_change_delivery_time.setText(booking_hold_time + " Min");
+        text_change_delivery_time.setText(holdtimemin + " Min");
         setText(text_instructions_id, data.user_instruction);
         ll_booking.setVisibility(View.VISIBLE);
         layout_customer_detail.setVisibility(View.VISIBLE);

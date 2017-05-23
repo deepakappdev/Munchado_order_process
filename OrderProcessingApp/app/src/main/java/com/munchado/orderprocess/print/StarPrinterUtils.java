@@ -10,6 +10,7 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Toast;
 
+import com.munchado.orderprocess.listener.OnBluetoothFailListener;
 import com.munchado.orderprocess.utils.PrefUtil;
 import com.munchado.orderprocess.utils.StringUtils;
 import com.starmicronics.stario.PortInfo;
@@ -37,9 +38,13 @@ public class StarPrinterUtils {
     int paperSize = PrinterSetting.PAPER_SIZE_TWO_INCH;
     Activity mActivity;
 
+    OnBluetoothFailListener mOnBluetoothFailListener;
     String printData;
-    public StarPrinterUtils(Activity activity,String address,String printdata){
-        mActivity=activity;
+
+    public StarPrinterUtils(Activity activity, String address, String printdata) {
+        mActivity = activity;
+        if (activity instanceof OnBluetoothFailListener)
+            mOnBluetoothFailListener = (OnBluetoothFailListener) activity;
         mProgressDialog = new ProgressDialog(mActivity);
         mProgressDialog.setMessage("Communicating...");
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -56,6 +61,7 @@ public class StarPrinterUtils {
         Log.e("===", "=== portname : " + setting.getPortName());
         Log.e("===", "=== getPortSettings : " + setting.getPortSettings());
     }
+
     private class SearchTask extends AsyncTask<String, Void, Void> {
         private List<PortInfo> mPortList;
 
@@ -120,9 +126,8 @@ public class StarPrinterUtils {
     }
 
     private void showModelDialog() {
-        if (!StringUtils.isNullOrEmpty(PrefUtil.getBluetoothModel()) && PrefUtil.getBluetoothModelCode()!=ModelCapability.NONE)
-        {
-            int model =PrefUtil.getBluetoothModelCode();
+        if (!StringUtils.isNullOrEmpty(PrefUtil.getBluetoothModel()) && PrefUtil.getBluetoothModelCode() != ModelCapability.NONE) {
+            int model = PrefUtil.getBluetoothModelCode();
             mPortSettings = ModelCapability.getPortSettings(model);
             emulation = ModelCapability.getEmulation(model);
 
@@ -130,9 +135,7 @@ public class StarPrinterUtils {
             PrinterSetting setting = new PrinterSetting(mActivity);
             setting.write(modelName, portName, macAddress, mPortSettings, emulation, false);
             setForPrint();
-        }
-        else
-        {
+        } else {
             AlertDialog.Builder builderSingle = new AlertDialog.Builder(mActivity);
             builderSingle.setTitle("Select Printer Model:-");
 
@@ -264,97 +267,113 @@ public class StarPrinterUtils {
     private class PrintTask extends AsyncTask<Integer, Void, Communication.Result> {
         @Override
         protected void onPreExecute() {
-            mProgressDialog.show();
+            if (null != mActivity && !mActivity.isFinishing())
+                mProgressDialog.show();
         }
 
         @Override
         protected Communication.Result doInBackground(Integer... params) {
-            byte[] commands;
-            int selectedIndex = params[0];
 
-            PrinterSetting setting = new PrinterSetting(mActivity);
-            StarIoExt.Emulation emulation = setting.getEmulation();
+            if (null != mActivity && !mActivity.isFinishing()) {
+                byte[] commands;
+                int selectedIndex = params[0];
 
-            ILocalizeReceipts localizeReceipts = ILocalizeReceipts.createLocalizeReceipts(selectedLanguage, paperSize);
+                PrinterSetting setting = new PrinterSetting(mActivity);
+                StarIoExt.Emulation emulation = setting.getEmulation();
 
-            switch (selectedIndex) {
-                default:
-                case 1:
-                    commands = PrinterFunctions.createTextReceiptData(emulation, localizeReceipts,printData, false);
-                    break;
-                case 2:
-                    commands = PrinterFunctions.createTextReceiptData(emulation, localizeReceipts,printData, true);
-                    break;
-                case 3:
-                    commands = PrinterFunctions.createRasterReceiptData(emulation, localizeReceipts, mActivity.getResources());
-                    break;
-                case 4:
-                    commands = PrinterFunctions.createScaleRasterReceiptData(emulation, localizeReceipts, mActivity.getResources(), paperSize, true);
-                    break;
-                case 5:
-                    commands = PrinterFunctions.createScaleRasterReceiptData(emulation, localizeReceipts, mActivity.getResources(), paperSize, false);
-                    break;
-                case 6:
-                    commands = PrinterFunctions.createCouponData(emulation, localizeReceipts, mActivity.getResources(), paperSize, ICommandBuilder.BitmapConverterRotation.Normal);
-                    break;
-                case 7:
-                    commands = PrinterFunctions.createCouponData(emulation, localizeReceipts, mActivity.getResources(), paperSize, ICommandBuilder.BitmapConverterRotation.Right90);
-                    break;
+                ILocalizeReceipts localizeReceipts = ILocalizeReceipts.createLocalizeReceipts(selectedLanguage, paperSize);
+
+                switch (selectedIndex) {
+                    default:
+                    case 1:
+                        commands = PrinterFunctions.createTextReceiptData(emulation, localizeReceipts, printData, false);
+                        break;
+                    case 2:
+                        commands = PrinterFunctions.createTextReceiptData(emulation, localizeReceipts, printData, true);
+                        break;
+                    case 3:
+                        commands = PrinterFunctions.createRasterReceiptData(emulation, localizeReceipts, mActivity.getResources());
+                        break;
+                    case 4:
+                        commands = PrinterFunctions.createScaleRasterReceiptData(emulation, localizeReceipts, mActivity.getResources(), paperSize, true);
+                        break;
+                    case 5:
+                        commands = PrinterFunctions.createScaleRasterReceiptData(emulation, localizeReceipts, mActivity.getResources(), paperSize, false);
+                        break;
+                    case 6:
+                        commands = PrinterFunctions.createCouponData(emulation, localizeReceipts, mActivity.getResources(), paperSize, ICommandBuilder.BitmapConverterRotation.Normal);
+                        break;
+                    case 7:
+                        commands = PrinterFunctions.createCouponData(emulation, localizeReceipts, mActivity.getResources(), paperSize, ICommandBuilder.BitmapConverterRotation.Right90);
+                        break;
+                }
+
+                Communication.Result result;
+
+                Log.e("===", "=== portname : " + setting.getPortName());
+                Log.e("===", "=== getPortSettings : " + setting.getPortSettings());
+                result = Communication.sendCommands(commands, setting.getPortName(), setting.getPortSettings(), 10000, mActivity);     // 10000mS!!!
+
+                return result;
             }
+            return null;
 
-            Communication.Result result;
-
-            Log.e("===", "=== portname : " + setting.getPortName());
-            Log.e("===", "=== getPortSettings : " + setting.getPortSettings());
-            result = Communication.sendCommands(commands, setting.getPortName(), setting.getPortSettings(), 10000, mActivity);     // 10000mS!!!
-
-            return result;
         }
 
         @Override
         protected void onPostExecute(Communication.Result result) {
 
-            if (mProgressDialog != null) {
-                mProgressDialog.dismiss();
+            if (null != mActivity && !mActivity.isFinishing() && null != result) {
+                if (mProgressDialog != null) {
+                    mProgressDialog.dismiss();
+                }
+
+                String msg;
+
+                switch (result) {
+                    case Success:
+                        msg = "Success!";
+                        break;
+                    case ErrorOpenPort:
+                        msg = "Fail to openPort\nTry again.";
+                        if (null != mOnBluetoothFailListener)
+                            mOnBluetoothFailListener.onBluetoothFail();
+                        break;
+                    case ErrorBeginCheckedBlock:
+                        msg = "Printer is offline (beginCheckedBlock)\n" +
+                                "Try again.";
+                        break;
+                    case ErrorEndCheckedBlock:
+                        msg = "Printer is offline (endCheckedBlock)\n" +
+                                "Try again.";
+                        break;
+                    case ErrorReadPort:
+                        msg = "Read port error (readPort)\n" +
+                                "Try again.";
+                        if (null != mOnBluetoothFailListener)
+                            mOnBluetoothFailListener.onBluetoothFail();
+                        break;
+                    case ErrorWritePort:
+                        msg = "Write port error (writePort)\n" +
+                                "Try again.";
+                        if (null != mOnBluetoothFailListener)
+                            mOnBluetoothFailListener.onBluetoothFail();
+                        break;
+                    default:
+                        msg = "Unknown error\n" +
+                                "Try again.";
+                        if (null != mOnBluetoothFailListener)
+                            mOnBluetoothFailListener.onBluetoothFail();
+                        break;
+                }
+
+                Toast.makeText(mActivity, msg, Toast.LENGTH_LONG).show();
+                if (!msg.equalsIgnoreCase("Success!")) {
+                    PrinterSetting setting = new PrinterSetting(mActivity);
+                    setting.write("", "", "", "", emulation, false);
+                }
             }
 
-            String msg;
-
-            switch (result) {
-                case Success:
-                    msg = "Success!";
-                    break;
-                case ErrorOpenPort:
-                    msg = "Fail to openPort\nTry again.";
-                    break;
-                case ErrorBeginCheckedBlock:
-                    msg = "Printer is offline (beginCheckedBlock)\n" +
-                            "Try again.";
-                    break;
-                case ErrorEndCheckedBlock:
-                    msg = "Printer is offline (endCheckedBlock)\n" +
-                            "Try again.";
-                    break;
-                case ErrorReadPort:
-                    msg = "Read port error (readPort)\n" +
-                            "Try again.";
-                    break;
-                case ErrorWritePort:
-                    msg = "Write port error (writePort)\n" +
-                            "Try again.";
-                    break;
-                default:
-                    msg = "Unknown error\n" +
-                            "Try again.";
-                    break;
-            }
-
-            Toast.makeText(mActivity, msg, Toast.LENGTH_LONG).show();
-            if(!msg.equalsIgnoreCase("Success!"))
-            {
-                PrinterSetting setting = new PrinterSetting(mActivity);
-                setting.write("", "", "", "", emulation, false);
-            }
 
 //            CommonAlertDialogFragment dialog = CommonAlertDialogFragment.newInstance("CommResultDialog");
 //            dialog.setTitle("Communication Result");

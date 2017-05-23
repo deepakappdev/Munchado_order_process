@@ -1,12 +1,20 @@
 package com.munchado.orderprocess.ui.fragment;
 
+import android.Manifest;
+import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Paint;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
@@ -24,6 +32,12 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.hp.mss.hpprint.model.PrintMetricsData;
+import com.hp.mss.hpprint.util.PrintUtil;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.tool.xml.XMLWorkerHelper;
 import com.munchado.orderprocess.R;
 import com.munchado.orderprocess.common.FRAGMENTS;
 import com.munchado.orderprocess.model.orderdetail.AddonsList;
@@ -37,15 +51,30 @@ import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.print.PrinterSetting;
 import com.munchado.orderprocess.print.StarPrinterUtils;
+import com.munchado.orderprocess.print.WifiPrinterUtils;
 import com.munchado.orderprocess.ui.activity.BaseActivity;
 import com.munchado.orderprocess.ui.activity.print.SearchPrinterActivity;
+import com.munchado.orderprocess.utils.Constants;
 import com.munchado.orderprocess.utils.DateTimeUtils;
 import com.munchado.orderprocess.utils.LogUtils;
+import com.munchado.orderprocess.utils.MyFont;
+import com.munchado.orderprocess.utils.PrefUtil;
 import com.munchado.orderprocess.utils.ReceiptFormatUtils;
 import com.munchado.orderprocess.utils.StringUtils;
 import com.munchado.orderprocess.utils.Utils;
+import com.munchado.orderprocess.utils.WifiPrintUtils;
 import com.squareup.picasso.Picasso;
 
+import org.jsoup.Jsoup;
+import org.jsoup.safety.Whitelist;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -57,7 +86,7 @@ import java.util.Date;
  * Created by android on 23/2/17.
  */
 
-public class OrderDetailFragment extends BaseFragment implements RequestCallback, View.OnClickListener {
+public class OrderDetailFragment extends BaseFragment implements RequestCallback, View.OnClickListener, PrintUtil.PrintMetricsListener {
 
     private TextView textName;
     private TextView textEmail;
@@ -110,6 +139,8 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     int layoutheight = 0;
     Handler handler = new Handler();
     Runnable runnable;
+
+    public static final int REQUEST_EXTERNAL_PERMISSION_CODE = 666;
     SimpleDateFormat format = new SimpleDateFormat(DateTimeUtils.FORMAT_YYYY_MM_DD_HHMMSS);
 
     @Nullable
@@ -192,7 +223,6 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         (textPrint = (TextView) view.findViewById(R.id.text_print)).setOnClickListener(this);
         (textChange_Time = (TextView) view.findViewById(R.id.text_change)).setOnClickListener(this);
 
-//        textPrint.setPaintFlags(textPrint.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         textEmail.setPaintFlags(textEmail.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         textTelephone.setPaintFlags(textTelephone.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
         textChange_Time.setPaintFlags(textChange_Time.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
@@ -229,12 +259,9 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
             labelOrderTime.setText("Time of Delivery: ");
             labelDeliveryAddress.setVisibility(View.VISIBLE);
             textDeliveryAddress.setVisibility(View.VISIBLE);
-//            textDeliveryAddress.setText(orderDetailData.my_delivery_detail.apt_suite + ", " + orderDetailData.my_delivery_detail.address +
-//                    "\n" + orderDetailData.my_delivery_detail.state + "-" + orderDetailData.my_delivery_detail.zipcode);
             textDeliveryAddress.setText(Utils.decodeHtml(orderDetailData.my_delivery_detail.address));
         }
         textDeliveryTime.setText(DateTimeUtils.getFormattedDate(orderDetailData.delivery_date, DateTimeUtils.FORMAT_MMM_DD_YYYY) + " @ " + DateTimeUtils.getFormattedDate(orderDetailData.delivery_date, DateTimeUtils.FORMAT_HH_MM_A));
-//        textChangeDeliveryTime.setText(orderDetailData.delivery_date);
         textChangeDeliveryTime.setText(DateTimeUtils.getFormattedDate(orderDetailData.delivery_date, DateTimeUtils.FORMAT_MMM_DD_YYYY) + " @ " + DateTimeUtils.getFormattedDate(orderDetailData.delivery_date, DateTimeUtils.FORMAT_HH_MM_A));
         deliveryTakeyoutDateString = orderDetailData.delivery_date;
     }
@@ -246,7 +273,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     }
 
     @Override
-    public  FRAGMENTS getFragmentId() {
+    public FRAGMENTS getFragmentId() {
         return FRAGMENTS.ORDER_DETAIL;
     }
 
@@ -257,7 +284,6 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         if (obj instanceof OrderDetailResponse) {
             response = (OrderDetailResponse) obj;
             printData = ReceiptFormatUtils.setPrintData(response.data);
-//            printData = Utils.decodeHtml(printData);
             LogUtils.e(printData);
             showDetail(response.data);
         } else if (obj instanceof OrderProcessResponse) {
@@ -271,14 +297,6 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                     if (response.data.status.equalsIgnoreCase("confirmed") || response.data.status.equalsIgnoreCase("arrived") || response.data.status.equalsIgnoreCase("delivered")) {
 
                         sendToPrinter();
-//                        PrinterSetting setting = new PrinterSetting(getActivity());
-
-//                        if (TextUtils.isEmpty(setting.getPortName()) || TextUtils.isEmpty(setting.getPortSettings())) {
-//                            Intent intent = new Intent(getActivity(), SearchPrinterActivity.class);
-//                            intent.putExtra("printData", printData);
-//                            startActivity(intent);
-//                        } else
-//                            new StarPrinterUtils(getActivity(), "", printData);
                     }
                 }
 
@@ -314,11 +332,6 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         textTelephone.setText(data.my_delivery_detail.phone);
         textEmail.setText(data.email);
 
-//        Picasso.with(getContext()).load(data.user_image)
-//                .placeholder(R.drawable.profile_img)
-//                .into(imageView);
-
-
         StringBuilder pastActivity = new StringBuilder();
         if (data.user_activity != null) {
             if (data.user_activity.total_user_order > 0)
@@ -347,16 +360,12 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
             if (data.special_instruction.contains("||"))
                 data.special_instruction = data.special_instruction.replaceAll("\\|\\|", "\n");
 
-//            if (data.item_list.size() < 3) {
-//                textinstrctions.setText(data.special_instruction + "\n\n\n\n  ");
-//            } else
             textinstrctions.setText(Utils.decodeHtml(data.special_instruction));
         } else
             layout_instrctions.setVisibility(View.GONE);
     }
 
     private void showOrderItem(ArrayList<MyItemList> item_list) {
-        LogUtils.e("============== showOrderItem : ");
         orderLayout.removeAllViews();
         LayoutInflater inflater = LayoutInflater.from(orderLayout.getContext());
         int view_count = 0;
@@ -398,11 +407,9 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
             orderLayout.addView(view);
         }
 
-//        LogUtils.e("============== layout_instrctions  " + layout_instrctions.getVisibility());
 
         if (layout_instrctions.getVisibility() == View.VISIBLE) {
 
-//            LogUtils.e("============== layout_instrctions VISIBLE ");
             ViewTreeObserver viewTreeObserver = layout_instrctions.getViewTreeObserver();
             if (viewTreeObserver.isAlive()) {
                 viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -410,7 +417,6 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                     public void onGlobalLayout() {
                         layout_instrctions.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                         layoutheight += layout_instrctions.getHeight();
-//                        LogUtils.e("============== layout_instrctions height : " + layoutheight + "=====" + layout_instrctions.getHeight());
                     }
                 });
             }
@@ -425,12 +431,10 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                         empty_layout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, layoutheight));
                         layout_close.setVisibility(View.VISIBLE);
                         layout_base.setVisibility(View.VISIBLE);
-//                        LogUtils.e("============== orderLayout height : " + layoutheight + "=====" + orderLayout.getHeight());
                     }
                 });
             }
         } else {
-//            LogUtils.e("============== layout_instrctions goNE ");
             ViewTreeObserver viewTreeObserver = orderLayout.getViewTreeObserver();
             if (viewTreeObserver.isAlive()) {
                 viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
@@ -452,25 +456,19 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         textPrint.setVisibility(View.VISIBLE);
         textAction.setVisibility(View.VISIBLE);
         textCancel.setVisibility(View.VISIBLE);
-//        rootView.findViewById(R.id.layout_change_delivery_time).setVisibility(View.GONE);
 
         textChange_Time.setVisibility(View.GONE);
         String currentStatus = response.data.status;
         if (currentStatus.equalsIgnoreCase("placed")) {
             textAction.setText("CONFIRM");
-//            textAction.setText("Archive");
             textAction.setBackgroundResource(R.drawable.green_button);
             textChange_Time.setVisibility(View.VISIBLE);
         } else if (currentStatus.equalsIgnoreCase("confirmed")) {
 
-            if (response.data.order_type.equalsIgnoreCase("takeout"))
-//                textAction.setText("Picked Up");
-            {
+            if (response.data.order_type.equalsIgnoreCase("takeout")) {
                 textAction.setText("READY");
                 textAction.setBackgroundResource(R.drawable.green_button);
-            } else
-//                textAction.setText("Sent");
-            {
+            } else {
                 textAction.setText("ARCHIVE");
                 textAction.setBackgroundResource(R.drawable.grey_button);
             }
@@ -489,7 +487,6 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     }
 
     private void showOrderPaymentDetail(final OrderDetailResponseData data, OrderAmountCalculation payment_detail) {
-        LogUtils.e("============== showOrderPaymentDetail : ");
         rootView.findViewById(R.id.layout_order_payment).setVisibility(View.VISIBLE);
         textSubtotal.setText("$" + df.format(Double.valueOf(payment_detail.subtotal)));
         textDealDiscount.setText("$" + df.format(Double.valueOf(payment_detail.discount)));
@@ -511,7 +508,6 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                 public void onGlobalLayout() {
                     layout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                     layoutheight += layout.getHeight();
-//                    LogUtils.e("============== layout_order_payment height : " + layoutheight + "=====" + layout.getHeight());
                     showOrderItem(data.item_list);
                 }
             });
@@ -535,14 +531,64 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     }
 
     private void sendToPrinter() {
-        PrinterSetting setting = new PrinterSetting(getActivity());
 
-        if (TextUtils.isEmpty(setting.getPortName()) || TextUtils.isEmpty(setting.getPortSettings())) {
-            Intent intent = new Intent(getActivity(), SearchPrinterActivity.class);
-            intent.putExtra("printData", printData);
-            startActivity(intent);
-        } else
-            new StarPrinterUtils(getActivity(), "", printData);
+        LogUtils.d("========== set printer type : " + PrefUtil.getPrinterType());
+        if (PrefUtil.getPrinterType().equalsIgnoreCase(Constants.BLUETOOTH)) {
+            PrinterSetting setting = new PrinterSetting(getActivity());
+            if (TextUtils.isEmpty(setting.getPortName()) || TextUtils.isEmpty(setting.getPortSettings())) {
+                Intent intent = new Intent(getActivity(), SearchPrinterActivity.class);
+                intent.putExtra("printData", printData);
+                startActivity(intent);
+            } else
+                new StarPrinterUtils(getActivity(), "", printData);
+        } else if (checkExternalStoragePermission(getActivity())) {
+
+            printData = new WifiPrintUtils().getReciept();
+            File file = createPDF(printData, "test.pdf", getActivity());
+            if (file != null)
+                new WifiPrinterUtils().startPrint(getActivity(), file);
+            else
+                new WifiPrinterUtils().startPrint(getActivity(), printData);
+
+        }
+    }
+
+    public File createPDF(String rawHTML, String fileName, Activity context) {
+        File file;
+        final String APPLICATION_PACKAGE_NAME = context.getPackageName();
+        File path = new File(Environment.getExternalStorageDirectory(), APPLICATION_PACKAGE_NAME);
+        if (!path.exists()) {
+            path.mkdir();
+        }
+        file = new File(path, fileName);
+
+        try {
+
+            Document document = new Document();
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
+            document.open();
+
+            // Подготавливаем HTML
+            String htmlText = Jsoup.clean(rawHTML, Whitelist.relaxed());
+            InputStream inputStream = new ByteArrayInputStream(htmlText.getBytes());
+
+            // Печатаем документ PDF
+            XMLWorkerHelper.getInstance().parseXHtml(writer, document,
+                    inputStream, null, Charset.defaultCharset(), new MyFont());
+
+            document.close();
+            return file;
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        } catch (DocumentException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     @Override
@@ -550,20 +596,13 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         String currentStatus = response.data.status;
         switch (view.getId()) {
             case R.id.text_print:
-
+                LogUtils.d("========== set printer type : " + PrefUtil.getPrinterType());
                 if (textAction.getVisibility() == View.VISIBLE && textAction.getText().toString().equalsIgnoreCase("CONFIRM") || currentStatus.equalsIgnoreCase("placed")) {
                     clickFrom = PRINT;
                     showProgressBar();
                     String status2 = "";// "archived";
                     if (currentStatus.equalsIgnoreCase("placed"))
                         status2 = "confirmed";
-//                    else if (currentStatus.equalsIgnoreCase("confirmed")) {
-//                        if (order_type.equalsIgnoreCase("takeout"))
-//                            status2 = "ready";
-//                        else
-//                            status2 = "delivered";
-//                    } else if (currentStatus.equalsIgnoreCase("arrived"))
-//                        status2 = "archived";
                     sent_status = status2;
                     RequestController.orderProcess(response.data.id, status2, "", "", OrderDetailFragment.this);
                 } else {
@@ -576,14 +615,6 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                 clickFrom = CONFIRM;
                 showProgressBar();
                 String status = "archived";
-//                if (currentStatus.equalsIgnoreCase("placed"))
-//                    status = "confirmed";
-//                else if (currentStatus.equalsIgnoreCase("confirmed")) {
-//                    if (currentStatus.equalsIgnoreCase("takeout"))
-//                        status = "arrived";
-//                    else
-//                        status = "delivered";
-//                }
                 if (currentStatus.equalsIgnoreCase("placed"))
                     status = "confirmed";
                 else if (currentStatus.equalsIgnoreCase("confirmed")) {
@@ -729,4 +760,42 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         });
     }
 
+    @Override
+    public void onPrintMetricsDataPosted(PrintMetricsData printMetricsData) {
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    public static final String[] PERMISSIONS_EXTERNAL_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
+    public boolean checkExternalStoragePermission(Activity activity) {
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            return true;
+        }
+
+        int readStoragePermissionState = ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE);
+        int writeStoragePermissionState = ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        boolean externalStoragePermissionGranted = readStoragePermissionState == PackageManager.PERMISSION_GRANTED &&
+                writeStoragePermissionState == PackageManager.PERMISSION_GRANTED;
+        if (!externalStoragePermissionGranted) {
+            requestPermissions(PERMISSIONS_EXTERNAL_STORAGE, REQUEST_EXTERNAL_PERMISSION_CODE);
+        }
+
+        return externalStoragePermissionGranted;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (requestCode == REQUEST_EXTERNAL_PERMISSION_CODE) {
+                if (checkExternalStoragePermission(getActivity())) {
+                    // Continue with your action after permission request succeed
+                    new WifiPrinterUtils().startPrint(getActivity(), printData);
+                }
+            }
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package com.munchado.orderprocess.ui.activity.print;
 
+import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -7,7 +8,12 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -20,12 +26,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.munchado.orderprocess.R;
+import com.munchado.orderprocess.listener.OnBluetoothFailListener;
 import com.munchado.orderprocess.print.StarPrinterUtils;
+import com.munchado.orderprocess.print.WifiPrinterUtils;
 import com.munchado.orderprocess.utils.StringUtils;
 
 import java.util.Set;
 
-public class SearchPrinterActivity extends AppCompatActivity {
+public class SearchPrinterActivity extends AppCompatActivity implements OnBluetoothFailListener {
     final int REQUEST_ENABLE_BT = 343;
     /**
      * Tag for Log
@@ -47,18 +55,29 @@ public class SearchPrinterActivity extends AppCompatActivity {
      */
     private ArrayAdapter<String> mNewDevicesArrayAdapter;
 
-    private String printData="";
+    private String printData = "";
+
+    public static final int REQUEST_EXTERNAL_PERMISSION_CODE = 666;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_printer);
 
         setupActionbar();
-//        setTitle(R.string.select_device);
-        mBtAdapter = BluetoothAdapter.getDefaultAdapter();
-        mBtAdapter = BluetoothAdapter.getDefaultAdapter();
+//        mBtAdapter = BluetoothAdapter.getDefaultAdapter();
 
         printData = getIntent().getStringExtra("printData");
+
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+//        setTitle(R.string.select_device);
+        mBtAdapter = BluetoothAdapter.getDefaultAdapter();
         // If the adapter is null, then Bluetooth is not supported
         if (mBtAdapter == null) {
             Toast.makeText(this, "Bluetooth is not available", Toast.LENGTH_LONG).show();
@@ -69,7 +88,6 @@ public class SearchPrinterActivity extends AppCompatActivity {
             startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
         } else
             setupBTdevices();
-
     }
 
     private void setupActionbar() {
@@ -77,6 +95,7 @@ public class SearchPrinterActivity extends AppCompatActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
@@ -84,6 +103,7 @@ public class SearchPrinterActivity extends AppCompatActivity {
             finish();
         return true;
     }
+
     private void setupBTdevices() {
 // Initialize the button to perform device discovery
         Button scanButton = (Button) findViewById(R.id.button_scan);
@@ -143,9 +163,15 @@ public class SearchPrinterActivity extends AppCompatActivity {
         if (mBtAdapter != null) {
             mBtAdapter.cancelDiscovery();
         }
+        try {
 
-        // Unregister broadcast listeners
-        this.unregisterReceiver(mReceiver);
+            // Unregister broadcast listeners
+            this.unregisterReceiver(mReceiver);
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+            ;
+        }
+
     }
 
     /**
@@ -179,17 +205,14 @@ public class SearchPrinterActivity extends AppCompatActivity {
             // Cancel discovery because it's costly and we're about to connect
             mBtAdapter.cancelDiscovery();
 
-            // Get the device MAC address, which is the last 17 chars in the View
-            String info = ((TextView) v).getText().toString();
-            String address = info.substring(info.length() - 17);
+            if (!StringUtils.isNullOrEmpty(((TextView) v).getText().toString()) && ((TextView) v).getText().toString().length() > 17) {
+                // Get the device MAC address, which is the last 17 chars in the View
+                String info = ((TextView) v).getText().toString();
+                String address = info.substring(info.length() - 17);
 
-            new StarPrinterUtils(SearchPrinterActivity.this, info,printData);
-            // Create the result Intent and include the MAC address
-//            Intent intent = new Intent(SearchPrinterActivity.this, PrinterActivity.class);
-//            intent.putExtra(EXTRA_DEVICE_ADDRESS, info);
-//            startActivity(intent);
-//            Toast.makeText(getApplicationContext(), "bluetooth :" + info, Toast.LENGTH_SHORT).show();
-//            finish();
+                new StarPrinterUtils(SearchPrinterActivity.this, info, printData);
+            }
+
         }
     };
 
@@ -238,6 +261,49 @@ public class SearchPrinterActivity extends AppCompatActivity {
                             Toast.LENGTH_SHORT).show();
                     finish();
                 }
+        }
+    }
+
+    @Override
+    public void onBluetoothFail() {
+        Log.d(TAG, "============= BT failed");
+        if (checkExternalStoragePermission(SearchPrinterActivity.this)) {
+            // Continue with your action after permission request succeed
+            new WifiPrinterUtils().startPrint(SearchPrinterActivity.this, printData);
+        }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    public static final String[] PERMISSIONS_EXTERNAL_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
+    public boolean checkExternalStoragePermission(Activity activity) {
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            return true;
+        }
+
+        int readStoragePermissionState = ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE);
+        int writeStoragePermissionState = ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        boolean externalStoragePermissionGranted = readStoragePermissionState == PackageManager.PERMISSION_GRANTED &&
+                writeStoragePermissionState == PackageManager.PERMISSION_GRANTED;
+        if (!externalStoragePermissionGranted) {
+            requestPermissions(PERMISSIONS_EXTERNAL_STORAGE, REQUEST_EXTERNAL_PERMISSION_CODE);
+        }
+
+        return externalStoragePermissionGranted;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (requestCode == REQUEST_EXTERNAL_PERMISSION_CODE) {
+                if (checkExternalStoragePermission(SearchPrinterActivity.this)) {
+                    // Continue with your action after permission request succeed
+                    new WifiPrinterUtils().startPrint(SearchPrinterActivity.this, printData);
+                }
+            }
         }
     }
 }

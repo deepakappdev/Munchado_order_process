@@ -20,6 +20,7 @@ public class Constants {
     public static final String PREF_DISPLAY_COUNT = "pref_display_count";
     public static final String PREF_UPGRADE_CLEAR_DATA = "pref_upgrade_clear_data";
     public static final String PREF_UPGRADE_MESSAGE = "pref_upgrade_message";
+    public static final String PREF_PRINTER_TYPE = "pref_printer_type";
 
     public static final String FRAGMENT_ARGS = "frag_args";
     public static final String FRAGMENT_PRINT_SETTING = "frag_PrintSettingFragment";
@@ -47,5 +48,8 @@ public class Constants {
     public static final String CANCEL = "5";
     public static final String USER_CONFIRM = "6";
     public static final String ARCHIVE = "7";
+
+    public static final String BLUETOOTH="BLUETOOTH";
+    public static final String WIFI="WIFI";
 
 }

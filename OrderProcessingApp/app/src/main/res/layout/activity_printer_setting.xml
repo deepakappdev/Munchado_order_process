@@ -57,7 +57,7 @@
         android:id="@+id/title_paired_devices"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="30dp"
         android:background="@color/grey_background"
         android:padding="5dp"
         android:text="  Bluetooth Settings"
@@ -89,6 +89,46 @@
         android:textColor="@color/white"
         android:textSize="15sp"
         app:textStyle="HelveticaLight" />
+
+    <com.munchado.orderprocess.ui.widgets.CustomTextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@color/grey_background"
+        android:padding="5dp"
+        android:text="  Default Printer Settings"
+        android:textColor="@color/white"
+        android:textSize="@dimen/textSizeXXLarge"
+        app:textStyle="HelveticaLight" />
+
+
+    <RadioGroup
+        android:id="@+id/radiogroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fifteendp"
+        android:orientation="horizontal">
+
+        <RadioButton
+            android:id="@+id/radioButton_bluetooth"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            android:text="Bluetooth Printer"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/textSizeXXLarge" />
+
+        <RadioButton
+            android:id="@+id/radioButton_wifi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/fifteendp"
+            android:layout_marginStart="@dimen/fifteendp"
+            android:text="Wifi Printer"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/textSizeXXLarge" />
+    </RadioGroup>
+
 
     <com.munchado.orderprocess.ui.widgets.CustomButton
         android:id="@+id/submit_btn"

@@ -18,6 +18,7 @@ import com.munchado.orderprocess.network.RequestController;
 import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.ui.fragment.CustomErrorDialogFragment;
+import com.munchado.orderprocess.utils.LogUtils;
 import com.munchado.orderprocess.utils.PrefUtil;
 import com.munchado.orderprocess.utils.StringUtils;
 
@@ -61,6 +62,7 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public void success(Object obj) {
+                LogUtils.d("============= token success");
                 TokenResponse mTokenResponse = (TokenResponse) obj;
                 PrefUtil.putToken(mTokenResponse.data.token);
                 checkUpdate(versionCode + "");
@@ -77,6 +79,7 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public void success(Object obj) {
+                LogUtils.d("============= checkUpdate success");
                 upgradeData = (UpgradeData) obj;
                 if (upgradeData != null && upgradeData.data != null && !StringUtils.isNullOrEmpty(upgradeData.data.upgrade_type)) {
                     if (upgradeData.data.upgrade_type.equalsIgnoreCase("hard") || upgradeData.data.upgrade_type.equalsIgnoreCase("soft")) {

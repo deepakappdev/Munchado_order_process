@@ -87,7 +87,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="@dimen/margin_normal"
-                            android:text="Speical Instructions :"
+                            android:text="Special Instructions :"
                             android:textColor="@color/default_text_color"
                             android:textSize="@dimen/textSizeXXLarge"
                             app:textStyle="HelveticaLight" />
