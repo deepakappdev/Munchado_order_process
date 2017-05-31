@@ -43,17 +43,9 @@ public class ReceiptFormatUtils {
 //        LogUtils.d(builder.toString());
         int i = 1;
         for (MyItemList printItemModel : orderDetailResponseData.item_list) {
-//            if(printItemModel.addons_list!=null && printItemModel.addons_list.size()>0 && printItemModel.addons_list.get(0).addon_price.equalsIgnoreCase("0.00"))
-//            {
-//
-//                builder.append(getItemPriceData(i, printItemModel.item_name+" ("+printItemModel.addons_list.get(0).addon_name+")",printItemModel.item_qty, Integer.valueOf(printItemModel.item_qty) * Float.valueOf(printItemModel.unit_price) + ""));
-//            }
-//            else
             builder.append(getItemPriceData(i, Utils.decodeHtml(printItemModel.item_name), printItemModel.item_qty, Integer.valueOf(printItemModel.item_qty) * Float.valueOf(printItemModel.unit_price) + ""));
             int j = 1;
             for (AddonsList addonsListModel : printItemModel.addons_list) {
-//                if(addonsListModel.addon_price.equalsIgnoreCase("0.00"))
-//                    continue;
                 builder.append(getSubItemPriceData(j, Utils.decodeHtml(addonsListModel.addon_name), addonsListModel.addon_quantity, Integer.valueOf(addonsListModel.addon_quantity) * Float.valueOf(addonsListModel.addon_price) + ""));
                 j++;
             }

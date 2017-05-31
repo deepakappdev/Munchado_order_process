@@ -543,10 +543,12 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                 new StarPrinterUtils(getActivity(), "", printData);
         } else if (checkExternalStoragePermission(getActivity())) {
 
-            printData = new WifiPrintUtils().getReciept();
-            File file = createPDF(printData, "test.pdf", getActivity());
+//            printData = new WifiPrintUtils().getReciept();
+//            printData = new WifiPrintUtils().getReciept(response.data);
+//            File file = createPDF(printData, "test.pdf", getActivity());
+            File file = new WifiPrintUtils().createPDF(response.data, "test.pdf", getActivity());
             if (file != null)
-                new WifiPrinterUtils().startPrint(getActivity(), file);
+                new WifiPrinterUtils().startPrint(getActivity(), file,"Order of "+response.data.customer_first_name);
             else
                 new WifiPrinterUtils().startPrint(getActivity(), printData);
 

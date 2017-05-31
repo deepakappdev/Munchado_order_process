@@ -16,6 +16,7 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.munchado.orderprocess.model.orderdetail.OrderDetailResponseData;
 import com.munchado.orderprocess.utils.Constants;
 import com.munchado.orderprocess.utils.LogUtils;
 import com.munchado.orderprocess.utils.PrefUtil;
@@ -49,23 +50,31 @@ public class WifiPrinterUtils {
         PrefUtil.putPrinterType(Constants.WIFI);
     }
 
-    public void startPrint(Activity ctx, File file) {
+    public void startPrint(Activity ctx, File file,String jobName) {
         this.ctx = ctx;
-        createPrintJobData(file);
+        createPrintJobData(file,jobName);
         PrintUtil.setPrintJobData(printJobData);
         PrintUtil.print(this.ctx);
         PrefUtil.putPrinterType(Constants.WIFI);
     }
 
-    private void createPrintJobData(File file1) {
-//        LogUtils.d("========== print matter : " + printData);
-//        File file1 = createandDisplayPdf(printData);
+    public void startPrint(Activity ctx, OrderDetailResponseData orderDetailResponseData) {
+        String printData = "";
+        this.ctx = ctx;
+//        createPrintJobData(file);
+//        PrintUtil.setPrintJobData(printJobData);
+//        PrintUtil.print(this.ctx);
+//        PrefUtil.putPrinterType(Constants.WIFI);
+
+    }
+
+    private void createPrintJobData(File file1,String jobName) {
         if (file1 != null)
             userPickedUri = Uri.fromFile(file1);
         createUserSelectedPDFJobData();
 
         //Giving the print job a name.
-        printJobData.setJobName("Example");
+        printJobData.setJobName(jobName);
 
         //Optionally include print attributes.
         PrintAttributes printAttributes = new PrintAttributes.Builder()
@@ -137,12 +146,6 @@ public class WifiPrinterUtils {
         PrintItem printItem3x5 = new PDFPrintItem(PrintAttributes.MediaSize.NA_INDEX_3X5, margins, scaleType, pdfAsset);
         printJobData = new PrintJobData(ctx, printItem3x5);
     }
-
-//    private void createCustomData() {
-//        PrintUtil.customData.clear();
-//        if (showCustomData)
-//            PrintUtil.customData.put(tagText.getText(), valueText.getText());
-//    }
 
 
 }
