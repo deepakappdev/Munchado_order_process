@@ -62,7 +62,7 @@ import com.munchado.orderprocess.utils.PrefUtil;
 import com.munchado.orderprocess.utils.ReceiptFormatUtils;
 import com.munchado.orderprocess.utils.StringUtils;
 import com.munchado.orderprocess.utils.Utils;
-import com.munchado.orderprocess.utils.WifiPrintUtils;
+import com.munchado.orderprocess.utils.WifiPrintReceiptFormatUtils;
 import com.squareup.picasso.Picasso;
 
 import org.jsoup.Jsoup;
@@ -163,6 +163,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         Bundle bundle = getArguments();
         String orderId = bundle.getString("ORDER_ID");
         ((BaseActivity) getActivity()).order_ID = orderId;
+        Constants.totalPage = 1;
         RequestController.getOrderDetail((BaseActivity) getActivity(), orderId, this);
     }
 
@@ -536,19 +537,25 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         if (PrefUtil.getPrinterType().equalsIgnoreCase(Constants.BLUETOOTH)) {
             PrinterSetting setting = new PrinterSetting(getActivity());
             if (TextUtils.isEmpty(setting.getPortName()) || TextUtils.isEmpty(setting.getPortSettings())) {
+                Bundle bundle = new Bundle();
                 Intent intent = new Intent(getActivity(), SearchPrinterActivity.class);
-                intent.putExtra("printData", printData);
+//                intent.putExtra("printData", printData);
+                bundle.putParcelable("data", response.data);
+                bundle.putString("printData", printData);
+                intent.putExtras(bundle);
                 startActivity(intent);
             } else
                 new StarPrinterUtils(getActivity(), "", printData);
         } else if (checkExternalStoragePermission(getActivity())) {
 
-//            printData = new WifiPrintUtils().getReciept();
-//            printData = new WifiPrintUtils().getReciept(response.data);
+//            printData = new WifiPrintReceiptFormatUtils().getReciept();
+//            printData = new WifiPrintReceiptFormatUtils().getReciept(response.data);
 //            File file = createPDF(printData, "test.pdf", getActivity());
-            File file = new WifiPrintUtils().createPDF(response.data, "test.pdf", getActivity());
+            LogUtils.d("========== write permission granted : " + PrefUtil.getPrinterType());
+            File file = new WifiPrintReceiptFormatUtils().createPDF(response.data, "Order_" + response.data.payment_receipt + ".pdf", getActivity());
             if (file != null)
-                new WifiPrinterUtils().startPrint(getActivity(), file,"Order of "+response.data.customer_first_name);
+                new WifiPrinterUtils().startPrint(getActivity(), file, "Order of " + response.data.customer_first_name);
+//                new WifiPrinterUtils().sendToPrint(getActivity(), file, "Order of " + response.data.customer_first_name);
             else
                 new WifiPrinterUtils().startPrint(getActivity(), printData);
 
@@ -795,7 +802,13 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
             if (requestCode == REQUEST_EXTERNAL_PERMISSION_CODE) {
                 if (checkExternalStoragePermission(getActivity())) {
                     // Continue with your action after permission request succeed
-                    new WifiPrinterUtils().startPrint(getActivity(), printData);
+//                    new WifiPrinterUtils().startPrint(getActivity(), printData);
+                    File file = new WifiPrintReceiptFormatUtils().createPDF(response.data, "Order_" + response.data.payment_receipt + ".pdf", getActivity());
+                    if (file != null)
+                        new WifiPrinterUtils().startPrint(getActivity(), file, "Order of " + response.data.customer_first_name);
+//                        new WifiPrinterUtils().sendToPrint(getActivity(), file, "Order of " + response.data.customer_first_name);
+                    else
+                        new WifiPrinterUtils().startPrint(getActivity(), printData);
                 }
             }
         }

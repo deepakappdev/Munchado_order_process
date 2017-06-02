@@ -1,9 +1,17 @@
 package com.munchado.orderprocess.print;
 
 import android.app.Activity;
+import android.content.Context;
 import android.net.Uri;
+import android.os.Bundle;
+import android.os.CancellationSignal;
 import android.os.Environment;
+import android.os.ParcelFileDescriptor;
+import android.print.PageRange;
 import android.print.PrintAttributes;
+import android.print.PrintDocumentAdapter;
+import android.print.PrintDocumentInfo;
+import android.print.PrintManager;
 import android.util.Log;
 
 import com.hp.mss.hpprint.model.PDFPrintItem;
@@ -16,14 +24,17 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.munchado.orderprocess.model.orderdetail.OrderDetailResponseData;
 import com.munchado.orderprocess.utils.Constants;
 import com.munchado.orderprocess.utils.LogUtils;
 import com.munchado.orderprocess.utils.PrefUtil;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 /**
  * Created by munchado on 23/5/17.
@@ -50,25 +61,72 @@ public class WifiPrinterUtils {
         PrefUtil.putPrinterType(Constants.WIFI);
     }
 
-    public void startPrint(Activity ctx, File file,String jobName) {
+    public void startPrint(Activity ctx, File file, String jobName) {
         this.ctx = ctx;
-        createPrintJobData(file,jobName);
+        createPrintJobData(file, jobName);
         PrintUtil.setPrintJobData(printJobData);
-        PrintUtil.print(this.ctx);
+        PrintUtil.print(this.ctx, Constants.totalPage);
         PrefUtil.putPrinterType(Constants.WIFI);
     }
 
-    public void startPrint(Activity ctx, OrderDetailResponseData orderDetailResponseData) {
-        String printData = "";
-        this.ctx = ctx;
-//        createPrintJobData(file);
-//        PrintUtil.setPrintJobData(printJobData);
-//        PrintUtil.print(this.ctx);
-//        PrefUtil.putPrinterType(Constants.WIFI);
+    public void sendToPrint(Activity ctx, final File file, String jobName) {
 
+        LogUtils.e("==================  $$$$ sendToPrint =============");
+
+        PrintDocumentAdapter pda = new PrintDocumentAdapter() {
+
+            @Override
+            public void onWrite(PageRange[] pages, ParcelFileDescriptor destination, CancellationSignal cancellationSignal, WriteResultCallback callback) {
+                InputStream input = null;
+                OutputStream output = null;
+
+                try {
+
+                    input = new FileInputStream(file);
+                    output = new FileOutputStream(destination.getFileDescriptor());
+
+                    byte[] buf = new byte[1024];
+                    int bytesRead;
+
+                    while ((bytesRead = input.read(buf)) > 0) {
+                        output.write(buf, 0, bytesRead);
+                    }
+
+                    callback.onWriteFinished(new PageRange[]{PageRange.ALL_PAGES});
+
+                } catch (FileNotFoundException ee) {
+                    //Catch exception
+                } catch (Exception e) {
+                    //Catch exception
+                } finally {
+                    try {
+                        input.close();
+                        output.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onLayout(PrintAttributes oldAttributes, PrintAttributes newAttributes, CancellationSignal cancellationSignal, LayoutResultCallback callback, Bundle extras) {
+
+                if (cancellationSignal.isCanceled()) {
+                    callback.onLayoutCancelled();
+                    return;
+                }
+
+
+                PrintDocumentInfo pdi = new PrintDocumentInfo.Builder(file.getName()).setContentType(PrintDocumentInfo.CONTENT_TYPE_DOCUMENT).build();
+
+                callback.onLayoutFinished(pdi, true);
+            }
+        };
+        PrintManager printManager = (PrintManager) ctx.getSystemService(Context.PRINT_SERVICE);
+        printManager.print(jobName, pda, null);
     }
 
-    private void createPrintJobData(File file1,String jobName) {
+    private void createPrintJobData(File file1, String jobName) {
         if (file1 != null)
             userPickedUri = Uri.fromFile(file1);
         createUserSelectedPDFJobData();

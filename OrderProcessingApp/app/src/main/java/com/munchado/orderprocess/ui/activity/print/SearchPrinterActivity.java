@@ -11,6 +11,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
@@ -27,10 +28,13 @@ import android.widget.Toast;
 
 import com.munchado.orderprocess.R;
 import com.munchado.orderprocess.listener.OnBluetoothFailListener;
+import com.munchado.orderprocess.model.orderdetail.OrderDetailResponseData;
 import com.munchado.orderprocess.print.StarPrinterUtils;
 import com.munchado.orderprocess.print.WifiPrinterUtils;
 import com.munchado.orderprocess.utils.StringUtils;
+import com.munchado.orderprocess.utils.WifiPrintReceiptFormatUtils;
 
+import java.io.File;
 import java.util.Set;
 
 public class SearchPrinterActivity extends AppCompatActivity implements OnBluetoothFailListener {
@@ -57,6 +61,7 @@ public class SearchPrinterActivity extends AppCompatActivity implements OnBlueto
 
     private String printData = "";
 
+    OrderDetailResponseData data;
     public static final int REQUEST_EXTERNAL_PERMISSION_CODE = 666;
 
     @Override
@@ -67,7 +72,9 @@ public class SearchPrinterActivity extends AppCompatActivity implements OnBlueto
         setupActionbar();
 //        mBtAdapter = BluetoothAdapter.getDefaultAdapter();
 
-        printData = getIntent().getStringExtra("printData");
+        printData = getIntent().getExtras().getString("printData");
+        data = getIntent().getExtras().getParcelable("data");
+//        printData = getIntent().getStringExtra("printData");
 
 
     }
@@ -266,10 +273,22 @@ public class SearchPrinterActivity extends AppCompatActivity implements OnBlueto
 
     @Override
     public void onBluetoothFail() {
-        Log.d(TAG, "============= BT failed");
+//        Log.d(TAG, "============= BT failed");
         if (checkExternalStoragePermission(SearchPrinterActivity.this)) {
             // Continue with your action after permission request succeed
-            new WifiPrinterUtils().startPrint(SearchPrinterActivity.this, printData);
+            final File file = new WifiPrintReceiptFormatUtils().createPDF(data, "Order_" + data.payment_receipt + ".pdf", SearchPrinterActivity.this);
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    if (file != null)
+                        new WifiPrinterUtils().startPrint(SearchPrinterActivity.this, file, "Order of " + data.customer_first_name);
+                    else
+                        new WifiPrinterUtils().startPrint(SearchPrinterActivity.this, printData);
+//            new WifiPrinterUtils().startPrint(SearchPrinterActivity.this, printData);
+                }
+            }, 1500);
+
         }
     }
 

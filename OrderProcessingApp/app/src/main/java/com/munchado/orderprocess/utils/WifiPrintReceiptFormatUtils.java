@@ -8,6 +8,7 @@ import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
+import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
@@ -28,7 +29,7 @@ import java.text.NumberFormat;
 /**
  * Created by munchado on 23/5/17.
  */
-public class WifiPrintUtils {
+public class WifiPrintReceiptFormatUtils {
 
     private final float OUTER_WIDTH = 272.13f;
     private final float INNER_WIDTH = 265.0f;
@@ -40,39 +41,7 @@ public class WifiPrintUtils {
     Font foodHeadingFont = new Font(Font.FontFamily.HELVETICA, 8, Font.BOLD);
     Font contentLargeBoldFont = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
 
-    public String getReciept() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("<!DOCTYPE html>");
-        sb.append("<html>");
-        sb.append("<body>");
-        sb.append("<h1>My First Heading</h1>");
-        sb.append("<p>My first paragraph.</p>");
-        sb.append("</body>");
-        sb.append("</html>");
-        return sb.toString();
-    }
-
-    public void getRecieptFile(OrderDetailResponseData orderDetailResponseData) {
-//        StringBuilder sb = new StringBuilder();
-//        sb.append("<!DOCTYPE html>");
-//        sb.append("<html>");
-//        sb.append("<body>");
-//        sb.append("<style type='text/css'>table {border-collapse:initial;}</style>");
-//        sb.append("<table class='receipt' style='width:72mm;font-family:arial;margin:0 auto;font-size:13px;border:#000 solid 1px;' border = '1' cellpadding='0' cellspacing='0'>" +
-//                "         <tr>" +
-//                "            <td valign='top'>" +
-//                "               <b>Hello print receipt</b>" +
-//                "   </td>" +
-//                "         </tr>" +
-//                "      </table>");
-//        sb.append("</body>");
-//        sb.append("</html>");
-//        return sb.toString();
-    }
-
     public File createPDF(OrderDetailResponseData orderDetailResponseData, String fileName, Activity context) {
-
-
         File file;
         final String APPLICATION_PACKAGE_NAME = context.getPackageName();
         File path = new File(Environment.getExternalStorageDirectory(), APPLICATION_PACKAGE_NAME);
@@ -82,16 +51,11 @@ public class WifiPrintUtils {
         file = new File(path, fileName);
 
         try {
-            Document document = new Document();
+            Document document = new Document(PageSize.A4);
             PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
             document.open();
             PdfPTable outerTable = new PdfPTable(1);
             setDefaultTableProperty(outerTable, OUTER_WIDTH);
-//            outerTable.setTotalWidth(272.13f);
-//            outerTable.setSpacingAfter(0);
-//            outerTable.setSpacingBefore(0);
-//            outerTable.setLockedWidth(true);
-
             PdfPCell outerCell = new PdfPCell();
 
             PdfPTable deliveryDateTimeTable = new PdfPTable(1);
@@ -142,13 +106,11 @@ public class WifiPrintUtils {
             deliveryDateTimeTable.addCell(new PdfPCell());
 
             // DATA FOR RESTAURANT NAME : EL Original TXMX
-
             PdfPCell restaurantCell = getGenericTableCell(Utils.decodeHtml(orderDetailResponseData.restaurant_name) + "\nORDER #" + orderDetailResponseData.payment_receipt + "\n ", Element.ALIGN_CENTER, contentLargeFont);
             restaurantCell.setPaddingBottom(-7f);
             deliveryDateTimeTable.addCell(restaurantCell);
 
             // ADD A SEPERATOR
-
             PdfPCell blankCell2 = new PdfPCell();
             deliveryDateTimeTable.addCell(blankCell2);
 
@@ -163,6 +125,7 @@ public class WifiPrintUtils {
             foodHeadingTable.addCell(foodheadingcell1);
             foodHeadingTable.addCell(foodheadingcell2);
             foodHeadingTable.addCell(foodheadingcell3);
+            foodHeadingTable.setKeepTogether(true);
             foodheadingcell.addElement(foodHeadingTable);
             foodheadingcell.setBorder(Rectangle.NO_BORDER);
             deliveryDateTimeTable.addCell(foodheadingcell);
@@ -181,6 +144,7 @@ public class WifiPrintUtils {
                 foodHeadingTable_1.addCell(foodheadingcell1_1);
                 foodHeadingTable_1.addCell(foodheadingcell2_1);
                 foodHeadingTable_1.addCell(foodheadingcell3_1);
+                foodHeadingTable_1.setKeepTogether(true);
                 foodheadingcell_1.addElement(foodHeadingTable_1);
                 foodheadingcell_1.setBorder(Rectangle.NO_BORDER);
                 foodheadingcell_1.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -199,12 +163,13 @@ public class WifiPrintUtils {
 
                     PdfPCell foodheadingcell1_3 = getTableSubitemCell("  + " + Utils.decodeHtml(addonsListModel.addon_name), Element.ALIGN_LEFT);
                     foodheadingcell1_3.setColspan(2);
-                    PdfPCell foodheadingcell2_3 = getTableSubitemCell("   " + Utils.decodeHtml(addonsListModel.addon_quantity), Element.ALIGN_LEFT);//= new PdfPCell();
+                    PdfPCell foodheadingcell2_3 = getTableSubitemCell("    " + Utils.decodeHtml(addonsListModel.addon_quantity), Element.ALIGN_LEFT);//= new PdfPCell();
                     PdfPCell foodheadingcell3_3 = getTableSubitemCell("$ " + formatter.format(Integer.valueOf(addonsListModel.addon_quantity) * Float.valueOf(addonsListModel.addon_price)), Element.ALIGN_RIGHT);//= new PdfPCell();
                     foodHeadingTable_3.addCell(foodheadingcell1_3);
                     foodHeadingTable_3.addCell(foodheadingcell2_3);
                     foodHeadingTable_3.addCell(foodheadingcell3_3);
                     foodheadingcell_3.addElement(foodHeadingTable_3);
+                    foodHeadingTable_3.setKeepTogether(true);
                     foodheadingcell_3.setHorizontalAlignment(Element.ALIGN_RIGHT);
                     foodheadingcell_3.setBorder(Rectangle.NO_BORDER);
                     deliveryDateTimeTable.addCell(foodheadingcell_3);
@@ -359,12 +324,18 @@ public class WifiPrintUtils {
             questionCell.addElement(questionParagraph2);
             questionCell.setHorizontalAlignment(Element.ALIGN_CENTER);
             deliveryDateTimeTable.addCell(questionCell);
-
+            deliveryDateTimeTable.setKeepTogether(true);
             outerCell.addElement(deliveryDateTimeTable);
             outerCell.setPadding(3.0f);
             outerTable.addCell(outerCell);
+
+            if (outerTable.getRowHeight(0) > 770.0f) {
+                int totalpage = (int) outerTable.getRowHeight(0) / 770;
+                Constants.totalPage = totalpage + 1;
+            }
+            LogUtils.e("==== totalPage : " + Constants.totalPage);
             document.add(outerTable);
-            document.newPage();
+
             document.close();
             return file;
 

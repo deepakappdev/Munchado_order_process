@@ -49,7 +49,8 @@ public class Constants {
     public static final String USER_CONFIRM = "6";
     public static final String ARCHIVE = "7";
 
-    public static final String BLUETOOTH="BLUETOOTH";
-    public static final String WIFI="WIFI";
+    public static final String BLUETOOTH = "BLUETOOTH";
+    public static final String WIFI = "WIFI";
 
+    public static int totalPage = 1;
 }
