@@ -49,6 +49,26 @@ public class StarPrinterUtils {
         mProgressDialog.setMessage("Communicating...");
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         mProgressDialog.setCancelable(false);
+//        mProgressDialog.show();
+
+        bluetoothAddress = address;
+        printData = printdata;
+        PrinterSetting setting = new PrinterSetting(mActivity);
+
+        if (TextUtils.isEmpty(setting.getPortName()) || TextUtils.isEmpty(setting.getPortSettings()))
+            new SearchTask().execute(PrinterSetting.IF_TYPE_BLUETOOTH);
+        else
+            setForPrint();
+        Log.e("===", "=== portname : " + setting.getPortName());
+        Log.e("===", "=== getPortSettings : " + setting.getPortSettings());
+    }
+
+    public StarPrinterUtils(Activity activity, ProgressDialog progressDialog, String address, String printdata) {
+        mActivity = activity;
+        if (activity instanceof OnBluetoothFailListener)
+            mOnBluetoothFailListener = (OnBluetoothFailListener) activity;
+        mProgressDialog = progressDialog;
+//        mProgressDialog.show();
 
         bluetoothAddress = address;
         printData = printdata;
@@ -90,8 +110,9 @@ public class StarPrinterUtils {
                 addItem(info);
             }
 
-            showModelDialog();
-            if (mProgressDialog != null) {
+            if (modelName.startsWith("Star Micronics") || modelName.contains("Star Micronics"))
+                showModelDialog();
+            if (mProgressDialog != null && mProgressDialog.isShowing()) {
                 mProgressDialog.dismiss();
             }
         }
@@ -267,7 +288,7 @@ public class StarPrinterUtils {
     private class PrintTask extends AsyncTask<Integer, Void, Communication.Result> {
         @Override
         protected void onPreExecute() {
-            if (null != mActivity && !mActivity.isFinishing())
+            if (null != mActivity && !mActivity.isFinishing() && !mProgressDialog.isShowing())
                 mProgressDialog.show();
         }
 
@@ -324,7 +345,7 @@ public class StarPrinterUtils {
         protected void onPostExecute(Communication.Result result) {
 
             if (null != mActivity && !mActivity.isFinishing() && null != result) {
-                if (mProgressDialog != null) {
+                if (mProgressDialog != null && mProgressDialog.isShowing()) {
                     mProgressDialog.dismiss();
                 }
 

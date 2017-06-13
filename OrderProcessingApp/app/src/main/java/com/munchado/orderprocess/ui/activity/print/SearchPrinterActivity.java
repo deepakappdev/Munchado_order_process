@@ -2,6 +2,7 @@ package com.munchado.orderprocess.ui.activity.print;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.ProgressDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.content.BroadcastReceiver;
@@ -62,6 +63,7 @@ public class SearchPrinterActivity extends AppCompatActivity implements OnBlueto
     private String printData = "";
 
     OrderDetailResponseData data;
+    private ProgressDialog mProgressDialog;
     public static final int REQUEST_EXTERNAL_PERMISSION_CODE = 666;
 
     @Override
@@ -213,11 +215,16 @@ public class SearchPrinterActivity extends AppCompatActivity implements OnBlueto
             mBtAdapter.cancelDiscovery();
 
             if (!StringUtils.isNullOrEmpty(((TextView) v).getText().toString()) && ((TextView) v).getText().toString().length() > 17) {
+
                 // Get the device MAC address, which is the last 17 chars in the View
                 String info = ((TextView) v).getText().toString();
                 String address = info.substring(info.length() - 17);
-
-                new StarPrinterUtils(SearchPrinterActivity.this, info, printData);
+                mProgressDialog = new ProgressDialog(SearchPrinterActivity.this);
+                mProgressDialog.setMessage("Communicating...");
+                mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                mProgressDialog.setCancelable(false);
+                mProgressDialog.show();
+                new StarPrinterUtils(SearchPrinterActivity.this,mProgressDialog, info, printData);
             }
 
         }
@@ -273,21 +280,13 @@ public class SearchPrinterActivity extends AppCompatActivity implements OnBlueto
 
     @Override
     public void onBluetoothFail() {
-//        Log.d(TAG, "============= BT failed");
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
+        Log.d(TAG, "============= BT failed");
         if (checkExternalStoragePermission(SearchPrinterActivity.this)) {
             // Continue with your action after permission request succeed
-            final File file = new WifiPrintReceiptFormatUtils().createPDF(data, "Order_" + data.payment_receipt + ".pdf", SearchPrinterActivity.this);
-
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    if (file != null)
-                        new WifiPrinterUtils().startPrint(SearchPrinterActivity.this, file, "Order of " + data.customer_first_name);
-                    else
-                        new WifiPrinterUtils().startPrint(SearchPrinterActivity.this, printData);
-//            new WifiPrinterUtils().startPrint(SearchPrinterActivity.this, printData);
-                }
-            }, 1500);
+            writeFile();
 
         }
     }
@@ -320,9 +319,25 @@ public class SearchPrinterActivity extends AppCompatActivity implements OnBlueto
             if (requestCode == REQUEST_EXTERNAL_PERMISSION_CODE) {
                 if (checkExternalStoragePermission(SearchPrinterActivity.this)) {
                     // Continue with your action after permission request succeed
-                    new WifiPrinterUtils().startPrint(SearchPrinterActivity.this, printData);
+//                    new WifiPrinterUtils().startPrint(SearchPrinterActivity.this, printData);
+                    writeFile();
                 }
             }
         }
+    }
+
+    private void writeFile() {
+        final File file = new WifiPrintReceiptFormatUtils().createPDF(data, "Order_" + data.payment_receipt + ".pdf", SearchPrinterActivity.this);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (file != null)
+                    new WifiPrinterUtils().startPrint(SearchPrinterActivity.this, file, "Order of " + data.customer_first_name);
+                else
+                    new WifiPrinterUtils().startPrint(SearchPrinterActivity.this, printData);
+//            new WifiPrinterUtils().startPrint(SearchPrinterActivity.this, printData);
+            }
+        }, 1500);
     }
 }
