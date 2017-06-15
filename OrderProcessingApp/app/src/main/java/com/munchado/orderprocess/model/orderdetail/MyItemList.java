@@ -13,6 +13,7 @@ public class MyItemList implements Parcelable {
     public String item_name;
     public String item_qty;
     public String unit_price;
+    public String item_price_desc;
     public String item_special_instruction;
     public int item_status;
     public ArrayList<AddonsList> addons_list = new ArrayList<>();
@@ -23,6 +24,7 @@ public class MyItemList implements Parcelable {
         item_name = in.readString();
         item_qty = in.readString();
         unit_price = in.readString();
+        item_price_desc = in.readString();
         item_special_instruction = in.readString();
         item_status = in.readInt();
         if (in.readByte() == 0x01) {
@@ -44,6 +46,7 @@ public class MyItemList implements Parcelable {
         dest.writeString(item_name);
         dest.writeString(item_qty);
         dest.writeString(unit_price);
+        dest.writeString(item_price_desc);
         dest.writeString(item_special_instruction);
         dest.writeInt(item_status);
         if (addons_list == null) {

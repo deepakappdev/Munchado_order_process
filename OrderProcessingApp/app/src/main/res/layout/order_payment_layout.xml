@@ -33,6 +33,15 @@
             android:textColor="@color/grey_light"
             android:textSize="@dimen/textSizeXLarge"
             app:textStyle="HelveticaLight" />
+        <com.munchado.orderprocess.ui.widgets.CustomTextView
+            android:id="@+id/text_promocode_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:text="Promocode Discount:    "
+            android:textColor="@color/grey_light"
+            android:textSize="@dimen/textSizeXLarge"
+            app:textStyle="HelveticaLight" />
 
         <com.munchado.orderprocess.ui.widgets.CustomTextView
             android:id="@+id/text_delivery_title"
@@ -100,6 +109,14 @@
             android:textSize="@dimen/textSizeXLarge"
             app:textStyle="HelveticaLight" />
 
+        <com.munchado.orderprocess.ui.widgets.CustomTextView
+            android:id="@+id/text_promocode_discount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:textColor="@color/default_text_color"
+            android:textSize="@dimen/textSizeXLarge"
+            app:textStyle="HelveticaLight" />
         <com.munchado.orderprocess.ui.widgets.CustomTextView
             android:id="@+id/text_delivery"
             android:layout_width="wrap_content"

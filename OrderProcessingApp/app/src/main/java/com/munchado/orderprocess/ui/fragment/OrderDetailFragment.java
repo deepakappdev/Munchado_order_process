@@ -94,6 +94,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     private TextView textPastActivity;
     private TextView textSubtotal;
     private TextView textDealDiscount;
+    private TextView textPromocodeDiscount, textPromocetitle;
     private TextView textDelivery, textDeliverytitle;
     private TextView textTax;
     private TextView textTip, textTiptitle;
@@ -191,6 +192,8 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         layout_instrctions = (LinearLayout) view.findViewById(R.id.special_instruction_layout);
 
         textSubtotal = (TextView) view.findViewById(R.id.text_subtotal);
+        textPromocodeDiscount = (TextView) view.findViewById(R.id.text_promocode_discount);
+        textPromocetitle = (TextView) view.findViewById(R.id.text_promocode_title);
         textinstrctions = (TextView) view.findViewById(R.id.speical_instruction);
         textDealDiscount = (TextView) view.findViewById(R.id.text_deal_discount);
         textDelivery = (TextView) view.findViewById(R.id.text_delivery);
@@ -377,7 +380,10 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
             TextView itemCount = (TextView) view.findViewById(R.id.text_item_count);
             TextView itemPrice = (TextView) view.findViewById(R.id.text_item_price);
 
-            itemName.setText(Utils.decodeHtml(itemList.item_name));
+            if (!StringUtils.isNullOrEmpty(itemList.item_price_desc))
+                itemName.setText(Utils.decodeHtml(itemList.item_name) + " (" + Utils.decodeHtml(itemList.item_price_desc) + ")");
+            else
+                itemName.setText(Utils.decodeHtml(itemList.item_name));
             if (StringUtils.isNullOrEmpty(itemList.item_special_instruction)) {
                 textInstruction.setVisibility(View.GONE);
             } else {
@@ -490,6 +496,11 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     private void showOrderPaymentDetail(final OrderDetailResponseData data, OrderAmountCalculation payment_detail) {
         rootView.findViewById(R.id.layout_order_payment).setVisibility(View.VISIBLE);
         textSubtotal.setText("$" + df.format(Double.valueOf(payment_detail.subtotal)));
+        if (StringUtils.isNullOrEmpty(payment_detail.promocode_discount) || payment_detail.promocode_discount.equalsIgnoreCase("0") || payment_detail.promocode_discount.equalsIgnoreCase("0.00")) {
+            textPromocetitle.setVisibility(View.GONE);
+            textPromocodeDiscount.setVisibility(View.GONE);
+        } else
+            textPromocodeDiscount.setText("$" + df.format(Double.valueOf(payment_detail.promocode_discount)));
         textDealDiscount.setText("$" + df.format(Double.valueOf(payment_detail.discount)));
 
         if (Utils.parseDouble(payment_detail.delivery_charge) == 0)
@@ -602,9 +613,10 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
 
     @Override
     public void onClick(View view) {
-        String currentStatus = response.data.status;
+
         switch (view.getId()) {
             case R.id.text_print:
+                String currentStatus = response.data.status;
                 if (textAction.getVisibility() == View.VISIBLE && textAction.getText().toString().equalsIgnoreCase("CONFIRM") || currentStatus.equalsIgnoreCase("placed")) {
                     clickFrom = PRINT;
                     showProgressBar();
@@ -620,16 +632,17 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                 break;
             case R.id.btn_action:
                 clickFrom = CONFIRM;
+                String currentStatus2 = response.data.status;
                 showProgressBar();
                 String status = "archived";
-                if (currentStatus.equalsIgnoreCase("placed"))
+                if (currentStatus2.equalsIgnoreCase("placed"))
                     status = "confirmed";
-                else if (currentStatus.equalsIgnoreCase("confirmed")) {
+                else if (currentStatus2.equalsIgnoreCase("confirmed")) {
                     if (order_type.equalsIgnoreCase("takeout"))
                         status = "ready";
                     else
                         status = "delivered";
-                } else if (currentStatus.equalsIgnoreCase("arrived"))
+                } else if (currentStatus2.equalsIgnoreCase("arrived"))
                     status = "archived";
                 sent_status = status;
                 RequestController.orderProcess(response.data.id, status, "", "", OrderDetailFragment.this);

@@ -393,7 +393,6 @@ public class StarPrinterUtils {
                     PrinterSetting setting = new PrinterSetting(mActivity);
                     setting.write("", "", "", "", emulation, false);
                 }
-                mActivity.finish();
             }
 
 

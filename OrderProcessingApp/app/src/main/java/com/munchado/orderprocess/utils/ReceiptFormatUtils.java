@@ -43,7 +43,10 @@ public class ReceiptFormatUtils {
 //        LogUtils.d(builder.toString());
         int i = 1;
         for (MyItemList printItemModel : orderDetailResponseData.item_list) {
-            builder.append(getItemPriceData(i, Utils.decodeHtml(printItemModel.item_name), printItemModel.item_qty, Integer.valueOf(printItemModel.item_qty) * Float.valueOf(printItemModel.unit_price) + ""));
+            if (!StringUtils.isNullOrEmpty(printItemModel.item_price_desc))
+                builder.append(getItemPriceData(i, Utils.decodeHtml(printItemModel.item_name) + " (" + Utils.decodeHtml(printItemModel.item_price_desc) + ")", printItemModel.item_qty, Integer.valueOf(printItemModel.item_qty) * Float.valueOf(printItemModel.unit_price) + ""));
+            else
+                builder.append(getItemPriceData(i, Utils.decodeHtml(printItemModel.item_name), printItemModel.item_qty, Integer.valueOf(printItemModel.item_qty) * Float.valueOf(printItemModel.unit_price) + ""));
             int j = 1;
             for (AddonsList addonsListModel : printItemModel.addons_list) {
                 builder.append(getSubItemPriceData(j, Utils.decodeHtml(addonsListModel.addon_name), addonsListModel.addon_quantity, Integer.valueOf(addonsListModel.addon_quantity) * Float.valueOf(addonsListModel.addon_price) + ""));
@@ -55,6 +58,12 @@ public class ReceiptFormatUtils {
         builder.append(seperator);
         builder.append(getAmountCalculation("Subtotal", orderDetailResponseData.order_amount_calculation.subtotal));
         builder.append(getAmountCalculation("Discount", orderDetailResponseData.order_amount_calculation.discount));
+
+        if (StringUtils.isNullOrEmpty(orderDetailResponseData.order_amount_calculation.promocode_discount) || orderDetailResponseData.order_amount_calculation.promocode_discount.equalsIgnoreCase("0") || orderDetailResponseData.order_amount_calculation.promocode_discount.equalsIgnoreCase("0.00")) {
+        } else {
+            builder.append(getAmountCalculation("Promocode Discount", orderDetailResponseData.order_amount_calculation.promocode_discount));
+        }
+
         if (!orderDetailResponseData.order_type.equalsIgnoreCase("takeout"))
             builder.append(getAmountCalculation("Delivery", orderDetailResponseData.order_amount_calculation.delivery_charge));
         builder.append(getAmountCalculation("Tax", orderDetailResponseData.order_amount_calculation.tax_amount));

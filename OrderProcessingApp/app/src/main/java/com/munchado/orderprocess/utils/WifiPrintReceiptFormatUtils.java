@@ -137,7 +137,11 @@ public class WifiPrintReceiptFormatUtils {
                 PdfPCell foodheadingcell_1 = new PdfPCell();
                 PdfPTable foodHeadingTable_1 = new PdfPTable(4);
                 setDefaultTableProperty(foodHeadingTable_1, INNER_WIDTH);
-                PdfPCell foodheadingcell1_1 = getTableCell(Utils.decodeHtml(printItemModel.item_name), Element.ALIGN_LEFT);
+                PdfPCell foodheadingcell1_1 = null;
+                if (!StringUtils.isNullOrEmpty(printItemModel.item_price_desc))
+                    foodheadingcell1_1 = getTableCell(Utils.decodeHtml(printItemModel.item_name) + " (" + Utils.decodeHtml(printItemModel.item_price_desc) + ")", Element.ALIGN_LEFT);
+                else
+                    foodheadingcell1_1 = getTableCell(Utils.decodeHtml(printItemModel.item_name), Element.ALIGN_LEFT);
                 foodheadingcell1_1.setColspan(2);
                 PdfPCell foodheadingcell2_1 = getTableCell("   " + printItemModel.item_qty, Element.ALIGN_LEFT);
                 PdfPCell foodheadingcell3_1 = getTableCell("$ " + formatter.format(Integer.valueOf(printItemModel.item_qty) * Float.valueOf(printItemModel.unit_price)), Element.ALIGN_RIGHT);
@@ -238,7 +242,16 @@ public class WifiPrintReceiptFormatUtils {
                 deliveryCell_2.setBorder(Rectangle.NO_BORDER);
                 deliveryDateTimeTable.addCell(deliveryCell_2);
             }
-
+            // DATA FOR PROMOCODE DISCOUNT
+            if (StringUtils.isNullOrEmpty(orderDetailResponseData.order_amount_calculation.promocode_discount) || orderDetailResponseData.order_amount_calculation.promocode_discount.equalsIgnoreCase("0") || orderDetailResponseData.order_amount_calculation.promocode_discount.equalsIgnoreCase("0.00")) {}else{
+                PdfPCell deliveryCell_2 = new PdfPCell();
+                Paragraph deliveryParagraph_2 = new Paragraph("Promocode Discount: $" + orderDetailResponseData.order_amount_calculation.promocode_discount, contentLargeFont);
+                deliveryParagraph_2.setAlignment(Element.ALIGN_RIGHT);
+                deliveryCell_2.addElement(deliveryParagraph_2);
+                deliveryCell_2.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                deliveryCell_2.setBorder(Rectangle.NO_BORDER);
+                deliveryDateTimeTable.addCell(deliveryCell_2);
+            }
             // DATA FOR Tax
             PdfPCell taxCell = new PdfPCell();
             Paragraph taxParagraph = new Paragraph("Tax: $" + orderDetailResponseData.order_amount_calculation.tax_amount, contentLargeFont);
