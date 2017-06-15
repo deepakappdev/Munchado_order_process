@@ -605,7 +605,6 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         String currentStatus = response.data.status;
         switch (view.getId()) {
             case R.id.text_print:
-                LogUtils.d("========== set printer type : " + PrefUtil.getPrinterType());
                 if (textAction.getVisibility() == View.VISIBLE && textAction.getText().toString().equalsIgnoreCase("CONFIRM") || currentStatus.equalsIgnoreCase("placed")) {
                     clickFrom = PRINT;
                     showProgressBar();
@@ -615,7 +614,6 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                     sent_status = status2;
                     RequestController.orderProcess(response.data.id, status2, "", "", OrderDetailFragment.this);
                 } else {
-
                     sendToPrinter();
                 }
 
@@ -697,7 +695,6 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
 
     private void changeTime(int minutes) {
         try {
-
             date = format.parse(deliveryTakeyoutDateString);
             calendar.setTime(date);
             calendar.add(Calendar.MINUTE, minutes);

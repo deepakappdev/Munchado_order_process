@@ -229,7 +229,10 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 } else if (orderItem.status.equalsIgnoreCase("placed")) {
                     btnAction.setText("CONFIRM");
                     btnAction.setBackgroundResource(R.drawable.green_button);
-                } else if (orderItem.status.equalsIgnoreCase("arrived")) {
+                } else if (orderItem.status.equalsIgnoreCase("arrived") || orderItem.status.equalsIgnoreCase("delivered")) {
+                    btnAction.setText("ARCHIVE");
+                    btnAction.setBackgroundResource(R.drawable.grey_button);
+                } else {
                     btnAction.setText("ARCHIVE");
                     btnAction.setBackgroundResource(R.drawable.grey_button);
                 }
@@ -307,10 +310,14 @@ public class ActiveOrderAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 } else if (orderItem.status.equalsIgnoreCase("placed")) {
                     btnAction.setText("CONFIRM");
                     btnAction.setBackgroundResource(R.drawable.green_button);
-                } else if (orderItem.status.equalsIgnoreCase("arrived")) {// && btnAction.getText().toString().equalsIgnoreCase("READY") {
+                } else if (orderItem.status.equalsIgnoreCase("arrived") || orderItem.status.equalsIgnoreCase("delivered")) {// && btnAction.getText().toString().equalsIgnoreCase("READY") {
+                    btnAction.setText("ARCHIVE");
+                    btnAction.setBackgroundResource(R.drawable.grey_button);
+                } else {
                     btnAction.setText("ARCHIVE");
                     btnAction.setBackgroundResource(R.drawable.grey_button);
                 }
+
             }
         }
     }

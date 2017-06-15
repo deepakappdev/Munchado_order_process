@@ -219,12 +219,13 @@ public class SearchPrinterActivity extends AppCompatActivity implements OnBlueto
                 // Get the device MAC address, which is the last 17 chars in the View
                 String info = ((TextView) v).getText().toString();
                 String address = info.substring(info.length() - 17);
-                mProgressDialog = new ProgressDialog(SearchPrinterActivity.this);
+                if (mProgressDialog == null)
+                    mProgressDialog = new ProgressDialog(SearchPrinterActivity.this);
                 mProgressDialog.setMessage("Communicating...");
                 mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
                 mProgressDialog.setCancelable(false);
                 mProgressDialog.show();
-                new StarPrinterUtils(SearchPrinterActivity.this,mProgressDialog, info, printData);
+                new StarPrinterUtils(SearchPrinterActivity.this, mProgressDialog, info, printData);
             }
 
         }

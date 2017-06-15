@@ -34,6 +34,7 @@ import com.munchado.orderprocess.ui.adapter.DineinArchiveAdapter;
 import com.munchado.orderprocess.ui.fragment.CustomErrorDialogFragment;
 import com.munchado.orderprocess.utils.Constants;
 import com.munchado.orderprocess.utils.DialogUtil;
+import com.munchado.orderprocess.utils.LogUtils;
 import com.munchado.orderprocess.utils.PrefUtil;
 
 import java.lang.reflect.Field;
@@ -203,7 +204,7 @@ public class HomeActivity extends BaseActivity
         try {
             if (upcommingReservationList != null && upcommingReservationList.size() > 0)
                 for (UpcomingReservation item : upcommingReservationList) {
-//                LogUtils.d("========= " + item.status);
+                    LogUtils.d("========= " + item.first_name + "=====" + item.status);
                     if (item.status.equalsIgnoreCase("0")) {
 
                         Uri notification = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
