@@ -3,19 +3,25 @@ package com.munchado.orderprocess.ui.fragment;
 import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
-import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.TextView;
 
+import com.munchado.orderprocess.MyApplication;
 import com.munchado.orderprocess.R;
-import com.munchado.orderprocess.utils.LogUtils;
+import com.munchado.orderprocess.ui.activity.LoginActivity;
+import com.munchado.orderprocess.utils.PrefUtil;
 import com.munchado.orderprocess.utils.StringUtils;
 
 /**
@@ -26,6 +32,8 @@ public class CustomErrorDialogFragment extends DialogFragment {
     private TextView mErrorText, mCloseBtn;
     private String mErrorMsg = "Please try again later!";
     private String mButtonText;
+    private boolean isLogin;
+    private static Activity activity;
 
     public CustomErrorDialogFragment() {
     }
@@ -37,6 +45,17 @@ public class CustomErrorDialogFragment extends DialogFragment {
         f.setArguments(args);
         return f;
     }
+
+    public static CustomErrorDialogFragment newInstance(Activity activi, String message, boolean loginAgain) {
+        activity = activi;
+        CustomErrorDialogFragment f = new CustomErrorDialogFragment();
+        Bundle args = new Bundle();
+        args.putString("message", message);
+        args.putBoolean("loginAgain", loginAgain);
+        f.setArguments(args);
+        return f;
+    }
+
     public static CustomErrorDialogFragment newInstance(String message, String buttonText) {
         CustomErrorDialogFragment f = new CustomErrorDialogFragment();
         Bundle args = new Bundle();
@@ -59,11 +78,21 @@ public class CustomErrorDialogFragment extends DialogFragment {
         scaleDown.start();
     }
 
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        getDialog().setCanceledOnTouchOutside(false);
+        return super.onCreateView(inflater, container, savedInstanceState);
+    }
+
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         final Dialog dialog = new Dialog(getActivity());
         mErrorMsg = getArguments().getString("message");
         mButtonText = getArguments().getString("buttonText");
+        if (getArguments().containsKey("loginAgain")) {
+            isLogin = getArguments().getBoolean("loginAgain");
+        }
 
         dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
         dialog.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -72,7 +101,7 @@ public class CustomErrorDialogFragment extends DialogFragment {
         dialog.show();
         mErrorText = (TextView) dialog.findViewById(R.id.mErrortext);
         mCloseBtn = (TextView) dialog.findViewById(R.id.mCloseBtn);
-        if(!StringUtils.isNullOrEmpty(mButtonText))
+        if (!StringUtils.isNullOrEmpty(mButtonText))
             mCloseBtn.setText(mButtonText);
         mErrorText.setText(mErrorMsg);
         mCloseBtn.setOnClickListener(new View.OnClickListener() {
@@ -88,6 +117,14 @@ public class CustomErrorDialogFragment extends DialogFragment {
                     @Override
                     public void onAnimationEnd(Animator animation) {
                         dismiss();
+                        if (isLogin) {
+                            Intent i = new Intent(activity, LoginActivity.class);
+                            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            PrefUtil.clearAllData();
+                            activity.startActivity(i);
+                            activity.finish();
+                            MyApplication.isDialogShown = false;
+                        }
                     }
 
                     @Override

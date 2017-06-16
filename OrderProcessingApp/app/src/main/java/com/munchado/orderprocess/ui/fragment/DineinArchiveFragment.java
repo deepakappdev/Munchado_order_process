@@ -21,6 +21,8 @@ import com.munchado.orderprocess.ui.activity.BaseActivity;
 import com.munchado.orderprocess.ui.activity.HomeActivity;
 import com.munchado.orderprocess.ui.adapter.DineinArchiveAdapter;
 import com.munchado.orderprocess.utils.CustomLinearLayoutManager;
+import com.munchado.orderprocess.utils.StringUtils;
+import com.munchado.orderprocess.utils.Utils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -108,7 +110,11 @@ public class DineinArchiveFragment extends BaseFragment implements View.OnClickL
 
     @Override
     public void error(NetworkError volleyError) {
-
+        if (volleyError != null && !StringUtils.isNullOrEmpty(volleyError.getLocalizedMessage()))
+            if (volleyError.getLocalizedMessage().equalsIgnoreCase("Invalid token"))
+            {
+                Utils.showLogin(getActivity());
+            }
     }
 
     @Override

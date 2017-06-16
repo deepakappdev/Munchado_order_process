@@ -288,6 +288,11 @@ public class DineInDetailFragment extends BaseFragment implements View.OnClickLi
     @Override
     public void error(NetworkError volleyError) {
         hideProgressBar();
+        if (volleyError != null && !StringUtils.isNullOrEmpty(volleyError.getLocalizedMessage()))
+            if (volleyError.getLocalizedMessage().equalsIgnoreCase("Invalid token"))
+            {
+                Utils.showLogin(getActivity());
+            }
     }
 
     @Override

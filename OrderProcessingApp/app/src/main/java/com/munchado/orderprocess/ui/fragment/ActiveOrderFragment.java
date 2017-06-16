@@ -31,6 +31,7 @@ import com.munchado.orderprocess.ui.activity.BaseActivity;
 import com.munchado.orderprocess.ui.adapter.ActiveOrderAdapter;
 import com.munchado.orderprocess.utils.LogUtils;
 import com.munchado.orderprocess.utils.StringUtils;
+import com.munchado.orderprocess.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,7 +88,11 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
 
     @Override
     public void error(NetworkError volleyError) {
-
+        if (volleyError != null && !StringUtils.isNullOrEmpty(volleyError.getLocalizedMessage()))
+            if (volleyError.getLocalizedMessage().equalsIgnoreCase("Invalid token"))
+            {
+                Utils.showLogin(getActivity());
+            }
     }
 
     @Override

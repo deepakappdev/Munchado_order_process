@@ -36,6 +36,8 @@ import com.munchado.orderprocess.utils.Constants;
 import com.munchado.orderprocess.utils.DialogUtil;
 import com.munchado.orderprocess.utils.LogUtils;
 import com.munchado.orderprocess.utils.PrefUtil;
+import com.munchado.orderprocess.utils.StringUtils;
+import com.munchado.orderprocess.utils.Utils;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -158,7 +160,10 @@ public class HomeActivity extends BaseActivity
         RequestController.logout("", "", new RequestCallback() {
             @Override
             public void error(NetworkError volleyError) {
-
+                if (volleyError != null && !StringUtils.isNullOrEmpty(volleyError.getLocalizedMessage())) {
+                    if (volleyError.getLocalizedMessage().equalsIgnoreCase("Invalid token"))
+                        Utils.showLogin(HomeActivity.this);
+                }
             }
 
             @Override

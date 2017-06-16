@@ -19,8 +19,10 @@ import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.ui.fragment.CustomErrorDialogFragment;
 import com.munchado.orderprocess.utils.LogUtils;
+import com.munchado.orderprocess.utils.MunchadoUtils;
 import com.munchado.orderprocess.utils.PrefUtil;
 import com.munchado.orderprocess.utils.StringUtils;
+import com.munchado.orderprocess.utils.Utils;
 
 public class SplashActivity extends AppCompatActivity {
     // Splash screen timer
@@ -34,7 +36,6 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
 
-
         try {
             PackageInfo pInfo = getPackageManager().getPackageInfo(getPackageName(), 0);
             versionCode = pInfo.versionCode;
@@ -44,20 +45,29 @@ public class SplashActivity extends AppCompatActivity {
         int savedVersionCode = PrefUtil.getVersionCode();
         if (versionCode >= savedVersionCode)
             doWorkAfterUpdate();
-        if (!StringUtils.isNullOrEmpty(PrefUtil.getToken()))
-            checkUpdate(versionCode + "");
-        else
+//        if (!StringUtils.isNullOrEmpty(PrefUtil.getToken()))
+//            checkUpdate(versionCode + "");
+//        else
+        if (MunchadoUtils.isNetworkAvailable(this)) {
             getNewToken();
+        } else {
+            CustomErrorDialogFragment errorDialogFragment = CustomErrorDialogFragment.newInstance(getResources().getString(R.string.network_error));
+            errorDialogFragment.show(getSupportFragmentManager(), "Error");
+        }
+
     }
 
     private void getNewToken() {
         RequestController.createNewAccessToken(new RequestCallback() {
             @Override
             public void error(NetworkError networkError) {
-                if (networkError != null && !StringUtils.isNullOrEmpty(networkError.getLocalizedMessage())) {
-                    CustomErrorDialogFragment errorDialogFragment = CustomErrorDialogFragment.newInstance(networkError.getLocalizedMessage());
-                    errorDialogFragment.show(getSupportFragmentManager(), "Error");
-                }
+                LogUtils.d("============= token error");
+                Utils.showLogin(SplashActivity.this);
+//                if (networkError != null && !StringUtils.isNullOrEmpty(networkError.getLocalizedMessage())) {
+//                    CustomErrorDialogFragment errorDialogFragment = CustomErrorDialogFragment.newInstance(networkError.getLocalizedMessage());
+//                    errorDialogFragment.show(getSupportFragmentManager(), "Error");
+//                }
+//                getNewToken();
             }
 
             @Override

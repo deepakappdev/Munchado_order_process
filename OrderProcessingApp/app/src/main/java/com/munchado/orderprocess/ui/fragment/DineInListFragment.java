@@ -28,6 +28,7 @@ import com.munchado.orderprocess.utils.Constants;
 import com.munchado.orderprocess.utils.LogUtils;
 import com.munchado.orderprocess.utils.PrefUtil;
 import com.munchado.orderprocess.utils.StringUtils;
+import com.munchado.orderprocess.utils.Utils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -149,7 +150,12 @@ public class DineInListFragment extends BaseFragment implements View.OnClickList
     RequestCallback mRequestCallback = new RequestCallback() {
         @Override
         public void error(NetworkError volleyError) {
-
+            if (mHomeActivity == null) return;
+            if (volleyError != null && !StringUtils.isNullOrEmpty(volleyError.getLocalizedMessage()))
+                if (volleyError.getLocalizedMessage().equalsIgnoreCase("Invalid token"))
+                {
+                    Utils.showLogin(mHomeActivity);
+                }
         }
 
         @Override
