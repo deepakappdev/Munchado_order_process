@@ -235,7 +235,19 @@ public class WifiPrintReceiptFormatUtils {
             // DATA FOR DELIVERY FEE
             if (!orderDetailResponseData.order_type.equalsIgnoreCase("takeout")) {
                 PdfPCell deliveryCell_2 = new PdfPCell();
-                Paragraph deliveryParagraph_2 = new Paragraph("Subtotal: $" + orderDetailResponseData.order_amount_calculation.delivery_charge, contentLargeFont);
+                Paragraph deliveryParagraph_2 = new Paragraph("Delivery: $" + orderDetailResponseData.order_amount_calculation.delivery_charge, contentLargeFont);
+                deliveryParagraph_2.setAlignment(Element.ALIGN_RIGHT);
+                deliveryCell_2.addElement(deliveryParagraph_2);
+                deliveryCell_2.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                deliveryCell_2.setBorder(Rectangle.NO_BORDER);
+                deliveryDateTimeTable.addCell(deliveryCell_2);
+            }
+            // DATA FOR DISCOUNT FEE
+            {
+                PdfPCell deliveryCell_2 = new PdfPCell();
+                String discount = "";
+
+                Paragraph deliveryParagraph_2 = new Paragraph("Discount: $" + formatZeroValue(orderDetailResponseData.order_amount_calculation.discount), contentLargeFont);
                 deliveryParagraph_2.setAlignment(Element.ALIGN_RIGHT);
                 deliveryCell_2.addElement(deliveryParagraph_2);
                 deliveryCell_2.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -243,7 +255,8 @@ public class WifiPrintReceiptFormatUtils {
                 deliveryDateTimeTable.addCell(deliveryCell_2);
             }
             // DATA FOR PROMOCODE DISCOUNT
-            if (StringUtils.isNullOrEmpty(orderDetailResponseData.order_amount_calculation.promocode_discount) || orderDetailResponseData.order_amount_calculation.promocode_discount.equalsIgnoreCase("0") || orderDetailResponseData.order_amount_calculation.promocode_discount.equalsIgnoreCase("0.00")) {}else{
+            if (StringUtils.isNullOrEmpty(orderDetailResponseData.order_amount_calculation.promocode_discount) || orderDetailResponseData.order_amount_calculation.promocode_discount.equalsIgnoreCase("0") || orderDetailResponseData.order_amount_calculation.promocode_discount.equalsIgnoreCase("0.00")) {
+            } else {
                 PdfPCell deliveryCell_2 = new PdfPCell();
                 Paragraph deliveryParagraph_2 = new Paragraph("Promocode Discount: $" + orderDetailResponseData.order_amount_calculation.promocode_discount, contentLargeFont);
                 deliveryParagraph_2.setAlignment(Element.ALIGN_RIGHT);
@@ -262,13 +275,15 @@ public class WifiPrintReceiptFormatUtils {
             deliveryDateTimeTable.addCell(taxCell);
 
             // DATA FOR Tip
-            PdfPCell tipCell = new PdfPCell();
-            Paragraph tipParagraph = new Paragraph("Tip: $" + orderDetailResponseData.order_amount_calculation.tip_amount, contentLargeFont);
-            tipParagraph.setAlignment(Element.ALIGN_RIGHT);
-            tipCell.addElement(tipParagraph);
-            tipCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-            tipCell.setBorder(Rectangle.NO_BORDER);
-            deliveryDateTimeTable.addCell(tipCell);
+            if (!orderDetailResponseData.order_type.equalsIgnoreCase("takeout")) {
+                PdfPCell tipCell = new PdfPCell();
+                Paragraph tipParagraph = new Paragraph("Tip: $" + orderDetailResponseData.order_amount_calculation.tip_amount, contentLargeFont);
+                tipParagraph.setAlignment(Element.ALIGN_RIGHT);
+                tipCell.addElement(tipParagraph);
+                tipCell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                tipCell.setBorder(Rectangle.NO_BORDER);
+                deliveryDateTimeTable.addCell(tipCell);
+            }
 
             // DATA FOR total
             PdfPCell totalCell = new PdfPCell();
@@ -318,9 +333,18 @@ public class WifiPrintReceiptFormatUtils {
             if (!orderDetailResponseData.order_type.equalsIgnoreCase("takeout")) {
                 deliveryDateTimeTable.addCell(userphoneCell);
                 // DATA FOR USER address : TOM
-                PdfPCell useraddressCell = getGenericTableCell(orderDetailResponseData.my_delivery_detail.address + "\n" + orderDetailResponseData.my_delivery_detail.city + " - " + orderDetailResponseData.my_delivery_detail.zipcode, Element.ALIGN_LEFT, contentLargeFont);
-                useraddressCell.setPaddingBottom(25.0f);
-                deliveryDateTimeTable.addCell(useraddressCell);
+//                if(orderDetailResponseData.my_delivery_detail.address.contains(orderDetailResponseData.my_delivery_detail.city) && orderDetailResponseData.my_delivery_detail.address.contains(orderDetailResponseData.my_delivery_detail.zipcode)){
+//                    PdfPCell useraddressCell = getGenericTableCell(orderDetailResponseData.my_delivery_detail.address + "\n" + orderDetailResponseData.my_delivery_detail.city + " - " + orderDetailResponseData.my_delivery_detail.zipcode, Element.ALIGN_LEFT, contentLargeFont);
+//                    useraddressCell.setPaddingBottom(25.0f);
+//                    deliveryDateTimeTable.addCell(useraddressCell);
+//                }
+//                else
+                {
+                    PdfPCell useraddressCell = getGenericTableCell(orderDetailResponseData.my_delivery_detail.address, Element.ALIGN_LEFT, contentLargeFont);
+                    useraddressCell.setPaddingBottom(25.0f);
+                    deliveryDateTimeTable.addCell(useraddressCell);
+                }
+
                 deliveryDateTimeTable.addCell(blankCell);
             } else {
                 userphoneCell.setPaddingBottom(25.0f);
@@ -362,6 +386,30 @@ public class WifiPrintReceiptFormatUtils {
             e.printStackTrace();
             return null;
         }
+    }
+
+    private String formatZeroValue(String amount) {
+        if (!amount.contains(".")) {
+            amount = amount + ".00";
+            float value = Float.valueOf(amount);
+            if ((int) value == 0) {
+                amount = "0.00";
+            }
+        } else {
+            float value = Float.valueOf(amount);
+//            if ((int) value < 10) {
+//                amount = "0" + amount;
+//            }
+
+            if ((int) value == 0) {
+
+                int retval = Float.compare(value, 0.00f);
+                if (retval > 0) {
+                } else
+                    amount = "0.00";
+            }
+        }
+        return amount;
     }
 
     private void setDefaultTableProperty(PdfPTable outerTable, float width) {

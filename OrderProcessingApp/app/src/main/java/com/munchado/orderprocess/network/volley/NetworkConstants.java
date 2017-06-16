@@ -6,8 +6,8 @@ package com.munchado.orderprocess.network.volley;
  */
 public class NetworkConstants {
 //            public static final String HTTP_BASE_URL = "http://api.munchado.in/";// QC
-//    public static final String HTTP_BASE_URL = "https://api.munchado.com/"; // LIVE
-    public static final String HTTP_BASE_URL = "https://demoapi.munchado.com/";// DEMO
+    public static final String HTTP_BASE_URL = "https://api.munchado.com/"; // LIVE
+//    public static final String HTTP_BASE_URL = "https://demoapi.munchado.com/";// DEMO
     public static final String TOKEN_URL = HTTP_BASE_URL + "api/dashboard/token?mob=true";
     public static final String LOGIN_URL = HTTP_BASE_URL + "api/dashboard/login?mob=true";
     public static final String LOGOUT_URL = HTTP_BASE_URL + "api/dashboard/logout?mob=true";
