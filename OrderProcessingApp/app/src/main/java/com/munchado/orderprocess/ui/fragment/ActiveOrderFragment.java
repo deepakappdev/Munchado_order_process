@@ -83,14 +83,14 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         mLinearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLinearLayoutManager);
+        textActiveOrderCount.setText("ACTIVE ORDERS");
     }
 
 
     @Override
     public void error(NetworkError volleyError) {
         if (volleyError != null && !StringUtils.isNullOrEmpty(volleyError.getLocalizedMessage()))
-            if (volleyError.getLocalizedMessage().equalsIgnoreCase("Invalid token"))
-            {
+            if (volleyError.getLocalizedMessage().equalsIgnoreCase("Invalid token") || volleyError.getLocalizedMessage().equalsIgnoreCase("Credential not found")) {
                 Utils.showLogin(getActivity());
             }
     }

@@ -110,8 +110,8 @@ public class StarPrinterUtils {
                 addItem(info);
             }
 
-            if (modelName.startsWith("Star Micronics") || modelName.contains("Star Micronics"))
-                showModelDialog();
+//            if (modelName.startsWith("Star Micronics") || modelName.contains("Star Micronics"))
+            showModelDialog();
             if (mProgressDialog != null && mProgressDialog.isShowing()) {
                 mProgressDialog.dismiss();
             }
@@ -147,7 +147,7 @@ public class StarPrinterUtils {
     }
 
     private void showModelDialog() {
-        if (!StringUtils.isNullOrEmpty(PrefUtil.getBluetoothModel()) && PrefUtil.getBluetoothModelCode() != ModelCapability.NONE) {
+        if (!StringUtils.isNullOrEmpty(PrefUtil.getBluetoothModel()) && PrefUtil.getBluetoothModelCode() != ModelCapability.NONE && !StringUtils.isNullOrEmpty(modelName)) {
             int model = PrefUtil.getBluetoothModelCode();
             mPortSettings = ModelCapability.getPortSettings(model);
             emulation = ModelCapability.getEmulation(model);

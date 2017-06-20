@@ -161,7 +161,7 @@ public class HomeActivity extends BaseActivity
             @Override
             public void error(NetworkError volleyError) {
                 if (volleyError != null && !StringUtils.isNullOrEmpty(volleyError.getLocalizedMessage())) {
-                    if (volleyError.getLocalizedMessage().equalsIgnoreCase("Invalid token"))
+                    if (volleyError.getLocalizedMessage().equalsIgnoreCase("Invalid token") || volleyError.getLocalizedMessage().equalsIgnoreCase("Credential not found"))
                         Utils.showLogin(HomeActivity.this);
                 }
             }
@@ -171,7 +171,11 @@ public class HomeActivity extends BaseActivity
                 DialogUtil.hideProgressDialog();
                 StatusResponse mStatusResponse = (StatusResponse) response;
                 if (mStatusResponse.data.message) {
+                    String username = PrefUtil.getUsername();
+                    String password = PrefUtil.getPassword();
                     PrefUtil.clearAllData();
+                    PrefUtil.putUsername(username);
+                    PrefUtil.putPassword(password);
                     Intent i = new Intent(HomeActivity.this, PubnubService.class);
                     i.putExtra(Constants.PARAM_PUBNUB_ACTION, Constants.PARAM_PUBNUB_UNSUBSCRIBE);
                     startService(i);

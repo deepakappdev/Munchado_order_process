@@ -111,7 +111,7 @@ public class DineinArchiveFragment extends BaseFragment implements View.OnClickL
     @Override
     public void error(NetworkError volleyError) {
         if (volleyError != null && !StringUtils.isNullOrEmpty(volleyError.getLocalizedMessage()))
-            if (volleyError.getLocalizedMessage().equalsIgnoreCase("Invalid token"))
+            if (volleyError.getLocalizedMessage().equalsIgnoreCase("Invalid token") || volleyError.getLocalizedMessage().equalsIgnoreCase("Credential not found"))
             {
                 Utils.showLogin(getActivity());
             }

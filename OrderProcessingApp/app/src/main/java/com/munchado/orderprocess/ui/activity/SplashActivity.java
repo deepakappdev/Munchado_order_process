@@ -22,7 +22,6 @@ import com.munchado.orderprocess.utils.LogUtils;
 import com.munchado.orderprocess.utils.MunchadoUtils;
 import com.munchado.orderprocess.utils.PrefUtil;
 import com.munchado.orderprocess.utils.StringUtils;
-import com.munchado.orderprocess.utils.Utils;
 
 public class SplashActivity extends AppCompatActivity {
     // Splash screen timer
@@ -43,17 +42,26 @@ public class SplashActivity extends AppCompatActivity {
             e.printStackTrace();
         }
         int savedVersionCode = PrefUtil.getVersionCode();
+
         if (versionCode >= savedVersionCode)
             doWorkAfterUpdate();
-//        if (!StringUtils.isNullOrEmpty(PrefUtil.getToken()))
-//            checkUpdate(versionCode + "");
-//        else
-        if (MunchadoUtils.isNetworkAvailable(this)) {
-            getNewToken();
+
+        if (!StringUtils.isNullOrEmpty(PrefUtil.getToken())) {
+            if (MunchadoUtils.isNetworkAvailable(this)) {
+                checkUpdate(versionCode + "");
+            } else {
+                CustomErrorDialogFragment errorDialogFragment = CustomErrorDialogFragment.newInstance(getResources().getString(R.string.network_error));
+                errorDialogFragment.show(getSupportFragmentManager(), "Error");
+            }
         } else {
-            CustomErrorDialogFragment errorDialogFragment = CustomErrorDialogFragment.newInstance(getResources().getString(R.string.network_error));
-            errorDialogFragment.show(getSupportFragmentManager(), "Error");
+            if (MunchadoUtils.isNetworkAvailable(this)) {
+                getNewToken();
+            } else {
+                CustomErrorDialogFragment errorDialogFragment = CustomErrorDialogFragment.newInstance(getResources().getString(R.string.network_error));
+                errorDialogFragment.show(getSupportFragmentManager(), "Error");
+            }
         }
+
 
     }
 
@@ -62,12 +70,8 @@ public class SplashActivity extends AppCompatActivity {
             @Override
             public void error(NetworkError networkError) {
                 LogUtils.d("============= token error");
-                Utils.showLogin(SplashActivity.this);
-//                if (networkError != null && !StringUtils.isNullOrEmpty(networkError.getLocalizedMessage())) {
-//                    CustomErrorDialogFragment errorDialogFragment = CustomErrorDialogFragment.newInstance(networkError.getLocalizedMessage());
-//                    errorDialogFragment.show(getSupportFragmentManager(), "Error");
-//                }
-//                getNewToken();
+                PrefUtil.setLogin(false);
+                gotoHome();
             }
 
             @Override
@@ -84,7 +88,9 @@ public class SplashActivity extends AppCompatActivity {
         RequestController.getUpdateApp(version, new RequestCallback() {
             @Override
             public void error(NetworkError volleyError) {
-
+//                getNewToken();
+                PrefUtil.setLogin(false);
+                gotoHome();
             }
 
             @Override
@@ -143,6 +149,7 @@ public class SplashActivity extends AppCompatActivity {
         }, SPLASH_TIME_OUT);
     }
 
+
     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
@@ -152,17 +159,6 @@ public class SplashActivity extends AppCompatActivity {
                     if (upgradeData != null) {
                         dialog.dismiss();
                         gotoHome();
-//                        if (PrefUtil.isLogin()) {
-//                            Intent i = new Intent(SplashActivity.this, HomeActivity.class);
-//                            startActivity(i);
-//                        } else {
-//                            Intent i = new Intent(SplashActivity.this, LoginActivity.class);
-//                            startActivity(i);
-//                        }
-//                        Intent webIntent = new Intent(Intent.ACTION_VIEW,
-//                                Uri.parse("https://play.google.com/store/apps/details?id=" + getPackageName()));
-//                        startActivity(webIntent);
-//                        finish();
                         dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
                         DownloadManager.Request request = new DownloadManager.Request(
                                 Uri.parse(upgradeData.data.apk_link));
@@ -188,7 +184,11 @@ public class SplashActivity extends AppCompatActivity {
 
     private void doWorkAfterUpdate() {
         if (PrefUtil.getUpgradeCleanData()) {
+            String username = PrefUtil.getUsername();
+            String password = PrefUtil.getPassword();
             PrefUtil.clearAllData();
+            PrefUtil.putUsername(username);
+            PrefUtil.putPassword(password);
         }
         PrefUtil.setUpgradeDisplayCount(0);
         PrefUtil.setUpgradeType("");

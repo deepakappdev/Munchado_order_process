@@ -152,7 +152,7 @@ public class DineInListFragment extends BaseFragment implements View.OnClickList
         public void error(NetworkError volleyError) {
             if (mHomeActivity == null) return;
             if (volleyError != null && !StringUtils.isNullOrEmpty(volleyError.getLocalizedMessage()))
-                if (volleyError.getLocalizedMessage().equalsIgnoreCase("Invalid token"))
+                if (volleyError.getLocalizedMessage().equalsIgnoreCase("Invalid token") || volleyError.getLocalizedMessage().equalsIgnoreCase("Credential not found"))
                 {
                     Utils.showLogin(mHomeActivity);
                 }

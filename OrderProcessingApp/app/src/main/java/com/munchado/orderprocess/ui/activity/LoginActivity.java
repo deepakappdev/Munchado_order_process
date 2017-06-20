@@ -142,11 +142,18 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         RequestController.login(mEmail.getText().toString(), mPassword.getText().toString(), new RequestCallback() {
             @Override
             public void error(NetworkError volleyError) {
-                DialogUtil.hideProgressDialog();
+
                 if (volleyError != null && !StringUtils.isNullOrEmpty(volleyError.getLocalizedMessage())) {
-                    CustomErrorDialogFragment errorDialogFragment = CustomErrorDialogFragment.newInstance(volleyError.getLocalizedMessage());
-                    errorDialogFragment.show(getSupportFragmentManager(), "Error");
+                    if (volleyError.getLocalizedMessage().equalsIgnoreCase("Invalid token") || volleyError.getLocalizedMessage().equalsIgnoreCase("Credential not found")) {
+                        PrefUtil.putToken("");// clear token since we will get new one.
+                        getNewToken();
+                    } else {
+                        DialogUtil.hideProgressDialog();
+                        CustomErrorDialogFragment errorDialogFragment = CustomErrorDialogFragment.newInstance(volleyError.getLocalizedMessage());
+                        errorDialogFragment.show(getSupportFragmentManager(), "Error");
+                    }
                 }
+
             }
 
             @Override
@@ -157,6 +164,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     PrefUtil.putString(Constants.PREF_USER_ID, mStatusResponse.data.restaurant_id);//58285
 
                     PrefUtil.setLogin(true);
+                    PrefUtil.putUsername(mEmail.getText().toString());
+                    PrefUtil.putPassword(mPassword.getText().toString());
                     startActivity(new Intent(LoginActivity.this, HomeActivity.class));
                     finish();
                 } else {

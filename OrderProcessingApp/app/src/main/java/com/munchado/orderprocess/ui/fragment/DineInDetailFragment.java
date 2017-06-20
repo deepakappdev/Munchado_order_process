@@ -289,7 +289,7 @@ public class DineInDetailFragment extends BaseFragment implements View.OnClickLi
     public void error(NetworkError volleyError) {
         hideProgressBar();
         if (volleyError != null && !StringUtils.isNullOrEmpty(volleyError.getLocalizedMessage()))
-            if (volleyError.getLocalizedMessage().equalsIgnoreCase("Invalid token"))
+            if (volleyError.getLocalizedMessage().equalsIgnoreCase("Invalid token") || volleyError.getLocalizedMessage().equalsIgnoreCase("Credential not found"))
             {
                 Utils.showLogin(getActivity());
             }

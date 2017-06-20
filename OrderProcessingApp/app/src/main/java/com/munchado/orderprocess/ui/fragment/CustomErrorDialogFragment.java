@@ -120,7 +120,11 @@ public class CustomErrorDialogFragment extends DialogFragment {
                         if (isLogin) {
                             Intent i = new Intent(activity, LoginActivity.class);
                             i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                            String username = PrefUtil.getUsername();
+                            String password = PrefUtil.getPassword();
                             PrefUtil.clearAllData();
+                            PrefUtil.putUsername(username);
+                            PrefUtil.putPassword(password);
                             activity.startActivity(i);
                             activity.finish();
                             MyApplication.isDialogShown = false;
