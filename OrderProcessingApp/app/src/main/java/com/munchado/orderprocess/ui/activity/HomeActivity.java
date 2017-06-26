@@ -1,13 +1,21 @@
 package com.munchado.orderprocess.ui.activity;
 
+import android.Manifest;
+import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Typeface;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.NavigationView;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
@@ -19,10 +27,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.munchado.orderprocess.R;
 import com.munchado.orderprocess.common.FRAGMENTS;
+import com.munchado.orderprocess.model.archiveorder.AllOrderItem;
+import com.munchado.orderprocess.model.archiveorder.AllOrderResponse;
 import com.munchado.orderprocess.model.dinein.ArchiveReservation;
 import com.munchado.orderprocess.model.dinein.UpcomingReservation;
 import com.munchado.orderprocess.model.login.StatusResponse;
@@ -33,17 +46,25 @@ import com.munchado.orderprocess.notification.PubnubService;
 import com.munchado.orderprocess.ui.adapter.DineinArchiveAdapter;
 import com.munchado.orderprocess.ui.fragment.CustomErrorDialogFragment;
 import com.munchado.orderprocess.utils.Constants;
+import com.munchado.orderprocess.utils.DateUtils;
 import com.munchado.orderprocess.utils.DialogUtil;
 import com.munchado.orderprocess.utils.LogUtils;
 import com.munchado.orderprocess.utils.PrefUtil;
 import com.munchado.orderprocess.utils.StringUtils;
 import com.munchado.orderprocess.utils.Utils;
+import com.munchado.orderprocess.utils.WifiPrintReceiptFormatUtils;
 
+import java.io.File;
 import java.lang.reflect.Field;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
+
+import static com.munchado.orderprocess.utils.DateTimeUtils.FORMAT_YYYY_MM_DD;
 
 public class HomeActivity extends BaseActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -51,11 +72,16 @@ public class HomeActivity extends BaseActivity
     PowerManager.WakeLock mWakeLock;
     private final ArrayList<View> mMenuItems = new ArrayList<>();
     public List<UpcomingReservation> upcommingReservationList = new ArrayList<>();
-    ;
     public List<ArchiveReservation> archiveReservationList = new ArrayList<>();
-
     public DineinArchiveAdapter mDineinArchiveAdapter;
     boolean isFirst;
+    private int mYear, mMonth, mDay;
+    String from_date_str, to_date_str, from_old_date_str, to_old_date_str;
+    private Button btn_from, btn_to, btn_submit;
+    Calendar calendar = Calendar.getInstance();
+    SimpleDateFormat sdf = new SimpleDateFormat(FORMAT_YYYY_MM_DD);
+    private List<AllOrderItem> allOrderItemList;
+    public static final int REQUEST_EXTERNAL_PERMISSION_CODE = 666;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +135,7 @@ public class HomeActivity extends BaseActivity
 
         navigationView.setNavigationItemSelectedListener(this);
     }
+
 
     private void keepScreenOn() {
         final PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
@@ -266,5 +293,173 @@ public class HomeActivity extends BaseActivity
         if (this.mWakeLock != null)
             this.mWakeLock.release();
         super.onDestroy();
+    }
+
+    public void showDownloadDialog() {
+
+        final Dialog dialog = new Dialog(HomeActivity.this);
+        dialog.setContentView(R.layout.dialog_order_filter);
+        dialog.setCancelable(false);
+        dialog.show();
+
+        btn_from = (Button) dialog.findViewById(R.id.btn_from);
+        btn_to = (Button) dialog.findViewById(R.id.btn_to);
+        btn_submit = (Button) dialog.findViewById(R.id.btn_submit);
+        Button btn_download = (Button) dialog.findViewById(R.id.btn_download);
+        TextView text_cancel = (TextView) dialog.findViewById(R.id.text_cancel);
+        from_old_date_str = "";
+        to_old_date_str = "";
+        setDate(btn_from);
+        setDate(btn_to);
+        // if decline button is clicked, close the custom dialog
+        btn_to.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mYear = calendar.get(Calendar.YEAR);
+                mMonth = calendar.get(Calendar.MONTH);
+                mDay = calendar.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog dialog1 = new DatePickerDialog(HomeActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+
+                                btn_to.setText(StringUtils.formatSingleDigit(dayOfMonth) + "-" + StringUtils.formatSingleDigit(monthOfYear + 1) + "-" + year);
+                                to_date_str = year + "-" + StringUtils.formatSingleDigit(monthOfYear + 1) + "-" + StringUtils.formatSingleDigit(dayOfMonth);
+                            }
+                        }, mYear, mMonth, mDay);
+                dialog1.getDatePicker().setMaxDate(System.currentTimeMillis() - TimeUnit.DAYS.toMillis(1));
+                dialog1.show();
+            }
+        });
+        btn_from.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mYear = calendar.get(Calendar.YEAR);
+                mMonth = calendar.get(Calendar.MONTH);
+                mDay = calendar.get(Calendar.DAY_OF_MONTH);
+                DatePickerDialog dialog1 = new DatePickerDialog(HomeActivity.this,
+                        new DatePickerDialog.OnDateSetListener() {
+
+                            @Override
+                            public void onDateSet(DatePicker view, int year,
+                                                  int monthOfYear, int dayOfMonth) {
+
+
+                                btn_from.setText(StringUtils.formatSingleDigit(dayOfMonth) + "-" + StringUtils.formatSingleDigit(monthOfYear + 1) + "-" + year);
+                                from_date_str = year + "-" + StringUtils.formatSingleDigit(monthOfYear + 1) + "-" + StringUtils.formatSingleDigit(dayOfMonth);
+                            }
+                        }, mYear, mMonth, mDay);
+                dialog1.getDatePicker().setMaxDate(System.currentTimeMillis() - TimeUnit.DAYS.toMillis(1));
+                dialog1.show();
+            }
+        });
+        btn_submit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                LogUtils.d("===== " + from_date_str + " is before " + to_date_str + " === " + DateUtils.isBeforeDay(from_date_str, to_date_str));
+                if (!DateUtils.isBeforeDay(from_date_str, to_date_str)) {
+                    Toast.makeText(HomeActivity.this, "Please select valid date.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                DialogUtil.showProgressDialog(HomeActivity.this);
+                RequestController.getAllOrder(HomeActivity.this, from_date_str, to_date_str, new RequestCallback() {
+                    @Override
+                    public void error(NetworkError volleyError) {
+                        DialogUtil.hideProgressDialog();
+                        from_old_date_str = from_date_str;
+                        to_old_date_str = to_date_str;
+                    }
+
+                    @Override
+                    public void success(Object obj) {
+                        DialogUtil.hideProgressDialog();
+                        AllOrderResponse response = (AllOrderResponse) obj;
+                        allOrderItemList = response.data.orders;
+                        from_old_date_str = from_date_str;
+                        to_old_date_str = to_date_str;
+//                        LogUtils.d("============ list size : " + allOrderItemList.size());
+                    }
+                });
+            }
+        });
+        btn_download.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (StringUtils.isNullOrEmpty(allOrderItemList)) {
+                    if (!StringUtils.isNullOrEmpty(from_old_date_str) && !StringUtils.isNullOrEmpty(to_old_date_str)) {
+                        if (!from_old_date_str.equalsIgnoreCase(from_date_str) || !to_old_date_str.equalsIgnoreCase(to_date_str)) {
+                            Toast.makeText(HomeActivity.this, "Please tap \"Submit\" button.", Toast.LENGTH_SHORT).show();
+                        } else
+                            Toast.makeText(HomeActivity.this, "No records found between " + btn_from.getText() + " and " + btn_to.getText(), Toast.LENGTH_SHORT).show();
+                    } else if (StringUtils.isNullOrEmpty(from_old_date_str) || StringUtils.isNullOrEmpty(to_old_date_str))
+                        Toast.makeText(HomeActivity.this, "Please tap \"Submit\" button.", Toast.LENGTH_SHORT).show();
+                    else
+                        Toast.makeText(HomeActivity.this, "No records found between " + btn_from.getText() + " and " + btn_to.getText(), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (checkExternalStoragePermission(HomeActivity.this)) {
+                    // Continue with your action after permission request succeed
+                    writeFile();
+
+                }
+                dialog.dismiss();
+            }
+        });
+        text_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Close dialog
+                dialog.dismiss();
+            }
+        });
+    }
+
+    private void setDate(Button btn) {
+        int mYear = calendar.get(Calendar.YEAR);
+        int mMonth = calendar.get(Calendar.MONTH);
+        int mDay = calendar.get(Calendar.DAY_OF_MONTH) - 1;
+        btn.setText(StringUtils.formatSingleDigit(mDay) + "-" + StringUtils.formatSingleDigit(mMonth + 1) + "-" + mYear);
+        from_date_str = mYear + "-" + StringUtils.formatSingleDigit(mMonth + 1) + "-" + StringUtils.formatSingleDigit(mDay);
+        to_date_str = mYear + "-" + StringUtils.formatSingleDigit(mMonth + 1) + "-" + StringUtils.formatSingleDigit(mDay);
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    public static final String[] PERMISSIONS_EXTERNAL_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
+    public boolean checkExternalStoragePermission(Activity activity) {
+        if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.JELLY_BEAN) {
+            return true;
+        }
+
+        int readStoragePermissionState = ContextCompat.checkSelfPermission(activity, Manifest.permission.READ_EXTERNAL_STORAGE);
+        int writeStoragePermissionState = ContextCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+        boolean externalStoragePermissionGranted = readStoragePermissionState == PackageManager.PERMISSION_GRANTED &&
+                writeStoragePermissionState == PackageManager.PERMISSION_GRANTED;
+        if (!externalStoragePermissionGranted) {
+            requestPermissions(PERMISSIONS_EXTERNAL_STORAGE, REQUEST_EXTERNAL_PERMISSION_CODE);
+        }
+
+        return externalStoragePermissionGranted;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            if (requestCode == REQUEST_EXTERNAL_PERMISSION_CODE) {
+                if (checkExternalStoragePermission(HomeActivity.this)) {
+                    writeFile();
+                }
+            }
+        }
+    }
+
+    private void writeFile() {
+        final File file = new WifiPrintReceiptFormatUtils().createPDF(allOrderItemList, "Order_" + from_date_str + "_to_" + to_date_str + ".pdf", HomeActivity.this);
+        Toast.makeText(HomeActivity.this, "Pdf is saved at location : " + file.getAbsolutePath(), Toast.LENGTH_SHORT).show();
     }
 }

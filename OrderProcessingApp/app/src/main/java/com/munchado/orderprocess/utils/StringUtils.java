@@ -9,10 +9,7 @@ package com.munchado.orderprocess.utils;
 
 import android.content.Context;
 
-import com.munchado.orderprocess.model.orderdetail.AddonsList;
-
 import java.net.URLDecoder;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -29,7 +26,6 @@ public abstract class StringUtils {
     public static final String MIME_TEXT_HTML = "text/html";
 
     public static final String EMAIL_REGEX = "\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*";
-
 
 
     public static String toTitleCase(String str) {
@@ -138,6 +134,13 @@ public abstract class StringUtils {
     }
 
     public static boolean isNullOrEmpty(List<?> arrayList) {
-        return (arrayList == null || arrayList.size() == 0);
+        return ( null == arrayList || arrayList.size() == 0);
+    }
+
+    public static String formatSingleDigit(int a) {
+        if (a > 9)
+            return a + "";
+        else
+            return "0" + a;
     }
 }

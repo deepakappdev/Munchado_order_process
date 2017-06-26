@@ -14,6 +14,7 @@ public class DateTimeUtils {
     public static final String FORMAT_YYYY_MM_DD_HHMMSS = "yyyy-MM-dd HH:mm:ss";
     public static final String FORMAT_MMM_DD_YYY_AT_HHMM_A = "MMMM dd, yyy at hh:mm a";
     public static final String FORMAT_MMM_DD_YYYY = "MMM dd, yyyy";
+    public static final String FORMAT_YYYY_MM_DD = "yyyy-MM-dd";
     public static final String FORMAT_HH_MM_A = "hh:mm a";
 
 

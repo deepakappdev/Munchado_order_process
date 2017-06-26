@@ -29,6 +29,7 @@ import com.munchado.orderprocess.model.token.TokenResponse;
 import com.munchado.orderprocess.network.request.BaseRequest;
 import com.munchado.orderprocess.network.request.GetActiveDineinRequest;
 import com.munchado.orderprocess.network.request.GetActiveOrderRequest;
+import com.munchado.orderprocess.network.request.GetAllOrderRequest;
 import com.munchado.orderprocess.network.request.GetArchiveOrderRequest;
 import com.munchado.orderprocess.network.request.GetDineinDetailRequest;
 import com.munchado.orderprocess.network.request.GetOrderDetailRequest;
@@ -340,6 +341,12 @@ public class RequestController {
             e.printStackTrace();
         }
         return versionCode + "";
+    }
+
+    public static void getAllOrder(Context ctx, String fdate, String tdate, RequestCallback callBack) {
+        GetAllOrderRequest request = new GetAllOrderRequest(getVersion(ctx), fdate, tdate);
+        GsonRequest gsonRequest = request.createServerRequest(getErrorListener(callBack), getListener(ctx, callBack, request));
+        getmRequestQueue().add(gsonRequest);
     }
 
 }

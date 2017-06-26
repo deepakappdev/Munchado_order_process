@@ -144,9 +144,23 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     public static final int REQUEST_EXTERNAL_PERMISSION_CODE = 666;
     SimpleDateFormat format = new SimpleDateFormat(DateTimeUtils.FORMAT_YYYY_MM_DD_HHMMSS);
 
+//    @Override
+//    public void onCreate(Bundle savedInstanceState) {
+//        super.onCreate(savedInstanceState);
+//
+//        setHasOptionsMenu(false);
+//    }
+//
+//    @Override
+//    public void onPrepareOptionsMenu(Menu menu) {
+////        super.onPrepareOptionsMenu(menu);
+//        menu.findItem(R.id.action_menu_more).setVisible(false);
+//    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         return rootView = inflater.inflate(R.layout.frag_order_detail, container, false);
     }
 
@@ -274,8 +288,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
     public void error(NetworkError volleyError) {
         hideProgressBar();
         if (volleyError != null && !StringUtils.isNullOrEmpty(volleyError.getLocalizedMessage()))
-            if (volleyError.getLocalizedMessage().equalsIgnoreCase("Invalid token") || volleyError.getLocalizedMessage().equalsIgnoreCase("Credential not found"))
-            {
+            if (volleyError.getLocalizedMessage().equalsIgnoreCase("Invalid token") || volleyError.getLocalizedMessage().equalsIgnoreCase("Credential not found")) {
                 Utils.showLogin(getActivity());
 //                showToast(volleyError.getLocalizedMessage());
             }

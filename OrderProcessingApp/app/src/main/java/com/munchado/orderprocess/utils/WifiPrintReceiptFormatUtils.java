@@ -15,6 +15,8 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.munchado.orderprocess.model.archiveorder.AllOrderItem;
+import com.munchado.orderprocess.model.archiveorder.ItemList;
 import com.munchado.orderprocess.model.orderdetail.AddonsList;
 import com.munchado.orderprocess.model.orderdetail.MyItemList;
 import com.munchado.orderprocess.model.orderdetail.OrderDetailResponseData;
@@ -25,6 +27,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.List;
 
 /**
  * Created by munchado on 23/5/17.
@@ -33,13 +36,13 @@ public class WifiPrintReceiptFormatUtils {
 
     private final float OUTER_WIDTH = 272.13f;
     private final float INNER_WIDTH = 265.0f;
-    Font contentFont = new Font(Font.FontFamily.HELVETICA, 9, Font.NORMAL);
-    Font contentBoldFont = new Font(Font.FontFamily.HELVETICA, 9, Font.BOLD);
-    Font subitemFont = new Font(Font.FontFamily.HELVETICA, 7, Font.NORMAL);
-    Font contentLargeFont = new Font(Font.FontFamily.HELVETICA, 11, Font.NORMAL);
-    Font topHeadingFont = new Font(Font.FontFamily.HELVETICA, 19, Font.BOLD);
-    Font foodHeadingFont = new Font(Font.FontFamily.HELVETICA, 8, Font.BOLD);
-    Font contentLargeBoldFont = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
+    private Font contentFont = new Font(Font.FontFamily.HELVETICA, 9, Font.NORMAL);
+    private Font contentBoldFont = new Font(Font.FontFamily.HELVETICA, 9, Font.BOLD);
+    private Font subitemFont = new Font(Font.FontFamily.HELVETICA, 7, Font.NORMAL);
+    private Font contentLargeFont = new Font(Font.FontFamily.HELVETICA, 11, Font.NORMAL);
+    private Font topHeadingFont = new Font(Font.FontFamily.HELVETICA, 19, Font.BOLD);
+    private Font foodHeadingFont = new Font(Font.FontFamily.HELVETICA, 8, Font.BOLD);
+    private Font contentLargeBoldFont = new Font(Font.FontFamily.HELVETICA, 11, Font.BOLD);
 
     public File createPDF(OrderDetailResponseData orderDetailResponseData, String fileName, Activity context) {
         File file;
@@ -388,6 +391,126 @@ public class WifiPrintReceiptFormatUtils {
         }
     }
 
+
+    public File createPDF(List<AllOrderItem> allOrderItemList, String fileName, Activity context) {
+        File file;
+        final String APPLICATION_PACKAGE_NAME = context.getPackageName();
+        File path = new File(Environment.getExternalStorageDirectory(), APPLICATION_PACKAGE_NAME);
+        if (!path.exists()) {
+            path.mkdir();
+        }
+        file = new File(path, fileName);
+
+        try {
+            Document document = new Document(PageSize.A4);
+            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
+            document.open();
+            PdfPTable outerTable = new PdfPTable(1);
+            setDefaultTableProperty(outerTable, OUTER_WIDTH * 2);
+            PdfPCell outerCell = new PdfPCell();
+
+            PdfPTable deliveryDateTimeTable = new PdfPTable(1);
+            setDefaultTableProperty(deliveryDateTimeTable, INNER_WIDTH * 2);
+
+            // ADD ITEM TABLE HEADING
+            PdfPCell foodheadingcell = new PdfPCell();
+            PdfPTable foodHeadingTable = new PdfPTable(8);
+            setDefaultTableProperty(foodHeadingTable, INNER_WIDTH * 2+5);
+            PdfPCell foodheadingcell1 = getTableHeadingCell("  Order Type", Element.ALIGN_LEFT);
+            PdfPCell foodheadingcell2 = getTableHeadingCell("Order", Element.ALIGN_LEFT);
+            foodheadingcell2.setColspan(2);
+            PdfPCell foodheadingcell3 = getTableHeadingCell("Amount", Element.ALIGN_CENTER);
+            PdfPCell foodheadingcell4 = getTableHeadingCell("Date", Element.ALIGN_LEFT);
+            PdfPCell foodheadingcell5 = getTableHeadingCell("User Details", Element.ALIGN_LEFT);
+            foodheadingcell5.setColspan(3);
+
+            foodHeadingTable.addCell(foodheadingcell1);
+            foodHeadingTable.addCell(foodheadingcell2);
+            foodHeadingTable.addCell(foodheadingcell3);
+            foodHeadingTable.addCell(foodheadingcell4);
+            foodHeadingTable.addCell(foodheadingcell5);
+            foodHeadingTable.setKeepTogether(true);
+            foodheadingcell.addElement(foodHeadingTable);
+//            foodheadingcell.setBorder(Rectangle.NO_BORDER);
+            deliveryDateTimeTable.addCell(foodheadingcell);
+
+            // ADD ITEMS
+            NumberFormat formatter = new DecimalFormat("#0.00");
+            for (AllOrderItem printItemModel : allOrderItemList) {
+
+                PdfPCell foodheadingcell_1 = new PdfPCell();
+                PdfPTable foodHeadingTable_1 = new PdfPTable(8);
+                setDefaultTableProperty(foodHeadingTable_1, INNER_WIDTH * 2);
+                PdfPCell foodheadingcell1_1 = getTableCell("  "+Utils.decodeHtml(printItemModel.order_type), Element.ALIGN_LEFT);
+
+                StringBuilder itembuilder = new StringBuilder();
+                for (ItemList list : printItemModel.item_list) {
+                    itembuilder.append(list.item_name).append(", ");
+                }
+                PdfPCell foodheadingcell2_1 = getTableCell(itembuilder.toString().substring(0, itembuilder.toString().length() - 2), Element.ALIGN_LEFT);
+                foodheadingcell2_1.setColspan(2);
+                PdfPCell foodheadingcell3_1 = getTableCell("$ " + formatter.format(Double.valueOf(printItemModel.total_amount)), Element.ALIGN_CENTER);
+                PdfPCell foodheadingcell4_1 = getTableCell(DateTimeUtils.getFormattedDate(printItemModel.order_date, DateTimeUtils.FORMAT_MMM_DD_YYYY), Element.ALIGN_LEFT);
+                StringBuilder builder = new StringBuilder();
+                if (!StringUtils.isNullOrEmpty(printItemModel.lname))
+                    builder.append(printItemModel.fname + " ").append(printItemModel.lname).append(", " + printItemModel.email).append(", " + printItemModel.phone);
+                else
+                    builder.append(printItemModel.fname).append(", " + printItemModel.email).append(", " + printItemModel.phone);
+                PdfPCell foodheadingcell5_1 = getTableCell(builder.toString(), Element.ALIGN_LEFT);
+                foodheadingcell5_1.setColspan(3);
+                foodHeadingTable_1.addCell(foodheadingcell1_1);
+                foodHeadingTable_1.addCell(foodheadingcell2_1);
+                foodHeadingTable_1.addCell(foodheadingcell3_1);
+                foodHeadingTable_1.addCell(foodheadingcell4_1);
+                foodHeadingTable_1.addCell(foodheadingcell5_1);
+                foodHeadingTable_1.setKeepTogether(true);
+                foodheadingcell_1.addElement(foodHeadingTable_1);
+                foodheadingcell_1.setBorder(Rectangle.NO_BORDER);
+                foodheadingcell_1.setHorizontalAlignment(Element.ALIGN_LEFT);
+                deliveryDateTimeTable.addCell(foodheadingcell_1);
+
+                /*for (AddonsList addonsListModel : printItemModel.addons_list) {
+//                    builder.append(getSubItemPriceData(j, Utils.decodeHtml(addonsListModel.addon_name), addonsListModel.addon_quantity, Integer.valueOf(addonsListModel.addon_quantity) * Float.valueOf(addonsListModel.addon_price) + ""));
+                    PdfPCell foodheadingcell_3 = new PdfPCell();
+                    PdfPTable foodHeadingTable_3 = new PdfPTable(4);
+                    setDefaultTableProperty(foodHeadingTable_3, INNER_WIDTH);
+
+                    PdfPCell foodheadingcell1_3 = getTableSubitemCell("  + " + Utils.decodeHtml(addonsListModel.addon_name), Element.ALIGN_LEFT);
+                    foodheadingcell1_3.setColspan(2);
+                    PdfPCell foodheadingcell2_3 = getTableSubitemCell("    " + Utils.decodeHtml(addonsListModel.addon_quantity), Element.ALIGN_LEFT);//= new PdfPCell();
+                    PdfPCell foodheadingcell3_3 = getTableSubitemCell("$ " + formatter.format(Integer.valueOf(addonsListModel.addon_quantity) * Float.valueOf(addonsListModel.addon_price)), Element.ALIGN_RIGHT);//= new PdfPCell();
+                    foodHeadingTable_3.addCell(foodheadingcell1_3);
+                    foodHeadingTable_3.addCell(foodheadingcell2_3);
+                    foodHeadingTable_3.addCell(foodheadingcell3_3);
+                    foodheadingcell_3.addElement(foodHeadingTable_3);
+                    foodHeadingTable_3.setKeepTogether(true);
+                    foodheadingcell_3.setHorizontalAlignment(Element.ALIGN_RIGHT);
+                    foodheadingcell_3.setBorder(Rectangle.NO_BORDER);
+                    deliveryDateTimeTable.addCell(foodheadingcell_3);
+                }*/
+            }
+//            deliveryDateTimeTable.addCell(questionCell);
+            deliveryDateTimeTable.setKeepTogether(true);
+            outerCell.addElement(deliveryDateTimeTable);
+            outerCell.setPadding(3.0f);
+            outerTable.addCell(outerCell);
+
+            document.add(outerTable);
+            document.close();
+            return file;
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return null;
+        } catch (DocumentException e) {
+            e.printStackTrace();
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     private String formatZeroValue(String amount) {
         if (!amount.contains(".")) {
             amount = amount + ".00";
@@ -397,10 +520,6 @@ public class WifiPrintReceiptFormatUtils {
             }
         } else {
             float value = Float.valueOf(amount);
-//            if ((int) value < 10) {
-//                amount = "0" + amount;
-//            }
-
             if ((int) value == 0) {
 
                 int retval = Float.compare(value, 0.00f);
@@ -459,4 +578,5 @@ public class WifiPrintReceiptFormatUtils {
         tableCell.setHorizontalAlignment(alignment);
         return tableCell;
     }
+
 }

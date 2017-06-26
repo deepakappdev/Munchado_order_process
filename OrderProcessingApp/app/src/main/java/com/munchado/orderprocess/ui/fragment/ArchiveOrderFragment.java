@@ -6,6 +6,9 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -21,6 +24,7 @@ import com.munchado.orderprocess.network.RequestController;
 import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.ui.activity.BaseActivity;
+import com.munchado.orderprocess.ui.activity.HomeActivity;
 import com.munchado.orderprocess.ui.adapter.ArchiveOrderAdapter;
 import com.munchado.orderprocess.utils.DialogUtil;
 import com.munchado.orderprocess.utils.LogUtils;
@@ -39,25 +43,46 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
     TextView tv_archive_order_count;
     ArchiveOrderAdapter adapter;
     private View rootView;
-    int page=1;
+    int page = 1;
     private boolean isMoreLoaded;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        if(rootView==null)
+        if (rootView == null)
             rootView = inflater.inflate(R.layout.frag_archive_order, container, false);
         return rootView;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_more, menu);
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.action_menu_more) {
+            ((HomeActivity) getActivity()).showDownloadDialog();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
-        if(adapter==null)
+        if (adapter == null)
             fetchArchiveOrder();
     }
+
     @Override
     public FRAGMENTS getFragmentId() {
         return FRAGMENTS.ARCHIVE;
@@ -65,7 +90,7 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
 
     private void fetchArchiveOrder() {
         DialogUtil.showProgressDialog(getActivity());
-        RequestController.getArchiveOrder((BaseActivity)getActivity(),this,page);
+        RequestController.getArchiveOrder((BaseActivity) getActivity(), this, page);
 
         recyclerView.addOnScrollListener(new OnVerticalScrollListener() {
             @Override
@@ -79,9 +104,10 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
             }
         });
     }
-    private void loadMoreArchieveOrders(){
+
+    private void loadMoreArchieveOrders() {
         DialogUtil.showProgressDialog(getActivity());
-        RequestController.getArchiveOrder((BaseActivity)getActivity(),this,++page);
+        RequestController.getArchiveOrder((BaseActivity) getActivity(), this, ++page);
     }
 
     private void initView(View view) {
@@ -98,8 +124,7 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
     public void error(NetworkError volleyError) {
         DialogUtil.hideProgressDialog();
         if (volleyError != null && !StringUtils.isNullOrEmpty(volleyError.getLocalizedMessage()))
-            if (volleyError.getLocalizedMessage().equalsIgnoreCase("Invalid token") || volleyError.getLocalizedMessage().equalsIgnoreCase("Credential not found"))
-            {
+            if (volleyError.getLocalizedMessage().equalsIgnoreCase("Invalid token") || volleyError.getLocalizedMessage().equalsIgnoreCase("Credential not found")) {
                 Utils.showLogin(getActivity());
             }
     }
@@ -113,7 +138,7 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
     }
 
     private void showArchiveList(ArchiveOrderResponseData data) {
-        if(adapter==null || recyclerView.getAdapter()==null) {
+        if (adapter == null || recyclerView.getAdapter() == null) {
             adapter = new ArchiveOrderAdapter(onOrderClickListener);
             recyclerView.setAdapter(adapter);
         }
@@ -125,15 +150,16 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
         if (adapterSize < adapter.getItemCount())
             isMoreLoaded = true;
         adapter.notifyDataSetChanged();
-        tv_archive_order_count.setText(data.total_archive_records+" ARCHIVE ORDERS");
+        tv_archive_order_count.setText(data.total_archive_records + " ARCHIVE ORDERS");
 
     }
+
     OnOrderClickListener onOrderClickListener = new OnOrderClickListener() {
         @Override
         public void onClickOrderItem(OrderItem orderItem) {
             Bundle bundle = new Bundle();
             bundle.putString("ORDER_ID", orderItem.id);
-            ((BaseActivity)getActivity()).addFragment(FRAGMENTS.ORDER_DETAIL, bundle);
+            ((BaseActivity) getActivity()).addFragment(FRAGMENTS.ORDER_DETAIL, bundle);
         }
 
         @Override

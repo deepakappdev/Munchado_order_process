@@ -337,7 +337,6 @@ public class SearchPrinterActivity extends AppCompatActivity implements OnBlueto
                     new WifiPrinterUtils().startPrint(SearchPrinterActivity.this, file, "Order of " + data.customer_first_name);
                 else
                     new WifiPrinterUtils().startPrint(SearchPrinterActivity.this, printData);
-//            new WifiPrinterUtils().startPrint(SearchPrinterActivity.this, printData);
             }
         }, 1500);
     }
