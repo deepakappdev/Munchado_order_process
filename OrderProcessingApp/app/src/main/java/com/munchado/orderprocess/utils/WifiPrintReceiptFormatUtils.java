@@ -431,7 +431,7 @@ public class WifiPrintReceiptFormatUtils {
             foodHeadingTable.addCell(foodheadingcell5);
             foodHeadingTable.setKeepTogether(true);
             foodheadingcell.addElement(foodHeadingTable);
-//            foodheadingcell.setBorder(Rectangle.NO_BORDER);
+            foodheadingcell.setBorder(Rectangle.NO_BORDER);
             deliveryDateTimeTable.addCell(foodheadingcell);
 
             // ADD ITEMS

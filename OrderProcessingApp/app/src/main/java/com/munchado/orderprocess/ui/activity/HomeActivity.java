@@ -26,6 +26,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -298,6 +299,7 @@ public class HomeActivity extends BaseActivity
     public void showDownloadDialog() {
 
         final Dialog dialog = new Dialog(HomeActivity.this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.dialog_order_filter);
         dialog.setCancelable(false);
         dialog.show();
@@ -305,8 +307,9 @@ public class HomeActivity extends BaseActivity
         btn_from = (Button) dialog.findViewById(R.id.btn_from);
         btn_to = (Button) dialog.findViewById(R.id.btn_to);
         btn_submit = (Button) dialog.findViewById(R.id.btn_submit);
-        Button btn_download = (Button) dialog.findViewById(R.id.btn_download);
+//        Button btn_download = (Button) dialog.findViewById(R.id.btn_download);
         TextView text_cancel = (TextView) dialog.findViewById(R.id.text_cancel);
+//        btn_download.setVisibility(View.INVISIBLE);
         from_old_date_str = "";
         to_old_date_str = "";
         setDate(btn_from);
@@ -358,7 +361,7 @@ public class HomeActivity extends BaseActivity
         btn_submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                LogUtils.d("===== " + from_date_str + " is before " + to_date_str + " === " + DateUtils.isBeforeDay(from_date_str, to_date_str));
+//                LogUtils.d("===== " + from_date_str + " is before " + to_date_str + " === " + DateUtils.isBeforeDay(from_date_str, to_date_str));
                 if (!DateUtils.isBeforeDay(from_date_str, to_date_str)) {
                     Toast.makeText(HomeActivity.this, "Please select valid date.", Toast.LENGTH_SHORT).show();
                     return;
@@ -379,34 +382,19 @@ public class HomeActivity extends BaseActivity
                         allOrderItemList = response.data.orders;
                         from_old_date_str = from_date_str;
                         to_old_date_str = to_date_str;
+                        writeFileWithValidation(dialog);
 //                        LogUtils.d("============ list size : " + allOrderItemList.size());
                     }
                 });
             }
         });
-        btn_download.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (StringUtils.isNullOrEmpty(allOrderItemList)) {
-                    if (!StringUtils.isNullOrEmpty(from_old_date_str) && !StringUtils.isNullOrEmpty(to_old_date_str)) {
-                        if (!from_old_date_str.equalsIgnoreCase(from_date_str) || !to_old_date_str.equalsIgnoreCase(to_date_str)) {
-                            Toast.makeText(HomeActivity.this, "Please tap \"Submit\" button.", Toast.LENGTH_SHORT).show();
-                        } else
-                            Toast.makeText(HomeActivity.this, "No records found between " + btn_from.getText() + " and " + btn_to.getText(), Toast.LENGTH_SHORT).show();
-                    } else if (StringUtils.isNullOrEmpty(from_old_date_str) || StringUtils.isNullOrEmpty(to_old_date_str))
-                        Toast.makeText(HomeActivity.this, "Please tap \"Submit\" button.", Toast.LENGTH_SHORT).show();
-                    else
-                        Toast.makeText(HomeActivity.this, "No records found between " + btn_from.getText() + " and " + btn_to.getText(), Toast.LENGTH_SHORT).show();
-                    return;
-                }
-                if (checkExternalStoragePermission(HomeActivity.this)) {
-                    // Continue with your action after permission request succeed
-                    writeFile();
-
-                }
-                dialog.dismiss();
-            }
-        });
+//        btn_download.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//                dialog.dismiss();
+//            }
+//        });
         text_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -414,6 +402,26 @@ public class HomeActivity extends BaseActivity
                 dialog.dismiss();
             }
         });
+    }
+
+    private void writeFileWithValidation(Dialog dialog) {
+        if (StringUtils.isNullOrEmpty(allOrderItemList)) {
+            if (!StringUtils.isNullOrEmpty(from_old_date_str) && !StringUtils.isNullOrEmpty(to_old_date_str)) {
+                if (!from_old_date_str.equalsIgnoreCase(from_date_str) || !to_old_date_str.equalsIgnoreCase(to_date_str)) {
+                    Toast.makeText(HomeActivity.this, "Please tap \"Submit\" button.", Toast.LENGTH_SHORT).show();
+                } else
+                    Toast.makeText(HomeActivity.this, "No records found between " + btn_from.getText() + " and " + btn_to.getText(), Toast.LENGTH_SHORT).show();
+            } else if (StringUtils.isNullOrEmpty(from_old_date_str) || StringUtils.isNullOrEmpty(to_old_date_str))
+                Toast.makeText(HomeActivity.this, "Please tap \"Submit\" button.", Toast.LENGTH_SHORT).show();
+            else
+                Toast.makeText(HomeActivity.this, "No records found between " + btn_from.getText() + " and " + btn_to.getText(), Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (checkExternalStoragePermission(HomeActivity.this)) {
+            // Continue with your action after permission request succeed
+            writeFile();
+            dialog.dismiss();
+        }
     }
 
     private void setDate(Button btn) {
