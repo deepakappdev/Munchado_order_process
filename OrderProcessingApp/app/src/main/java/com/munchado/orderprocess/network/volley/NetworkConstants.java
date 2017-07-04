@@ -5,7 +5,7 @@ package com.munchado.orderprocess.network.volley;
  * Created by piyush on 22/2/2017.
  */
 public class NetworkConstants {
-            public static final String HTTP_BASE_URL = "http://api.munchado.in/";// QC
+    public static final String HTTP_BASE_URL = "http://api.munchado.in/";// QC
 //    public static final String HTTP_BASE_URL = "https://api.munchado.com/"; // LIVE
 //    public static final String HTTP_BASE_URL = "https://demoapi.munchado.com/";// DEMO
 //    public static final String HTTP_BASE_URL = "http://192.168.29.21/";// SUDHANSHU

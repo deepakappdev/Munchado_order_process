@@ -45,11 +45,14 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
     private View rootView;
     int page = 1;
     private boolean isMoreLoaded;
+    long archivefragmentappearTimeInMillies =0;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        LogUtils.d("=========== onCreateView ==== Archive");
+        archivefragmentappearTimeInMillies = System.currentTimeMillis();
         if (rootView == null)
             rootView = inflater.inflate(R.layout.frag_archive_order, container, false);
         return rootView;
@@ -89,6 +92,7 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
     }
 
     private void fetchArchiveOrder() {
+//        MyApplication.isApiHitting=true;
         DialogUtil.showProgressDialog(getActivity());
         RequestController.getArchiveOrder((BaseActivity) getActivity(), this, page);
 
@@ -127,14 +131,18 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
             if (volleyError.getLocalizedMessage().equalsIgnoreCase("Invalid token") || volleyError.getLocalizedMessage().equalsIgnoreCase("Credential not found")) {
                 Utils.showLogin(getActivity());
             }
+
+//        MyApplication.isApiHitting=false;
     }
 
     @Override
     public void success(Object obj) {
+
         DialogUtil.hideProgressDialog();
         if (obj instanceof ArchiveOrderResponse) {
             showArchiveList(((ArchiveOrderResponse) obj).data);
         }
+//        MyApplication.isApiHitting=false;
     }
 
     private void showArchiveList(ArchiveOrderResponseData data) {
@@ -172,7 +180,11 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.text_archive_order:
-                getFragmentManager().popBackStack();
+                // TRICK TO AVOID NO FRAGMENT APPEAR WHEN USER CONTINUOUS CLICK ON BUTTON VERY FAST SPEED
+                if ((System.currentTimeMillis() - archivefragmentappearTimeInMillies) / 1000 >= 1) {
+                    archivefragmentappearTimeInMillies = System.currentTimeMillis();
+                    getFragmentManager().popBackStack();
+                }
                 break;
         }
     }

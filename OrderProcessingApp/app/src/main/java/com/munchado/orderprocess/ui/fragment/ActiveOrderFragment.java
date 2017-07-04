@@ -57,6 +57,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
     ArrayList<OrderItem> live_orderList;
     boolean isFirst;
     long lastApiHitTimeInMillies = 0L;
+    long activefragmentappearTimeInMillies = 0L;
 
 
     @Override
@@ -69,6 +70,8 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
+        LogUtils.d("=========== onCreateView ==== Active");
+        activefragmentappearTimeInMillies = System.currentTimeMillis();
         if (rootView == null)
             rootView = inflater.inflate(R.layout.frag_active_order, container, false);
         return rootView;
@@ -111,6 +114,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
     }
 
     public void fetchActiveOrder() {
+//        MyApplication.isApiHitting = true;
         if ((System.currentTimeMillis() - lastApiHitTimeInMillies) / 1000 >= 30)
             RequestController.getActiveOrder((BaseActivity) getActivity(), this);
     }
@@ -122,7 +126,11 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
         recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         mLinearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLinearLayoutManager);
-        textActiveOrderCount.setText("ACTIVE ORDERS");
+
+        if (null != adapter && adapter.getItemCount() > 0)
+            textActiveOrderCount.setText(adapter.getItemCount() + " ACTIVE ORDERS");
+        else
+            textActiveOrderCount.setText("0 ACTIVE ORDERS");
     }
 
 
@@ -132,6 +140,8 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
             if (volleyError.getLocalizedMessage().equalsIgnoreCase("Invalid token") || volleyError.getLocalizedMessage().equalsIgnoreCase("Credential not found")) {
                 Utils.showLogin(getActivity());
             }
+
+//        MyApplication.isApiHitting = false;
     }
 
     @Override
@@ -187,6 +197,8 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
                 }
             }
         }
+
+//        MyApplication.isApiHitting = false;
     }
 
     private void playRing() {
@@ -276,7 +288,11 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.text_archive_order:
-                ((BaseActivity) getActivity()).addFragment(FRAGMENTS.ARCHIVE, null);
+                // TRICK TO AVOID NO FRAGMENT APPEAR WHEN USER CONTINUOUS CLICK ON BUTTON VERY FAST SPEED
+                if ((System.currentTimeMillis() - activefragmentappearTimeInMillies) / 1000 >= 1) {
+                    activefragmentappearTimeInMillies = System.currentTimeMillis();
+                    ((BaseActivity) getActivity()).addFragment(FRAGMENTS.ARCHIVE, null);
+                }
                 break;
         }
     }

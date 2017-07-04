@@ -485,7 +485,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
 
         textChange_Time.setVisibility(View.GONE);
         String currentStatus = response.data.status;
-        if (currentStatus.equalsIgnoreCase("placed")) {
+        if (currentStatus.equalsIgnoreCase("placed") ||currentStatus.equalsIgnoreCase("ordered") ) {
             textAction.setText("CONFIRM");
             textAction.setBackgroundResource(R.drawable.green_button);
             textChange_Time.setVisibility(View.VISIBLE);
@@ -499,15 +499,17 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                 textAction.setBackgroundResource(R.drawable.grey_button);
             }
         } else if (currentStatus.equalsIgnoreCase("Arrived") || currentStatus.equalsIgnoreCase("delivered")) {
+
+            textCancel.setVisibility(View.GONE);
             textAction.setBackgroundResource(R.drawable.grey_button);
             textAction.setText("ARCHIVE");
         } else {
+            textCancel.setVisibility(View.GONE);
             if (response.data.order_type.equalsIgnoreCase("takeout") && sent_status.equalsIgnoreCase("arrived") && currentStatus.equalsIgnoreCase("archived")) {
                 textAction.setBackgroundResource(R.drawable.grey_button);
                 textAction.setText("ARCHIVE");
             } else {
                 textAction.setVisibility(View.GONE);
-                textCancel.setVisibility(View.GONE);
             }
         }
     }
@@ -636,11 +638,11 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         switch (view.getId()) {
             case R.id.text_print:
                 String currentStatus = response.data.status;
-                if (textAction.getVisibility() == View.VISIBLE && textAction.getText().toString().equalsIgnoreCase("CONFIRM") || currentStatus.equalsIgnoreCase("placed")) {
+                if (textAction.getVisibility() == View.VISIBLE && textAction.getText().toString().equalsIgnoreCase("CONFIRM") || currentStatus.equalsIgnoreCase("placed") || currentStatus.equalsIgnoreCase("ordered")) {
                     clickFrom = PRINT;
                     showProgressBar();
                     String status2 = "";// "archived";
-                    if (currentStatus.equalsIgnoreCase("placed"))
+                    if (currentStatus.equalsIgnoreCase("placed") || currentStatus.equalsIgnoreCase("ordered"))
                         status2 = "confirmed";
                     sent_status = status2;
                     RequestController.orderProcess(response.data.id, status2, "", "", OrderDetailFragment.this);
@@ -654,7 +656,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                 String currentStatus2 = response.data.status;
                 showProgressBar();
                 String status = "archived";
-                if (currentStatus2.equalsIgnoreCase("placed"))
+                if (currentStatus2.equalsIgnoreCase("placed") || currentStatus2.equalsIgnoreCase("ordered"))
                     status = "confirmed";
                 else if (currentStatus2.equalsIgnoreCase("confirmed")) {
                     if (order_type.equalsIgnoreCase("takeout"))
