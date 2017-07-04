@@ -20,5 +20,4 @@ public class NetworkConstants {
     public static final String GET_DINEIN_DETAIL_URL = HTTP_BASE_URL + "api/dashboard/restaurant/holdatable/%s?mob=true&token=";
     public static final String GET_ORDER_LIST_DATE_URL = HTTP_BASE_URL + "api/dashboard/order?mob=true&token=";
 
-//    http://munch-local.com/api/dashboard/order?mob=true&token=2955004c04b199d02436c5b311cad000&type=all&current_version=3&fromDate=2017-06-05&toDate=2017-06-21
 }

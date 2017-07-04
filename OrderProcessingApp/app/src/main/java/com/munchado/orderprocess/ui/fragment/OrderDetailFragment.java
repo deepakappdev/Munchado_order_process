@@ -498,7 +498,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                 textAction.setText("ARCHIVE");
                 textAction.setBackgroundResource(R.drawable.grey_button);
             }
-        } else if (currentStatus.equalsIgnoreCase("Arrived")) {
+        } else if (currentStatus.equalsIgnoreCase("Arrived") || currentStatus.equalsIgnoreCase("delivered")) {
             textAction.setBackgroundResource(R.drawable.grey_button);
             textAction.setText("ARCHIVE");
         } else {
@@ -661,7 +661,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                         status = "ready";
                     else
                         status = "delivered";
-                } else if (currentStatus2.equalsIgnoreCase("arrived"))
+                } else if (currentStatus2.equalsIgnoreCase("arrived") || currentStatus2.equalsIgnoreCase("delivered"))
                     status = "archived";
                 sent_status = status;
                 RequestController.orderProcess(response.data.id, status, "", "", OrderDetailFragment.this);
