@@ -9,7 +9,6 @@ import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -34,10 +33,6 @@ import android.widget.Toast;
 
 import com.hp.mss.hpprint.model.PrintMetricsData;
 import com.hp.mss.hpprint.util.PrintUtil;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.tool.xml.XMLWorkerHelper;
 import com.munchado.orderprocess.R;
 import com.munchado.orderprocess.common.FRAGMENTS;
 import com.munchado.orderprocess.model.orderdetail.AddonsList;
@@ -57,7 +52,6 @@ import com.munchado.orderprocess.ui.activity.print.SearchPrinterActivity;
 import com.munchado.orderprocess.utils.Constants;
 import com.munchado.orderprocess.utils.DateTimeUtils;
 import com.munchado.orderprocess.utils.LogUtils;
-import com.munchado.orderprocess.utils.MyFont;
 import com.munchado.orderprocess.utils.PrefUtil;
 import com.munchado.orderprocess.utils.ReceiptFormatUtils;
 import com.munchado.orderprocess.utils.StringUtils;
@@ -65,16 +59,7 @@ import com.munchado.orderprocess.utils.Utils;
 import com.munchado.orderprocess.utils.WifiPrintReceiptFormatUtils;
 import com.squareup.picasso.Picasso;
 
-import org.jsoup.Jsoup;
-import org.jsoup.safety.Whitelist;
-
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.charset.Charset;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -313,6 +298,7 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
             if (((OrderProcessResponse) obj).data.message) {
                 response.data.status = ((OrderProcessResponse) obj).data.status;
                 ((BaseActivity) getActivity()).order_Status = response.data.status;
+                ((BaseActivity) getActivity()).deliver_time = response.data.delivery_date;
                 updateActionButton();
 
                 if (clickFrom.equalsIgnoreCase(PRINT)) {
@@ -594,43 +580,43 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
         }
     }
 
-    public File createPDF(String rawHTML, String fileName, Activity context) {
-        File file;
-        final String APPLICATION_PACKAGE_NAME = context.getPackageName();
-        File path = new File(Environment.getExternalStorageDirectory(), APPLICATION_PACKAGE_NAME);
-        if (!path.exists()) {
-            path.mkdir();
-        }
-        file = new File(path, fileName);
-
-        try {
-
-            Document document = new Document();
-            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
-            document.open();
-
-            // Подготавливаем HTML
-            String htmlText = Jsoup.clean(rawHTML, Whitelist.relaxed());
-            InputStream inputStream = new ByteArrayInputStream(htmlText.getBytes());
-
-            // Печатаем документ PDF
-            XMLWorkerHelper.getInstance().parseXHtml(writer, document,
-                    inputStream, null, Charset.defaultCharset(), new MyFont());
-
-            document.close();
-            return file;
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            return null;
-        } catch (DocumentException e) {
-            e.printStackTrace();
-            return null;
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+//    public File createPDF(String rawHTML, String fileName, Activity context) {
+//        File file;
+//        final String APPLICATION_PACKAGE_NAME = context.getPackageName();
+//        File path = new File(Environment.getExternalStorageDirectory(), APPLICATION_PACKAGE_NAME);
+//        if (!path.exists()) {
+//            path.mkdir();
+//        }
+//        file = new File(path, fileName);
+//
+//        try {
+//
+//            Document document = new Document();
+//            PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(file));
+//            document.open();
+//
+//            // Подготавливаем HTML
+//            String htmlText = Jsoup.clean(rawHTML, Whitelist.relaxed());
+//            InputStream inputStream = new ByteArrayInputStream(htmlText.getBytes());
+//
+//            // Печатаем документ PDF
+//            XMLWorkerHelper.getInstance().parseXHtml(writer, document,
+//                    inputStream, null, Charset.defaultCharset(), new MyFont());
+//
+//            document.close();
+//            return file;
+//
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//            return null;
+//        } catch (DocumentException e) {
+//            e.printStackTrace();
+//            return null;
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            return null;
+//        }
+//    }
 
     @Override
     public void onClick(View view) {
@@ -760,6 +746,8 @@ public class OrderDetailFragment extends BaseFragment implements RequestCallback
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.MATCH_PARENT);
         input.setLayoutParams(lp);
+        lp.setMarginEnd(15);
+        lp.setMarginStart(15);
         alertDialog.setView(input);
 
         alertDialog.setPositiveButton("Cancel Order",

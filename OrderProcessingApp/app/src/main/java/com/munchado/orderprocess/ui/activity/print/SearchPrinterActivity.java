@@ -284,7 +284,7 @@ public class SearchPrinterActivity extends AppCompatActivity implements OnBlueto
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
-        Log.d(TAG, "============= BT failed");
+//        Log.d(TAG, "============= BT failed");
         if (checkExternalStoragePermission(SearchPrinterActivity.this)) {
             // Continue with your action after permission request succeed
             writeFile();

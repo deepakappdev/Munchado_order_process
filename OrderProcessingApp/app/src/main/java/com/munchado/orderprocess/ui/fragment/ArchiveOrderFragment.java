@@ -51,7 +51,7 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreateView(inflater, container, savedInstanceState);
-        LogUtils.d("=========== onCreateView ==== Archive");
+
         archivefragmentappearTimeInMillies = System.currentTimeMillis();
         if (rootView == null)
             rootView = inflater.inflate(R.layout.frag_archive_order, container, false);
@@ -82,6 +82,7 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
+        LogUtils.d("=========== onViewCreated ==== Archive");
         if (adapter == null)
             fetchArchiveOrder();
     }

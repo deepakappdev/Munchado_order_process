@@ -39,7 +39,7 @@ public class BaseActivity extends AppCompatActivity {
     public BaseFragment mDineInListFragment;
 
 
-    public String order_ID = "", order_Status = "";
+    public String order_ID = "", order_Status = "", deliver_time="";
     public String reservation_Id = "", reservation_status = "";
 
     public void addFragment(FRAGMENTS fragmentId, Bundle bundle) {

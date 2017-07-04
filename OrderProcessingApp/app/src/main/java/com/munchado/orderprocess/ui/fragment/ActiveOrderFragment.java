@@ -109,6 +109,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         initView(view);
+        LogUtils.d("=========== onViewCreated ==== Active");
         live_orderList = new ArrayList<>();
         fetchActiveOrder();
     }
@@ -316,15 +317,17 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
                 new IntentFilter("com.munchado.orderprocess.notification.refresh"));
         try {
             if (adapter != null && adapter.getAllItems() != null && adapter.getAllItems().size() > 0) {
-                LogUtils.d("========= Order Id : " + ((BaseActivity) getActivity()).order_ID + "=======" + ((BaseActivity) getActivity()).order_Status + "=======" + adapter.getAllItems().size());
+//                LogUtils.d("========= Order Id : " + ((BaseActivity) getActivity()).order_ID + "=======" + ((BaseActivity) getActivity()).order_Status + "=======" + adapter.getAllItems().size());
                 if (!StringUtils.isNullOrEmpty(((BaseActivity) getActivity()).order_ID) && !StringUtils.isNullOrEmpty(((BaseActivity) getActivity()).order_Status)) {
                     for (int i = 0; i < adapter.getAllItems().size(); i++) {
                         if (adapter.getAllItems().get(i).id.equalsIgnoreCase(((BaseActivity) getActivity()).order_ID)) {
-                            LogUtils.d("========= status: " + adapter.getAllItems().get(i).status + "=======" + ((BaseActivity) getActivity()).order_Status);
+//                            LogUtils.d("========= status: " + adapter.getAllItems().get(i).status + "=======" + ((BaseActivity) getActivity()).order_Status);
                             if (!adapter.getAllItems().get(i).status.equalsIgnoreCase(((BaseActivity) getActivity()).order_Status)) {
-                                LogUtils.d("========= status: " + adapter.getAllItems().get(i).status + "22222" + ((BaseActivity) getActivity()).order_Status);
+//                                LogUtils.d("========= status: " + adapter.getAllItems().get(i).status + "22222" + ((BaseActivity) getActivity()).order_Status);
                                 OrderItem item = adapter.getAllItems().get(i);
                                 item.status = ((BaseActivity) getActivity()).order_Status;
+                                if (!StringUtils.isNullOrEmpty(((BaseActivity) getActivity()).deliver_time))
+                                    item.delivery_date = ((BaseActivity) getActivity()).deliver_time;
                                 adapter.getAllItems().set(i, item);
 
                                 if (((BaseActivity) getActivity()).order_Status.equalsIgnoreCase("archived") || ((BaseActivity) getActivity()).order_Status.equalsIgnoreCase("cancelled"))
@@ -345,6 +348,8 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
 
                 ((BaseActivity) getActivity()).order_ID = "";
                 ((BaseActivity) getActivity()).order_Status = "";
+                ((BaseActivity) getActivity()).deliver_time = "";
+
             }
         } catch (Exception e) {
             e.printStackTrace();
