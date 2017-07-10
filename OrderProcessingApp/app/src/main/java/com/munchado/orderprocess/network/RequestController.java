@@ -1,8 +1,8 @@
 package com.munchado.orderprocess.network;
 
-import android.app.DownloadManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -183,13 +183,13 @@ public class RequestController {
             switch (which) {
                 case DialogInterface.BUTTON_POSITIVE: {
                     dialog.dismiss();
-//                    Intent webIntent = new Intent(Intent.ACTION_VIEW,
-//                            Uri.parse("https://play.google.com/store/apps/details?id=" + context.getPackageName()));
-//                    context.startActivity(webIntent);
-                    DownloadManager dm = (DownloadManager) context.getSystemService(context.DOWNLOAD_SERVICE);
-                    DownloadManager.Request request = new DownloadManager.Request(
-                            Uri.parse(apk_link));
-                    long enqueue = dm.enqueue(request);
+                    Intent webIntent = new Intent(Intent.ACTION_VIEW,
+                            Uri.parse("https://play.google.com/store/apps/details?id=" + context.getPackageName()));
+                    context.startActivity(webIntent);
+//                    DownloadManager dm = (DownloadManager) context.getSystemService(context.DOWNLOAD_SERVICE);
+//                    DownloadManager.Request request = new DownloadManager.Request(
+//                            Uri.parse(apk_link));
+//                    long enqueue = dm.enqueue(request);
                     if (upgrade_type.equalsIgnoreCase("hard")) {
                         PrefUtil.setUpgradeDisplayCount(0);
                         PrefUtil.setUpgradeType("");

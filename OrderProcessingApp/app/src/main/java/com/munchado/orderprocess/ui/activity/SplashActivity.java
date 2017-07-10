@@ -149,6 +149,26 @@ public class SplashActivity extends AppCompatActivity {
         }, SPLASH_TIME_OUT);
     }
 
+    private void gotoPlayStore() {
+        new Handler().postDelayed(new Runnable() {
+
+            /*
+             * Showing splash screen with a timer. This will be useful when you
+             * want to show case your app logo / company
+             */
+
+            @Override
+            public void run() {
+                //                        dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+//                        DownloadManager.Request request = new DownloadManager.Request(
+//                                Uri.parse(upgradeData.data.apk_link));
+//                        long enqueue = dm.enqueue(request);
+                Intent webIntent = new Intent(Intent.ACTION_VIEW,
+                        Uri.parse("https://play.google.com/store/apps/details?id=" + getPackageName()));
+                startActivity(webIntent);
+            }
+        }, SPLASH_TIME_OUT * 2);
+    }
 
     DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
         @Override
@@ -159,10 +179,7 @@ public class SplashActivity extends AppCompatActivity {
                     if (upgradeData != null) {
                         dialog.dismiss();
                         gotoHome();
-                        dm = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
-                        DownloadManager.Request request = new DownloadManager.Request(
-                                Uri.parse(upgradeData.data.apk_link));
-                        long enqueue = dm.enqueue(request);
+                        gotoPlayStore();
                         if (upgradeData.data.upgrade_type.equalsIgnoreCase("hard")) {
                             PrefUtil.setUpgradeDisplayCount(0);
                             PrefUtil.setUpgradeType("");

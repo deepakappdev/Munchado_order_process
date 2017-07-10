@@ -10,8 +10,8 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import com.munchado.orderprocess.R;
@@ -42,7 +42,7 @@ public class PubnubService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (intent!=null && intent.hasExtra(Constants.PARAM_PUBNUB_ACTION)) {
+        if (intent != null && intent.hasExtra(Constants.PARAM_PUBNUB_ACTION)) {
             if (intent.getStringExtra(Constants.PARAM_PUBNUB_ACTION).equalsIgnoreCase(Constants.PARAM_PUBNUB_SUBSCRIBE)) {
                 initPub();
             } else if (intent.getStringExtra(Constants.PARAM_PUBNUB_ACTION).equalsIgnoreCase(Constants.PARAM_PUBNUB_UNSUBSCRIBE)) {
@@ -76,7 +76,7 @@ public class PubnubService extends Service {
 
             @Override
             public void connectCallback(String channel, Object message) {
-                Log.d("Subscribe", "============Connected! " + message.toString()+"==== Channel : "+channel);
+                Log.d("Subscribe", "============Connected! " + message.toString() + "==== Channel : " + channel);
 
             }
         };
@@ -95,6 +95,7 @@ public class PubnubService extends Service {
         intent.putExtra("message", message);
         LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
     }
+
     private void redirectToTargetScreen(String message) {
 
         Intent intent = new Intent(this, HomeActivity.class);
@@ -107,7 +108,7 @@ public class PubnubService extends Service {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher))
                 .setSmallIcon(R.mipmap.app_small_icon)
-                .setContentTitle("Munchado")
+                .setContentTitle(getString(R.string.app_name))
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setDefaults(Notification.DEFAULT_LIGHTS | Notification.DEFAULT_SOUND)
