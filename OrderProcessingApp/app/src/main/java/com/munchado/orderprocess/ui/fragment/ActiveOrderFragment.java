@@ -33,6 +33,7 @@ import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.ui.activity.BaseActivity;
 import com.munchado.orderprocess.ui.activity.HomeActivity;
 import com.munchado.orderprocess.ui.adapter.ActiveOrderAdapter;
+import com.munchado.orderprocess.utils.DialogUtil;
 import com.munchado.orderprocess.utils.LogUtils;
 import com.munchado.orderprocess.utils.StringUtils;
 import com.munchado.orderprocess.utils.Utils;
@@ -111,13 +112,17 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
         initView(view);
         LogUtils.d("=========== onViewCreated ==== Active");
         live_orderList = new ArrayList<>();
-        fetchActiveOrder();
+        fetchActiveOrder(true);
     }
 
-    public void fetchActiveOrder() {
+    public void fetchActiveOrder(boolean is_dialog_shown) {
 //        MyApplication.isApiHitting = true;
         if ((System.currentTimeMillis() - lastApiHitTimeInMillies) / 1000 >= 30)
+        {
+            if(is_dialog_shown)
+            DialogUtil.showProgressDialog(getActivity());
             RequestController.getActiveOrder((BaseActivity) getActivity(), this);
+        }
     }
 
 
@@ -137,6 +142,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
 
     @Override
     public void error(NetworkError volleyError) {
+        DialogUtil.hideProgressDialog();
         if (volleyError != null && !StringUtils.isNullOrEmpty(volleyError.getLocalizedMessage()))
             if (volleyError.getLocalizedMessage().equalsIgnoreCase("Invalid token") || volleyError.getLocalizedMessage().equalsIgnoreCase("Credential not found")) {
                 Utils.showLogin(getActivity());
@@ -147,6 +153,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
 
     @Override
     public void success(Object obj) {
+        DialogUtil.hideProgressDialog();
         if (getActivity() == null) return;
         if (obj instanceof ActiveOrderResponse) {
             lastApiHitTimeInMillies = System.currentTimeMillis();
@@ -158,7 +165,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    fetchActiveOrder();
+                    fetchActiveOrder(false);
                 }
             }, 30000);
             if (!isFirst) {
@@ -305,7 +312,7 @@ public class ActiveOrderFragment extends BaseFragment implements RequestCallback
             // Extract data included in the Intent
             String message = intent.getStringExtra("message");
 //            Log.d("receiver", "=============Got message: " + message);
-            fetchActiveOrder();
+            fetchActiveOrder(false);
         }
     };
 
