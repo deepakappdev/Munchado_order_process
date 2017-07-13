@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "464887470728-h01l2seifjudb4s0q66nqcqbtg82e687.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.munchado.orderprocess",
+            "certificate_hash": "ba12ffedcc495ab01f604b7aa5b8d9d4aac187c5"
+          }
+        },
+        {
           "client_id": "464887470728-eimm0dd00saor7cm5kj523j0v25hlgc5.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +37,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "464887470728-eimm0dd00saor7cm5kj523j0v25hlgc5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2
