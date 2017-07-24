@@ -206,8 +206,6 @@ public class DineInListFragment extends BaseFragment implements View.OnClickList
             Bundle bundle = new Bundle();
             bundle.putString("BOOKING_ID", reservation.reservation_id);
             ((BaseActivity) getActivity()).addOverLayFragment(FRAGMENTS.DINE_IN_DETAIL, bundle);
-
-
         }
 
         @Override

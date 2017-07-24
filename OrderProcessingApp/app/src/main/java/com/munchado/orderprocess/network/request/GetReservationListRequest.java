@@ -2,7 +2,7 @@ package com.munchado.orderprocess.network.request;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.munchado.orderprocess.model.dinein.DineinResponse;
+import com.munchado.orderprocess.model.reservation.UpcomingReservationModelResponse;
 import com.munchado.orderprocess.network.volley.GsonRequest;
 import com.munchado.orderprocess.network.volley.NetworkConstants;
 import com.munchado.orderprocess.utils.PrefUtil;
@@ -12,13 +12,14 @@ import org.json.JSONObject;
 import java.util.HashMap;
 
 /**
- * Created by munchado on 28/4/17.
+ * Created by munchado on 21/7/17.
  */
-public class GetActiveDineinRequest extends BaseRequest {
+
+public class GetReservationListRequest extends BaseRequest {
 
     public String getServiceUrl() {
 
-        return NetworkConstants.GET_DINEIN_URL + PrefUtil.getToken();
+        return NetworkConstants.GET_RESERVATION_LIST_URL + PrefUtil.getToken();
     }
 
     public HashMap<String, String> getParameters() {
@@ -37,9 +38,9 @@ public class GetActiveDineinRequest extends BaseRequest {
     }
 
     public GsonRequest createServerRequest(Response.ErrorListener errorListener, Response.Listener listener) {
-        GsonRequest<DineinResponse> gsonRequest = new GsonRequest<>(
+        GsonRequest<UpcomingReservationModelResponse> gsonRequest = new GsonRequest<>(
                 Request.Method.GET, getServiceUrl(),
-                DineinResponse.class, null, listener, errorListener, getJsonRequest());
+                UpcomingReservationModelResponse.class, null, listener, errorListener, getJsonRequest());
         gsonRequest.setShouldCache(false);
         gsonRequest.setHeader(getHeaders());
         return gsonRequest;

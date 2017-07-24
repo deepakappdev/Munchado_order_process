@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="90dp"
+    android:background="@drawable/grey_border"
+    android:padding="@dimen/margin_normal">
+
+    <RelativeLayout
+        android:id="@+id/ll_action"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="5dp"
+        android:layout_marginRight="5dp">
+
+        <com.munchado.orderprocess.ui.widgets.CustomButton
+            android:id="@+id/btn_action"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/green_button"
+            android:paddingLeft="@dimen/margin_normal"
+            android:paddingRight="@dimen/margin_normal"
+            android:text="Confirm"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:textStyle="HelveticaLight" />
+
+        <android.support.v4.widget.ContentLoadingProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/margin_xx_large"
+            android:visibility="invisible" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/lltop"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_toLeftOf="@+id/ll_action">
+
+        <com.munchado.orderprocess.ui.widgets.CustomTextView
+            android:id="@+id/tv_customer_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Customer Name"
+            android:textColor="@color/default_text_color"
+            android:textSize="@dimen/textSizeXXLarge"
+            app:textStyle="HelveticaMedium" />
+
+        <com.munchado.orderprocess.ui.widgets.CustomTextView
+            android:id="@+id/tv_customer_new_old"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_xx_large"
+            android:layout_weight="0.5"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:text="New Customer"
+            android:textColor="@color/text_light_black"
+            android:textSize="@dimen/textSizeXLarge"
+            app:textStyle="HelveticaLightItalic" />
+
+        <com.munchado.orderprocess.ui.widgets.CustomTextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_weight="0.5"
+            android:gravity="right|center_vertical"
+            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
+            android:text="Date"
+            android:textColor="@color/default_text_color"
+            android:textSize="@dimen/textSizeXXLarge"
+            app:textStyle="HelveticaMedium" />
+
+        <com.munchado.orderprocess.ui.widgets.CustomTextView
+            android:id="@+id/tv_people_count"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="30dp"
+            android:layout_marginRight="30dp"
+            android:layout_marginTop="2dp"
+            android:text="2 People"
+            android:textColor="@color/text_light_black"
+            android:textSize="@dimen/textSizeXXLarge"
+            app:textStyle="HelveticaRegular" />
+
+    </LinearLayout>
+
+
+</RelativeLayout>

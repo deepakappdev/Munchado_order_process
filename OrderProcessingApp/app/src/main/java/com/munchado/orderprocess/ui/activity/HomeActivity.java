@@ -116,6 +116,9 @@ public class HomeActivity extends BaseActivity
                 id = "nav_dinein";
                 MenuItem item33 = navMenu.findItem(getResources().getIdentifier(id, "id", getPackageName()));
                 navigationView.findViewsWithText(mMenuItems, item33.getTitle(), View.FIND_VIEWS_WITH_TEXT);
+                id = "nav_reservation";
+                MenuItem item331 = navMenu.findItem(getResources().getIdentifier(id, "id", getPackageName()));
+                navigationView.findViewsWithText(mMenuItems, item331.getTitle(), View.FIND_VIEWS_WITH_TEXT);
                 id = "nav_manage";
                 MenuItem item1 = navMenu.findItem(getResources().getIdentifier(id, "id", getPackageName()));
                 navigationView.findViewsWithText(mMenuItems, item1.getTitle(), View.FIND_VIEWS_WITH_TEXT);
@@ -170,11 +173,13 @@ public class HomeActivity extends BaseActivity
         } else if (id == R.id.nav_dinein) {
             popToHomePage();
             addFragment(FRAGMENTS.DINE_IN, null);
+        } else if (id == R.id.nav_reservation) {
+            popToHomePage();
+            addFragment(FRAGMENTS.RESERVATION, null);
         } else if (id == R.id.nav_manage) {
             popToHomePage();
             addFragment(FRAGMENTS.PRINT, null);
         } else if (id == R.id.nav_logout) {
-
             hitLogout();
         }
 

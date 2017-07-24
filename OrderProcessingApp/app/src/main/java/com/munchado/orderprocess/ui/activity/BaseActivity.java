@@ -23,6 +23,9 @@ import com.munchado.orderprocess.ui.fragment.DineInListFragment;
 import com.munchado.orderprocess.ui.fragment.DineinArchiveFragment;
 import com.munchado.orderprocess.ui.fragment.OrderDetailFragment;
 import com.munchado.orderprocess.ui.fragment.PrintSettingFragment;
+import com.munchado.orderprocess.ui.fragment.ReservationArchiveListFragment;
+import com.munchado.orderprocess.ui.fragment.ReservationDetailFragment;
+import com.munchado.orderprocess.ui.fragment.ReservationListFragment;
 import com.munchado.orderprocess.utils.LogUtils;
 
 import java.lang.reflect.Field;
@@ -39,7 +42,7 @@ public class BaseActivity extends AppCompatActivity {
     public BaseFragment mDineInListFragment;
 
 
-    public String order_ID = "", order_Status = "", deliver_time="";
+    public String order_ID = "", order_Status = "", deliver_time = "";
     public String reservation_Id = "", reservation_status = "";
 
     public void addFragment(FRAGMENTS fragmentId, Bundle bundle) {
@@ -54,14 +57,15 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void addOverLayFragment(FRAGMENTS fragmentId, Bundle bundle) {
-        BaseFragment fragment = getFragment(fragmentId);
-        if (fragment != null) {
-            fragment.setArguments(bundle);
-            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-            ft.add(R.id.frame_container, fragment);
-            ft.addToBackStack(fragmentId.name());
-            ft.commit();
-        }
+        addFragment(fragmentId, bundle);
+//        BaseFragment fragment = getFragment(fragmentId);
+//        if (fragment != null) {
+//            fragment.setArguments(bundle);
+//            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//            ft.add(R.id.frame_container, fragment);
+//            ft.addToBackStack(fragmentId.name());
+//            ft.commit();
+//        }
     }
 
     private BaseFragment getFragment(FRAGMENTS fragmentId) {
@@ -69,7 +73,6 @@ public class BaseActivity extends AppCompatActivity {
         switch (fragmentId) {
             case ACTIVE:
                 fragment = new ActiveOrderFragment();
-//                fragmentActiveOrder = fragment;
                 break;
             case ARCHIVE:
                 fragment = new ArchiveOrderFragment();
@@ -92,6 +95,15 @@ public class BaseActivity extends AppCompatActivity {
             case DINE_IN_ARCHIVE:
                 fragment = new DineinArchiveFragment();
                 break;
+            case RESERVATION:
+                fragment = new ReservationListFragment();
+                break;
+            case RESERVATION_ARCHIVE:
+                fragment = new ReservationArchiveListFragment();
+                break;
+            case RESERVATION_DETAIL:
+                fragment = new ReservationDetailFragment();
+                break;
         }
         return fragment;
     }
@@ -113,11 +125,12 @@ public class BaseActivity extends AppCompatActivity {
             finish();
     }
 
-    public void setCurrentFragmentTitle(){
+    public void setCurrentFragmentTitle() {
         BaseFragment fragment = getVisibleFragment();
         if (fragment != null)
             setCustomTitle(fragment.getCustomTitle(fragment.getFragmentId()));
     }
+
     public void setCustomTitle(String title) {
         if (toolbar != null) {
             toolbar.setTitle(title);

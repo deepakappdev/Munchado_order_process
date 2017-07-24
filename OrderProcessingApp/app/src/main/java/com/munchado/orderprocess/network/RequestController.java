@@ -33,6 +33,7 @@ import com.munchado.orderprocess.network.request.GetAllOrderRequest;
 import com.munchado.orderprocess.network.request.GetArchiveOrderRequest;
 import com.munchado.orderprocess.network.request.GetDineinDetailRequest;
 import com.munchado.orderprocess.network.request.GetOrderDetailRequest;
+import com.munchado.orderprocess.network.request.GetReservationListRequest;
 import com.munchado.orderprocess.network.request.GetRestaurantProfileRequest;
 import com.munchado.orderprocess.network.request.LoginRequest;
 import com.munchado.orderprocess.network.request.LogoutRequest;
@@ -313,6 +314,12 @@ public class RequestController {
 
     public static void getBooking(RequestCallback callBack) {
         GetActiveDineinRequest request = new GetActiveDineinRequest();
+        GsonRequest gsonRequest = request.createServerRequest(getErrorListener(callBack), getListener(callBack, request));
+        getmRequestQueue().add(gsonRequest);
+    }
+
+    public static void getUpcomingReservation(RequestCallback callBack) {
+        GetReservationListRequest request = new GetReservationListRequest();
         GsonRequest gsonRequest = request.createServerRequest(getErrorListener(callBack), getListener(callBack, request));
         getmRequestQueue().add(gsonRequest);
     }

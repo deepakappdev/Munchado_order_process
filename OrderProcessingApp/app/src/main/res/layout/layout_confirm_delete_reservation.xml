@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <Spinner
+        android:id="@+id/spinner_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_gravity="center_horizontal"
+        android:visibility="visible" />
+
+    <EditText
+        android:id="@+id/edittext_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/white_rounded_corner"
+        android:gravity="top|left"
+        android:inputType="textMultiLine"
+        android:lines="4" android:hint="Please specify reason to cancel."
+        android:scrollHorizontally="false"
+        android:scrollbars="vertical"
+        android:singleLine="false" />
+
+    <com.munchado.orderprocess.ui.widgets.CustomButton
+        android:id="@+id/btn_cancel"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:layout_below="@+id/edittext_reject"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/green_button"
+        android:text="Cancel Reservation"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        app:textStyle="HelveticaLight" />
+</LinearLayout>
