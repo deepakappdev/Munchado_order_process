@@ -33,6 +33,7 @@ import com.munchado.orderprocess.network.request.GetAllOrderRequest;
 import com.munchado.orderprocess.network.request.GetArchiveOrderRequest;
 import com.munchado.orderprocess.network.request.GetDineinDetailRequest;
 import com.munchado.orderprocess.network.request.GetOrderDetailRequest;
+import com.munchado.orderprocess.network.request.GetReservationDetailRequest;
 import com.munchado.orderprocess.network.request.GetReservationListRequest;
 import com.munchado.orderprocess.network.request.GetRestaurantProfileRequest;
 import com.munchado.orderprocess.network.request.LoginRequest;
@@ -356,4 +357,10 @@ public class RequestController {
         getmRequestQueue().add(gsonRequest);
     }
 
+
+    public static void getReservationDetail(String reservationid,  RequestCallback callBack) {
+        GetReservationDetailRequest request=new GetReservationDetailRequest(reservationid);
+        GsonRequest gsonRequest = request.createServerRequest(getErrorListener(callBack), getListener(callBack, request));
+        getmRequestQueue().add(gsonRequest);
+    }
 }

@@ -16,6 +16,7 @@ import com.munchado.orderprocess.common.FRAGMENTS;
 public class ReservationArchiveListFragment extends BaseFragment {
 
 
+
     public ReservationArchiveListFragment() {
         // Required empty public constructor
     }

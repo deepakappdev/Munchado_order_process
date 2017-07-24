@@ -125,7 +125,7 @@ public class ReservationListFragment extends BaseFragment implements View.OnClic
     @Override
     public void onReservationClick(UpcomingReservationModelResponse.Incoming_reservations incomingReservations) {
         Bundle bundle = new Bundle();
-        bundle.putString("BOOKING_ID", incomingReservations.id);
+        bundle.putString("RESERVATION_ID", incomingReservations.id);
         ((BaseActivity) getActivity()).addOverLayFragment(FRAGMENTS.RESERVATION_DETAIL, bundle);
     }
 
