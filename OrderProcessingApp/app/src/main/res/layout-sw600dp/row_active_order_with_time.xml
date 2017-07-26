@@ -6,22 +6,37 @@
     android:background="@drawable/grey_border"
     android:padding="@dimen/margin_normal">
 
-
-    <com.munchado.orderprocess.ui.widgets.CustomButton
-        android:id="@+id/btn_action"
-        android:layout_width="90dp"
+    <RelativeLayout
+        android:id="@+id/ll_action"
+        android:layout_width="120dp"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginEnd="5dp"
-        android:layout_marginRight="5dp"
-        android:background="@drawable/grey_button"
-        android:paddingLeft="@dimen/margin_normal"
-        android:paddingRight="@dimen/margin_normal"
-        android:text="View"
-        android:textColor="@color/white"
-        android:textSize="15sp"
-        app:textStyle="HelveticaLight" />
+        android:layout_marginRight="5dp">
+
+        <com.munchado.orderprocess.ui.widgets.CustomButton
+            android:id="@+id/btn_action"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/green_button"
+            android:paddingLeft="@dimen/margin_normal"
+            android:paddingRight="@dimen/margin_normal"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:textStyle="HelveticaLight" />
+
+        <android.support.v4.widget.ContentLoadingProgressBar
+            android:id="@+id/progress_bar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/margin_xx_large"
+            android:visibility="invisible" />
+
+    </RelativeLayout>
 
     <LinearLayout
         android:id="@+id/lltop"
@@ -30,7 +45,7 @@
         android:layout_centerVertical="true"
         android:layout_marginLeft="5dp"
         android:layout_marginStart="5dp"
-        android:layout_toLeftOf="@+id/btn_action">
+        android:layout_toLeftOf="@+id/ll_action">
 
         <com.munchado.orderprocess.ui.widgets.CustomTextView
             android:id="@+id/text_order_type"
@@ -49,38 +64,47 @@
             android:layout_weight="1"
             android:ellipsize="end"
             android:maxLines="1"
-            android:text="items"
+            android:text="Takeout"
             android:textColor="@color/text_light_black"
-            android:textSize="@dimen/textSizeXLarge"
-            android:visibility="gone"
+            android:textSize="@dimen/textSizeXXLarge"
             app:textStyle="HelveticaLightItalic" />
 
         <com.munchado.orderprocess.ui.widgets.CustomTextView
             android:id="@+id/text_order_amount"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
+            android:layout_marginEnd="15dp"
+            android:layout_marginRight="15dp"
             android:paddingLeft="10dp"
             android:paddingStart="10dp"
-            android:text="$00"
+            android:text="Takeout"
             android:textColor="@color/default_text_color"
-            android:textSize="@dimen/textSizeXLarge"
+            android:textSize="@dimen/textSizeXXLarge"
             app:textStyle="HelveticaMedium" />
 
         <com.munchado.orderprocess.ui.widgets.CustomTextView
             android:id="@+id/text_delay_time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="5dp"
-            android:layout_marginRight="5dp"
-            android:layout_weight="1"
-            android:text="jul"
+            android:layout_marginEnd="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="2dp"
+            android:text="Takeout"
             android:textColor="@color/text_light_black"
-            android:textSize="@dimen/textSizeXLarge"
+            android:textSize="@dimen/textSizeXXLarge"
             app:textStyle="HelveticaRegular" />
 
+        <com.munchado.orderprocess.ui.widgets.CustomTextView
+            android:id="@+id/text_delay_time_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:layout_marginRight="15dp"
+            android:layout_marginTop="2dp"
+            android:text="Takeout"
+            android:textColor="@color/text_light_black"
+            android:textSize="@dimen/textSizeXXLarge"
+            app:textStyle="HelveticaRegular" />
     </LinearLayout>
 
 

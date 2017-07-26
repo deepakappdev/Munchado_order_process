@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_confirm_reject"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="30dp"
+    android:orientation="vertical"
+    android:paddingLeft="5dp"
+    android:paddingRight="5dp"
+    android:visibility="invisible">
+
+    <Button
+        android:id="@+id/btn_confirm_time"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/grey_unselected_btn"
+        android:gravity="left|center_vertical"
+        android:paddingLeft="15dp"
+        android:paddingRight="10dp"
+        android:paddingStart="15dp"
+        android:text="Confirm Table For This Time"
+        android:textAllCaps="false"
+        android:textColor="@color/default_text_color" />
+
+    <com.github.aakira.expandablelayout.ExpandableRelativeLayout
+        android:id="@+id/layout_confirm_time"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/grey_bg_confirm_table"
+        android:elevation="0dp"
+        android:padding="10dp"
+        app:ael_duration="300"
+        app:ael_expanded="true"
+        app:ael_interpolator="linear"
+        app:ael_orientation="vertical">
+
+        <Spinner
+            android:id="@+id/spinner_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/edittext_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/white_rounded_corner"
+            android:gravity="top|left"
+            android:inputType="textMultiLine"
+            android:lines="4"
+            android:scrollHorizontally="false"
+            android:scrollbars="vertical"
+            android:singleLine="false" />
+
+        <com.munchado.orderprocess.ui.widgets.CustomButton
+            android:id="@+id/btn_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_below="@+id/edittext_confirm"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/green_button"
+            android:text="Confirm Booking"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:textStyle="HelveticaLight" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_below="@+id/btn_confirm"
+            android:layout_marginTop="5dp" />
+    </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
+
+
+    <Button
+        android:id="@+id/btn_alternate_time"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/grey_unselected_btn"
+        android:gravity="left|center_vertical"
+        android:paddingLeft="15dp"
+        android:paddingRight="10dp"
+        android:paddingStart="15dp"
+        android:text="Confirm Table For Alternate Time"
+        android:textAllCaps="false"
+        android:textColor="@color/default_text_color" />
+
+    <com.github.aakira.expandablelayout.ExpandableRelativeLayout
+        android:id="@+id/layout_alternate_time"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/grey_bg_confirm_table"
+        android:elevation="0dp"
+        android:padding="16dp"
+        app:ael_duration="300"
+        app:ael_expanded="false"
+        app:ael_interpolator="linear"
+        app:ael_orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/ll_update_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical">
+
+
+            <com.munchado.orderprocess.ui.widgets.CustomTextView
+                android:id="@+id/text_minus"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="@dimen/margin_medium"
+                android:layout_marginRight="@dimen/margin_medium"
+                android:background="@drawable/grey_border"
+                android:gravity="center"
+                android:text="-"
+                android:textColor="@color/default_text_color"
+                android:textSize="20sp"
+                app:textStyle="HelveticaLight" />
+
+            <com.munchado.orderprocess.ui.widgets.CustomTextView
+                android:id="@+id/text_change_delivery_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="15-15-2015 12:45"
+                android:textColor="@color/default_text_color"
+                android:textSize="20sp"
+                app:textStyle="HelveticaLight" />
+
+            <com.munchado.orderprocess.ui.widgets.CustomTextView
+                android:id="@+id/text_plus"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="@dimen/margin_medium"
+                android:layout_marginRight="@dimen/margin_medium"
+                android:background="@drawable/grey_border"
+                android:gravity="center"
+                android:text="+"
+                android:textColor="@color/default_text_color"
+                android:textSize="20sp"
+                app:textStyle="HelveticaLight" />
+
+        </LinearLayout>
+
+        <Spinner
+            android:id="@+id/spinner_alternate"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_below="@+id/ll_update_time"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="10dp"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/edittext_alternate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ll_update_time"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/white_rounded_corner"
+            android:gravity="top|left"
+            android:inputType="textMultiLine"
+            android:lines="4"
+            android:scrollHorizontally="false"
+            android:scrollbars="vertical"
+            android:singleLine="false" />
+
+        <com.munchado.orderprocess.ui.widgets.CustomButton
+            android:id="@+id/btn_alternate"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_below="@+id/edittext_alternate"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/green_button"
+            android:text="Confirm Booking"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:textStyle="HelveticaLight" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_below="@+id/btn_alternate"
+            android:layout_marginTop="5dp" />
+    </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
+
+    <Button
+        android:id="@+id/btn_reject_time"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/grey_unselected_btn"
+        android:gravity="left|center_vertical"
+        android:paddingLeft="15dp"
+        android:paddingRight="10dp"
+        android:paddingStart="15dp"
+        android:text="Reject Booking Request"
+        android:textAllCaps="false"
+        android:textColor="@color/default_text_color" />
+
+    <com.github.aakira.expandablelayout.ExpandableRelativeLayout
+        android:id="@+id/layout_reject_time"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/grey_bg_confirm_table"
+        android:elevation="0dp"
+        android:padding="16dp"
+        app:ael_duration="300"
+        app:ael_expanded="false"
+        app:ael_interpolator="linear"
+        app:ael_orientation="vertical">
+
+
+        <Spinner
+            android:id="@+id/spinner_rejct"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_gravity="center_horizontal"
+            android:visibility="gone" />
+
+        <EditText
+            android:id="@+id/edittext_reject"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/white_rounded_corner"
+            android:gravity="top|left"
+            android:inputType="textMultiLine"
+            android:lines="4"
+            android:scrollHorizontally="false"
+            android:scrollbars="vertical"
+            android:singleLine="false" />
+
+        <com.munchado.orderprocess.ui.widgets.CustomButton
+            android:id="@+id/btn_reject"
+            android:layout_width="match_parent"
+            android:layout_height="45dp"
+            android:layout_below="@+id/edittext_reject"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/green_button"
+            android:text="Reject Booking"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            app:textStyle="HelveticaLight" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:layout_below="@+id/btn_reject"
+            android:layout_marginTop="5dp" />
+    </com.github.aakira.expandablelayout.ExpandableRelativeLayout>
+
+
+</LinearLayout>

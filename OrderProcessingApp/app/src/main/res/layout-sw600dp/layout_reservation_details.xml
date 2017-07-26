@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_booking"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:visibility="visible">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:orientation="horizontal">
+
+        <com.munchado.orderprocess.ui.widgets.CustomTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:gravity="right|end"
+            android:paddingLeft="7dp"
+            android:paddingStart="7dp"
+            android:text="Reservation ID:"
+            android:textColor="@color/grey_light"
+            android:textSize="@dimen/textSizeXLarge"
+            app:textStyle="HelveticaLight" />
+
+        <com.munchado.orderprocess.ui.widgets.CustomTextView
+            android:id="@+id/text_booking_id"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:paddingLeft="7dp"
+            android:paddingStart="7dp"
+            android:text="23ASFASF$334"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/textSizeXLarge"
+            app:textStyle="HelveticaLight" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <com.munchado.orderprocess.ui.widgets.CustomTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:gravity="right|end"
+            android:paddingLeft="7dp"
+            android:paddingStart="7dp"
+            android:text="Received:"
+            android:textColor="@color/grey_light"
+            android:textSize="@dimen/textSizeXLarge"
+            app:textStyle="HelveticaLight" />
+
+        <com.munchado.orderprocess.ui.widgets.CustomTextView
+            android:id="@+id/text_booking_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:paddingLeft="7dp"
+            android:paddingStart="7dp"
+            android:text=""
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/textSizeXLarge"
+            app:textStyle="HelveticaLight" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <com.munchado.orderprocess.ui.widgets.CustomTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:gravity="right|end"
+            android:paddingLeft="7dp"
+            android:paddingStart="7dp"
+            android:text="No. of People:"
+            android:textColor="@color/grey_light"
+            android:textSize="@dimen/textSizeXLarge"
+            app:textStyle="HelveticaLight" />
+
+        <com.munchado.orderprocess.ui.widgets.CustomTextView
+            android:id="@+id/text_no_people"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:paddingLeft="7dp"
+            android:paddingStart="7dp"
+            android:text=""
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/textSizeXLarge"
+            app:textStyle="HelveticaLight" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <com.munchado.orderprocess.ui.widgets.CustomTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:layout_weight="4"
+            android:gravity="right|end"
+            android:paddingLeft="7dp"
+            android:paddingStart="7dp"
+            android:text="Date &amp; Time:"
+            android:textColor="@color/grey_light"
+            android:textSize="@dimen/textSizeXLarge"
+            app:textStyle="HelveticaLight" />
+
+
+        <com.munchado.orderprocess.ui.widgets.CustomTextView
+            android:id="@+id/text_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:paddingLeft="7dp"
+            android:paddingStart="7dp"
+            android:text="06:00 PM"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/textSizeXLarge"
+            app:textStyle="HelveticaMedium" />
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <com.munchado.orderprocess.ui.widgets.CustomTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:gravity="right|end"
+            android:paddingLeft="7dp"
+            android:paddingStart="7dp"
+            android:text="Status:"
+            android:textColor="@color/grey_light"
+            android:textSize="@dimen/textSizeXLarge"
+            app:textStyle="HelveticaLight" />
+
+        <com.munchado.orderprocess.ui.widgets.CustomTextView
+            android:id="@+id/text_status"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:paddingLeft="7dp"
+            android:paddingStart="7dp"
+            android:text=""
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/textSizeXLarge"
+            app:textStyle="HelveticaLight" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <com.munchado.orderprocess.ui.widgets.CustomTextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="4"
+            android:gravity="right|end"
+            android:paddingLeft="7dp"
+            android:paddingStart="7dp"
+            android:text="Instructions:"
+            android:textColor="@color/grey_light"
+            android:textSize="@dimen/textSizeXLarge"
+            app:textStyle="HelveticaLight" />
+
+        <com.munchado.orderprocess.ui.widgets.CustomTextView
+            android:id="@+id/text_instructions_id"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:paddingLeft="7dp"
+            android:paddingStart="7dp"
+            android:text="sample text asdlfkj asldfkjasfkja"
+            android:textColor="@color/dark_grey"
+            android:textSize="@dimen/textSizeXLarge"
+            app:textStyle="HelveticaLight" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,63 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white_semitransparent"
+    android:clickable="true"
+    tools:context="com.munchado.orderprocess.ui.fragment.ReservationDetailFragment">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/grey_border_2"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/iv_close"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@null"
+            android:scaleType="centerInside"
+            android:src="@mipmap/ic_cross" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.43">
+
+                <include layout="@layout/layout_dine_in_user_profile" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="0.57"
+                android:orientation="vertical">
+
+                <include layout="@layout/layout_reservation_details" />
+
+                <include layout="@layout/layout_confirm_delete_reservation" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+
+    <include layout="@layout/progress_bar_layout" />
+</RelativeLayout>

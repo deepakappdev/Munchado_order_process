@@ -13,7 +13,7 @@
         android:layout_marginLeft="@dimen/fifteendp"
         android:layout_marginRight="@dimen/fifteendp"
         android:layout_marginStart="@dimen/fifteendp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="60dp"
         android:gravity="center_vertical"
         android:text="Printer Settings"
         android:textAppearance="?android:attr/textAppearanceMedium"
