@@ -104,7 +104,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             mPasswordLayout.setError(getString(R.string.error_password_register));
             isValid = false;
         } else {
-            if (mPassword.getText().toString().trim().length() < 6) {
+            if (mPassword.getText().toString().trim().length() < 5) {
                 mPasswordLayout.setErrorEnabled(true);
                 mPasswordLayout.setError(getString(R.string.error_password_length));
                 isValid = false;

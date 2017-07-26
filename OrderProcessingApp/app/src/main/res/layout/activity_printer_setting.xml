@@ -15,129 +15,143 @@
         android:background="?attr/colorPrimary"
         app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-    <com.munchado.orderprocess.ui.widgets.CustomTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:background="@color/grey_background"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp"
-        android:text="  Wifi Settings"
-        android:textColor="@color/white"
-        android:textSize="@dimen/textSizeXXLarge"
-        app:textStyle="HelveticaLight" />
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/email_layout"
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="25dp"
-        android:layout_marginEnd="@dimen/fifteendp"
-        android:layout_marginLeft="@dimen/fifteendp"
-        android:layout_marginRight="@dimen/fifteendp"
-        android:layout_marginStart="@dimen/fifteendp"
-        android:layout_marginTop="@dimen/fifteendp"
-        app:counterOverflowTextAppearance="@color/prmary_txt_color"
-        app:errorTextAppearance="@style/TextErrorAppearance"
-        app:hintTextAppearance="@style/TextFloatLabelAppearance">
+        android:layout_height="match_parent">
 
-        <EditText
-            android:id="@+id/ip"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:focusableInTouchMode="true"
-            android:hint="Enter I.P. Address of Printer"
-            android:inputType="textEmailAddress"
-            android:maxLines="1"
-            android:singleLine="true"
-            android:textColor="@color/default_text_color" />
-    </android.support.design.widget.TextInputLayout>
+            android:orientation="vertical">
 
-    <com.munchado.orderprocess.ui.widgets.CustomTextView
-        android:id="@+id/title_paired_devices"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
-        android:background="@color/grey_background"
-        android:padding="5dp"
-        android:text="  Bluetooth Settings"
-        android:textColor="@color/white"
-        android:textSize="@dimen/textSizeXXLarge"
-        app:textStyle="HelveticaLight" />
+            <com.munchado.orderprocess.ui.widgets.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:background="@color/grey_background"
+                android:paddingBottom="5dp"
+                android:paddingTop="5dp"
+                android:text="  Wifi Settings"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textSizeXXLarge"
+                app:textStyle="HelveticaLight" />
 
-    <com.munchado.orderprocess.ui.widgets.CustomTextView
-        android:id="@+id/bluetooth_model"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fifteendp"
-        android:gravity="center"
-        android:text="No Model selected"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@color/dark_grey"
-        android:textSize="@dimen/textSizeXXLarge"
-        app:textStyle="HelveticaLight" />
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/email_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginEnd="@dimen/fifteendp"
+                android:layout_marginLeft="@dimen/fifteendp"
+                android:layout_marginRight="@dimen/fifteendp"
+                android:layout_marginStart="@dimen/fifteendp"
+                android:layout_marginTop="@dimen/fifteendp"
+                app:counterOverflowTextAppearance="@color/prmary_txt_color"
+                app:errorTextAppearance="@style/TextErrorAppearance"
+                app:hintTextAppearance="@style/TextFloatLabelAppearance">
 
-    <com.munchado.orderprocess.ui.widgets.CustomButton
-        android:id="@+id/select_printer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
-        android:layout_marginLeft="@dimen/fifteendp"
-        android:layout_marginRight="@dimen/fifteendp"
-        android:background="@drawable/green_button"
-        android:text="Select Printer Model"
-        android:textColor="@color/white"
-        android:textSize="15sp"
-        app:textStyle="HelveticaLight" />
+                <EditText
+                    android:id="@+id/ip"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusableInTouchMode="true"
+                    android:hint="Enter I.P. Address of Printer"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="@color/default_text_color" />
+            </android.support.design.widget.TextInputLayout>
 
-    <com.munchado.orderprocess.ui.widgets.CustomTextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:background="@color/grey_background"
-        android:padding="5dp"
-        android:text="  Default Printer Settings"
-        android:textColor="@color/white"
-        android:textSize="@dimen/textSizeXXLarge"
-        app:textStyle="HelveticaLight" />
+            <com.munchado.orderprocess.ui.widgets.CustomTextView
+                android:id="@+id/title_paired_devices"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/grey_background"
+                android:padding="5dp"
+                android:text="  Bluetooth Settings"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textSizeXXLarge"
+                app:textStyle="HelveticaLight" />
+
+            <com.munchado.orderprocess.ui.widgets.CustomTextView
+                android:id="@+id/bluetooth_model"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/fifteendp"
+                android:gravity="center"
+                android:text="No Model selected"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="@color/dark_grey"
+                android:textSize="@dimen/textSizeXXLarge"
+                app:textStyle="HelveticaLight" />
+
+            <com.munchado.orderprocess.ui.widgets.CustomButton
+                android:id="@+id/select_printer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="@dimen/fifteendp"
+                android:layout_marginRight="@dimen/fifteendp"
+                android:background="@drawable/green_button"
+                android:text="Select Printer Model"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                app:textStyle="HelveticaLight" />
+
+            <com.munchado.orderprocess.ui.widgets.CustomTextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:background="@color/grey_background"
+                android:padding="5dp"
+                android:text="  Default Printer Settings"
+                android:textColor="@color/white"
+                android:textSize="@dimen/textSizeXXLarge"
+                app:textStyle="HelveticaLight" />
 
 
-    <RadioGroup
-        android:id="@+id/radiogroup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fifteendp"
-        android:orientation="horizontal">
+            <RadioGroup
+                android:id="@+id/radiogroup"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/fifteendp"
+                android:orientation="horizontal">
 
-        <RadioButton
-            android:id="@+id/radioButton_bluetooth"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="true"
-            android:text="Bluetooth Printer"
-            android:textColor="@color/dark_grey"
-            android:textSize="@dimen/textSizeXXLarge" />
+                <RadioButton
+                    android:id="@+id/radioButton_bluetooth"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="Bluetooth Printer"
+                    android:textColor="@color/dark_grey"
+                    android:textSize="@dimen/textSizeXXLarge" />
 
-        <RadioButton
-            android:id="@+id/radioButton_wifi"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/fifteendp"
-            android:layout_marginStart="@dimen/fifteendp"
-            android:text="Wifi Printer"
-            android:textColor="@color/dark_grey"
-            android:textSize="@dimen/textSizeXXLarge" />
-    </RadioGroup>
+                <RadioButton
+                    android:id="@+id/radioButton_wifi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/fifteendp"
+                    android:layout_marginStart="@dimen/fifteendp"
+                    android:text="Wifi Printer"
+                    android:textColor="@color/dark_grey"
+                    android:textSize="@dimen/textSizeXXLarge" />
+            </RadioGroup>
 
 
-    <com.munchado.orderprocess.ui.widgets.CustomButton
-        android:id="@+id/submit_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fifteendp"
-        android:background="@drawable/green_button"
-        android:text="Save"
-        android:textColor="@color/white"
-        android:textSize="15sp"
-        app:textStyle="HelveticaLight" />
+            <com.munchado.orderprocess.ui.widgets.CustomButton
+                android:id="@+id/submit_btn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/fifteendp"
+                android:background="@drawable/green_button"
+                android:text="Save"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                app:textStyle="HelveticaLight" />
+        </LinearLayout>
+    </ScrollView>
+
+
 </LinearLayout>

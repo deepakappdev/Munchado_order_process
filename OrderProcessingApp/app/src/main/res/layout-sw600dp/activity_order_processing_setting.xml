@@ -18,7 +18,7 @@
     <com.munchado.orderprocess.ui.widgets.CustomTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="60dp"
         android:background="@color/grey_background"
         android:paddingBottom="5dp"
         android:paddingLeft="@dimen/twentyeightdp"
@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/twentyeightdp"
         android:layout_marginStart="@dimen/twentyeightdp"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         android:button="@drawable/checkbok_register"
         android:gravity="center"
         android:paddingLeft="10dp"
@@ -46,7 +46,7 @@
     <com.munchado.orderprocess.ui.widgets.CustomTextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:background="@color/grey_background"
         android:paddingBottom="5dp"
         android:paddingLeft="@dimen/twentyeightdp"
