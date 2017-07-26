@@ -23,9 +23,9 @@ import com.munchado.orderprocess.ui.fragment.DineInListFragment;
 import com.munchado.orderprocess.ui.fragment.DineinArchiveFragment;
 import com.munchado.orderprocess.ui.fragment.OrderDetailFragment;
 import com.munchado.orderprocess.ui.fragment.PrintSettingFragment;
-import com.munchado.orderprocess.ui.fragment.ReservationArchiveListFragment;
+import com.munchado.orderprocess.ui.fragment.ArchiveReservationFragment;
 import com.munchado.orderprocess.ui.fragment.ReservationDetailFragment;
-import com.munchado.orderprocess.ui.fragment.ReservationListFragment;
+import com.munchado.orderprocess.ui.fragment.ActiveReservationFragment;
 import com.munchado.orderprocess.utils.LogUtils;
 
 import java.lang.reflect.Field;
@@ -96,10 +96,10 @@ public class BaseActivity extends AppCompatActivity {
                 fragment = new DineinArchiveFragment();
                 break;
             case RESERVATION:
-                fragment = new ReservationListFragment();
+                fragment = new ActiveReservationFragment();
                 break;
             case RESERVATION_ARCHIVE:
-                fragment = new ReservationArchiveListFragment();
+                fragment = new ArchiveReservationFragment();
                 break;
             case RESERVATION_DETAIL:
                 fragment = new ReservationDetailFragment();

@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import com.munchado.orderprocess.R;
 import com.munchado.orderprocess.common.FRAGMENTS;
 import com.munchado.orderprocess.listener.OnReservationClickListener;
@@ -20,11 +21,14 @@ import com.munchado.orderprocess.network.volley.RequestCallback;
 import com.munchado.orderprocess.ui.activity.BaseActivity;
 import com.munchado.orderprocess.ui.activity.HomeActivity;
 import com.munchado.orderprocess.ui.adapter.ActiveReservationAdapter;
+import com.munchado.orderprocess.utils.DialogUtil;
+import com.munchado.orderprocess.utils.StringUtils;
+import com.munchado.orderprocess.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ReservationListFragment extends BaseFragment implements View.OnClickListener, RequestCallback, OnReservationClickListener {
+public class ActiveReservationFragment extends BaseFragment implements View.OnClickListener, RequestCallback, OnReservationClickListener {
 
     private View rootView;
     RecyclerView recyclerView;
@@ -33,6 +37,8 @@ public class ReservationListFragment extends BaseFragment implements View.OnClic
     private List<UpcomingReservationModelResponse.Incoming_reservations> reservationsList;
     private ActiveReservationAdapter mActiveReservationAdapter;
     private HomeActivity mHomeActivity;
+    long lastApiHitTimeInMillies = 0L;
+    long activefragmentappearTimeInMillies = 0L;
 
     @Override
     public void onAttach(Context context) {
@@ -40,27 +46,31 @@ public class ReservationListFragment extends BaseFragment implements View.OnClic
         mHomeActivity = (HomeActivity) context;
     }
 
-    public ReservationListFragment() {
+    public ActiveReservationFragment() {
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        activefragmentappearTimeInMillies = System.currentTimeMillis();
+        if (rootView == null)
+            rootView = inflater.inflate(R.layout.fragment_reservation_list, container, false);
+        return rootView;
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_reservation_list, container, false);
+
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initView(view);
-        fetchBookingList();
+        initView();
+        fetchBookingList(true);
     }
 
-    private void initView(View view) {
-        textUpcomingBookingCount = (TextView) view.findViewById(R.id.text_reservation_count);
-        view.findViewById(R.id.text_archive_reservation).setOnClickListener(this);
-        recyclerView = (RecyclerView) view.findViewById(R.id.rv_reservation);
+    private void initView() {
+        textUpcomingBookingCount = (TextView) rootView.findViewById(R.id.text_reservation_count);
+        rootView.findViewById(R.id.text_archive_reservation).setOnClickListener(this);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.rv_reservation);
         mLinearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLinearLayoutManager);
         reservationsList = new ArrayList<>();
@@ -70,14 +80,21 @@ public class ReservationListFragment extends BaseFragment implements View.OnClic
     }
 
 
-    private void fetchBookingList() {
-        RequestController.getUpcomingReservation(this);
+    private void fetchBookingList(boolean is_dialog_shown) {
+        if ((System.currentTimeMillis() - lastApiHitTimeInMillies) / 1000 >= 30) {
+            if (is_dialog_shown)
+                RequestController.getUpcomingReservation(this);
+        }
     }
 
 
     @Override
     public void error(NetworkError volleyError) {
-
+        DialogUtil.hideProgressDialog();
+        if (volleyError != null && !StringUtils.isNullOrEmpty(volleyError.getLocalizedMessage()))
+            if (volleyError.getLocalizedMessage().equalsIgnoreCase("Invalid token") || volleyError.getLocalizedMessage().equalsIgnoreCase("Credential not found")) {
+                Utils.showLogin(getActivity());
+            }
     }
 
     @Override
@@ -93,9 +110,9 @@ public class ReservationListFragment extends BaseFragment implements View.OnClic
                     reservationsList.addAll(mUpcomingReservationModelResponse.data.view_today_reservation);
                 textUpcomingBookingCount.setText(reservationsList.size() + " NEW RESERVATIONS");
 //
-                    if (reservationsList != null && reservationsList.size() > 0) {
-                        mActiveReservationAdapter.updateResult(reservationsList);
-                    }
+                if (reservationsList != null && reservationsList.size() > 0) {
+                    mActiveReservationAdapter.updateResult(reservationsList);
+                }
 
             } catch (Exception e) {
                 e.printStackTrace();
@@ -103,19 +120,15 @@ public class ReservationListFragment extends BaseFragment implements View.OnClic
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    fetchBookingList();
+                    fetchBookingList(false);
                 }
             }, 30000);
             mHomeActivity.startPlaySoundForNewBookings();
         } else if (obj instanceof DineinConfirmResponse) {
-            fetchBookingList();
+            fetchBookingList(false);
         }
     }
 
-    @Override
-    public void onClick(View v) {
-
-    }
 
     @Override
     public FRAGMENTS getFragmentId() {
@@ -132,5 +145,19 @@ public class ReservationListFragment extends BaseFragment implements View.OnClic
     @Override
     public void onReservationActionClick(UpcomingReservationModelResponse.Incoming_reservations incomingReservations) {
 
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.text_archive_reservation:
+//                Toast.makeText(mHomeActivity, "hii", Toast.LENGTH_SHORT).show();
+                // TRICK TO AVOID NO FRAGMENT APPEAR WHEN USER CONTINUOUS CLICK ON BUTTON VERY FAST SPEED
+                if ((System.currentTimeMillis() - activefragmentappearTimeInMillies) / 1000 >= 1) {
+                    activefragmentappearTimeInMillies = System.currentTimeMillis();
+                    ((BaseActivity) getActivity()).addFragment(FRAGMENTS.RESERVATION_ARCHIVE, null);
+                }
+                break;
+        }
     }
 }

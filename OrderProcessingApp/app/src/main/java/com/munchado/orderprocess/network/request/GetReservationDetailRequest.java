@@ -2,7 +2,7 @@ package com.munchado.orderprocess.network.request;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.munchado.orderprocess.model.BaseResponse;
+import com.munchado.orderprocess.model.reservation.ReservationDetailsResponse;
 import com.munchado.orderprocess.network.volley.GsonRequest;
 import com.munchado.orderprocess.network.volley.NetworkConstants;
 import com.munchado.orderprocess.utils.PrefUtil;
@@ -11,21 +11,21 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
-import static android.R.attr.id;
-
 /**
  * Created by test on 24/7/17.
  */
 
 public class GetReservationDetailRequest extends BaseRequest {
 
-    String resrvationid;
-    public GetReservationDetailRequest(String id){
-    resrvationid = id;
+    public String resrvationid;
+
+    public GetReservationDetailRequest(String resrvationid) {
+        this.resrvationid = resrvationid;
     }
+
     public String getServiceUrl() {
 
-        return NetworkConstants.GET_RESERVATION_DETAIL_URL +id+"?mob=true&token="+ PrefUtil.getToken();
+        return NetworkConstants.GET_RESERVATION_DETAIL_URL + resrvationid + "?mob=true&token=" + PrefUtil.getToken();
     }
 
 
@@ -45,9 +45,9 @@ public class GetReservationDetailRequest extends BaseRequest {
     }
 
     public GsonRequest createServerRequest(Response.ErrorListener errorListener, Response.Listener listener) {
-        GsonRequest<BaseResponse> gsonRequest = new GsonRequest<>(
+        GsonRequest<ReservationDetailsResponse> gsonRequest = new GsonRequest<>(
                 Request.Method.GET, getServiceUrl(),
-                BaseResponse.class, null, listener, errorListener, getJsonRequest());
+                ReservationDetailsResponse.class, null, listener, errorListener, getJsonRequest());
         gsonRequest.setShouldCache(false);
         gsonRequest.setHeader(getHeaders());
         return gsonRequest;
