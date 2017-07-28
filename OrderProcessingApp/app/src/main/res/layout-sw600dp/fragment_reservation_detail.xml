@@ -51,6 +51,7 @@
                 android:layout_weight="0.57"
                 android:orientation="vertical">
 
+
                 <include layout="@layout/layout_reservation_details" />
 
                 <include layout="@layout/layout_confirm_delete_reservation" />
