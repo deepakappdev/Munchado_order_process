@@ -21,5 +21,7 @@ public class NetworkConstants {
     public static final String GET_ORDER_LIST_DATE_URL = HTTP_BASE_URL + "api/dashboard/order?mob=true&token=";
     public static final String GET_RESERVATION_LIST_URL = HTTP_BASE_URL + "api/dashboard/reservations/today?mob=true&token=";
     public static final String GET_RESERVATION_DETAIL_URL = HTTP_BASE_URL + "api/dashboard/reservation/detail/";
+    public static final String GET_ARCHIVE_RESERVATION_URL = HTTP_BASE_URL + "api/dashboard/reservations?mob=true&type=archive&token=";
+
 
 }

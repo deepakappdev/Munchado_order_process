@@ -87,10 +87,6 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
             fetchArchiveOrder();
     }
 
-    @Override
-    public FRAGMENTS getFragmentId() {
-        return FRAGMENTS.ARCHIVE;
-    }
 
     private void fetchArchiveOrder() {
 //        MyApplication.isApiHitting=true;
@@ -122,6 +118,10 @@ public class ArchiveOrderFragment extends BaseFragment implements RequestCallbac
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
 //        recyclerView.addItemDecoration(new DividerItemDecoration(getContext(), R.drawable.grey_border));
+    }
+    @Override
+    public FRAGMENTS getFragmentId() {
+        return FRAGMENTS.ARCHIVE;
     }
 
 

@@ -45,6 +45,7 @@ import com.munchado.orderprocess.network.request.UpdateDineRequest;
 import com.munchado.orderprocess.network.volley.GsonRequest;
 import com.munchado.orderprocess.network.volley.NetworkError;
 import com.munchado.orderprocess.network.volley.RequestCallback;
+import com.munchado.orderprocess.ui.activity.BaseActivity;
 import com.munchado.orderprocess.utils.LogUtils;
 import com.munchado.orderprocess.utils.PrefUtil;
 import com.munchado.orderprocess.utils.StringUtils;
@@ -273,11 +274,6 @@ public class RequestController {
         getmRequestQueue().add(gsonRequest);
     }
 
-    public static void getArchiveOrder(Context ctx, RequestCallback callBack, int page) {
-        GetArchiveOrderRequest request = new GetArchiveOrderRequest(getVersion(ctx), page);
-        GsonRequest gsonRequest = request.createServerRequest(getErrorListener(callBack), getListener(ctx, callBack, request));
-        getmRequestQueue().add(gsonRequest);
-    }
 
     public static void getActiveOrder(Context ctx, RequestCallback callBack) {
 
@@ -287,11 +283,7 @@ public class RequestController {
     }
 
 
-    public static void getOrderDetail(Context ctx, String orderId, RequestCallback callBack) {
-        GetOrderDetailRequest request = new GetOrderDetailRequest(getVersion(ctx), orderId);
-        GsonRequest gsonRequest = request.createServerRequest(getErrorListener(callBack), getListener(ctx, callBack, request));
-        getmRequestQueue().add(gsonRequest);
-    }
+
 
     public static void orderProcess(String orderId, String status, String reason, String deliverytime, RequestCallback callBack) {
         OrderProcessRequest request = new OrderProcessRequest(orderId, status, reason, deliverytime);
@@ -361,6 +353,22 @@ public class RequestController {
     public static void getReservationDetail(String reservationid,  RequestCallback callBack) {
         GetReservationDetailRequest request=new GetReservationDetailRequest(reservationid);
         GsonRequest gsonRequest = request.createServerRequest(getErrorListener(callBack), getListener(callBack, request));
+        getmRequestQueue().add(gsonRequest);
+    }
+    public static void getOrderDetail(Context ctx, String orderId, RequestCallback callBack) {
+        GetOrderDetailRequest request = new GetOrderDetailRequest(getVersion(ctx), orderId);
+        GsonRequest gsonRequest = request.createServerRequest(getErrorListener(callBack), getListener(ctx, callBack, request));
+        getmRequestQueue().add(gsonRequest);
+    }
+    public static void getArchiveOrder(Context ctx, RequestCallback callBack, int page) {
+        GetArchiveOrderRequest request = new GetArchiveOrderRequest(getVersion(ctx), page);
+        GsonRequest gsonRequest = request.createServerRequest(getErrorListener(callBack), getListener(ctx, callBack, request));
+        getmRequestQueue().add(gsonRequest);
+    }
+
+    public static void getArchiveReservation(BaseActivity ctx,  RequestCallback callBack, int page) {
+        GetArchiveReservationRequest request = new GetArchiveReservationRequest(getVersion(ctx), page);
+        GsonRequest gsonRequest = request.createServerRequest(getErrorListener(callBack), getListener(ctx, callBack, request));
         getmRequestQueue().add(gsonRequest);
     }
 }
