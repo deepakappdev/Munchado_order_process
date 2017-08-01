@@ -74,7 +74,7 @@ public class ActiveReservationFragment extends BaseFragment implements View.OnCl
         mLinearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(mLinearLayoutManager);
         reservationsList = new ArrayList<>();
-        textUpcomingBookingCount.setText(reservationsList.size() + " NEW RESERVATIONS");
+//        textUpcomingBookingCount.setText(reservationsList.size() + " NEW RESERVATIONS");
         mActiveReservationAdapter = new ActiveReservationAdapter(mHomeActivity, this);
         recyclerView.setAdapter(mActiveReservationAdapter);
     }

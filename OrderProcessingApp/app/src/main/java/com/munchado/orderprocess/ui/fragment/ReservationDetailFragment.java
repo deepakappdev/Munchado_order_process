@@ -166,8 +166,9 @@ public class ReservationDetailFragment extends BaseFragment implements View.OnCl
 
     }
 
-    private void showDetail(ReservationDetailResponseData data) {
+    private void showDetail(final ReservationDetailResponseData data) {
         layout_profile = (LinearLayout) rootView.findViewById(R.id.layout_customer_detail);
+
 //        empty_layout = (LinearLayout) rootView.findViewById(R.id.empty_layout);
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -175,12 +176,17 @@ public class ReservationDetailFragment extends BaseFragment implements View.OnCl
         int width = displayMetrics.widthPixels;
         int w = (int) (width * .4);
         layout_profile.setLayoutParams(new RelativeLayout.LayoutParams(w, RelativeLayout.LayoutParams.MATCH_PARENT));
+
         rootView.findViewById(R.id.ll_booking).setVisibility(View.VISIBLE);
         textName = (CustomTextView) rootView.findViewById(R.id.text_name);
         textEmail = (CustomTextView) rootView.findViewById(R.id.text_email);
         textTelephone = (CustomTextView) rootView.findViewById(R.id.text_telephone);
         textPastActivity = (CustomTextView) rootView.findViewById(R.id.text_past_activity);
         iv_Profile = (com.munchado.orderprocess.ui.widgets.SquareImageView) rootView.findViewById(R.id.image_view);
+
+//        Picasso.with(getContext()).load(data.getUserPicture()).resize(200 * (int) getActivity().getResources()
+//                .getDisplayMetrics().density, 200 * (int) getActivity().getResources().getDisplayMetrics()
+//                .density).centerCrop().placeholder(R.drawable.profile_img).into(iv_Profile);
 
         StringBuilder nameBuilder = new StringBuilder(data.getFirst_name());
         if (!StringUtils.isNullOrEmpty(data.getFirst_name()))
@@ -208,7 +214,7 @@ public class ReservationDetailFragment extends BaseFragment implements View.OnCl
         showOrderDetail(data);
     }
 
-    private void showOrderDetail(ReservationDetailResponseData orderDetailData) {
+    private void showOrderDetail(final ReservationDetailResponseData orderDetailData) {
         rootView.findViewById(R.id.ll_booking).setVisibility(View.VISIBLE);
 //        textOrderId.setText(orderDetailData.getReceipt_no());
 //        text_receipt_no.setText(orderDetailData.payment_receipt);
@@ -227,6 +233,8 @@ public class ReservationDetailFragment extends BaseFragment implements View.OnCl
         text_time.setText(orderDetailData.getReservation_date_time());
         text_status.setText(orderDetailData.getStatus());
         text_instructions.setText(orderDetailData.getUser_instruction());
+
+
     }
 
     @Override

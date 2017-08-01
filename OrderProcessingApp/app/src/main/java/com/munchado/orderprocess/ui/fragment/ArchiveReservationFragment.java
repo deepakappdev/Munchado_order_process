@@ -102,15 +102,15 @@ public class ArchiveReservationFragment extends BaseFragment implements View.OnC
                 LogUtils.d("=========== on bottom  ");
                 if (isMoreLoaded) {
                     isMoreLoaded = false;
-                    loadMoreArchieveOrders();
+                    loadMoreArchieveOrders(++page);
                 }
             }
         });
     }
 
-    private void loadMoreArchieveOrders() {
+    private void loadMoreArchieveOrders(int page) {
         DialogUtil.showProgressDialog(getActivity());
-        RequestController.getArchiveReservation((BaseActivity) getActivity(), this, ++page);
+        RequestController.getArchiveReservation((BaseActivity) getActivity(), this, page);
 
     }
 
@@ -153,12 +153,14 @@ public class ArchiveReservationFragment extends BaseFragment implements View.OnC
 
     private void showArchiveList(ArchiveReservationResponse data) {
         LogUtils.d("=========== showArchiveList ");
-        if (adapter == null || recyclerView.getAdapter() == null) {
-            adapter = new ArchiveReservationAdapter(mHomeActivity,  this);
-            recyclerView.setAdapter(adapter);
-            if(page ==1){
-                adapter.setList(data.data.getArchive_reservation());
-            }
+        if(null!=data.data.getArchive_reservation() && data.data.getArchive_reservation().size()>0){
+            isMoreLoaded = true;
+            if (adapter == null || recyclerView.getAdapter() == null) {
+                adapter = new ArchiveReservationAdapter(mHomeActivity,  this);
+                recyclerView.setAdapter(adapter);
+                if(page ==1){
+                    adapter.setList(data.data.getArchive_reservation());
+                }
 //            int adapterSize = adapter.getItemCount();
 //            ArrayList<Archive_reservation> archive_order = (ArrayList<Archive_reservation>) adapter.getAllItems();
 //            archive_order.addAll(data.archive_order);
@@ -166,14 +168,24 @@ public class ArchiveReservationFragment extends BaseFragment implements View.OnC
 //            if (adapterSize < adapter.getItemCount())
 //                isMoreLoaded = true;
 //            adapter.notifyDataSetChanged();
-            tv_archive_order_count.setText(adapter.getItemCount() + " ARCHIVE ORDERS");
 
+
+            }
+            else{
+                adapter.appendList(data.data.getArchive_reservation());
+//                ArrayList<Archive_reservation> reservationlist=adapter.getAllItems();
+//                reservationlist.addAll(data.data.getArchive_reservation());
+            }
+            tv_archive_order_count.setText(adapter.getItemCount() + " ARCHIVE RESERVATIONS");
         }
+
     }
 
     @Override
     public void onReservationClick(Archive_reservation incomingReservations) {
-
+        Bundle bundle = new Bundle();
+        bundle.putString("RESERVATION_ID", incomingReservations.getId());
+        ((BaseActivity) getActivity()).addOverLayFragment(FRAGMENTS.RESERVATION_DETAIL, bundle);
     }
 
     @Override

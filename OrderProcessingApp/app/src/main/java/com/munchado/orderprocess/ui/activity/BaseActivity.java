@@ -57,15 +57,14 @@ public class BaseActivity extends AppCompatActivity {
     }
 
     public void addOverLayFragment(FRAGMENTS fragmentId, Bundle bundle) {
-        addFragment(fragmentId, bundle);
-//        BaseFragment fragment = getFragment(fragmentId);
-//        if (fragment != null) {
-//            fragment.setArguments(bundle);
-//            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-//            ft.add(R.id.frame_container, fragment);
-//            ft.addToBackStack(fragmentId.name());
-//            ft.commit();
-//        }
+        BaseFragment fragment = getFragment(fragmentId);
+        if (fragment != null) {
+            fragment.setArguments(bundle);
+            FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+            ft.add(R.id.frame_container, fragment);
+            ft.addToBackStack(fragmentId.name());
+            ft.commit();
+        }
     }
 
     private BaseFragment getFragment(FRAGMENTS fragmentId) {

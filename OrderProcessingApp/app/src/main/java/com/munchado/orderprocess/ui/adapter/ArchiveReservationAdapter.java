@@ -44,7 +44,7 @@ public class ArchiveReservationAdapter extends RecyclerView.Adapter<RecyclerView
 
     @Override
     public int getItemCount() {
-        return orderItems.size();
+        return null!=orderItems? orderItems.size() : 0;
     }
 
     public ArrayList<Archive_reservation> getAllItems() {
@@ -52,6 +52,10 @@ public class ArchiveReservationAdapter extends RecyclerView.Adapter<RecyclerView
     }
     public void setList(ArrayList<Archive_reservation> list){
         orderItems=list;
+        notifyDataSetChanged();
+    }
+    public void appendList(ArrayList<Archive_reservation> list){
+        orderItems.addAll(list);
         notifyDataSetChanged();
     }
 
